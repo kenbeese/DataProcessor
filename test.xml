@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+
+  <run name="run01">
+    <tags>
+      <tag>yes</tag>
+      <tag>no</tag>
+      <tag>ahohage</tag>
+    </tags>
+    <comment>hogecommet</comment>
+    <date>1987/05/12</date>
+    <optional></optional>
+  </run>
+
+  <run name="run02">
+    <tags>
+      <tag>chaotic</tag>
+      <tag>tag3</tag>
+    </tags>
+    <comment>かおだ</comment>
+    <date>1989/03/12</date>
+  </run>
+
+  <run name="run03">
+    <tags>
+      <tag>tag1</tag>
+      <tag>chaotic</tag>
+    </tags>
+    <comment>かおだ</comment>
+    <date>1987/03/12</date>
+    <opt>
+      <additional> etc... reference</additional>
+    </opt>
+  </run>
+
+</data>
