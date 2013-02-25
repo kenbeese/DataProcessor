@@ -5,8 +5,8 @@
 
 __all__ = ["filters","processor"]
 
-input_dic = {}
-output_dic = {}
+input_dics = {}
+output_dics = {}
 
 def input_sample(args):
     run_list = [
@@ -15,8 +15,11 @@ def input_sample(args):
         ]
     return run_list
 
-input_dic["sample"] = {
+input_dics["sample"] = {
     "name" : "sample",
     "args" : [],
     "func" : input_sample
     }
+
+from . import csv
+csv.register(output_dic)
