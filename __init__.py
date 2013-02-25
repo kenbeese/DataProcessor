@@ -1,4 +1,4 @@
 """@package DataProcessor
 """
 
-__all__ = ["ConfManager", "DirConstructor", "InfoManager", "RunConf"]
+__all__ = ["ConfManager", "DirConstructor", "InfoManager", "RunConf", "SimpleFilters"]
