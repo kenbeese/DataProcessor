@@ -3,13 +3,17 @@
 class DirConstructor(object):
     """
     IO for run_results file formatted as JSON.
+
+
     Usage:
+    >>> filestring = '''[rundir]
+    ... dir_prefix = run
+    ... num_format = 02d
+    ... #rundirname = dir_prefix + "%" + num_format
+    ... #In this case, rundirname = run%02d
+    ... '''
     >>> f = open("/tmp/conffile", "w")
-    >>> f.write(u"[rundir]            \\n")                   # make conf file
-    >>> f.write(u"dir_prefix = run    \\n")
-    >>> f.write(u"num_format = 02d    \\n")
-    >>> f.write(u"#rundirname = dir_prefix + \\"%\\" + num_format  \\n")
-    >>> f.write(u"#In this case, rundirname = run%02d \\n")
+    >>> f.write(filestring)
     >>> f.close()
     >>> import os
     >>> os.mkdir("/tmp/run02")
