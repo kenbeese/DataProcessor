@@ -16,7 +16,7 @@ def processing(action_list):
 
 def test():
     action_list_sample = {
-            "input"  : {"name":"DirConstructor","args":[]},
+            "input"  : {"name":"sample","args":[]},
             "output" : {"name":"csv","args":[]},
             "filter" : [
                     {"name":"meta","args":[]},
