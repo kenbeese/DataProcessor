@@ -1,5 +1,3 @@
-
-
 class DirConstructor(object):
     """
     IO for run_results file formatted as JSON.
@@ -48,7 +46,10 @@ class DirConstructor(object):
 
     def __init__(self, conf_path):
         import os.path
-        self.conf = read_rundirConf(conf_path, "rundir")
+        from ConfManager import ConfManager
+        config = ConfManager()
+        config.read(os.path.abspath(conf_path))
+        self.conf = config.confDict("rundir")
         self.conf["topdir_path"] = os.path.abspath(os.path.dirname(conf_path))
 
 
@@ -105,46 +106,6 @@ class DirConstructor(object):
     def __path2basename(self, path):
         import os.path
         return os.path.basename(os.path.normpath(path))
-
-
-
-def read_rundirConf(conf_path, section):
-    """
-    Return dict of CONF_PATH configure in SECTION.
-
-    >>> f = open("/tmp/testfile", "w")
-    >>> f.write(u"[sec1]      \\n") # make conf file
-    >>> f.write(u"conf1 = 3   \\n")
-    >>> f.write(u"conf2 = 4   \\n")
-    >>> f.write(u"[sec2]      \\n")
-    >>> f.write(u"conf4 = 2   \\n")
-    >>> f.write(u"conf1 = 5   \\n")
-    >>> f.close()
-    >>> sec1 = read_rundirConf("/tmp/testfile", "sec1")
-    >>> sec2 = read_rundirConf("/tmp/testfile", "sec2")
-    >>> print sec1['conf1']
-    3
-    >>> print sec1['conf2']
-    4
-    >>> print sec2['conf1']
-    5
-    >>> print sec2['conf4']
-    2
-    >>> import os
-    >>> os.remove("/tmp/testfile")
-    """
-    import ConfigParser
-    config = ConfigParser.SafeConfigParser()
-    config.optionxform = str
-    config.read(conf_path)
-
-    confd = {}
-    for key in config.options(section):
-        confd[key] = config.get(section, key)
-
-    return confd
-
-
 
 
 def _test():
