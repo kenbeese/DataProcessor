@@ -50,9 +50,8 @@ class InfoManager(object):
     ...         'optional': None,
     ...         'tags': ['tag1', 'tag3']}}
     True
-
-    # >>> import os
-    # >>> os.remove("/tmp/test.xml")
+    >>> import os
+    >>> os.remove("/tmp/test.xml")
     """
 
     def __init__(self, info_path):
@@ -85,12 +84,16 @@ class InfoManager(object):
         return {self.tags_nm: tags, self.cmnt:comment, self.date: date, self.opt: opt}
 
 
-    def metaPipe(self, diclist):
+    def metaPipe(self, run_list):
         pipedList = []
-        for dic in diclist:
-            piped = {self.metakey:self.__elem2dict(self.__path2elem(dic["path"]))}
-            piped.update(dic)
-            pipedList.append(piped)
+        for dic in run_list:
+            elem = self.__path2elem(dic["path"])
+            if elem != None:
+                piped = {self.metakey:self.__elem2dict(elem)}
+                piped.update(dic)
+                pipedList.append(piped)
+            else:
+                print("Warning: meta data for directory %s is not defined." % dic["path"])
         return pipedList
 
 
