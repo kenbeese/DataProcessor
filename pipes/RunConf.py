@@ -47,7 +47,7 @@ def add(runs_conf_path, run_list):
     """
 
     import os.path
-    from ConfManager import ConfManager
+    from ..libs.ConfManager import ConfManager
 
     confkey = "configure"
 
