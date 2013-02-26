@@ -3,7 +3,7 @@
 """
 
 
-__all__ = ["filters", "processor", "pipe", "input"]
+__all__ = ["filters", "processor", "pipes", "inputs", "outputs"]
 
 input_dics = {}
 output_dics = {}
