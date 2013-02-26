@@ -6,7 +6,6 @@
 __all__ = ["filters", "processor", "pipes", "inputs", "outputs"]
 
 input_dics = {}
-output_dics = {}
 
 def input_sample(args):
     run_list = [
@@ -20,6 +19,3 @@ input_dics["sample"] = {
     "args" : [],
     "func" : input_sample
     }
-
-from . import csv
-csv.register(output_dic)
