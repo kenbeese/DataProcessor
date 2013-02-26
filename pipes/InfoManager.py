@@ -97,6 +97,9 @@ class InfoManager(object):
         return pipedList
 
 
+
+
+
 def _test():
     import doctest
     doctest.testmod()
