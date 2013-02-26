@@ -2,4 +2,4 @@
 """
 
 
-__all__ = ["ConfManager", "InfoManager", "RunConf", "SimpleFileters"]
+__all__ = ["ConfManager", "InfoManager", "RunConf", "tagFilter.py"]
