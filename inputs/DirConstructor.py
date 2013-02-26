@@ -46,7 +46,7 @@ class DirConstructor(object):
 
     def __init__(self, conf_path):
         import os.path
-        from ConfManager import ConfManager
+        from ..libs.ConfManager import ConfManager
         config = ConfManager()
         config.read(os.path.abspath(conf_path))
         self.conf = config.confDict("rundir")
