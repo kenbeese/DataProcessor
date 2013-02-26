@@ -1,16 +1,22 @@
-# codiing=utf-8
+# coding=utf-8
 """@DataProcessor.pipes
 """
 
+import glob
+import os.path
 
-__all__ = ["ConfManager", "InfoManager", "RunConf",
-           "TagFilter", "meta", "project_choose"]
+__all__ = [os.path.basename(f)[:-3] for f in glob.glob(os.path.join(os.path.dirname(__file__), "*.py"))
+           if os.path.basename(f) != "__init__.py"]
+
+
+
+mod_list = [__import__(mod, globals(), locals(), [], - 1) for mod in  __all__]
 
 pipes_dics = {}
-
-from . import RunConf, InfoManager, TagFilter, meta, project_choose
-meta.register(filter_dic)
-project_choose.register(filter_dic)
-RunConf.register(pipes_dics)
-InfoManager.register(pipes_dics)
-TagFilter.register(pipes_dics)
+for mod in mod_list:
+    try:
+        register = getattr(mod, "register")
+    except:
+        print (format("Warning: module %s does not have register function." % mod.__name__))
+        continue
+    register(pipes_dics)
