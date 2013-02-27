@@ -1,4 +1,4 @@
-def add(runs_conf_path, run_list):
+def add(run_list, runs_conf_path):
     """
     Add configure dictionary to run_list
 
@@ -34,7 +34,7 @@ def add(runs_conf_path, run_list):
     >>> f.write(filestring)
     >>> f.close()
     >>> run_list = [{"path":"/tmp/run02"}, {"path":"/tmp/run01"}]
-    >>> add("/tmp/runs.conf", run_list) == [
+    >>> add(run_list, "/tmp/runs.conf") == [
     ...     {'path':'/tmp/run02',
     ...     'configure':{'conf1':'21', 'conf2': '1', 'conf4': '3.23', 'conf5': '42'}},
     ...     {'path':'/tmp/run01',
@@ -67,6 +67,15 @@ def add(runs_conf_path, run_list):
 
     run_list = L
     return run_list
+
+
+
+def register(pipes_dics):
+    pipes_dics["configure"] = {
+        "func" : add,
+        "args" : ["runs_conf_path"],
+        "desc" : "add run cofigure"
+        }
 
 
 def _test():

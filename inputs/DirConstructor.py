@@ -108,6 +108,22 @@ class DirConstructor(object):
         return os.path.basename(os.path.normpath(path))
 
 
+
+def runPaths(conf):
+    DC = DirConstructor(conf)
+    run_list = DC.listPath()
+    return run_list
+
+
+def register(inputs_dics):
+    inputs_dics["runnum"] = {
+        "func": runPaths,
+        "args": ["conf"],
+        "desc": "read runs configure and output runs dir paths"
+        }
+
+
+
 def _test():
     import doctest
     doctest.testmod()

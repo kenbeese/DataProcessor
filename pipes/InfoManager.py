@@ -97,6 +97,21 @@ class InfoManager(object):
         return pipedList
 
 
+
+def addRunsMeta(run_list, info_path):
+    info = InfoManager(info_path)
+    run_list = info.metaPipe(run_list)
+    return run_list
+
+
+def register(pipes_dics):
+    pipes_dics["run_meta"] = {
+        "func" : addRunsMeta,
+        "args" : ["info_path"],
+        "desc" : "add run meta-data"
+        }
+
+
 def _test():
     import doctest
     doctest.testmod()

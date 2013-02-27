@@ -15,6 +15,13 @@ def filter(run_list, tag):
     return [run for run in run_list if tag in run["meta"]["tags"]]
 
 
+def register(pipes_dics):
+    pipes_dics["tagFilter"] = {
+        "func" : filter,
+        "args" : ["tag"],
+        "desc" : "extract run with tag"
+        }
+
 
 def _test():
     import doctest
