@@ -1,4 +1,4 @@
-def filter(run_list, tag):
+def filter(run_list, *tags):
     """
     >>> run_list = [{"path":"hoge", "meta":{"tags":["tag1", "tag2"]}},
     ...     {"path":"hoge2", "meta":{"tags":["tag1", "tag4"]}},
@@ -10,10 +10,17 @@ def filter(run_list, tag):
     ...     {'path':'hoge2', 'meta':{'tags':['tag1', 'tag4']}},
     ...     {'path':'hoge5', 'meta':{'tags':['tag1', 'tag2']}}]
     True
-    >>>
+    >>> filter(run_list, "tag1", "tag2") == [
+    ...     {'path':'hoge', 'meta':{'tags':['tag1', 'tag2']}},
+    ...     {'path':'hoge5', 'meta':{'tags':['tag1', 'tag2']}}]
+    True
     """
-    return [run for run in run_list if tag in run["meta"]["tags"]]
-
+    if (len(tags) == 1):
+        return [run for run in run_list if tags[0] in run["meta"]["tags"]]
+    else:
+        filtered = [run for run in run_list if tags[0] in run["meta"]["tags"]]
+        filtered = filter(filtered, *tags[1:])
+    return filtered
 
 def register(pipes_dics):
     pipes_dics["tagFilter"] = {
