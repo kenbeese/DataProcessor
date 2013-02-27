@@ -73,7 +73,7 @@ def add(run_list, runs_conf_path):
 def register(pipes_dics):
     pipes_dics["configure"] = {
         "func" : add,
-        "args" : ["runs_conf_path"]
+        "args" : ["runs_conf_path"],
         "desc" : "add run cofigure"
         }
 
