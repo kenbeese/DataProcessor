@@ -55,8 +55,14 @@ class InfoManager(object):
     ...         'optional': None,
     ...         'tags': ['tag321 hoge', 'tag5']}}
     True
-    >>> info.metaPipe(diclist)[1]
-    >>> info.metaPipe(diclist)[2]
+    >>> info.taglist()
+    [' tag321   hoge', 'ahohage', 'no', 'tag1', 'tag3 ', 'tag5', 'yes']
+    >>> info.runnamelist()
+    ['run01', 'run02', 'run03']
+    >>> info.runInfo('run03') == {'comment': 'hagehagehage', 'date': '1988/02/03',
+    ...     'optional': None,
+    ...     'tags': ['tag321 hoge', 'tag5']}
+    True
     >>> import os
     >>> os.remove("/tmp/test.xml")
     """
@@ -77,7 +83,7 @@ class InfoManager(object):
     def __path2elem(self, path):
         import os.path as op
         path_key = op.relpath(path, op.dirname(self.info_path))
-        for elem in self.root.iter():
+        for elem in list(self.root):
             if elem.get("name") == path_key:
                 return elem
         return None
@@ -95,7 +101,36 @@ class InfoManager(object):
     def normWhiteSpace(self, string):
         import re
         reg = re.compile("\s+")
-        return reg.sub(" ", string).strip()
+        try:
+            return reg.sub(" ", string).strip()
+        except TypeError:
+            return None
+
+
+    def taglist(self):
+        tag_list = [tag.text for tag in self.root.iter(self.tag_nm)]
+        tag_list = list(set(tag_list))
+        tag_list.sort()
+        return tag_list
+
+
+    def runnamelist(self):
+        """
+        return run name list written in info_path.
+        """
+        l = [run.get("name") for run in list(self.root)]
+        return l
+
+
+    def runInfo(self, runname):
+        """
+        return run infomation, for example, comment, tag, date, etc.
+        """
+        for elem in list(self.root):
+            if elem.get("name") == runname:
+                return self.__elem2dict(elem)
+
+
 
 
     def metaPipe(self, run_list):

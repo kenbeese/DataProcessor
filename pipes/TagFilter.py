@@ -14,8 +14,6 @@ def filter(run_list, *tags):
     ...     {'path':'hoge', 'meta':{'tags':['tag1', 'tag2']}},
     ...     {'path':'hoge5', 'meta':{'tags':['tag1', 'tag2']}}]
     True
-    >>> taglist(run_list)
-    ['tag1', 'tag12', 'tag2', 'tag3', 'tag4']
     """
     if (len(tags) == 1):
         return [run for run in run_list if tags[0] in run["meta"]["tags"]]
@@ -23,13 +21,6 @@ def filter(run_list, *tags):
         filtered = [run for run in run_list if tags[0] in run["meta"]["tags"]]
         filtered = filter(filtered, *tags[1:])
     return filtered
-
-
-def taglist(run_list):
-    integ = [tag for run in run_list for tag in run["meta"]["tags"]]
-    tag_list = list(set(integ))
-    tag_list.sort()
-    return tag_list
 
 
 def register(pipes_dics):
