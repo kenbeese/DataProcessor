@@ -63,6 +63,19 @@ class InfoManager(object):
     ...     'optional': None,
     ...     'tags': ['tag321 hoge', 'tag5']}
     True
+    >>> info.setComment('run03', "test")
+    >>> info.runInfo('run03')["comment"]
+    'test'
+    >>> info.setTag('run03', "newtag")
+    >>> info.runInfo('run03')["tags"]
+    ['tag321 hoge', 'tag5', 'newtag']
+    >>> info.rmTag('run03', "newtag")
+    >>> info.runInfo('run03')["tags"]
+    ['tag321 hoge', 'tag5']
+    >>> info.rmTag('run03', "tag5")
+    >>> info.setComment('run03', "testdayo~")
+    >>> info.setTag('run02', "testdayo~")
+    >>> info.saveInfo('/tmp/hoge')
     >>> import os
     >>> os.remove("/tmp/test.xml")
     """
@@ -71,8 +84,8 @@ class InfoManager(object):
         import xml.etree.ElementTree as ET
         import os.path as op
         self.info_path = op.abspath(info_path)
-        tree = ET.parse(self.info_path)
-        self.root = tree.getroot()
+        self.tree = ET.parse(self.info_path)
+        self.root = self.tree.getroot()
         self.tags_nm = "tags"
         self.tag_nm = "tag"
         self.cmnt = "comment"
@@ -114,6 +127,18 @@ class InfoManager(object):
         return tag_list
 
 
+    def taggedlist(self, tagbody):
+        """
+        return run name list written in info_path.
+        """
+        l = [run.get("name") for run in list(self.root)
+             for tag in run.find(self.tags_nm).findall(self.tag_nm)
+             if self.normWhiteSpace(tag.text) == self.normWhiteSpace(tagbody)]
+        return l
+
+
+
+
     def runnamelist(self):
         """
         return run name list written in info_path.
@@ -131,6 +156,34 @@ class InfoManager(object):
                 return self.__elem2dict(elem)
 
 
+    def setComment(self, runname, comment):
+        for elem in list(self.root):
+            if elem.get("name") == runname:
+                com = elem.find(self.cmnt)
+                com.text = comment
+
+
+    def setTag(self, runname, tagbody):
+        import xml.etree.ElementTree as ET
+        for elem in list(self.root):
+            if elem.get("name") == runname:
+                tags = elem.find(self.tags_nm)
+                for tag in tags.findall(self.tag_nm):
+                    if tag.text == self.normWhiteSpace(tagbody):
+                        raise Warning("%s was already defined." & tagbody)
+                newtag = ET.SubElement(tags, self.tag_nm)
+                newtag.text = self.normWhiteSpace(tagbody)
+
+
+    def rmTag(self, runname, tagbody):
+        for elem in list(self.root):
+            if elem.get("name") == runname:
+                tags = elem.find(self.tags_nm)
+                for tag in tags.findall(self.tag_nm):
+                    if tag.text == self.normWhiteSpace(tagbody):
+                        tags.remove(tag)
+                        return
+                raise Warning("%s was not defined." % tagbody)
 
 
     def metaPipe(self, run_list):
@@ -145,6 +198,15 @@ class InfoManager(object):
                 print("Warning: meta data for directory %s is not defined." % dic["path"])
         return pipedList
 
+
+    def saveInfo(self, info_path = None):
+        import os.path
+        if info_path == None:
+            info_path = self.info_path
+        else:
+            info_path = os.path.abspath(info_path)
+
+        self.tree.write(info_path)
 
 
 def addRunsMeta(run_list, info_path):
