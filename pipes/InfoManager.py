@@ -22,7 +22,7 @@ class InfoManager(object):
     ...   <run name="run02">
     ...     <tags>
     ...       <tag>tag1</tag>
-    ...       <tag>tag3</tag>
+    ...       <tag>tag3 </tag>
     ...     </tags>
     ...     <comment>come</comment>
     ...     <date>1989/03/12</date>
@@ -30,7 +30,7 @@ class InfoManager(object):
     ...
     ...   <run name="run03">
     ...     <tags>
-    ...       <tag>tag321</tag>
+    ...       <tag> tag321   hoge</tag>
     ...       <tag>tag5</tag>
     ...     </tags>
     ...     <comment>hagehagehage</comment>
@@ -44,12 +44,19 @@ class InfoManager(object):
     >>> f.close()
     >>> import os.path as op
     >>> info = InfoManager("/tmp/test.xml")
-    >>> diclist = [{"path":"/tmp/run01"}, {"path":"/tmp/run02"}]
+    >>> diclist = [{"path":"/tmp/run01"}, {"path":"/tmp/run02"}, {"path":"/tmp/run03"}]
     >>> info.metaPipe(diclist)[1] == {'path': '/tmp/run02',
     ...     'meta': {'comment': 'come', 'date': '1989/03/12',
     ...         'optional': None,
     ...         'tags': ['tag1', 'tag3']}}
     True
+    >>> info.metaPipe(diclist)[2] == {'path': '/tmp/run03',
+    ...     'meta': {'comment': 'hagehagehage', 'date': '1988/02/03',
+    ...         'optional': None,
+    ...         'tags': ['tag321 hoge', 'tag5']}}
+    True
+    >>> info.metaPipe(diclist)[1]
+    >>> info.metaPipe(diclist)[2]
     >>> import os
     >>> os.remove("/tmp/test.xml")
     """
@@ -76,12 +83,19 @@ class InfoManager(object):
         return None
 
     def __elem2dict(self, elem):
-        tags = [tag.text for tag in elem.find(self.tags_nm).findall(self.tag_nm)]
-        comment = elem.findtext(self.cmnt)
-        date = elem.findtext(self.date)
+        tags = [self.normWhiteSpace(tag.text)
+                for tag in elem.find(self.tags_nm).findall(self.tag_nm)]
+        comment = self.normWhiteSpace(elem.findtext(self.cmnt))
+        date = self.normWhiteSpace(elem.findtext(self.date))
         opt = elem.find(self.opt)
 
         return {self.tags_nm: tags, self.cmnt:comment, self.date: date, self.opt: opt}
+
+
+    def normWhiteSpace(self, string):
+        import re
+        reg = re.compile("\s+")
+        return reg.sub(" ", string).strip()
 
 
     def metaPipe(self, run_list):
