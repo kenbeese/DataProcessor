@@ -109,9 +109,9 @@ class DirConstructor(object):
 
 
 
-def runPaths(conf):
+def runPaths(run_list, conf):
     DC = DirConstructor(conf)
-    run_list = DC.listPath()
+    run_list = run_list + DC.listPath()
     return run_list
 
 
