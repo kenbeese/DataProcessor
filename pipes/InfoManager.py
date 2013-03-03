@@ -76,12 +76,13 @@ class InfoManager(object):
     """
 
 
-    def __init__(self, info_path):
+    def __init__(self, info_path, root_path="."):
         import xml.etree.ElementTree as ET
         import os.path as op
         self.info_path = op.abspath(info_path)
         self.tree = ET.parse(self.info_path)
-        self.root = self.tree.getroot()
+        root = self.tree.getroot()
+        self.root = root.find(root_path)
         self.run_nm = "run"
         self.tags_nm = "tags"
         self.tag_nm = "tag"
@@ -89,6 +90,7 @@ class InfoManager(object):
         self.opt = "optional"
         self.date = "date"
         self.metakey = "meta"
+
 
 
     def __path2elem(self, path):
