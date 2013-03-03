@@ -1,3 +1,4 @@
+#encoding:utf-8
 class InfoManager(object):
     """
     if specified optional, return elementTree object.
@@ -11,7 +12,7 @@ class InfoManager(object):
     ...   <run name="run01">
     ...     <tags>
     ...       <tag>yes</tag>
-    ...       <tag>no</tag>
+    ...       <tag>ばか</tag>
     ...       <tag>ahohage</tag>
     ...     </tags>
     ...     <comment>hogecommet</comment>
@@ -48,7 +49,7 @@ class InfoManager(object):
     ...         'tags': ['tag321 hoge', 'tag5']}}
     True
     >>> info.taglist()
-    [' tag321   hoge', 'ahohage', 'no', 'tag1', 'tag3 ', 'tag5', 'yes']
+    [' tag321   hoge', 'ahohage', 'tag1', 'tag3 ', 'tag5', 'yes', u'\u3070\u304b']
     >>> info.runnamelist()
     ['run01', 'run02', 'run03']
     >>> info.runInfo('run03') == {'comment': 'hagehagehage', 'date': '1988/02/03',
@@ -207,7 +208,7 @@ class InfoManager(object):
             info_path = self.info_path
         else:
             info_path = os.path.abspath(info_path)
-        self.tree.write(info_path)
+        self.tree.write(info_path, encoding = "UTF-8")
         return
 
 
