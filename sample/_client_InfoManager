@@ -49,7 +49,7 @@ function _runpm(){
                 settag)
                     _arguments \
                         '1: :_runpm_runlist' \
-                        '2: :_rupm_taglist' \
+                        '2: :_runpm_taglist' \
                         && ret=0
                     ;;
                 setc)
