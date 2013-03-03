@@ -1,0 +1,92 @@
+<project name="oscillon-drag2">
+  <run name="run01">
+    <tags>
+      <tag>dumping</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run02">
+    <tags>
+      <tag>dumping</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run03">
+    <tags>
+      <tag>quasi-local</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run04">
+    <tags>
+      <tag>quasi-local</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run05">
+    <tags>
+      <tag>diffusing</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run06">
+    <tags>
+      <tag>chaotic</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run07">
+    <tags>
+      <tag />
+      <tag>dumping</tag>
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run08">
+    <tags>
+      <tag>dumping</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run09">
+    <tags>
+      <tag>dumping</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+  <run name="run10">
+    <tags>
+      <tag>chaotic</tag>
+      <tag />
+    </tags>
+    <comment />
+    <date />
+  </run>
+
+</project>

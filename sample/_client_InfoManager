@@ -16,7 +16,6 @@ function _runpm(){
         '(*)-v[Show verbose help]' \
         '(*)-h[Show help]' \
         '-m[Specify meta file path]:Input file:_files' \
-        '-c[Specify conf file path]:Input file:_files' \
         '1:cmd:->cmds' \
         '*::arg:->args' \
         && ret=0

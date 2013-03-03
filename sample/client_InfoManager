@@ -7,8 +7,6 @@ def optionArgs():
     parser = ArgumentParser(description = desc)
     parser.add_argument("command", metavar = "COMMAND", type=str, nargs="*",
                         help="Usage: COMMAND [runame] [tag|comment]")
-    parser.add_argument("-c", "--conffile", default = "runs.conf",
-                  help = "specify conf file path. Default is runs.conf.")
     parser.add_argument("-m", "--metafile", default = "project.xml",
                   help = "specify meta file path. Default is project.xml.")
     parser.add_argument("-v", "--verbose", action = "store_true",
