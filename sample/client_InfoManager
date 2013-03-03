@@ -76,7 +76,13 @@ def setFunc(metafile):
         meta.addRun(runname)
         meta.saveInfo()
 
+    def tagged(tag):
+        for run in meta.taggedlist(tag):
+            if run != None:
+                print run
 
+    def runInfo(run):
+        print meta.runInfo(run)
 
     funcList = {
         "lstag"     :{"act": lstag,
@@ -85,7 +91,7 @@ def setFunc(metafile):
         "lsrun"     :{"act": lsrun,
                       "args": [],
                       "desc": "list of runs"},
-        "info"      :{"act": meta.runInfo,
+        "info"      :{"act": runInfo,
                       "args": ["runname"],
                       "desc": "run info",
                       },
@@ -98,7 +104,7 @@ def setFunc(metafile):
         "rmtag"     :{"act": rmTag,
                       "args": ["runname", "tagbody"],
                       "desc": "rm tag"},
-        "tagged"    :{"act": meta.taggedlist,
+        "tagged"    :{"act": tagged,
                       "args": ["tag"],
                       "desc":"search tagged run"},
         "addRun"    :{"act": addRun,
