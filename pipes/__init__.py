@@ -30,6 +30,7 @@ def execute(manip_json_str):
     """
     execute pipeline
     """
+    # TODO write doctest
     manip = json.loads(manip_json_str)
     run_list = []
     for mn in manip:
@@ -43,8 +44,6 @@ def execute(manip_json_str):
     return run_list
 
 if __name__ == "__main__":
-    # import doctest
-    # doctest.testmod()
-    manip = '[{"name":"act1","args":[]}]'
-    execute(manip)
+    import doctest
+    doctest.testmod()
 
