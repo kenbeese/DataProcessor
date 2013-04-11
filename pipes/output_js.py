@@ -24,16 +24,19 @@ def dump(run_list):
     valid_run_list = [run for run in run_list if "path" in run and "meta" in run and "configure" in run]
     return json.dumps(valid_run_list)
 
+def write_to_js(run_list,js_path,obj_name):
+    json_str = dump(run_list)
+    with open(js_path,'w') as f:
+        f.write(obj_name+"=JSON.parse(%s)"%json_str)
+    return run_list
+
 def register(pipes_dics):
-    pipes_dics["output_json"] = {
-        "func" : dump,
-        "args" : [],
-        "desc" : "dump valid runs into JSON string"
+    pipes_dics["output_js"] = {
+        "func" : write_to_js,
+        "args" : ["js_path","obj_name"],
+        "desc" : "output Javascript file",
         }
 
-def _test():
+if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-if __name__ == "__main__":
-    _test()
