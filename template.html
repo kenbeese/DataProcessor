@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <title>Run Browser</title>
+    </head>
+    <body>
+        <h1 id="Title">Run Browser v0.1</h1>
+        <table id="DataTable" border=1>
+            <thead>
+                <tr>
+                {% for c in pre_meta%}
+                    <th>{{c}}</th>
+                {% endfor %}
+                {% for c in confs %}
+                    <th>{{c}}</th>
+                {% endfor %}
+                {% for c in post_meta%}
+                    <th>{{c}}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for run in run_list %}
+                <tr>
+                {% for c in pre_meta%}
+                    {% if c in run["meta"] %}
+                        <td>{{run["meta"][c]}}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endfor %}
+                {% for c in confs %}
+                    {% if c in run["configure"] %}
+                        <td>{{run["configure"][c]}}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endfor %}
+                {% for c in post_meta%}
+                    {% if c in run["meta"] %}
+                        <td>{{run["meta"][c]}}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
+
