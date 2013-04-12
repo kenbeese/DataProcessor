@@ -11,7 +11,14 @@ def replace(run_list,template_filename,output_filename):
         for c in conf:
             if c not in confs:
                 confs.append(c)
-    cfg = { "run_list" : run_list, "confs" : confs }
+        result_list.append(run)
+    confs.sort()
+    confs.sort(key=len)
+    cfg = { "run_list" : result_list,
+            "confs" : confs,
+            "pre_meta" : ["name","date"],
+            "post_meta" : ["tags","comment"]
+        }
     with open(template_filename,'r') as f:
         tmpl = Template(f.read())
     html = tmpl.render(cfg)
