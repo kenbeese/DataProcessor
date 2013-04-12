@@ -27,7 +27,7 @@ def dump(run_list):
 def write_to_js(run_list,js_path,obj_name):
     json_str = dump(run_list)
     with open(js_path,'w') as f:
-        f.write(obj_name+"=JSON.parse(%s)"%json_str)
+        f.write(obj_name+"=JSON.parse('%s')"%json_str)
     return run_list
 
 def register(pipes_dics):
