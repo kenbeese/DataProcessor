@@ -18,6 +18,7 @@ def directory(run_list,root):
         for run_dir in run_dirs:
             path = os.path.join(project_path,run_dir)
             run_list.append({"path" : path,"meta" : {"name" : run_dir, "project" : project, "date" : __date(path), }, }) 
+    return run_list
 
 def register(pipe_dics):
     pipe_dics["scan_directory"] = {
@@ -27,6 +28,5 @@ def register(pipe_dics):
         }
 
 if __name__ == "__main__":
-    run_list = []
-    directory(run_list,"~/data")
+    run_list = directory([],"~/data")
     print(run_list)
