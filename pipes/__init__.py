@@ -25,13 +25,11 @@ class InvalidManipulationJSONWarning(UserWarning):
     def __str__(self):
         return "while processing pipe[%s]: %s" % (self.name, self.msg)
 
-import json
-def execute(manip_json_str):
+def execute(manip):
     """
     execute pipeline
     """
     # TODO write doctest
-    manip = json.loads(manip_json_str)
     run_list = []
     for mn in manip:
         name = mn["name"]
@@ -42,6 +40,11 @@ def execute(manip_json_str):
             raise InvalidManipulationJSONWarning(name,"invalid arguments")
         run_list = dic["func"](run_list,*mn["args"])
     return run_list
+
+import json
+def execute_from_json_str(manip_json_str):
+    manip = json.loads(manip_json_str)
+    execute(manip)
 
 if __name__ == "__main__":
     import doctest

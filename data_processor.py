@@ -14,7 +14,7 @@ def main():
         print("such file does not exists")
         return 1
     with open(args.json_filename,'r') as f:
-        pipes.execute(f.read())
+        pipes.execute_from_json_str(f.read())
 
 if __name__ == "__main__":
     main()
