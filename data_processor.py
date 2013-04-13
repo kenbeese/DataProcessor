@@ -4,6 +4,7 @@
 import argparse
 import os.path
 import pipes
+
 def main():
     parser = argparse.ArgumentParser(description="command line interface for DataProcessor pipeline")
     parser.add_argument('json_filename')
