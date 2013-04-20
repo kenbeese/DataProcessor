@@ -41,9 +41,9 @@ def execute(manip):
         if "kwds" in mn and "kwds" in dic:
             kwds = {}
             for kwd in mn["kwds"]:
-                if kwd not in dic["kwds"]
+                if kwd not in dic["kwds"]:
                     continue
-                kwds[kew] = mn["kwds"][kwd]
+                kwds[kwd] = mn["kwds"][kwd]
             run_list = dic["func"](run_list,*mn["args"],**kwds)
         else:
             run_list = dic["func"](run_list,*mn["args"])

@@ -3,7 +3,7 @@
 
 import argparse
 import os.path
-import sys.path
+import sys
 
 sys.path.append("../lib")
 sys.path.reverse()
