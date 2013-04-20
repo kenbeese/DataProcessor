@@ -28,7 +28,11 @@
                 <tr>
                 {% for c in pre_meta%}
                     {% if c in run["meta"] %}
+                        {% if c == "name" and "link" in run["meta"] %}
+                        <td><a href='{{run["meta"]["link"]}}'>{{run["meta"][c]}}</a></td>
+                        {% else %}
                         <td>{{run["meta"][c]}}</td>
+                        {% endif %}
                     {% else %}
                         <td></td>
                     {% endif %}

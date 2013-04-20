@@ -9,6 +9,7 @@ def __date(path):
     last_modified = stat.st_mtime
     return time.ctime(last_modified)
 
+from glob import glob
 def directory(run_list,root):
     root = os.path.abspath(os.path.expanduser(root))
     projects = __get_dirs(root)
@@ -17,7 +18,24 @@ def directory(run_list,root):
         run_dirs = __get_dirs(project_path)
         for run_dir in run_dirs:
             path = os.path.join(project_path,run_dir)
-            run_list.append({"path" : path,"meta" : {"name" : run_dir, "project" : project, "date" : __date(path), }, }) 
+            htmls = glob(os.path.join(path,"*.html"))
+            if len(htmls) >= 1:
+                run_list.append({"path" : path,
+                    "meta" : {
+                        "name" : run_dir, 
+                        "project" : project,
+                        "date" : __date(path),
+                        "link" : os.path.abspath(htmls[0]),
+                        },
+                    }) 
+            else:
+                run_list.append({"path" : path,
+                    "meta" : {
+                        "name" : run_dir,
+                        "project" : project,
+                        "date" : __date(path),
+                        },
+                    }) 
     return run_list
 
 def register(pipe_dics):
