@@ -26,10 +26,33 @@ def replace(run_list,template_filename,output_filename):
         f.write(html.encode("utf-8"))
     return run_list
 
+import os.path
+import shutil
+def _install_attachments(template_dir,dest_path):
+    if not os.path.isdir(template_dir):
+        print("template directory does not found.")
+        return 1
+    if not os,path.isdir(dest_path):
+        print("destination directory does not found.")
+        return 1
+    attachments = ["js","css"]
+    att_paths = [os.path.join(template_dir,att) for att in attachments]
+    att_paths = [path for path in att_paths if os.path.exists(path)]
+    for att_path in att_paths:
+        shutil.copytree(att_path,dest_path)
+
+def generate(run_list,template_dir,output_html_path,template_html_filename="template.html",install_attachment=False):
+    output_html_path = os.path.abspath(output_html_path)
+    dest_dir = os.path.dirname(output_html_path)
+    if install_attachment:
+        _install_attachments(template_dir,dest_dir)
+    template_html_path = os.path(template_dir,template_html_filename)
+    replace(run_list,template_html_path,output_html_path)
+
 def register(pipes_dics):
     pipes_dics["generate_html"] = {
         "func" : replace,
-        "args" : ["template_filename","output_filename"],
-        "desc" : "replace jinja2 template",
+        "args" : ["template_dir","output_html_path"],
+        "desc" : "generate HTML and install attachments",
+        "kwds" : ["template_html_filename","install_attachments"],
         }
-
