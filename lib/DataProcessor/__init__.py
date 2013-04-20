@@ -24,12 +24,20 @@ def execute(manip):
     run_list = []
     for mn in manip:
         name = mn["name"]
-        if name not in pipes.pipes_dics:
-            raise InvalidManipulationJSONWarning(name, "invalid name")
-        dic = pipes.pipes_dics[name]
+        if name not in pipes_dics:
+            raise InvalidManipulationJSONWarning(name,"invalid name")
+        dic = pipes_dics[name]
         if len(mn["args"]) != len(dic["args"]):
-            raise InvalidManipulationJSONWarning(name, "invalid arguments")
-        run_list = dic["func"](run_list, *mn["args"])
+            raise InvalidManipulationJSONWarning(name,"invalid arguments")
+        if "kwds" in mn and "kwds" in dic:
+            kwds = {}
+            for kwd in mn["kwds"]:
+                if kwd not in dic["kwds"]:
+                    continue
+                kwds[kwd] = mn["kwds"][kwd]
+            run_list = dic["func"](run_list,*mn["args"],**kwds)
+        else:
+            run_list = dic["func"](run_list,*mn["args"])
     return run_list
 
 
