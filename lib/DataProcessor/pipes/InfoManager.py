@@ -39,12 +39,13 @@ class InfoManager(object):
     >>> info.humanReadable("/tmp/human.xml")
     >>> diclist = [{"path":"/tmp/run01"}, {"path":"/tmp/run02"}, {"path":"/tmp/run03"}]
     >>> info.metaPipe(diclist)[1] == {'path': '/tmp/run02',
-    ...     'meta': {'comment': 'come', 'date': '1989/03/12',
+    ...     'meta': {'name': 'run02',
+    ...         'comment': 'come', 'date': '1989/03/12',
     ...         'optional': None,
     ...         'tags': ['tag1', 'tag3']}}
     True
     >>> info.metaPipe(diclist)[2] == {'path': '/tmp/run03',
-    ...     'meta': {'comment': 'hagehagehage', 'date': '1988/02/03',
+    ...     'meta': {'comment': 'hagehagehage', 'date': '1988/02/03', 'name': 'run03',
     ...         'optional': None,
     ...         'tags': ['tag321 hoge', 'tag5']}}
     True
@@ -52,7 +53,7 @@ class InfoManager(object):
     [' tag321   hoge', 'ahohage', 'tag1', 'tag3 ', 'tag5', 'yes', u'\u3070\u304b']
     >>> info.runnamelist()
     ['run01', 'run02', 'run03']
-    >>> info.runInfo('run03') == {'comment': 'hagehagehage', 'date': '1988/02/03',
+    >>> info.runInfo('run03') == {'name': 'run03', 'comment': 'hagehagehage', 'date': '1988/02/03',
     ...     'optional': None,
     ...     'tags': ['tag321 hoge', 'tag5']}
     True
@@ -76,7 +77,6 @@ class InfoManager(object):
     >>> os.remove("/tmp/hoge")
     """
 
-
     def __init__(self, info_path, root_path="."):
         import xml.etree.ElementTree as ET
         import os.path as op
@@ -91,8 +91,7 @@ class InfoManager(object):
         self.opt = "optional"
         self.date = "date"
         self.metakey = "meta"
-
-
+        self.name = "name"
 
     def __path2elem(self, path):
         import os.path as op
@@ -102,16 +101,14 @@ class InfoManager(object):
                 return elem
         return None
 
-
     def __elem2dict(self, elem):
+        name = elem.get("name")
         tags = [self.normWhiteSpace(tag.text)
                 for tag in elem.find(self.tags_nm).findall(self.tag_nm)]
         comment = self.normWhiteSpace(elem.findtext(self.cmnt))
         date = self.normWhiteSpace(elem.findtext(self.date))
         opt = elem.find(self.opt)
-
-        return {self.tags_nm: tags, self.cmnt:comment, self.date: date, self.opt: opt}
-
+        return {self.name: name, self.tags_nm: tags, self.cmnt: comment, self.date: date, self.opt: opt}
 
     def normWhiteSpace(self, string):
         import re
@@ -121,13 +118,11 @@ class InfoManager(object):
         except TypeError:
             return None
 
-
     def taglist(self):
         tag_list = [tag.text for tag in self.root.iter(self.tag_nm)]
         tag_list = list(set(tag_list))
         tag_list.sort()
         return tag_list
-
 
     def taggedlist(self, tagbody):
         """
@@ -138,14 +133,12 @@ class InfoManager(object):
              if self.normWhiteSpace(tag.text) == self.normWhiteSpace(tagbody)]
         return l
 
-
     def runnamelist(self):
         """
         return run name list written in info_path.
         """
         l = [run.get("name") for run in list(self.root)]
         return l
-
 
     def runInfo(self, runname):
         """
@@ -155,13 +148,11 @@ class InfoManager(object):
             if elem.get("name") == runname:
                 return self.__elem2dict(elem)
 
-
     def setComment(self, runname, comment):
         for elem in list(self.root):
             if elem.get("name") == runname:
                 com = elem.find(self.cmnt)
                 com.text = comment
-
 
     def setTag(self, runname, tagbody):
         import xml.etree.ElementTree as ET
@@ -174,7 +165,6 @@ class InfoManager(object):
                 newtag = ET.SubElement(tags, self.tag_nm)
                 newtag.text = self.normWhiteSpace(tagbody)
 
-
     def rmTag(self, runname, tagbody):
         for elem in list(self.root):
             if elem.get("name") == runname:
@@ -185,39 +175,33 @@ class InfoManager(object):
                         return
                 raise Warning("%s was not defined." % tagbody)
 
-
     def metaPipe(self, run_list):
         pipedList = []
         for dic in run_list:
             elem = self.__path2elem(dic["path"])
-            if elem != None:
-                piped = {self.metakey:self.__elem2dict(elem)}
+            if elem is not None:
+                piped = {self.metakey: self.__elem2dict(elem)}
                 piped.update(dic)
                 pipedList.append(piped)
             else:
                 print("Warning: meta data for directory %s is not defined." % dic["path"])
         return pipedList
 
-
-    def saveInfo(self, info_path = None):
+    def saveInfo(self, info_path=None):
         """
         if info_path is not specified, meta data is written in read file.
         """
         import os.path
-        if info_path == None:
+        if info_path is None:
             info_path = self.info_path
         else:
             info_path = os.path.abspath(info_path)
-        self.tree.write(info_path, encoding = "UTF-8")
+        self.tree.write(info_path, encoding="UTF-8")
         return
 
-
-
-
-    def humanReadable(self, out_path = None):
+    def humanReadable(self, out_path=None):
         import os.path
-
-        if out_path == None:
+        if out_path is None:
             out_path = self.info_path
         else:
             out_path = os.path.abspath(out_path)
@@ -233,7 +217,6 @@ class InfoManager(object):
         f = open(out_path, "w")
         f.write(string)
         f.close
-
         return
 
     def addRun(self, runname):
@@ -242,14 +225,11 @@ class InfoManager(object):
         for run in list(self.root):
             if run.get("name") == runname:
                 raise Warning("%s exists already." % runname)
-        run = ET.SubElement(self.root, self.run_nm, {"name":runname})
+        run = ET.SubElement(self.root, self.run_nm, {"name": runname})
         ET.SubElement(run, self.cmnt)
         ET.SubElement(run, self.tags_nm)
         ET.SubElement(run, self.opt)
         ET.SubElement(run, self.date)
-
-
-
 
 
 def _rmindent(string):
@@ -262,23 +242,26 @@ def _rmindent(string):
             string = string + line.strip() + "\n"
     return string
 
+
 def _splitTag(string):
     import re
     reg1 = re.compile(r"<(.*?)>[ \t\b]*<(.*?)>")
-    if reg1.search(string) == None:
+    if reg1.search(string) is None:
         return string
     else:
         string = reg1.sub(r"<\1>\n<\2>", string, 1)
         return _splitTag(string)
 
+
 def _addNewline(string):
     import re
     reg1 = re.compile(r"(</run>[ \t\b]*[\n\r])(\S+)")
-    if reg1.search(string) == None:
+    if reg1.search(string) is None:
         return string
     else:
         string = reg1.sub(r"\1\n\2", string, 1)
         return _addNewline(string)
+
 
 def _checkTag(line):
     import re
@@ -296,6 +279,7 @@ def _checkTag(line):
         return "start"
     else:
         return "none"
+
 
 def _indent(string):
     import re
@@ -326,10 +310,9 @@ def addRunsMeta(run_list, info_path):
 
 def register(pipes_dics):
     pipes_dics["run_meta"] = {
-        "func" : addRunsMeta,
-        "args" : ["info_path"],
-        "desc" : "add run meta-data",
-        }
+        "func": addRunsMeta,
+        "args": ["info_path"],
+        "desc": "add run meta-data"}
 
 
 def _test():
