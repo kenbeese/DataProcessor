@@ -46,10 +46,12 @@ class DirConstructor(object):
 
     def __init__(self, conf_path):
         import os.path
-        from ..libs.ConfManager import ConfManager
-        config = ConfManager()
+        from ConfigParser import SafeConfigParser
+        config = SafeConfigParser()
         config.read(os.path.abspath(conf_path))
-        self.conf = config.confDict("rundir")
+        self.conf = []
+        for opt in config.options("rundir"):
+            self.conf[opt] = config.get("rundir", opt)
         self.conf["topdir_path"] = os.path.abspath(os.path.dirname(conf_path))
 
 
