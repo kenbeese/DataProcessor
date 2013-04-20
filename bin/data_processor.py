@@ -3,12 +3,10 @@
 
 import argparse
 import os.path
-import sys.path
+import sys
 
-sys.path.append("../lib")
-sys.path.reverse()
-import pipes
-sys.path.reverse()
+sys.path = [sys.path[0]] + ["../libs"] + sys.path[1:]
+import DataProcessor
 
 
 def main():
@@ -20,7 +18,7 @@ def main():
         print("such file does not exists")
         return 1
     with open(args.json_filename, 'r') as f:
-        pipes.execute_from_json_str(f.read())
+        DataProcessor.execute_from_json_str(f.read())
 
 if __name__ == "__main__":
     main()
