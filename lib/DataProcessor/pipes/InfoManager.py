@@ -92,6 +92,7 @@ class InfoManager(object):
         self.date = "date"
         self.metakey = "meta"
         self.name = "name"
+
     def __path2elem(self, path):
         import os.path as op
         path_key = op.relpath(path, op.dirname(self.info_path))
