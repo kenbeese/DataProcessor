@@ -58,6 +58,7 @@ def _install_attachments(template_dir,dest_path):
             shutil.copy2(a,att_dest_dir)
 
 def generate(run_list,template_dir,output_html_path,template_html_filename="template.html",install_attachments=False,pre_meta=["name","date"],post_meta=["tags","comment"],confs=None):
+    template_dir = os.path.expanduser(template_dir)
     output_html_path = os.path.expanduser(output_html_path)
     dest_dir = os.path.dirname(output_html_path)
     if install_attachments:
