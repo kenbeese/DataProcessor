@@ -54,14 +54,10 @@ class DirConstructor(object):
             self.conf[opt] = config.get("rundir", opt)
         self.conf["topdir_path"] = os.path.abspath(os.path.dirname(conf_path))
 
-
-
-
-    def listPath(self, num_list = False):
-        import glob, os
-
+    def listPath(self, num_list=False):
+        import glob
+        import os
         dirlist = []
-
         if num_list:
             for num in num_list:
                 try:
@@ -69,7 +65,7 @@ class DirConstructor(object):
                 except Exception as e:
                     print(e)
 
-        else :
+        else:
             search_str = os.path.join(self.conf["topdir_path"], self.conf["dir_prefix"]) + "[0-9]*"
             for dir in glob.glob(search_str):
                 num = self.path2num(dir)
@@ -77,17 +73,14 @@ class DirConstructor(object):
                     dirlist.append(self.num2path(num))
                 except Exception as e:
                     print(e)
-        return [{"path":path} for path in dirlist]
-
+        return [{"path": path} for path in dirlist]
 
     def path2num(self, path):
         import os.path
         if (not os.path.exists(path)):
             raise Exception(path + " is not exists.")
         base = self.__path2basename(path)
-
         return self.__basename2num(base)
-
 
     def num2path(self, num):
         import os.path
@@ -96,19 +89,15 @@ class DirConstructor(object):
             raise Exception(path + " is not exists.")
         return path
 
-
     def __num2basename(self, num):
         return (self.conf["dir_prefix"] + "%" + self.conf["num_format"]) % int(num)
-
 
     def __basename2num(self, dirname):
         return int(dirname.lstrip(self.conf["dir_prefix"]))
 
-
     def __path2basename(self, path):
         import os.path
         return os.path.basename(os.path.normpath(path))
-
 
 
 def runPaths(run_list, conf):
@@ -118,12 +107,10 @@ def runPaths(run_list, conf):
 
 
 def register(inputs_dics):
-    inputs_dics["runnum"] = {
+    inputs_dics["run_number"] = {
         "func": runPaths,
         "args": ["conf"],
-        "desc": "read runs configure and output runs dir paths"
-        }
-
+        "desc": "read runs configure and output runs dir paths"}
 
 
 def _test():
