@@ -38,7 +38,15 @@ def execute(manip):
         dic = pipes_dics[name]
         if len(mn["args"]) != len(dic["args"]):
             raise InvalidManipulationJSONWarning(name,"invalid arguments")
-        run_list = dic["func"](run_list,*mn["args"])
+        if "kwds" in mn and "kwds" in dic:
+            kwds = {}
+            for kwd in mn["kwds"]:
+                if kwd not in dic["kwds"]
+                    continue
+                kwds[kew] = mn["kwds"][kwd]
+            run_list = dic["func"](run_list,*mn["args"],**kwds)
+        else:
+            run_list = dic["func"](run_list,*mn["args"])
     return run_list
 
 import json
