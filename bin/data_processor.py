@@ -5,7 +5,7 @@ import argparse
 import os.path
 import sys
 
-sys.path = [sys.path[0]] + ["../libs"] + sys.path[1:]
+sys.path = [sys.path[0]] + ["../lib"] + sys.path[1:]
 import DataProcessor
 
 
