@@ -92,6 +92,7 @@ class InfoManager(object):
         self.date = "date"
         self.metakey = "meta"
         self.name = "name"
+        self.link_nm = "link"
 
     def __path2elem(self, path):
         import os.path as op
@@ -108,7 +109,10 @@ class InfoManager(object):
         comment = self.normWhiteSpace(elem.findtext(self.cmnt))
         date = self.normWhiteSpace(elem.findtext(self.date))
         opt = elem.find(self.opt)
-        return {self.name: name, self.tags_nm: tags, self.cmnt: comment, self.date: date, self.opt: opt}
+        link = self.normWhiteSpace(elem.findtext(self.link_nm))
+        return {self.name: name, self.tags_nm: tags,
+                self.cmnt: comment, self.date: date, self.opt: opt,
+                self.link_nm: link}
 
     def normWhiteSpace(self, string):
         import re
@@ -153,6 +157,17 @@ class InfoManager(object):
             if elem.get("name") == runname:
                 com = elem.find(self.cmnt)
                 com.text = comment
+
+    def setLink(self, runname, url):
+        import xml.etree.ElementTree as ET
+        for elem in list(self.root):
+            if elem.get("name") == runname:
+                link = elem.find(self.link_nm)
+                if link is not None:
+                    link.text = url
+                else:
+                    newlink = ET.SubElement(elem, self.link_nm)
+                    newlink.text = self.normWhiteSpace(url)
 
     def setTag(self, runname, tagbody):
         import xml.etree.ElementTree as ET
