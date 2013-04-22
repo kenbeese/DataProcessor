@@ -67,7 +67,9 @@ class DirConstructor(object):
 
         else:
             search_str = os.path.join(self.conf["topdir_path"], self.conf["dir_prefix"]) + "[0-9]*"
-            for dir in glob.glob(search_str):
+            dirs = glob.glob(search_str)
+            dirs.sort()
+            for dir in dirs:
                 num = self.path2num(dir)
                 try:
                     dirlist.append(self.num2path(num))
