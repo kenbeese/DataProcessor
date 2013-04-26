@@ -176,7 +176,7 @@ class InfoManager(object):
                 tags = elem.find(self.tags_nm)
                 for tag in tags.findall(self.tag_nm):
                     if tag.text == self.normWhiteSpace(tagbody):
-                        raise Warning("%s was already defined." & tagbody)
+                        raise Warning("%s was already defined." % tagbody)
                 newtag = ET.SubElement(tags, self.tag_nm)
                 newtag.text = self.normWhiteSpace(tagbody)
 
