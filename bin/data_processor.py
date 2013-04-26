@@ -5,8 +5,9 @@ import argparse
 import os.path
 import sys
 
-sys.path = [sys.path[0]] + ["../lib"] + sys.path[1:]
+sys.path = [sys.path[0]] + [os.path.join(os.path.dirname(__file__), "../lib")] + sys.path[1:]
 import DataProcessor
+sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main():
