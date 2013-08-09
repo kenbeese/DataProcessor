@@ -6,11 +6,12 @@ class InfoManager(object):
     if specified optional, return elementTree object.
 
     Usage:
+    >>> ### Add some data from path. ###
     >>> info = InfoManager()
     >>> diclist = [{"path":"/tmp/run01", "date":"1982/9/32",
     ...     "children": ["/tmp/hoge", "/tmp/hogehoge/"], "tags":["hoge", "hoges"]},
     ...     {"path":"/tmp/run02"}, {"path":"/tmp/run03"}]
-    >>> node_list = info.metaPipe(diclist)
+    >>> node_list = info.metaPipe(diclist) # Add some data to list
     >>> node_list[0] == {'path': '/tmp/run01',
     ...     'name': 'run01', 'type': 'unknown',
     ...     'comment': '', 'date': '1982/9/32',
@@ -22,14 +23,23 @@ class InfoManager(object):
     ...     'comment': '', 'date': '',
     ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
     True
+    >>> node_list[2] == {'path': '/tmp/run03',
+    ...     'name': 'run03', 'type': 'unknown',
+    ...     'comment': '', 'date': '',
+    ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
+    True
+    >>>
+    >>> ### edit some elements and save. ###
     >>> node_list[1]["comment"] = "I am sleepy"
     >>> node_list[1] == {'path': '/tmp/run02',
     ...     'name': 'run02', 'type': 'unknown',
     ...     'comment': 'I am sleepy', 'date': '',
     ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
     True
-    >>> info.dlist2xmlTree(node_list)
+    >>> info.dlist2xmlTree(node_list) # transform list to xmltree
     >>> info.saveInfo("/tmp/hoge.xml")
+    >>>
+    >>> ### scan metadata xml. ###
     >>> filestring = '''<?xml version="1.0" encoding="utf-8"?>
     ... <data>
     ...   <node path="/tmp/testrun/run01" name="run01" type="run">
@@ -68,7 +78,7 @@ class InfoManager(object):
     >>> f.write(filestring)
     >>> f.close()
     >>> info = InfoManager("/tmp/test.xml")
-    >>> info.read()
+    >>> info.read()             # read xml
     >>> diclist = []
     >>> info.scanMeta(diclist) == [{'comment': 'hogecommet', 'evaluation': '', 'parents': [],
     ...     'name': 'run01', 'tags': ['yes', u'\u3070\u304b', 'ahohage'], 'date':
