@@ -1,4 +1,4 @@
 DataProcessor
 =============
 
-data processor
+A data processing library.

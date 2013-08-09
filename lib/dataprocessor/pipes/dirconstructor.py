@@ -1,15 +1,17 @@
-
-
 class DirConstructor(object):
     """
     IO for run_results file formatted as JSON.
+
+
     Usage:
+    >>> filestring = '''[rundir]
+    ... dir_prefix = run
+    ... num_format = 02d
+    ... #rundirname = dir_prefix + "%" + num_format
+    ... #In this case, rundirname = run%02d
+    ... '''
     >>> f = open("/tmp/conffile", "w")
-    >>> f.write(u"[rundir]            \\n")                   # make conf file
-    >>> f.write(u"dir_prefix = run    \\n")
-    >>> f.write(u"num_format = 02d    \\n")
-    >>> f.write(u"#rundirname = dir_prefix + \\"%\\" + num_format  \\n")
-    >>> f.write(u"#In this case, rundirname = run%02d \\n")
+    >>> f.write(filestring)
     >>> f.close()
     >>> import os
     >>> os.mkdir("/tmp/run02")
@@ -44,17 +46,18 @@ class DirConstructor(object):
 
     def __init__(self, conf_path):
         import os.path
-        self.conf = read_rundirConf(conf_path, "rundir")
+        from ConfigParser import SafeConfigParser
+        config = SafeConfigParser()
+        config.read(os.path.abspath(conf_path))
+        self.conf = {}
+        for opt in config.options("rundir"):
+            self.conf[opt] = config.get("rundir", opt)
         self.conf["topdir_path"] = os.path.abspath(os.path.dirname(conf_path))
 
-
-
-
-    def listPath(self, num_list = False):
-        import glob, os
-
+    def listPath(self, num_list=False):
+        import glob
+        import os
         dirlist = []
-
         if num_list:
             for num in num_list:
                 try:
@@ -62,25 +65,24 @@ class DirConstructor(object):
                 except Exception as e:
                     print(e)
 
-        else :
+        else:
             search_str = os.path.join(self.conf["topdir_path"], self.conf["dir_prefix"]) + "[0-9]*"
-            for dir in glob.glob(search_str):
+            dirs = glob.glob(search_str)
+            dirs.sort()
+            for dir in dirs:
                 num = self.path2num(dir)
                 try:
                     dirlist.append(self.num2path(num))
                 except Exception as e:
                     print(e)
-        return [{"path":path} for path in dirlist]
-
+        return [{"path": path} for path in dirlist]
 
     def path2num(self, path):
         import os.path
         if (not os.path.exists(path)):
             raise Exception(path + " is not exists.")
         base = self.__path2basename(path)
-
         return self.__basename2num(base)
-
 
     def num2path(self, num):
         import os.path
@@ -89,58 +91,28 @@ class DirConstructor(object):
             raise Exception(path + " is not exists.")
         return path
 
-
     def __num2basename(self, num):
         return (self.conf["dir_prefix"] + "%" + self.conf["num_format"]) % int(num)
 
-
     def __basename2num(self, dirname):
         return int(dirname.lstrip(self.conf["dir_prefix"]))
-
 
     def __path2basename(self, path):
         import os.path
         return os.path.basename(os.path.normpath(path))
 
 
-
-def read_rundirConf(conf_path, section):
-    """
-    Return dict of CONF_PATH configure in SECTION.
-
-    >>> f = open("/tmp/testfile", "w")
-    >>> f.write(u"[sec1]      \\n") # make conf file
-    >>> f.write(u"conf1 = 3   \\n")
-    >>> f.write(u"conf2 = 4   \\n")
-    >>> f.write(u"[sec2]      \\n")
-    >>> f.write(u"conf4 = 2   \\n")
-    >>> f.write(u"conf1 = 5   \\n")
-    >>> f.close()
-    >>> sec1 = read_rundirConf("/tmp/testfile", "sec1")
-    >>> sec2 = read_rundirConf("/tmp/testfile", "sec2")
-    >>> print sec1['conf1']
-    3
-    >>> print sec1['conf2']
-    4
-    >>> print sec2['conf1']
-    5
-    >>> print sec2['conf4']
-    2
-    >>> import os
-    >>> os.remove("/tmp/testfile")
-    """
-    import ConfigParser
-    config = ConfigParser.SafeConfigParser()
-    config.optionxform = str
-    config.read(conf_path)
-
-    confd = {}
-    for key in config.options(section):
-        confd[key] = config.get(section, key)
-
-    return confd
+def runPaths(run_list, conf):
+    DC = DirConstructor(conf)
+    run_list = run_list + DC.listPath()
+    return run_list
 
 
+def register(inputs_dics):
+    inputs_dics["run_number"] = {
+        "func": runPaths,
+        "args": ["conf"],
+        "desc": "read runs configure and output runs dir paths"}
 
 
 def _test():
