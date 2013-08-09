@@ -11,7 +11,8 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main():
-    parser = argparse.ArgumentParser(description="command line interface for DataProcessor pipeline")
+    parser = argparse.ArgumentParser(description="""
+                command line interface for DataProcessor pipeline""")
     parser.add_argument('json_filename')
     args = parser.parse_args()
 
@@ -20,6 +21,7 @@ def main():
         return 1
     with open(args.json_filename, 'r') as f:
         DataProcessor.execute_from_json_str(f.read())
+
 
 if __name__ == "__main__":
     main()

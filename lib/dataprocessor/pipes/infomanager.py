@@ -1,4 +1,6 @@
 #encoding:utf-8
+
+
 class InfoManager(object):
     """
     if specified optional, return elementTree object.
@@ -199,7 +201,8 @@ class InfoManager(object):
                 piped.update(dic)
                 pipedList.append(piped)
             else:
-                print("Warning: meta data for directory %s is not defined." % dic["path"])
+                print("Warning: meta data for directory %s is not defined."
+                      % dic["path"])
         return pipedList
 
     def saveInfo(self, info_path=None):
