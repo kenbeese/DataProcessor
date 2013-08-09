@@ -1,0 +1,108 @@
+#compdef runpm
+
+# function _runpm(){
+#     local optdesc
+#     optdesc=($'-v\tShow verbose help' $'-m\tSpecify meta file path' $'-c\tSpecify conf file path')
+#     compadd -J 'option' -X "%UOptions%u" -ld optdesc -- -v -m -c
+#     compadd -V 'argument' -X "%USubcommands%u" lstag lsrun info setc settag rmtag tagged addRun reflesh
+# }
+
+
+function _runpm(){
+    local context state line curcontext="$curcontext"
+    local ret=1
+    typeset -A opt_args
+    _arguments -C \
+        '(*)-v[Show verbose help]' \
+        '(*)-h[Show help]' \
+        '-m[Specify meta file path]:Input file:_files' \
+        '1:cmd:->cmds' \
+        '*::arg:->args' \
+        && ret=0
+    case "$state" in
+        cmds)
+            local commands
+            commands=(
+                'lstag:list tag'
+                'lsrun:list run'
+                'info:show run info'
+                'setc:set comment'
+                'settag:set tag'
+                'rmtag:rm tag'
+                'tagged:list of specified tag'
+                'addRun:add run'
+                'reflesh:convert xml to humanreadable'
+            )
+            _describe -t commands 'command' commands && ret=0
+            ;;
+        args)
+            curcontext="${curcontext%:*:*}:runpm-cmd-$words[1]:"
+            case $words[1] in
+                lstag|lsrun|reflesh)
+                    _message 'no more arguments' && ret=0
+                    ;;
+                info)
+                    _arguments \
+                        '1: :_runpm_runlist' \
+                        && ret=0
+                    ;;
+                settag)
+                    _arguments \
+                        '1: :_runpm_runlist' \
+                        '2: :_runpm_taglist' \
+                        && ret=0
+                    ;;
+                setc)
+                    _arguments \
+                        '1: :_runpm_runlist' \
+                        '2: : ' \
+                        && ret=0
+                    ;;
+                rmtag)
+                    _arguments \
+                        '1: :_runpm_runlist' \
+                        '2: :_runpm_taglist' \
+                        && ret=0
+                    ;;
+                tagged)
+                    _arguments \
+                        '1: :_runpm_taglist' \
+                        && ret=0
+                    ;;
+                addRun)
+                    _arguments \
+                        '1: : ' \
+                        && ret=0
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+
+_runpm_runlist() {
+    runpm lsrun > /dev/null 2>&1
+    if [[ $? != 0 ]];then
+        return
+    fi
+    local runlist="$(runpm lsrun)"
+    local list
+    : ${(A)list::=${${(f)${runlist}}}}
+    _describe -t runlist 'run list' list
+}
+
+_runpm_taglist() {
+    runpm lstag > /dev/null 2>&1
+    if [[ $? != 0 ]];then
+        return
+    fi
+    local taglist="$(runpm lstag)"
+    local list
+    : ${(A)list::=${${(f)${taglist}}}}
+    _describe -t taglist 'tag list' list
+}
+
+
+_runpm "$@"
