@@ -2,8 +2,6 @@
 """@DataProcessor
 """
 import json
-import sys
-
 import pipes
 
 
