@@ -25,10 +25,10 @@ def filter(run_list, *tags):
 
 def register(pipes_dics):
     pipes_dics["tagFilter"] = {
-        "func" : filter,
-        "args" : ["tag"],
-        "desc" : "extract run with tag"
-        }
+        "func": filter,
+        "args": ["tag"],
+        "desc": "extract run with tag"
+    }
 
 
 def _test():
