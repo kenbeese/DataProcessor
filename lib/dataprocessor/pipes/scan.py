@@ -1,52 +1,43 @@
 import os
-import time
 from glob import glob
 
 
-def __get_dirs(path):
-    return os.walk(path).next()[1]
-
-
-def __date(path):
-    stat = os.stat(path)
-    last_modified = stat.st_mtime
-    return time.ctime(last_modified)
-
-
-def directory(run_list, root):
+def directory(node_list, root, whitelist):
     root = os.path.abspath(os.path.expanduser(root))
-    projects = __get_dirs(root)
-    for project in projects:
-        project_path = os.path.join(root, project)
-        run_dirs = __get_dirs(project_path)
-        for run_dir in run_dirs:
-            path = os.path.join(project_path, run_dir)
-            htmls = glob(os.path.join(path, "*.html"))
-            if len(htmls) >= 1:
-                run_list.append({"path": path,
-                                 "meta": {
-                                     "name": run_dir,
-                                     "project": project,
-                                     "date": __date(path),
-                                     "link": os.path.abspath(htmls[0]),
-                                 }, })
-            else:
-                run_list.append({"path": path,
-                                 "meta": {
-                                     "name": run_dir,
-                                     "project": project,
-                                     "date": __date(path),
-                                 }, })
-    return run_list
+    for path, dirs, files in os.walk(root):
+        node_type = None
+        parents = []
+        children = []
+        for child in dirs:
+            for white in whitelist:
+                if glob(os.path.join(path, child, white)):
+                    node_type = "project"
+                    children.append(os.path.join(path, child))
+                    break
+        for white in whitelist:
+            if glob(os.path.join(path, white)):
+                node_type = "run"
+                parents.append(os.path.dirname(path))
+                break
+        if not node_type:
+            continue
+        node_list.append({"path": path,
+                          "parents": parents,
+                          "children": children,
+                          "type": node_type,
+                          "name": os.path.basename(path),
+                          })
+    return node_list
 
 
 def register(pipe_dics):
     pipe_dics["scan_directory"] = {
         "func": directory,
-        "args": ["root_path"],
+        "args": ["root_path", "whitelist"],
         "desc": "scan direcoty structure",
     }
 
+
 if __name__ == "__main__":
-    run_list = directory([], "~/data")
-    print(run_list)
+    node_list = directory([], "~/data", ["*.conf"])
+    print(node_list)
