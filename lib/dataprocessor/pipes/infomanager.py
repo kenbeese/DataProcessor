@@ -132,13 +132,13 @@ class InfoManager(object):
         path = elem.get("path")
         name = elem.get("name")
         node_type = elem.get("type")
-        tags = [self.normWhiteSpace(tag.text)
+        tags = [self.normalizeWhiteSpace(tag.text)
                 for tag in elem.find(self.tags_nm).findall(self.tag_nm)]
-        comment = self.normWhiteSpace(elem.findtext(self.cmnt))
-        date = self.normWhiteSpace(elem.findtext(self.date))
+        comment = self.normalizeWhiteSpace(elem.findtext(self.cmnt))
+        date = self.normalizeWhiteSpace(elem.findtext(self.date))
         parents = [parent.text for parent in elem.find(self.parents).findall(self.link)]
         children = [child.text for child in elem.find(self.children).findall(self.link)]
-        evaluation = self.normWhiteSpace(elem.findtext(self.evaluation))
+        evaluation = self.normalizeWhiteSpace(elem.findtext(self.evaluation))
         # print path, name, node_type, tags, comment, date, parents, children, evaluation
         return {self.path: path, self.name: name,
                 self.node_type: node_type, self.tags_nm: tags,
@@ -146,43 +146,13 @@ class InfoManager(object):
                 self.cmnt: comment, self.date: date,
                 self.parents: parents, self.children: children}
 
-    def normWhiteSpace(self, string):
+    def normalizeWhiteSpace(self, string):
         import re
         reg = re.compile("\s+")
         try:
             return reg.sub(" ", string).strip()
         except TypeError:
             return None
-
-    def taglist(self):
-        tag_list = [tag.text for tag in self.root.iter(self.tag_nm)]
-        tag_list = list(set(tag_list))
-        tag_list.sort()
-        return tag_list
-
-    def taggedlist(self, tagbody):
-        """
-        return path list written in info_path.
-        """
-        l = [node.get("path") for node in list(self.root)
-             for tag in node.find(self.tags_nm).findall(self.tag_nm)
-             if self.normWhiteSpace(tag.text) == self.normWhiteSpace(tagbody)]
-        return l
-
-    def nodelist(self):
-        """
-        return node path list written in info_path.
-        """
-        l = [node.get("path") for node in list(self.root)]
-        return l
-
-    def nodeInfo(self, path):
-        """
-        return node infomation, for example, comment, tag, date, etc.
-        """
-        for elem in list(self.root):
-            if elem.get("path") == path:
-                return self.__elem2dict(elem)
 
     def scanMeta(self, node_list):
         node_list = []
@@ -207,32 +177,14 @@ class InfoManager(object):
         if info_path is not specified, meta data is written in read file.
         """
         import os.path
+        import etreeio
         if info_path is None:
             info_path = self.info_path
         else:
             info_path = os.path.abspath(info_path)
             self.info_path = info_path
         self.tree.write(info_path, encoding="UTF-8")
-        self.humanReadable(info_path)
-        return
-
-    def humanReadable(self, out_path=None):
-        import os.path
-        if out_path is None:
-            out_path = self.info_path
-        else:
-            out_path = os.path.abspath(out_path)
-        f = open(self.info_path)
-        string = f.read()
-        f.close()
-
-        string = _rmindent(string)
-        string = _splitTag(string)
-        string = _addNewline(string)
-        string = _indent(string)
-        f = open(out_path, "w")
-        f.write(string)
-        f.close
+        etreeio.readable(info_path)
         return
 
     def addNode(self, path, name=None, type="unknown", comment="", tags=[],
@@ -264,74 +216,6 @@ class InfoManager(object):
             ET.SubElement(children_ele, self.link).text = child
 
 
-def _rmindent(string):
-    import re
-    sp = re.compile("[\n\r]")
-    lines = sp.split(string)
-    string = ""
-    for line in lines:
-        if line != "":
-            string = string + line.strip() + "\n"
-    return string
-
-
-def _splitTag(string):
-    import re
-    reg1 = re.compile(r"<(.*?)>[ \t\b]*<(.*?)>")
-    if reg1.search(string) is None:
-        return string
-    else:
-        string = reg1.sub(r"<\1>\n<\2>", string, 1)
-        return _splitTag(string)
-
-
-def _addNewline(string):
-    import re
-    reg1 = re.compile(r"(</run>[ \t\b]*[\n\r])(\S+)")
-    if reg1.search(string) is None:
-        return string
-    else:
-        string = reg1.sub(r"\1\n\2", string, 1)
-        return _addNewline(string)
-
-
-def _checkTag(line):
-    import re
-    startend = re.compile("<.+?>.*?</.+?>")
-    end = re.compile("</.+?>")
-    onetag = re.compile("<.+?/>")
-    start = re.compile("<.+?>")
-    if startend.search(line):
-        return "startend"
-    elif onetag.search(line):
-        return "oneline"
-    elif end.search(line):
-        return "end"
-    elif start.search(line):
-        return "start"
-    else:
-        return "none"
-
-
-def _indent(string):
-    import re
-    sp = re.compile("[\n\r]")
-    lines = sp.split(string)
-    string = ""
-    depth = 0
-    for line in lines:
-        if line == "":
-            string = string + "\n"
-        else:
-            if _checkTag(line) == "start":
-                string = string + "  " * (depth) + line + "\n"
-                depth = depth + 1
-            elif _checkTag(line) == "end":
-                depth = depth - 1
-                string = string + "  " * (depth) + line + "\n"
-            else:
-                string = string + "  " * (depth) + line + "\n"
-    return string
 
 
 def addRunsMeta(run_list):
