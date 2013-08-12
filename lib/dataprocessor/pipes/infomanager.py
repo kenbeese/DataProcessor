@@ -85,22 +85,22 @@ class InfoManager(object):
         path = elem.get(self.path)
         name = elem.get(self.name)
         node_type = elem.get(self.node_type)
-        tags = [self.normalizeWhiteSpace(tag.text)
+        tags = [self.normalize_white_space(tag.text)
                 for tag in elem.find(self.tags_nm).findall(self.tag_nm)]
-        comment = self.normalizeWhiteSpace(elem.findtext(self.cmnt))
-        date = self.normalizeWhiteSpace(elem.findtext(self.date))
+        comment = self.normalize_white_space(elem.findtext(self.cmnt))
+        date = self.normalize_white_space(elem.findtext(self.date))
         parents = [parent.text for parent
                    in elem.find(self.parents).findall(self.link)]
         children = [child.text for child
                     in elem.find(self.children).findall(self.link)]
-        evaluation = self.normalizeWhiteSpace(elem.findtext(self.evaluation))
+        evaluation = self.normalize_white_space(elem.findtext(self.evaluation))
         return {self.path: path, self.name: name,
                 self.node_type: node_type, self.tags_nm: tags,
                 self.evaluation: evaluation,
                 self.cmnt: comment, self.date: date,
                 self.parents: parents, self.children: children}
 
-    def normalizeWhiteSpace(self, string):
+    def normalize_white_space(self, string):
         import re
         reg = re.compile("\s+")
         try:
@@ -120,16 +120,16 @@ class InfoManager(object):
         self.tree = ET.ElementTree(ET.Element("data"))
         self.root_element = self.tree.getroot()
         for node in node_list:
-            self.addNode2etree(**node)
+            self.add_node2etree(**node)
 
     def save(self, out_path):
         import etreeio
         etreeio.write(self.tree, out_path)
         return
 
-    def addNode2etree(self, path, name=None, type="unknown", comment="",
-                      tags=[], date="", parents=[], children=[],
-                      evaluation=""):
+    def add_node2etree(self, path, name=None, type="unknown", comment="",
+                       tags=[], date="", parents=[], children=[],
+                       evaluation=""):
         for node in list(self.root_element):
             if node.get("path") == path:
                 raise Warning("%s exists already." % path)
@@ -161,7 +161,7 @@ def fill_node_list(node_list):
     return info.etree2node_list()
 
 
-def scanMeta(node_list, info_path):
+def scan_meta(node_list, info_path):
     info = InfoManager()
     info.read(info_path)
     node_list = node_list.append(info.etree2node_list())
@@ -180,7 +180,7 @@ def register(pipes_dics):
         "args": [],
         "desc": "add run meta-data"}
     pipes_dics["scan_meta"] = {
-        "func": scanMeta,
+        "func": scan_meta,
         "args": ["info_path"],
         "desc": "scan meta-data"}
     pipes_dics["save_meta"] = {

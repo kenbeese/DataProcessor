@@ -29,8 +29,8 @@ def readable(in_filepath, out_filepath=None):
     f.close()
 
     string = _rmindent(string)
-    string = _splitTag(string)
-    string = _addNewline(string)
+    string = _splittag(string)
+    string = _add_newline(string)
     string = _indent(string)
     f = open(out_filepath, "w")
     f.write(string)
@@ -48,27 +48,27 @@ def _rmindent(string):
     return string
 
 
-def _splitTag(string):
+def _splittag(string):
     import re
     reg1 = re.compile(r"<(.*?)>[ \t\b]*<(.*?)>")
     if reg1.search(string) is None:
         return string
     else:
         string = reg1.sub(r"<\1>\n<\2>", string, 1)
-        return _splitTag(string)
+        return _splittag(string)
 
 
-def _addNewline(string):
+def _add_newline(string):
     import re
     reg1 = re.compile(r"(</run>[ \t\b]*[\n\r])(\S+)")
     if reg1.search(string) is None:
         return string
     else:
         string = reg1.sub(r"\1\n\2", string, 1)
-        return _addNewline(string)
+        return _add_newline(string)
 
 
-def _checkTag(line):
+def _checktag(line):
     import re
     startend = re.compile("<.+?>.*?</.+?>")
     end = re.compile("</.+?>")
@@ -96,10 +96,10 @@ def _indent(string):
         if line == "":
             string = string + "\n"
         else:
-            if _checkTag(line) == "start":
+            if _checktag(line) == "start":
                 string = string + "  " * (depth) + line + "\n"
                 depth = depth + 1
-            elif _checkTag(line) == "end":
+            elif _checktag(line) == "end":
                 depth = depth - 1
                 string = string + "  " * (depth) + line + "\n"
             else:
