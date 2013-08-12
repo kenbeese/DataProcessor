@@ -1,5 +1,6 @@
 #encoding:utf-8
-import os.path as op
+import os.path
+import xml.etree.ElementTree as ET
 
 
 class InfoManager(object):
@@ -78,8 +79,8 @@ class InfoManager(object):
     >>> f = open("/tmp/test.xml", "w")
     >>> f.write(filestring)
     >>> f.close()
-    >>> info = InfoManager("/tmp/test.xml")
-    >>> info.read()             # read xml
+    >>> info = InfoManager()
+    >>> info.read("/tmp/test.xml")             # read xml
     >>> diclist = []
     >>> info.scanMeta(diclist) == [{'comment': 'hogecommet', 'evaluation': '', 'parents': [],
     ...     'name': 'run01', 'tags': ['yes', u'\u3070\u304b', 'ahohage'], 'date':
@@ -90,14 +91,12 @@ class InfoManager(object):
     ...     {'comment': '', 'evaluation': '', 'parents': [], 'name': 'hogehoge2', 'tags': [],
     ...     'date': '1987/05/12', 'path': '/tmp/testrun2', 'type': 'hyahha-', 'children': []}]
     True
-    >>> info.saveInfo()
+    >>> info.saveInfo("/tmp/test.xml")
     """
 
-    def __init__(self, info_path="metainfo.xml", root_path="."):
-        import xml.etree.ElementTree as ET
+    def __init__(self, root_path="."):
         self.tree = ET.ElementTree(ET.Element("data"))
         self.root_element = self.tree.find(root_path)
-        self.info_path = op.abspath(info_path)
         self.node_nm = "node"
         self.path = "path"
         self.tags_nm = "tags"
@@ -111,11 +110,10 @@ class InfoManager(object):
         self.date = "date"
         self.node_type = "type"
 
-    def read(self, info_path=None, root_path="."):
+    def read(self, read_path, root_path="."):
         import etreeio
-        if info_path is not None:
-            self.info_path = op.abspath(info_path)
-        self.tree, self.root_element = etreeio.read(self.info_path, root_path)
+        fpath = os.path.abspath(read_path)
+        self.tree, self.root_element = etreeio.read(fpath, root_path)
 
     def __path2elem(self, path):
         for elem in list(self.root_element):
@@ -168,15 +166,8 @@ class InfoManager(object):
         self.dlist2xmlTree(node_list)
         return self.scanMeta(node_list)
 
-    def saveInfo(self, out_path=None):
-        """
-        if info_path is not specified, meta data is written in read file.
-        """
+    def saveInfo(self, out_path):
         import etreeio
-        if out_path is None:
-            out_path = self.info_path
-        else:
-            out_path = op.abspath(out_path)
         etreeio.write(self.tree, out_path)
         return
 
@@ -216,8 +207,8 @@ def addRunsMeta(run_list):
 
 
 def scanMeta(run_list, info_path):
-    info = InfoManager(info_path)
-    info.read()
+    info = InfoManager()
+    info.read(info_path)
     run_list = info.scanPipe(run_list)
     return run_list
 
