@@ -8,16 +8,19 @@ class InfoManager(object):
     if specified optional, return elementTree object.
 
     Usage:
-    >>> ### Add some data from path. ###
+    >>> ### fill incomplete node_list. ###
     >>> info = InfoManager()
     >>> diclist = [{"path":"/tmp/run01", "date":"1982/9/32",
-    ...     "children": ["/tmp/hoge", "/tmp/hogehoge/"], "tags":["hoge", "hoges"]},
+    ...     "children": ["/tmp/hoge", "/tmp/hogehoge/"],
+    ...     "tags":["hoge", "hoges"]},
     ...     {"path":"/tmp/run02"}, {"path":"/tmp/run03"}]
-    >>> node_list = info.metaPipe(diclist) # Add some data to list
+    >>> info.node_list2etree(diclist) # incomplete node_list -> complete etree
+    >>> node_list = info.etree2node_list()
     >>> node_list[0] == {'path': '/tmp/run01',
     ...     'name': 'run01', 'type': 'unknown',
     ...     'comment': '', 'date': '1982/9/32',
-    ...     'tags': ['hoge', 'hoges'], 'parents': [], 'children': ["/tmp/hoge", "/tmp/hogehoge/"],
+    ...     'tags': ['hoge', 'hoges'], 'parents': [],
+    ...     'children': ["/tmp/hoge", "/tmp/hogehoge/"],
     ...     'evaluation': ''}
     True
     >>> node_list[1] == {'path': '/tmp/run02',
@@ -31,6 +34,7 @@ class InfoManager(object):
     ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
     True
     >>>
+    >>>
     >>> ### edit some elements and save. ###
     >>> node_list[1]["comment"] = "I am sleepy"
     >>> node_list[1] == {'path': '/tmp/run02',
@@ -38,60 +42,22 @@ class InfoManager(object):
     ...     'comment': 'I am sleepy', 'date': '',
     ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
     True
-    >>> info.dlist2xmlTree(node_list) # transform list to xmltree
-    >>> info.saveInfo("/tmp/hoge.xml")
+    >>> info.node_list2etree(node_list) # transform node list to etree
+    >>> info.save("/tmp/hoge.xml")
+    >>>
     >>>
     >>> ### scan metadata xml. ###
-    >>> filestring = '''<?xml version="1.0" encoding="utf-8"?>
-    ... <data>
-    ...   <node path="/tmp/testrun/run01" name="run01" type="run">
-    ...     <tags>
-    ...       <tag>yes</tag>
-    ...       <tag>ばか</tag>
-    ...       <tag>ahohage</tag>
-    ...     </tags>
-    ...     <comment>hogecommet</comment>
-    ...     <date>1987/05/12</date>
-    ...     <evaluation/>
-    ...     <parents>
-    ...     </parents>
-    ...     <children>
-    ...     </children>
-    ...   </node>
-    ...
-    ...   <node path="/tmp/testrun" name="hogeproject" type="project">
-    ...     <tags>
-    ...       <tag>yes</tag>
-    ...       <tag>ahohage</tag>
-    ...     </tags>
-    ...     <comment>hogecommet</comment>
-    ...     <date>1987/05/12</date>
-    ...     <evaluation/>
-    ...     <parents>
-    ...        <link>/hogehoge/home/</link>
-    ...     </parents>
-    ...     <children>
-    ...     </children>
-    ...   </node>
-    ...   <node path="/tmp/testrun2" name="hogehoge2" type="hyahha-">
-    ...   <tags/><comment/> <date>1987/05/12</date><evaluation/><parents>
-    ...     </parents>     <children>     </children> </node> </data>'''
-    >>> f = open("/tmp/test.xml", "w")
-    >>> f.write(filestring)
-    >>> f.close()
     >>> info = InfoManager()
-    >>> info.read("/tmp/test.xml")             # read xml
-    >>> diclist = []
-    >>> info.scanMeta(diclist) == [{'comment': 'hogecommet', 'evaluation': '', 'parents': [],
-    ...     'name': 'run01', 'tags': ['yes', u'\u3070\u304b', 'ahohage'], 'date':
-    ...     '1987/05/12', 'path': '/tmp/testrun/run01', 'type': 'run', 'children': []},
-    ...     {'comment': 'hogecommet', 'evaluation': '', 'parents': ['/hogehoge/home/'],
-    ...     'name': 'hogeproject', 'tags': ['yes', 'ahohage'], 'date': '1987/05/12',
-    ...     'path': '/tmp/testrun', 'type': 'project', 'children': []},
-    ...     {'comment': '', 'evaluation': '', 'parents': [], 'name': 'hogehoge2', 'tags': [],
-    ...     'date': '1987/05/12', 'path': '/tmp/testrun2', 'type': 'hyahha-', 'children': []}]
+    >>> info.read("/tmp/hoge.xml")             # read xml
+    >>> node_list = info.etree2node_list()     # output node_list format
+    >>> node_list[1] == {'path': '/tmp/run02',
+    ...     'name': 'run02', 'type': 'unknown',
+    ...     'comment': 'I am sleepy', 'date': '',
+    ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
     True
-    >>> info.saveInfo("/tmp/test.xml")
+    >>> info.node_list2etree(node_list)
+    >>> node_list = info.etree2node_list()
+    >>> info.save("/tmp/test.xml")
     """
 
     def __init__(self, root_path="."):
@@ -115,25 +81,19 @@ class InfoManager(object):
         fpath = os.path.abspath(read_path)
         self.tree, self.root_element = etreeio.read(fpath, root_path)
 
-    def __path2elem(self, path):
-        for elem in list(self.root_element):
-            if elem.get("path") == path:
-                return elem
-        self.addNode(path)
-        return None
-
-    def __elem2dict(self, elem):
-        path = elem.get("path")
-        name = elem.get("name")
-        node_type = elem.get("type")
+    def __element2node(self, elem):
+        path = elem.get(self.path)
+        name = elem.get(self.name)
+        node_type = elem.get(self.node_type)
         tags = [self.normalizeWhiteSpace(tag.text)
                 for tag in elem.find(self.tags_nm).findall(self.tag_nm)]
         comment = self.normalizeWhiteSpace(elem.findtext(self.cmnt))
         date = self.normalizeWhiteSpace(elem.findtext(self.date))
-        parents = [parent.text for parent in elem.find(self.parents).findall(self.link)]
-        children = [child.text for child in elem.find(self.children).findall(self.link)]
+        parents = [parent.text for parent
+                   in elem.find(self.parents).findall(self.link)]
+        children = [child.text for child
+                    in elem.find(self.children).findall(self.link)]
         evaluation = self.normalizeWhiteSpace(elem.findtext(self.evaluation))
-        # print path, name, node_type, tags, comment, date, parents, children, evaluation
         return {self.path: path, self.name: name,
                 self.node_type: node_type, self.tags_nm: tags,
                 self.evaluation: evaluation,
@@ -148,41 +108,36 @@ class InfoManager(object):
         except TypeError:
             return None
 
-    def scanMeta(self, node_list):
+    def etree2node_list(self):
         node_list = []
-        for node in list(self.root_element):
-            piped = self.__elem2dict(node)
-            node_list.append(piped)
+        for node_element in list(self.root_element):
+            node = self.__element2node(node_element)
+            node_list.append(node)
         return node_list
 
-    def dlist2xmlTree(self, dlist):
+    def node_list2etree(self, node_list):
         import xml.etree.ElementTree as ET
         self.tree = ET.ElementTree(ET.Element("data"))
         self.root_element = self.tree.getroot()
-        for dic in dlist:
-            self.addNode(**dic)
+        for node in node_list:
+            self.addNode2etree(**node)
 
-    def metaPipe(self, node_list):
-        self.dlist2xmlTree(node_list)
-        return self.scanMeta(node_list)
-
-    def saveInfo(self, out_path):
+    def save(self, out_path):
         import etreeio
         etreeio.write(self.tree, out_path)
         return
 
-    def addNode(self, path, name=None, type="unknown", comment="", tags=[],
-                date="", parents=[], children=[], evaluation=""):
-        import xml.etree.ElementTree as ET
-        import os.path
+    def addNode2etree(self, path, name=None, type="unknown", comment="",
+                      tags=[], date="", parents=[], children=[],
+                      evaluation=""):
         for node in list(self.root_element):
             if node.get("path") == path:
                 raise Warning("%s exists already." % path)
         if name is None:
             name = os.path.basename(path)
-        node = ET.SubElement(self.root_element, self.node_nm, {"path": path,
-                                                               "name": name,
-                                                       "type": type})
+        node = ET.SubElement(self.root_element, self.node_nm, {self.path: path,
+                                                               self.name: name,
+                                                               self.node_type: type})
         ET.SubElement(node, self.cmnt).text = comment
         ET.SubElement(node, self.date).text = date
         ET.SubElement(node, self.evaluation).text = evaluation
@@ -200,28 +155,38 @@ class InfoManager(object):
             ET.SubElement(children_ele, self.link).text = child
 
 
-def addRunsMeta(run_list):
+def fill_node_list(node_list):
     info = InfoManager()
-    run_list = info.metaPipe(run_list)
-    return run_list
+    info.node_list2etree(node_list)
+    return info.etree2node_list()
 
 
-def scanMeta(run_list, info_path):
+def scanMeta(node_list, info_path):
     info = InfoManager()
     info.read(info_path)
-    run_list = info.scanPipe(run_list)
-    return run_list
+    node_list = node_list.append(info.etree2node_list())
+    return node_list
+
+
+def save_node_list(node_list, out_file):
+    info = InfoManager()
+    info.node_list2etree(node_list)
+    info.save(out_file)
 
 
 def register(pipes_dics):
-    pipes_dics["add_meta"] = {
-        "func": addRunsMeta,
+    pipes_dics["fill_meta"] = {
+        "func": fill_node_list,
         "args": [],
         "desc": "add run meta-data"}
     pipes_dics["scan_meta"] = {
         "func": scanMeta,
         "args": ["info_path"],
         "desc": "scan meta-data"}
+    pipes_dics["save_meta"] = {
+        "func": save_node_list,
+        "args": ["out_path"],
+        "desc": "save meta-data"}
 
 
 def _test():
