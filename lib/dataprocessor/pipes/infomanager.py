@@ -1,4 +1,5 @@
 #encoding:utf-8
+import os.path as op
 
 
 class InfoManager(object):
@@ -94,10 +95,8 @@ class InfoManager(object):
 
     def __init__(self, info_path="metainfo.xml", root_path="."):
         import xml.etree.ElementTree as ET
-        import os.path as op
         self.tree = ET.ElementTree(ET.Element("data"))
-        root = self.tree
-        self.root = root.find(root_path)
+        self.root_element = self.tree.find(root_path)
         self.info_path = op.abspath(info_path)
         self.node_nm = "node"
         self.path = "path"
@@ -113,16 +112,13 @@ class InfoManager(object):
         self.node_type = "type"
 
     def read(self, info_path=None, root_path="."):
-        import xml.etree.ElementTree as ET
-        import os.path as op
+        import etreeio
         if info_path is not None:
             self.info_path = op.abspath(info_path)
-        self.tree = ET.parse(self.info_path)
-        root = self.tree.getroot()
-        self.root = root.find(root_path)
+        self.tree, self.root_element = etreeio.read(self.info_path, root_path)
 
     def __path2elem(self, path):
-        for elem in list(self.root):
+        for elem in list(self.root_element):
             if elem.get("path") == path:
                 return elem
         self.addNode(path)
@@ -156,7 +152,7 @@ class InfoManager(object):
 
     def scanMeta(self, node_list):
         node_list = []
-        for node in list(self.root):
+        for node in list(self.root_element):
             piped = self.__elem2dict(node)
             node_list.append(piped)
         return node_list
@@ -164,7 +160,7 @@ class InfoManager(object):
     def dlist2xmlTree(self, dlist):
         import xml.etree.ElementTree as ET
         self.tree = ET.ElementTree(ET.Element("data"))
-        self.root = self.tree.getroot()
+        self.root_element = self.tree.getroot()
         for dic in dlist:
             self.addNode(**dic)
 
@@ -172,32 +168,29 @@ class InfoManager(object):
         self.dlist2xmlTree(node_list)
         return self.scanMeta(node_list)
 
-    def saveInfo(self, info_path=None):
+    def saveInfo(self, out_path=None):
         """
         if info_path is not specified, meta data is written in read file.
         """
-        import os.path
         import etreeio
-        if info_path is None:
-            info_path = self.info_path
+        if out_path is None:
+            out_path = self.info_path
         else:
-            info_path = os.path.abspath(info_path)
-            self.info_path = info_path
-        self.tree.write(info_path, encoding="UTF-8")
-        etreeio.readable(info_path)
+            out_path = op.abspath(out_path)
+        etreeio.write(self.tree, out_path)
         return
 
     def addNode(self, path, name=None, type="unknown", comment="", tags=[],
                 date="", parents=[], children=[], evaluation=""):
         import xml.etree.ElementTree as ET
         import os.path
-        for node in list(self.root):
+        for node in list(self.root_element):
             if node.get("path") == path:
                 raise Warning("%s exists already." % path)
         if name is None:
             name = os.path.basename(path)
-        node = ET.SubElement(self.root, self.node_nm, {"path": path,
-                                                       "name": name,
+        node = ET.SubElement(self.root_element, self.node_nm, {"path": path,
+                                                               "name": name,
                                                        "type": type})
         ET.SubElement(node, self.cmnt).text = comment
         ET.SubElement(node, self.date).text = date
@@ -214,8 +207,6 @@ class InfoManager(object):
         children_ele = ET.SubElement(node, self.children)
         for child in children:
             ET.SubElement(children_ele, self.link).text = child
-
-
 
 
 def addRunsMeta(run_list):

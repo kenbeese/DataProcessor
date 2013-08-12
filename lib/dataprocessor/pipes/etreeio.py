@@ -1,8 +1,20 @@
 #encoding:utf-8
+import os.path
+
+
+def read(filepath, root_path="."):
+    import xml.etree.ElementTree as ET
+    filepath = os.path.abspath(filepath)
+    etree = ET.parse(filepath)
+    return etree, etree.getroot().find(root_path)
+
+
+def write(etree, filepath):
+    etree.write(os.path.abspath(filepath), encoding="UTF-8")
+    readable(filepath)
 
 
 def readable(in_filepath, out_filepath=None):
-    import os.path
     """
     modify xml filt to be readable.
 
