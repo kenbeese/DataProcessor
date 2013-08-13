@@ -172,6 +172,7 @@ def save_node_list(node_list, out_file):
     info = InfoManager()
     info.node_list2etree(node_list)
     info.save(out_file)
+    return node_list
 
 
 def register(pipes_dics):
