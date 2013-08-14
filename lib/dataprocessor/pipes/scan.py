@@ -132,10 +132,12 @@ def _generate_test_directories(root):
     open(os.path.join(root, "run0", "run0", "data", "hoge.conf"),
          "w").close()
 
+
 def _show_test_directories(root):
     for root, dirs, files in os.walk(root):
         dirs.sort()
-        print((root,dirs,files))
+        print((root, dirs, files))
+
 
 def _test():
     import doctest
