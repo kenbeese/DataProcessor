@@ -11,34 +11,18 @@ def directory(node_list, root, whitelist):
     Project node has run node in its sub-directory.
 
 
-    >>> import os
     >>> scandir = "/tmp/scan_dir"
-    >>> os.mkdir(scandir)
-    >>> for i in range(4):
-    ...     os.mkdir(os.path.join(scandir, "run" + str(i)))
-    >>> for i in range(3):
-    ...     open(os.path.join(scandir, "run" + str(i), "test.conf"),
-    ...          "w").close()
-    >>> for i in range(2):
-    ...     os.mkdir(os.path.join(scandir, "run0", "run" + str(i)))
-    >>> os.mkdir(os.path.join(scandir, "run3", "data"))
-    >>> os.mkdir(os.path.join(scandir, "run0", "run0", "data"))
-    >>> open(os.path.join(scandir, "run0", "run1", "test.conf"),
-    ...      "w").close()
-    >>> open(os.path.join(scandir, "run3", "data", "test.conf"),
-    ...      "w").close()
-    >>> open(os.path.join(scandir, "run0", "run0", "data", "hoge.conf"),
-    ...      "w").close()
-    >>> for i in os.walk(scandir): print i
-    ('/tmp/scan_dir', ['run3', 'run2', 'run1', 'run0'], [])
-    ('/tmp/scan_dir/run3', ['data'], [])
-    ('/tmp/scan_dir/run3/data', [], ['test.conf'])
-    ('/tmp/scan_dir/run2', [], ['test.conf'])
-    ('/tmp/scan_dir/run1', [], ['test.conf'])
-    ('/tmp/scan_dir/run0', ['run1', 'run0'], ['test.conf'])
-    ('/tmp/scan_dir/run0/run1', [], ['test.conf'])
+    >>> _generate_test_directories(scandir)
+    >>> _show_test_directories(scandir)
+    ('/tmp/scan_dir', ['run0', 'run1', 'run2', 'run3'], [])
+    ('/tmp/scan_dir/run0', ['run0', 'run1'], ['test.conf'])
     ('/tmp/scan_dir/run0/run0', ['data'], [])
     ('/tmp/scan_dir/run0/run0/data', [], ['hoge.conf'])
+    ('/tmp/scan_dir/run0/run1', [], ['test.conf'])
+    ('/tmp/scan_dir/run1', [], ['test.conf'])
+    ('/tmp/scan_dir/run2', [], ['test.conf'])
+    ('/tmp/scan_dir/run3', ['data'], [])
+    ('/tmp/scan_dir/run3/data', [], ['test.conf'])
     >>> directory([], scandir, ["*.conf"]) == [
     ...     {'path': '/tmp/scan_dir', 'parents': [],
     ...      'children': ['/tmp/scan_dir/run2', '/tmp/scan_dir/run1',
@@ -131,6 +115,27 @@ def register(pipe_dics):
         "desc": "scan direcoty structure",
     }
 
+
+def _generate_test_directories(root):
+    os.mkdir(root)
+    for i in range(4):
+        os.mkdir(os.path.join(root, "run" + str(i)))
+    for i in range(3):
+        open(os.path.join(root, "run" + str(i), "test.conf"),
+             "w").close()
+    for i in range(2):
+        os.mkdir(os.path.join(root, "run0", "run" + str(i)))
+    os.mkdir(os.path.join(root, "run3", "data"))
+    os.mkdir(os.path.join(root, "run0", "run0", "data"))
+    open(os.path.join(root, "run0", "run1", "test.conf"), "w").close()
+    open(os.path.join(root, "run3", "data", "test.conf"), "w").close()
+    open(os.path.join(root, "run0", "run0", "data", "hoge.conf"),
+         "w").close()
+
+def _show_test_directories(root):
+    for root, dirs, files in os.walk(root):
+        dirs.sort()
+        print((root,dirs,files))
 
 def _test():
     import doctest
