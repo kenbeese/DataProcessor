@@ -83,6 +83,7 @@ def directory(node_list, root, whitelist):
 
     root = os.path.abspath(os.path.expanduser(root))
     for path, dirs, files in os.walk(root):
+        dirs.sort()
         node_type = None
         parents = []
         children = []
