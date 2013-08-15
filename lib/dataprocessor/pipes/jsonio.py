@@ -3,9 +3,14 @@ import json
 import os.path
 
 
-def save(node_list, json_path):
-    # TODO check file in json_path already exists
+def save(node_list, json_path, ask_replace=False):
     path = os.path.expanduser(json_path)
+    if ask_replace and os.path.exists(json_path):
+        ans = raw_input("File %s already exists. Replace? [y/N]"
+                        % json_path).lower()
+        if ans not in ["yes", "y"]:
+            print("Skip save_json pipe.")
+            return node_list
     with open(path, "w") as f:
         json.dump(node_list, f)
     return node_list
@@ -24,6 +29,7 @@ def register(pipes_dics):
     pipes_dics["save_json"] = {
         "func": save,
         "args": ["json_path"],
+        "kwds": ["ask_replace"],
         "desc": "save node_list in a JSON file",
     }
     pipes_dics["load_json"] = {
