@@ -12,9 +12,9 @@ def save(node_list, json_path):
 
 
 def load(node_list, json_path):
+    path = os.path.expanduser(json_path)
     if not os.path.exists(json_path):
         raise RuntimeError("json path does not exist")
-    path = os.path.expanduser(json_path)
     with open(path, "r") as f:
         read_node_list = json.load(f)
     return node_list + read_node_list
