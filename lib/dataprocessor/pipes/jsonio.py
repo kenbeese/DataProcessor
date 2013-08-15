@@ -20,6 +20,19 @@ def load(node_list, json_path):
     return node_list + read_node_list
 
 
+def register(pipes_dics):
+    pipes_dics["save_json"] = {
+        "func": save,
+        "args": ["json_path"],
+        "desc": "save node_list in a JSON file",
+    }
+    pipes_dics["load_json"] = {
+        "func": load,
+        "args": ["json_path"],
+        "desc": "load node_list from a JSON file",
+    }
+
+
 def _test():
     import doctest
     doctest.testmod()
