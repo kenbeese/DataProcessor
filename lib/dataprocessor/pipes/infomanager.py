@@ -135,9 +135,10 @@ class InfoManager(object):
                 raise Warning("%s exists already." % path)
         if name is None:
             name = os.path.basename(path)
-        node = ET.SubElement(self.root_element, self.node_nm, {self.path: path,
-                                                               self.name: name,
-                                                               self.node_type: type})
+        node = ET.SubElement(self.root_element,
+                             self.node_nm, {self.path: path,
+                                            self.name: name,
+                                            self.node_type: type})
         ET.SubElement(node, self.cmnt).text = comment
         ET.SubElement(node, self.date).text = date
         ET.SubElement(node, self.evaluation).text = evaluation
