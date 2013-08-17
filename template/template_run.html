@@ -3,10 +3,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <style type="text/css">
-	<!--
-	#Title {color: black;}
-	td {white-space: nowrap;}
-	-->
+        <!--
+        #Title {color: black;}
+        td {white-space: nowrap;}
+        -->
       </style>
       <title>Run Browser</title>
   </head>
@@ -14,29 +14,28 @@
     <h1 id="Title">Run Browser v0.1</h1>
     {%- if "table" in node %}
       {%- for table in node["table"] %}
-	<table id="DataTable" border=1>
-	  <thead>
+        <table id="DataTable" border=1>
+          <thead>
             <tr>
               {%- for key in table["header"] %}
-		<th>{{key}}</th>
+                <th>{{key}}</th>
               {%- endfor %}
             </tr>
-	  </thead>
-	  <tbody>
+          </thead>
+          <tbody>
             {%- for index in range(table["name"]|length) %}
-		<tr>
-	    	  {%- for key in table["header"] %}
-		    {%- if key == "name" %}
-                      <td><a href='{{table["path"][index] + "/" + output_html}}'>
-			  {{table[key][index]}}</a></td>
-		    {%- else %}
-                      <td>{{table[key][index]}}</td>
-		    {%- endif %}
-	    	  {%- endfor %}
-		</tr>
+              <tr>
+                {%- for key in table["header"] %}
+                  {%- if key == "name" %}
+                    <td><a href='{{table["path"][index] + "/" + output_html}}'>{{table[key][index]}}</a></td>
+                  {%- else %}
+                    <td>{{table[key][index]}}</td>
+                  {%- endif %}
+                {%- endfor %}
+              </tr>
             {%- endfor %}
-	  </tbody>
-	</table>
+          </tbody>
+        </table>
       {%- endfor %}
     {%- endif %}
   </body>
