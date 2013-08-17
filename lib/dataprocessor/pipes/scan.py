@@ -11,87 +11,113 @@ def directory(node_list, root, whitelist):
     Project node has run node in its sub-directory.
 
 
-    >>> import os
     >>> scandir = "/tmp/scan_dir"
-    >>> os.mkdir(scandir)
-    >>> for i in range(4):
-    ...     os.mkdir(os.path.join(scandir, "run" + str(i)))
-    >>> for i in range(3):
-    ...     open(os.path.join(scandir, "run" + str(i), "test.conf"),
-    ...          "w").close()
-    >>> for i in range(2):
-    ...     os.mkdir(os.path.join(scandir, "run0", "run" + str(i)))
-    >>> os.mkdir(os.path.join(scandir, "run3", "data"))
-    >>> os.mkdir(os.path.join(scandir, "run0", "run0", "data"))
-    >>> open(os.path.join(scandir, "run0", "run1", "test.conf"),
-    ...      "w").close()
-    >>> open(os.path.join(scandir, "run3", "data", "test.conf"),
-    ...      "w").close()
-    >>> open(os.path.join(scandir, "run0", "run0", "data", "hoge.conf"),
-    ...      "w").close()
-    >>> for i in os.walk(scandir): print i
-    ('/tmp/scan_dir', ['run3', 'run2', 'run1', 'run0'], [])
-    ('/tmp/scan_dir/run3', ['data'], [])
-    ('/tmp/scan_dir/run3/data', [], ['test.conf'])
-    ('/tmp/scan_dir/run2', [], ['test.conf'])
-    ('/tmp/scan_dir/run1', [], ['test.conf'])
-    ('/tmp/scan_dir/run0', ['run1', 'run0'], ['test.conf'])
-    ('/tmp/scan_dir/run0/run1', [], ['test.conf'])
+    >>> _generate_test_directories(scandir)
+    >>> _show_test_directories(scandir)
+    ('/tmp/scan_dir', ['run0', 'run1', 'run2', 'run3'], [])
+    ('/tmp/scan_dir/run0', ['run0', 'run1'], ['test.conf'])
     ('/tmp/scan_dir/run0/run0', ['data'], [])
     ('/tmp/scan_dir/run0/run0/data', [], ['hoge.conf'])
+    ('/tmp/scan_dir/run0/run1', [], ['test.conf'])
+    ('/tmp/scan_dir/run1', [], ['test.conf'])
+    ('/tmp/scan_dir/run2', [], ['test.conf'])
+    ('/tmp/scan_dir/run3', ['data'], [])
+    ('/tmp/scan_dir/run3/data', [], ['test.conf'])
     >>> directory([], scandir, ["*.conf"]) == [
-    ...     {'path': '/tmp/scan_dir', 'parents': [],
-    ...      'children': ['/tmp/scan_dir/run2', '/tmp/scan_dir/run1',
-    ...                   '/tmp/scan_dir/run0'],
-    ...      'name': 'scan_dir', 'type': 'project'},
-    ...     {'path': '/tmp/scan_dir/run3', 'parents': [],
-    ...      'children': ['/tmp/scan_dir/run3/data'],
-    ...      'name': 'run3', 'type': 'project'},
-    ...     {'path': '/tmp/scan_dir/run3/data',
-    ...      'parents': ['/tmp/scan_dir/run3'],
-    ...      'children': [], 'name': 'data', 'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run2', 'parents': ['/tmp/scan_dir'],
-    ...      'children': [], 'name': 'run2', 'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run1', 'parents': ['/tmp/scan_dir'],
-    ...      'children': [], 'name': 'run1', 'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run0', 'parents': ['/tmp/scan_dir'],
+    ...     {'path': '/tmp/scan_dir',
+    ...      'parents': [],
+    ...      'children': ['/tmp/scan_dir/run0',
+    ...                   '/tmp/scan_dir/run1',
+    ...                   '/tmp/scan_dir/run2'],
+    ...      'name': 'scan_dir',
+    ...      'type': 'project'},
+    ...     {'path': '/tmp/scan_dir/run0',
+    ...      'parents': ['/tmp/scan_dir'],
     ...      'children': ['/tmp/scan_dir/run0/run1'],
-    ...      'name': 'run0', 'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run0/run1',
-    ...      'parents': ['/tmp/scan_dir/run0'],
-    ...      'children': [], 'name': 'run1', 'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run0/run0', 'parents': [],
+    ...      'name': 'run0',
+    ...      'type': 'run'},
+    ...     {'path': '/tmp/scan_dir/run0/run0',
+    ...      'parents': [],
     ...      'children': ['/tmp/scan_dir/run0/run0/data'],
-    ...      'name': 'run0', 'type': 'project'},
+    ...      'name': 'run0',
+    ...      'type': 'project'},
     ...     {'path': '/tmp/scan_dir/run0/run0/data',
     ...      'parents': ['/tmp/scan_dir/run0/run0'],
-    ...      'children': [], 'name': 'data', 'type': 'run'}]
+    ...      'children': [],
+    ...      'name': 'data',
+    ...      'type': 'run'},
+    ...     {'path': '/tmp/scan_dir/run0/run1',
+    ...      'parents': ['/tmp/scan_dir/run0'],
+    ...      'children': [],
+    ...      'name': 'run1',
+    ...      'type': 'run'},
+    ...     {'path': '/tmp/scan_dir/run1',
+    ...      'parents': ['/tmp/scan_dir'],
+    ...      'children': [],
+    ...      'name': 'run1',
+    ...      'type': 'run'},
+    ...     {'path': '/tmp/scan_dir/run2',
+    ...      'parents': ['/tmp/scan_dir'],
+    ...      'children': [],
+    ...      'name': 'run2',
+    ...      'type': 'run'},
+    ...     {'path': '/tmp/scan_dir/run3',
+    ...      'parents': [],
+    ...      'children': ['/tmp/scan_dir/run3/data'],
+    ...      'name': 'run3',
+    ...      'type': 'project'},
+    ...     {'path': '/tmp/scan_dir/run3/data',
+    ...      'parents': ['/tmp/scan_dir/run3'],
+    ...      'children': [],
+    ...      'name': 'data',
+    ...      'type': 'run'}
+    ... ]
     True
     >>> directory([], scandir, ["data"]) == [
-    ...     {'path': '/tmp/scan_dir', 'parents': [],
+    ...     {'path': '/tmp/scan_dir',
+    ...      'parents': [],
     ...      'children': ['/tmp/scan_dir/run3'],
-    ...      'name': 'scan_dir', 'type': 'project'},
-    ...     {'path': '/tmp/scan_dir/run3', 'parents': ['/tmp/scan_dir'],
-    ...      'children': [], 'name': 'run3', 'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run0', 'parents': [],
+    ...      'name': 'scan_dir',
+    ...      'type': 'project'},
+    ...     {'path': '/tmp/scan_dir/run0',
+    ...      'parents': [],
     ...      'children': ['/tmp/scan_dir/run0/run0'],
-    ...      'name': 'run0', 'type': 'project'},
+    ...      'name': 'run0',
+    ...      'type': 'project'},
     ...     {'path': '/tmp/scan_dir/run0/run0',
     ...      'parents': ['/tmp/scan_dir/run0'],
-    ...      'children': [], 'name': 'run0', 'type': 'run'}]
+    ...      'children': [],
+    ...      'name': 'run0',
+    ...      'type': 'run'},
+    ...     {'path': '/tmp/scan_dir/run3',
+    ...      'parents': ['/tmp/scan_dir'],
+    ...      'children': [],
+    ...      'name': 'run3',
+    ...      'type': 'run'}
+    ... ]
     True
     >>> directory([], scandir, ["data/hoge*", "data/test*"]) == [
-    ...     {'path': '/tmp/scan_dir', 'parents': [],
+    ...     {'path': '/tmp/scan_dir',
+    ...      'parents': [],
     ...      'children': ['/tmp/scan_dir/run3'],
-    ...      'name': 'scan_dir', 'type': 'project'},
-    ...     {'path': '/tmp/scan_dir/run3', 'parents': ['/tmp/scan_dir'],
-    ...      'children': [], 'name': 'run3', 'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run0', 'parents': [],
+    ...      'name': 'scan_dir',
+    ...      'type': 'project'},
+    ...     {'path': '/tmp/scan_dir/run0',
+    ...      'parents': [],
     ...      'children': ['/tmp/scan_dir/run0/run0'],
-    ...      'name': 'run0', 'type': 'project'},
+    ...      'name': 'run0',
+    ...      'type': 'project'},
     ...     {'path': '/tmp/scan_dir/run0/run0',
     ...      'parents': ['/tmp/scan_dir/run0'],
-    ...      'children': [], 'name': 'run0', 'type': 'run'}]
+    ...      'children': [],
+    ...      'name': 'run0',
+    ...      'type': 'run'},
+    ...     {'path': '/tmp/scan_dir/run3',
+    ...      'parents': ['/tmp/scan_dir'],
+    ...      'children': [],
+    ...      'name': 'run3',
+    ...      'type': 'run'}
+    ... ]
     True
     >>> import shutil
     >>> shutil.rmtree(scandir)
@@ -99,6 +125,7 @@ def directory(node_list, root, whitelist):
 
     root = os.path.abspath(os.path.expanduser(root))
     for path, dirs, files in os.walk(root):
+        dirs.sort()
         node_type = None
         parents = []
         children = []
@@ -130,6 +157,29 @@ def register(pipe_dics):
         "args": ["root_path", "whitelist"],
         "desc": "scan direcoty structure",
     }
+
+
+def _generate_test_directories(root):
+    os.mkdir(root)
+    for i in range(4):
+        os.mkdir(os.path.join(root, "run" + str(i)))
+    for i in range(3):
+        open(os.path.join(root, "run" + str(i), "test.conf"),
+             "w").close()
+    for i in range(2):
+        os.mkdir(os.path.join(root, "run0", "run" + str(i)))
+    os.mkdir(os.path.join(root, "run3", "data"))
+    os.mkdir(os.path.join(root, "run0", "run0", "data"))
+    open(os.path.join(root, "run0", "run1", "test.conf"), "w").close()
+    open(os.path.join(root, "run3", "data", "test.conf"), "w").close()
+    open(os.path.join(root, "run0", "run0", "data", "hoge.conf"),
+         "w").close()
+
+
+def _show_test_directories(root):
+    for root, dirs, files in os.walk(root):
+        dirs.sort()
+        print((root, dirs, files))
 
 
 def _test():
