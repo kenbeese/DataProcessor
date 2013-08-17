@@ -31,6 +31,13 @@ def _replace(node, template_html, output_html):
 def generate(node_list, template_dir, output_html,
              template_filename={"project": "template_project.html",
                                 "run": "template_run.html"}):
+    """
+    Convert each node to html. No node_list changes at all.
+
+    Notes:
+    Output files are created at relative path of each node as same name.
+    Run node must have key 'configure'.
+    """
     template_dir = os.path.expanduser(template_dir)
     node_list = _strip_invalid_node(node_list)
     for node in node_list:
