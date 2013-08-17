@@ -1,3 +1,6 @@
+# coding=utf-8
+
+
 def _get_confs(node):
     confs = []
     for conf in node["configure"]:
