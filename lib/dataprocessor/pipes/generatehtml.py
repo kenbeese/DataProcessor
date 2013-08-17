@@ -1,7 +1,6 @@
 # coding=utf-8
 import os
-import shutil
-from glob import glob
+
 from jinja2 import Template
 
 
@@ -29,34 +28,12 @@ def _replace(node, template_html, output_html):
     return node
 
 
-def _install_attachments(template_dir, dest_path):
-    if not os.path.isdir(template_dir):
-        print("template directory does not found.")
-        return 1
-    if not os.path.isdir(dest_path):
-        print("destination directory does not found.")
-        return 1
-    attachments = ["js", "css"]
-    for att in attachments:
-        path = os.path.join(template_dir, att)
-        if not os.path.isdir(path):
-            continue
-        att_dest_dir = os.path.join(dest_path, att)
-        if not os.path.isdir(att_dest_dir):
-            os.mkdir(att_dest_dir)
-        for a in glob(os.path.join(path, u"*." + att)):
-            shutil.copy2(a, att_dest_dir)
-
-
 def generate(node_list, template_dir, output_html,
-             install_attachments=False,
              template_filename={"project": "template_project.html",
                                 "run": "template_run.html"}):
     template_dir = os.path.expanduser(template_dir)
     node_list = _strip_invalid_node(node_list)
     for node in node_list:
-        if install_attachments:
-            _install_attachments(template_dir, node["path"])
         template_path = os.path.join(
             template_dir, template_filename[node["type"]])
         _replace(node, template_path, output_html)
@@ -68,5 +45,5 @@ def register(pipes_dics):
         "func": generate,
         "args": ["template_path", "output_html"],
         "desc": "generate HTML and install attachments",
-        "kwds": ["install_attachments", "template_filename"],
+        "kwds": ["template_filename"],
     }
