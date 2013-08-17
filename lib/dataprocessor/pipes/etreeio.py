@@ -3,6 +3,15 @@ import os.path
 
 
 def read(filepath, root_path="."):
+    """
+    read xml file.
+    This function return the etree and root element.
+    You can specify root element by xpath.
+
+    Usage:
+    >>> etree, root = read(xml_file_path, xpath)  # specify root by xpath
+    >>> etree, root = read(xml_file_path)
+    """
     import xml.etree.ElementTree as ET
     filepath = os.path.abspath(filepath)
     etree = ET.parse(filepath)
@@ -16,9 +25,11 @@ def write(etree, filepath):
 
 def readable(in_filepath, out_filepath=None):
     """
-    modify xml filt to be readable.
+    modify xml file to be readable.
 
     Usage:
+    >>> readable(xml_file_path) # replace xml file with new readable xml file.
+    >>> readable(xml_file_path, output_path)
     """
     if out_filepath is None:
         out_filepath = in_filepath
@@ -28,8 +39,8 @@ def readable(in_filepath, out_filepath=None):
     string = f.read()
     f.close()
 
-    string = _rmindent(string)
-    string = _splittag(string)
+    string = _remove_indent(string)
+    string = _split_tag(string)
     string = _add_newline(string)
     string = _indent(string)
     f = open(out_filepath, "w")
@@ -37,7 +48,7 @@ def readable(in_filepath, out_filepath=None):
     f.close
 
 
-def _rmindent(string):
+def _remove_indent(string):
     import re
     sp = re.compile("[\n\r]")
     lines = sp.split(string)
@@ -48,14 +59,14 @@ def _rmindent(string):
     return string
 
 
-def _splittag(string):
+def _split_tag(string):
     import re
     reg1 = re.compile(r"<(.*?)>[ \t\b]*<(.*?)>")
     if reg1.search(string) is None:
         return string
     else:
         string = reg1.sub(r"<\1>\n<\2>", string, 1)
-        return _splittag(string)
+        return _split_tag(string)
 
 
 def _add_newline(string):
@@ -68,7 +79,7 @@ def _add_newline(string):
         return _add_newline(string)
 
 
-def _checktag(line):
+def _check_tag(line):
     import re
     startend = re.compile("<.+?>.*?</.+?>")
     end = re.compile("</.+?>")
@@ -96,10 +107,10 @@ def _indent(string):
         if line == "":
             string = string + "\n"
         else:
-            if _checktag(line) == "start":
+            if _check_tag(line) == "start":
                 string = string + "  " * (depth) + line + "\n"
                 depth = depth + 1
-            elif _checktag(line) == "end":
+            elif _check_tag(line) == "end":
                 depth = depth - 1
                 string = string + "  " * (depth) + line + "\n"
             else:
