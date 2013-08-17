@@ -1,48 +1,32 @@
 # coding=utf-8
 import os
-import os.path
 import shutil
 from glob import glob
 from jinja2 import Template
 
 
-def _get_confs(run_list):
-    confs = []
-    for run in run_list:
-        conf = run["configure"]
-        for c in conf:
-            if c not in confs:
-                confs.append(c)
-    confs.sort()
-    confs.sort(key=len)
-    return confs
-
-
-def _strip_invalid_run(run_list):
+def _strip_invalid_node(node_list):
     result_list = []
-    for run in run_list:
-        if "path" in run and "meta" in run and "configure" in run:
-            result_list.append(run)
+    for node in node_list:
+        if node["type"] == "run" and "path" in node and "configure" in node:
+            result_list.append(node)
+        elif node["type"] == "project" and "path" in node:
+            result_list.append(node)
     return result_list
 
 
-def replace(run_list, template_filename,
-            output_filename, pre_meta, post_meta, confs):
-    stripped_list = _strip_invalid_run(run_list)
-    if not confs:
-        confs = _get_confs(stripped_list)
+def _replace(node, template_html, output_html):
     cfg = {
-        "run_list": stripped_list,
-        "confs": confs,
-        "pre_meta": pre_meta,
-        "post_meta": post_meta,
+        "node": node,
+        "output_html": output_html
     }
-    with open(template_filename, 'r') as f:
+    with open(template_html, 'r') as f:
         tmpl = Template(f.read())
     html = tmpl.render(cfg)
-    with open(output_filename, 'w') as f:
+    output_path = os.path.join(node["path"], output_html)
+    with open(output_path, 'w') as f:
         f.write(html.encode("utf-8"))
-    return run_list
+    return node
 
 
 def _install_attachments(template_dir, dest_path):
@@ -64,27 +48,25 @@ def _install_attachments(template_dir, dest_path):
             shutil.copy2(a, att_dest_dir)
 
 
-def generate(run_list, template_dir, output_html_path,
-             template_html_filename="template.html",
+def generate(node_list, template_dir, output_html,
              install_attachments=False,
-             pre_meta=["name", "date"],
-             post_meta=["tags", "comment"],
-             confs=None):
+             template_filename={"project": "template_project.html",
+                                "run": "template_run.html"}):
     template_dir = os.path.expanduser(template_dir)
-    output_html_path = os.path.expanduser(output_html_path)
-    dest_dir = os.path.dirname(output_html_path)
-    if install_attachments:
-        _install_attachments(template_dir, dest_dir)
-    template_html_path = os.path.join(template_dir, template_html_filename)
-    replace(run_list, template_html_path, output_html_path,
-            pre_meta, post_meta, confs)
+    node_list = _strip_invalid_node(node_list)
+    for node in node_list:
+        if install_attachments:
+            _install_attachments(template_dir, node["path"])
+        template_path = os.path.join(
+            template_dir, template_filename[node["type"]])
+        _replace(node, template_path, output_html)
+    return node_list
 
 
 def register(pipes_dics):
     pipes_dics["generate_html"] = {
         "func": generate,
-        "args": ["template_dir", "output_html_path"],
+        "args": ["template_path", "output_html"],
         "desc": "generate HTML and install attachments",
-        "kwds": ["template_html_filename",  "install_attachments",
-                 "pre_meta", "post_meta", "confs"],
+        "kwds": ["install_attachments", "template_filename"],
     }
