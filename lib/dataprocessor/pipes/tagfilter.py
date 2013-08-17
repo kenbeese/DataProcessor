@@ -1,3 +1,6 @@
+# coding=utf-8
+
+
 def filter(run_list, *tags):
     """
     >>> run_list = [{"path":"hoge", "meta":{"tags":["tag1", "tag2"]}},
