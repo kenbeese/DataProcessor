@@ -23,72 +23,71 @@ def _copy_value(dic_out, dic_in, key):
     return dic_out
 
 
-def _check_child(child_path, node_list):
-    for child_node in node_list:
-        if child_path == child_node["path"]:
-            return child_node
+def _check_path(path, node_list):
+    for node in node_list:
+        if path == node["path"]:
+            return node
     return None
 
 
-def add(node_list, pre_meta=["name", "date"],
+def add(node_list, table_type="children", pre_meta=["name", "date"],
         post_meta=["tags", "comment"], confs=None):
     """
-    Add children information table to node as 'table' key.
-
+    Add parents or children information table to 'widgets' key.
 
     >>> add([
     ...     {"path": "/tmp/project",
     ...      "children": ["/tmp/run1", "/tmp/run0"]},
     ...     {"path": "/tmp/run0", "name": "run0",
-    ...      "tags": ["run0_tag"], "comment": "test",
-    ...      "configure": {"nx": 1, "ny": 2}},
+    ...      "comment": "test", "configure": {"nx": 1, "ny": 2}},
     ...     {"path": "/tmp/run1", "name": "run1",
-    ...      "tags": ["tag2", "tag3"],
     ...      "configure": {"nx": 10, "ny": 20}},
     ...     ],
-    ...     pre_meta=["name"], post_meta=["tags", "comment"],
+    ...     table_type="children", pre_meta=["name"], post_meta=["comment"],
     ...    )[0] == {
     ...      'path': '/tmp/project', 'children': ['/tmp/run1', '/tmp/run0'],
-    ...      'table': [{'comment': ['test', None], 'name': ['run0', 'run1'],
-    ...                'path': ['/tmp/run0', '/tmp/run1'],
-    ...                'tags': [['run0_tag'], ['tag2', 'tag3']],
-    ...                'header': ['name', 'nx', 'ny', 'tags', 'comment'],
-    ...                'nx': [1, 10], 'ny': [2, 20]}]}
+    ...      'widgets': [{'type': 'table', 'tags': ['children'], 'data':
+    ...          {'comment': ['test', None], 'name': ['run0', 'run1'],
+    ...           'path': ['/tmp/run0', '/tmp/run1'],
+    ...           'header': ['name', 'nx', 'ny', 'comment'],
+    ...           'nx': [1, 10], 'ny': [2, 20]}}]}
     True
     """
     for node in node_list:
-        if not "children" in node:
+        if not table_type in node:
             continue
-        table = {}
+        widget = {"type": "table", "tags": [table_type]}
+        data = {}
         config = confs
-        for child_path in sorted(node["children"]):
-            child = _check_child(child_path, node_list)
-            if child is None:
+        for path in sorted(node[table_type]):
+            linked_node = _check_path(path, node_list)
+            if linked_node is None:
                 continue
             for key in set(pre_meta + post_meta + ["path"]):
-                table = _copy_value(table, child, key)
-            if not "configure" in child:
+                data = _copy_value(data, linked_node, key)
+            if not "configure" in linked_node:
                 continue
             if config is None:
-                config = _get_confs(child)
+                config = _get_confs(linked_node)
             for key in config:
-                table = _copy_value(table, child["configure"], key)
+                data = _copy_value(data, linked_node["configure"], key)
         if config is None:
             config = []
-        table["header"] = pre_meta + config + post_meta
-        if not "table" in node:
-            node["table"] = [table]
+        data["header"] = pre_meta + config + post_meta
+        widget["data"] = data
+        if not "widgets" in node:
+            node["widgets"] = [widget]
         else:
-            node["table"].append(table)
+            node["widgets"].append(widget)
     return node_list
 
 
 def register(pipes_dics):
-    pipes_dics["add_children_table"] = {
+    pipes_dics["add_table"] = {
         "func": add,
         "args": [],
-        "desc": "add children information table",
-        "kwds": ["pre_meta", "post_meta", "confs"],
+        "desc": "add parents or children information table as widget",
+        "kwds": ["table_type", "pre_meta", "post_meta", "confs"],
         }
 
 
