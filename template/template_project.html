@@ -8,12 +8,13 @@
         td {white-space: nowrap;}
         -->
       </style>
-      <title>Run Browser</title>
+      <title>{{node["name"]}}</title>
   </head>
   <body>
-    <h1 id="Title">Run Browser v0.1</h1>
-    {%- if "table" in node %}
-      {%- for table in node["table"] %}
+    <h1 id="Title">{{node["name"]}}</h1>
+    {%- if "widgets" in node %}
+      {%- for widget in node["widgets"] %}
+	{%- set table = widget["data"] %}
         <table id="DataTable" border=1>
           <thead>
             <tr>
