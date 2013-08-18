@@ -71,6 +71,8 @@ def add(node_list, table_type="children", pre_meta=["name", "date"],
                 config = _get_confs(linked_node)
             for key in config:
                 data = _copy_value(data, linked_node["configure"], key)
+        if not data:
+            continue
         if config is None:
             config = []
         data["header"] = pre_meta + config + post_meta
