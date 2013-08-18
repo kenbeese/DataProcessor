@@ -60,19 +60,22 @@ def add(node_list, pre_meta=["name", "date"],
         if not "children" in node:
             continue
         table = {}
+        config = confs
         for child_path in sorted(node["children"]):
             child = _check_child(child_path, node_list)
             if child is None:
                 continue
-            for key in pre_meta + post_meta + ["path"]:
+            for key in set(pre_meta + post_meta + ["path"]):
                 table = _copy_value(table, child, key)
             if not "configure" in child:
                 continue
-            if confs is None:
-                confs = _get_confs(child)
-            for key in confs:
+            if config is None:
+                config = _get_confs(child)
+            for key in config:
                 table = _copy_value(table, child["configure"], key)
-        table["header"] = pre_meta + confs + post_meta
+        if config is None:
+            config = []
+        table["header"] = pre_meta + config + post_meta
         if not "table" in node:
             node["table"] = [table]
         else:
