@@ -1,3 +1,6 @@
+# coding=utf-8
+
+
 class func(object):
     def __init__(self, fn_list):
         self.fn_list = fn_list

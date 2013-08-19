@@ -1,3 +1,6 @@
+# coding=utf-8
+
+
 class DirConstructor(object):
     """
     IO for run_results file formatted as JSON.
