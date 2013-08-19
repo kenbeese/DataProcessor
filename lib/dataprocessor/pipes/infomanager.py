@@ -1,4 +1,6 @@
 # coding=utf-8
+import os.path
+import xml.etree.ElementTree as ET
 
 
 class InfoManager(object):
@@ -6,117 +8,99 @@ class InfoManager(object):
     if specified optional, return elementTree object.
 
     Usage:
-
-
-    >>> filestring = '''<?xml version="1.0" encoding="utf-8"?>
-    ... <data>
-    ...
-    ...   <run name="run01">
-    ...     <tags>
-    ...       <tag>yes</tag>
-    ...       <tag>ばか</tag>
-    ...       <tag>ahohage</tag>
-    ...     </tags>
-    ...     <comment>hogecommet</comment>
-    ...     <date>1987/05/12</date>
-    ...     <optional></optional>
-    ...   </run>
-    ...
-    ...   <run name="run02">
-    ...     <tags>
-    ...       <tag>tag1</tag>
-    ...       <tag>tag3 </tag>
-    ...     </tags>
-    ...     <comment>come</comment>
-    ...     <date>1989/03/12</date>
-    ...   </run>
-    ...   <run name="run03"><tags>  <tag> tag321   hoge</tag>   <tag>tag5</tag>  </tags> <comment>hagehagehage</comment>
-    ... <date>1988/02/03 </date></run></data>
-    ... '''
-    >>> f = open("/tmp/test.xml", "w")
-    >>> f.write(filestring)
-    >>> f.close()
-    >>> import os.path as op
-    >>> info = InfoManager("/tmp/test.xml")
-    >>> info.humanReadable("/tmp/human.xml")
-    >>> diclist = [{"path":"/tmp/run01"}, {"path":"/tmp/run02"}, {"path":"/tmp/run03"}]
-    >>> info.metaPipe(diclist)[1] == {'path': '/tmp/run02',
-    ...     'meta': {'name': 'run02',
-    ...         'comment': 'come', 'date': '1989/03/12',
-    ...         'optional': None,
-    ...         'tags': ['tag1', 'tag3']}}
+    >>> ### fill incomplete node_list. ###
+    >>> info = InfoManager()
+    >>> diclist = [{"path":"/tmp/run01", "date":"1982/9/32",
+    ...     "children": ["/tmp/hoge", "/tmp/hogehoge/"],
+    ...     "tags":["hoge", "hoges"]},
+    ...     {"path":"/tmp/run02"}, {"path":"/tmp/run03"}]
+    >>> info.node_list2etree(diclist) # incomplete node_list -> complete etree
+    >>> node_list = info.etree2node_list()
+    >>> node_list[0] == {'path': '/tmp/run01',
+    ...     'name': 'run01', 'type': 'unknown',
+    ...     'comment': '', 'date': '1982/9/32',
+    ...     'tags': ['hoge', 'hoges'], 'parents': [],
+    ...     'children': ["/tmp/hoge", "/tmp/hogehoge/"],
+    ...     'evaluation': ''}
     True
-    >>> info.metaPipe(diclist)[2] == {'path': '/tmp/run03',
-    ...     'meta': {'comment': 'hagehagehage', 'date': '1988/02/03', 'name': 'run03',
-    ...         'optional': None,
-    ...         'tags': ['tag321 hoge', 'tag5']}}
+    >>> node_list[1] == {'path': '/tmp/run02',
+    ...     'name': 'run02', 'type': 'unknown',
+    ...     'comment': '', 'date': '',
+    ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
     True
-    >>> info.taglist()
-    [' tag321   hoge', 'ahohage', 'tag1', 'tag3 ', 'tag5', 'yes', u'\u3070\u304b']
-    >>> info.runnamelist()
-    ['run01', 'run02', 'run03']
-    >>> info.runInfo('run03') == {'name': 'run03', 'comment': 'hagehagehage', 'date': '1988/02/03',
-    ...     'optional': None,
-    ...     'tags': ['tag321 hoge', 'tag5']}
+    >>> node_list[2] == {'path': '/tmp/run03',
+    ...     'name': 'run03', 'type': 'unknown',
+    ...     'comment': '', 'date': '',
+    ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
     True
-    >>> info.setComment('run03', "test")
-    >>> info.runInfo('run03')["comment"]
-    'test'
-    >>> info.setTag('run03', "newtag")
-    >>> info.runInfo('run03')["tags"]
-    ['tag321 hoge', 'tag5', 'newtag']
-    >>> info.rmTag('run03', "newtag")
-    >>> info.runInfo('run03')["tags"]
-    ['tag321 hoge', 'tag5']
-    >>> info.rmTag('run03', "tag5")
-    >>> info.setComment('run03', "testdayo~")
-    >>> info.setTag('run02', "testdayo~")
-    >>> info.saveInfo('/tmp/hoge')
-    >>> info.addRun('run10')
-    >>> info.setTag('run10', "test2dayo")
-    >>> info.saveInfo()
-    >>> import os
-    >>> os.remove("/tmp/hoge")
+    >>>
+    >>>
+    >>> ### edit some elements and save. ###
+    >>> node_list[1]["comment"] = "I am sleepy"
+    >>> node_list[1] == {'path': '/tmp/run02',
+    ...     'name': 'run02', 'type': 'unknown',
+    ...     'comment': 'I am sleepy', 'date': '',
+    ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
+    True
+    >>> info.node_list2etree(node_list) # transform node list to etree
+    >>> info.save("/tmp/hoge.xml")
+    >>>
+    >>>
+    >>> ### scan metadata xml. ###
+    >>> info = InfoManager()
+    >>> info.read("/tmp/hoge.xml")             # read xml
+    >>> node_list = info.etree2node_list()     # output node_list format
+    >>> node_list[1] == {'path': '/tmp/run02',
+    ...     'name': 'run02', 'type': 'unknown',
+    ...     'comment': 'I am sleepy', 'date': '',
+    ...     'tags': [], 'parents': [], 'children': [], 'evaluation': ''}
+    True
+    >>> info.node_list2etree(node_list)
+    >>> node_list = info.etree2node_list()
+    >>> info.save("/tmp/test.xml")
     """
 
-    def __init__(self, info_path, root_path="."):
-        import xml.etree.ElementTree as ET
-        import os.path as op
-        self.info_path = op.abspath(info_path)
-        self.tree = ET.parse(self.info_path)
-        root = self.tree.getroot()
-        self.root = root.find(root_path)
-        self.run_nm = "run"
+    def __init__(self, root_path="."):
+        self.tree = ET.ElementTree(ET.Element("data"))
+        self.root_element = self.tree.find(root_path)
+        self.node_nm = "node"
+        self.path = "path"
         self.tags_nm = "tags"
         self.tag_nm = "tag"
         self.cmnt = "comment"
-        self.opt = "optional"
-        self.date = "date"
-        self.metakey = "meta"
+        self.parents = "parents"
+        self.children = "children"
         self.name = "name"
-        self.link_nm = "link"
+        self.link = "link"
+        self.evaluation = "evaluation"
+        self.date = "date"
+        self.node_type = "type"
 
-    def __path2elem(self, path):
-        import os.path as op
-        path_key = op.relpath(path, op.dirname(self.info_path))
-        for elem in list(self.root):
-            if elem.get("name") == path_key:
-                return elem
-        return None
+    def read(self, read_path, root_path="."):
+        import etreeio
+        fpath = os.path.abspath(os.path.expanduser(read_path))
+        self.tree, self.root_element = etreeio.read(fpath, root_path)
 
-    def __elem2dict(self, elem):
-        name = elem.get("name")
-        tags = [self.normWhiteSpace(tag.text)
+    def __element2node(self, elem):
+        path = elem.get(self.path)
+        name = elem.get(self.name)
+        node_type = elem.get(self.node_type)
+        tags = [self.normalize_white_space(tag.text)
                 for tag in elem.find(self.tags_nm).findall(self.tag_nm)]
-        comment = self.normWhiteSpace(elem.findtext(self.cmnt))
-        date = self.normWhiteSpace(elem.findtext(self.date))
-        opt = elem.find(self.opt)
-        link = self.normWhiteSpace(elem.findtext(self.link_nm))
-        return {self.name: name, self.tags_nm: tags,
-                self.cmnt: comment, self.date: date, self.opt: opt,
-                self.link_nm: link}
+        comment = self.normalize_white_space(elem.findtext(self.cmnt))
+        date = self.normalize_white_space(elem.findtext(self.date))
+        parents = [parent.text for parent
+                   in elem.find(self.parents).findall(self.link)]
+        children = [child.text for child
+                    in elem.find(self.children).findall(self.link)]
+        evaluation = self.normalize_white_space(elem.findtext(self.evaluation))
+        return {self.path: path, self.name: name,
+                self.node_type: node_type, self.tags_nm: tags,
+                self.evaluation: evaluation,
+                self.cmnt: comment, self.date: date,
+                self.parents: parents, self.children: children}
 
-    def normWhiteSpace(self, string):
+    def normalize_white_space(self, string):
         import re
         reg = re.compile("\s+")
         try:
@@ -124,213 +108,87 @@ class InfoManager(object):
         except TypeError:
             return None
 
-    def taglist(self):
-        tag_list = [tag.text for tag in self.root.iter(self.tag_nm)]
-        tag_list = list(set(tag_list))
-        tag_list.sort()
-        return tag_list
+    def etree2node_list(self):
+        node_list = []
+        for node_element in list(self.root_element):
+            node = self.__element2node(node_element)
+            node_list.append(node)
+        return node_list
 
-    def taggedlist(self, tagbody):
-        """
-        return run name list written in info_path.
-        """
-        l = [run.get("name") for run in list(self.root)
-             for tag in run.find(self.tags_nm).findall(self.tag_nm)
-             if self.normWhiteSpace(tag.text) == self.normWhiteSpace(tagbody)]
-        return l
-
-    def runnamelist(self):
-        """
-        return run name list written in info_path.
-        """
-        l = [run.get("name") for run in list(self.root)]
-        return l
-
-    def runInfo(self, runname):
-        """
-        return run infomation, for example, comment, tag, date, etc.
-        """
-        for elem in list(self.root):
-            if elem.get("name") == runname:
-                return self.__elem2dict(elem)
-
-    def setComment(self, runname, comment):
-        for elem in list(self.root):
-            if elem.get("name") == runname:
-                com = elem.find(self.cmnt)
-                com.text = comment
-
-    def setLink(self, runname, url):
+    def node_list2etree(self, node_list):
         import xml.etree.ElementTree as ET
-        for elem in list(self.root):
-            if elem.get("name") == runname:
-                link = elem.find(self.link_nm)
-                if link is not None:
-                    link.text = url
-                else:
-                    newlink = ET.SubElement(elem, self.link_nm)
-                    newlink.text = self.normWhiteSpace(url)
+        self.tree = ET.ElementTree(ET.Element("data"))
+        self.root_element = self.tree.getroot()
+        for node in node_list:
+            self.add_node2etree(**node)
 
-    def setTag(self, runname, tagbody):
-        import xml.etree.ElementTree as ET
-        for elem in list(self.root):
-            if elem.get("name") == runname:
-                tags = elem.find(self.tags_nm)
-                for tag in tags.findall(self.tag_nm):
-                    if tag.text == self.normWhiteSpace(tagbody):
-                        raise Warning("%s was already defined." % tagbody)
-                newtag = ET.SubElement(tags, self.tag_nm)
-                newtag.text = self.normWhiteSpace(tagbody)
-
-    def rmTag(self, runname, tagbody):
-        for elem in list(self.root):
-            if elem.get("name") == runname:
-                tags = elem.find(self.tags_nm)
-                for tag in tags.findall(self.tag_nm):
-                    if tag.text == self.normWhiteSpace(tagbody):
-                        tags.remove(tag)
-                        return
-                raise Warning("%s was not defined." % tagbody)
-
-    def metaPipe(self, run_list):
-        pipedList = []
-        for dic in run_list:
-            elem = self.__path2elem(dic["path"])
-            if elem is not None:
-                piped = {self.metakey: self.__elem2dict(elem)}
-                piped.update(dic)
-                pipedList.append(piped)
-            else:
-                print("Warning: meta data for directory %s is not defined."
-                      % dic["path"])
-        return pipedList
-
-    def saveInfo(self, info_path=None):
-        """
-        if info_path is not specified, meta data is written in read file.
-        """
-        import os.path
-        if info_path is None:
-            info_path = self.info_path
-        else:
-            info_path = os.path.abspath(info_path)
-        self.tree.write(info_path, encoding="UTF-8")
+    def save(self, out_path):
+        import etreeio
+        etreeio.write(self.tree, out_path)
         return
 
-    def humanReadable(self, out_path=None):
-        import os.path
-        if out_path is None:
-            out_path = self.info_path
-        else:
-            out_path = os.path.abspath(out_path)
+    def add_node2etree(self, path, name=None, type="unknown", comment="",
+                       tags=[], date="", parents=[], children=[],
+                       evaluation=""):
+        for node in list(self.root_element):
+            if node.get("path") == path:
+                raise Warning("%s exists already." % path)
+        if name is None:
+            name = os.path.basename(path)
+        node = ET.SubElement(self.root_element,
+                             self.node_nm, {self.path: path,
+                                            self.name: name,
+                                            self.node_type: type})
+        ET.SubElement(node, self.cmnt).text = comment
+        ET.SubElement(node, self.date).text = date
+        ET.SubElement(node, self.evaluation).text = evaluation
 
-        f = open(self.info_path)
-        string = f.read()
-        f.close()
+        tags_ele = ET.SubElement(node, self.tags_nm)
+        for tag in tags:
+            ET.SubElement(tags_ele, self.tag_nm).text = tag
 
-        string = _rmindent(string)
-        string = _splitTag(string)
-        string = _addNewline(string)
-        string = _indent(string)
-        f = open(out_path, "w")
-        f.write(string)
-        f.close
-        return
+        parents_ele = ET.SubElement(node, self.parents)
+        for parent in parents:
+            ET.SubElement(parents_ele, self.link).text = parent
 
-    def addRun(self, runname):
-        import xml.etree.ElementTree as ET
-
-        for run in list(self.root):
-            if run.get("name") == runname:
-                raise Warning("%s exists already." % runname)
-        run = ET.SubElement(self.root, self.run_nm, {"name": runname})
-        ET.SubElement(run, self.cmnt)
-        ET.SubElement(run, self.tags_nm)
-        ET.SubElement(run, self.opt)
-        ET.SubElement(run, self.date)
+        children_ele = ET.SubElement(node, self.children)
+        for child in children:
+            ET.SubElement(children_ele, self.link).text = child
 
 
-def _rmindent(string):
-    import re
-    sp = re.compile("[\n\r]")
-    lines = sp.split(string)
-    string = ""
-    for line in lines:
-        if line != "":
-            string = string + line.strip() + "\n"
-    return string
+def fill_node_list(node_list):
+    info = InfoManager()
+    info.node_list2etree(node_list)
+    return info.etree2node_list()
 
 
-def _splitTag(string):
-    import re
-    reg1 = re.compile(r"<(.*?)>[ \t\b]*<(.*?)>")
-    if reg1.search(string) is None:
-        return string
-    else:
-        string = reg1.sub(r"<\1>\n<\2>", string, 1)
-        return _splitTag(string)
+def scan_meta(node_list, info_path):
+    info = InfoManager()
+    info.read(info_path)
+    node_list = node_list.append(info.etree2node_list())
+    return node_list
 
 
-def _addNewline(string):
-    import re
-    reg1 = re.compile(r"(</run>[ \t\b]*[\n\r])(\S+)")
-    if reg1.search(string) is None:
-        return string
-    else:
-        string = reg1.sub(r"\1\n\2", string, 1)
-        return _addNewline(string)
-
-
-def _checkTag(line):
-    import re
-    startend = re.compile("<.+?>.*?</.+?>")
-    end = re.compile("</.+?>")
-    onetag = re.compile("<.+?/>")
-    start = re.compile("<.+?>")
-    if startend.search(line):
-        return "startend"
-    elif onetag.search(line):
-        return "oneline"
-    elif end.search(line):
-        return "end"
-    elif start.search(line):
-        return "start"
-    else:
-        return "none"
-
-
-def _indent(string):
-    import re
-    sp = re.compile("[\n\r]")
-    lines = sp.split(string)
-    string = ""
-    depth = 0
-    for line in lines:
-        if line == "":
-            string = string + "\n"
-        else:
-            if _checkTag(line) == "start":
-                string = string + "  " * (depth) + line + "\n"
-                depth = depth + 1
-            elif _checkTag(line) == "end":
-                depth = depth - 1
-                string = string + "  " * (depth) + line + "\n"
-            else:
-                string = string + "  " * (depth) + line + "\n"
-    return string
-
-
-def addRunsMeta(run_list, info_path):
-    info = InfoManager(info_path)
-    run_list = info.metaPipe(run_list)
-    return run_list
+def save_node_list(node_list, out_file):
+    info = InfoManager()
+    info.node_list2etree(node_list)
+    info.save(out_file)
+    return node_list
 
 
 def register(pipes_dics):
-    pipes_dics["run_meta"] = {
-        "func": addRunsMeta,
-        "args": ["info_path"],
+    pipes_dics["fill_meta"] = {
+        "func": fill_node_list,
+        "args": [],
         "desc": "add run meta-data"}
+    pipes_dics["scan_meta"] = {
+        "func": scan_meta,
+        "args": ["info_path"],
+        "desc": "scan meta-data"}
+    pipes_dics["save_meta"] = {
+        "func": save_node_list,
+        "args": ["out_path"],
+        "desc": "save meta-data"}
 
 
 def _test():
