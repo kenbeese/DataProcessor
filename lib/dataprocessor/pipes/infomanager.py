@@ -78,7 +78,7 @@ class InfoManager(object):
 
     def read(self, read_path, root_path="."):
         import etreeio
-        fpath = os.path.abspath(read_path)
+        fpath = os.path.abspath(os.path.expanduser(read_path))
         self.tree, self.root_element = etreeio.read(fpath, root_path)
 
     def __element2node(self, elem):
