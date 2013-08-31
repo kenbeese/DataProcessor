@@ -3,6 +3,9 @@ import os.path
 
 
 def _check_files(path, figure_names):
+    """
+    check if figures exist in path
+    """
     if not os.path.exists(path):
         raise RuntimeError("figure directory does not found")
     for fig_name in figure_names:
@@ -15,6 +18,9 @@ def add_figure_node(node_list, path, figure_names,
                     parents, children, check_files=True):
     """
     add figure node into node_list
+
+    It is assumed that figures have been generated already
+    by another way. This function only generate a node.
 
     >>> node_list = []
     >>> node_list = add_figure_node(
