@@ -1,0 +1,26 @@
+#!/usr/bin/python
+# coding=utf-8
+
+
+import argparse
+import os.path
+import sys
+
+sys.path = ([sys.path[0]]
+            + [os.path.join(os.path.dirname(__file__), "../lib")]
+            + sys.path[1:])
+import dataprocessor
+sys.path = [sys.path[0]] + sys.path[2:]
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Register generated figures into DataProcessor")
+    parser.add_argument("-P","--parents",dest="parents",nargs="+")
+    parser.add_argument("figures",nargs="+")
+    args = parser.parse_args()
+
+
+if __name__ == "__main__":
+    main()
+else:
+    raise RuntimeError("registerfigure should not be imported")
