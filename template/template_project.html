@@ -12,32 +12,8 @@
   </head>
   <body>
     <h1 id="Title">{{node["name"]}}</h1>
-    {%- if "widgets" in node %}
-      {%- for widget in node["widgets"] %}
-	{%- set table = widget["data"] %}
-        <table id="DataTable" border=1>
-          <thead>
-            <tr>
-              {%- for key in table["header"] %}
-                <th>{{key}}</th>
-              {%- endfor %}
-            </tr>
-          </thead>
-          <tbody>
-            {%- for index in range(table["name"]|length) %}
-              <tr>
-                {%- for key in table["header"] %}
-                  {%- if key == "name" %}
-                    <td><a href='{{table["path"][index] + "/" + output_html}}'>{{table[key][index]}}</a></td>
-                  {%- else %}
-                    <td>{{table[key][index]}}</td>
-                  {%- endif %}
-                {%- endfor %}
-              </tr>
-            {%- endfor %}
-          </tbody>
-        </table>
-      {%- endfor %}
-    {%- endif %}
+    {%- for widget in widgets %}
+      {{widget["html"]}}
+    {%- endfor %}
   </body>
 </html>

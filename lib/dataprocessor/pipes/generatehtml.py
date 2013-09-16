@@ -14,11 +14,26 @@ def _strip_invalid_node(node_list):
     return result_list
 
 
+def _get_widget_html(widget, output_html, template_dir):
+    widget_html = {"type": widget["type"]}
+    html_filename = os.path.join(template_dir,
+                                 "widget_" + widget["type"] + ".html")
+    with open(html_filename, 'r') as f:
+        tmpl = Template(f.read())
+    widget_html["html"] = tmpl.render(widget, output_html=output_html)
+    return widget_html
+
+
 def _replace(node, template_html, output_html):
     cfg = {
         "node": node,
-        "output_html": output_html
+        "widgets": [],
     }
+    if "widgets" in node:
+        for widget in node["widgets"]:
+            cfg["widgets"].append(
+                _get_widget_html(widget, output_html,
+                                 os.path.dirname(template_html)))
     with open(template_html, 'r') as f:
         tmpl = Template(f.read())
     html = tmpl.render(cfg)
