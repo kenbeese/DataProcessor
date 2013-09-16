@@ -5,19 +5,35 @@
 import argparse
 import os.path
 import sys
+import json
 
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
             + sys.path[1:])
-import dataprocessor
+import dataprocessor.pipes.figure
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main():
     parser = argparse.ArgumentParser(description="Register generated figures into DataProcessor")
-    parser.add_argument("-P","--parents",dest="parents",nargs="+")
-    parser.add_argument("figures",nargs="+")
+    parser.add_argument("nodes",help="The path of JSON file containing nodes")
+    parser.add_argument("figures",nargs="+",
+                        help="Filenames of the figures that you want to register")
+    parser.add_argument("-R","--runs",dest="runs",nargs="+",
+                        help="Paths of directories containing run data.",
+                        default=[os.getcwd(),])
     args = parser.parse_args()
+
+    nodes_path = os.path.expanduser(os.path.abspath(args.nodes))
+    if os.path.exists(nodes_path):
+        try:
+            with open(nodes_path, "r") as f:
+                nodes = json.read(f)
+        except e:
+            print(e)
+            sys.exit(1)
+    else:
+        nodes = []
 
 
 if __name__ == "__main__":
