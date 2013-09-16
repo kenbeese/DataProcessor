@@ -15,19 +15,23 @@ import dataprocessor.pipes.figure
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
-def main():
+def read_args():
     parser = argparse.ArgumentParser(description="Register generated figures into DataProcessor")
     parser.add_argument("figure_directory",help="The directory for saving figures")
     parser.add_argument("nodes",help="The path of JSON file containing nodes")
     parser.add_argument("figures",nargs="+",
-                        help="Filenames of the figures that you want to register")
+                        help="Paths of the figures that you want to register")
     parser.add_argument("-R","--runs",dest="runs",nargs="+",
                         help="Paths of directories containing run data.",
                         default=[os.getcwd(),])
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    # figure directory
-    dir_path = os.path.expanduser(os.path.abspath(args.figure_directory))
+
+def _path_expand(path):
+    return os.path.expanduser(os.path.abspath(path))
+
+def check_figure_dir(args):
+    dir_path = _path_expand(args.figure_directory)
     if not os.path.isdir(dir_path):
         if os.path.exists(dir_path):
             print("Another type of file exists: " + dir_path)
@@ -38,8 +42,11 @@ def main():
             print("Figure directory cannot be created. Exit with error.")
             sys.exit(1)
         os.makedirs(dir_path)
+    return dir_path
 
-    nodes_path = os.path.expanduser(os.path.abspath(args.nodes))
+
+def get_node_list(args):
+    nodes_path = _path_expand(args.nodes)
     if os.path.exists(nodes_path):
         try:
             node_list = dataprocessor.pipes.jsonio.load([],nodes_path)
@@ -47,7 +54,33 @@ def main():
             print("JSON file cannot be read.")
             sys.exit(1)
     else:
+        print("Create new node_list: %s" % nodes_path)
         node_list = []
+    return nodes_path, node_list
+
+
+def check_figures(args):
+    for fig in args.figures:
+        path = _path_expand(fig)
+        if not os.path.exists(path):
+            print("Figure %s does not found." % path)
+            sys.exit(1)
+
+
+def check_runs(args):
+    for run in args.runs:
+        path = _path_expand(run)
+        if not os.path.exists(path):
+            print("Run directory %s does not found." % path)
+            sys.exit(1)
+
+
+def main():
+    args = read_args()
+    dir_path = check_figure_dir(args)
+    nodes_path, node_list = get_node_list(args)
+    check_figures(args)
+    check_runs(args)
 
     dataprocessor.pipes.jsonio.save(node_list, nodes_path, ask_replace=False)
 
