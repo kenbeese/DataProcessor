@@ -15,7 +15,7 @@ def _check_files(path, figure_names):
 
 
 def add_figure_node(node_list, path, figure_names,
-                    parents, children, check_files=True):
+                    parents, check_files=True):
     """
     add figure node into node_list
 
@@ -25,16 +25,15 @@ def add_figure_node(node_list, path, figure_names,
     >>> node_list = []
     >>> node_list = add_figure_node(
     ...                 node_list,"/tmp/doctest/add_figure_node/fig1",
-    ...                 ["fig1.eps","fig1.png"],
-    ...                 ["/tmp/doctest/add_figure_node"],
+    ...                 ["fig1.eps", "fig1.png"],
     ...                 ["/path/to/run/data"],
     ...                 check_files=False
     ...             )
     >>> node_list == [{'path': '/tmp/doctest/add_figure_node/fig1',
     ...                'type': 'figure',
     ...                'figures': ['fig1.eps', 'fig1.png'],
-    ...                'parents': ['/tmp/doctest/add_figure_node'],
-    ...                'children': ['/path/to/run/data']}]
+    ...                'parents': ['/path/to/run/data'],
+    ...                'children': []}]
     True
     """
     path = os.path.expanduser(os.path.abspath(path))
@@ -45,7 +44,7 @@ def add_figure_node(node_list, path, figure_names,
         "type": "figure",
         "figures": figure_names,
         "parents": parents,
-        "children": children,
+        "children": [],
     }
     node_list.append(node)
     return node_list
