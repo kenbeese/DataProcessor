@@ -17,6 +17,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 def main():
     parser = argparse.ArgumentParser(description="Register generated figures into DataProcessor")
+    parser.add_argument("figure_directory",help="The directory for saving figures")
     parser.add_argument("nodes",help="The path of JSON file containing nodes")
     parser.add_argument("figures",nargs="+",
                         help="Filenames of the figures that you want to register")
@@ -24,6 +25,19 @@ def main():
                         help="Paths of directories containing run data.",
                         default=[os.getcwd(),])
     args = parser.parse_args()
+
+    # figure directory
+    dir_path = os.path.expanduser(os.path.abspath(args.figure_directory))
+    if not os.path.isdir(dir_path):
+        if os.path.exists(dir_path):
+            print("Another type of file exists: " + dir_path)
+            print("Exit with ERROR")
+            sys.exit(1)
+        ans = raw_input("Create directory(%s)? [y/N]" % dir_path)
+        if ans not in ["yes", "y"]:
+            print("Figure directory cannot be created. Exit with error.")
+            sys.exit(1)
+        os.makedirs(dir_path)
 
     nodes_path = os.path.expanduser(os.path.abspath(args.nodes))
     if os.path.exists(nodes_path):
