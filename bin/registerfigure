@@ -6,6 +6,8 @@ import argparse
 import os.path
 import sys
 import json
+import datetime
+import shutil
 
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
@@ -82,6 +84,17 @@ def main():
     check_figures(args)
     check_runs(args)
 
+    now = datetime.datetime.today().strftime("%Y%m%d-%H%M%S")
+    path = os.path.join(dir_path,now)
+    os.mkdir(path)
+    for fig in args.figures:
+        name = os.path.basename(fig)
+        path_from = _path_expand(fig)
+        path_to = os.path.join(path,name)
+        shutil.copy2(path_from,path_to)
+    figs = [os.path.basename(fig) for fig in args.figures]
+    runs = [_path_expand(run) for run in args.runs]
+    dataprocessor.pipes.figure.add_figure_node(node_list, path, figs, runs)
     dataprocessor.pipes.jsonio.save(node_list, nodes_path, ask_replace=False)
 
 
