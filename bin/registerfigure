@@ -10,6 +10,7 @@ import json
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
             + sys.path[1:])
+import dataprocessor.pipes.jsonio
 import dataprocessor.pipes.figure
 sys.path = [sys.path[0]] + sys.path[2:]
 
@@ -27,13 +28,14 @@ def main():
     nodes_path = os.path.expanduser(os.path.abspath(args.nodes))
     if os.path.exists(nodes_path):
         try:
-            with open(nodes_path, "r") as f:
-                nodes = json.read(f)
+            node_list = dataprocessor.pipes.jsonio.load([],nodes_path)
         except e:
-            print(e)
+            print("JSON file cannot be read.")
             sys.exit(1)
     else:
-        nodes = []
+        node_list = []
+
+    dataprocessor.pipes.jsonio.save(node_list, nodes_path, ask_replace=False)
 
 
 if __name__ == "__main__":
