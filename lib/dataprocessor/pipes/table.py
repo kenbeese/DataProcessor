@@ -36,17 +36,23 @@ def add(node_list, table_type="children", pre_meta=["name", "date"],
     Add parents or children information table to 'widgets' key.
     Alignment sequence of table is pre_meta, confs and post_meta from left.
 
+    notes:
+    If any one of pre_meta and post_meta is same as confs,
+    this function become something wrong.
+
     Parameters
     ----------
     table_type : string, optional
         table_type is 'children' or 'parents'.
     pre_meta : list, optional
+        Specify any of key in node.
         pre_meta are placed at left side of table.
     post_meta : list, optional
+        Specify any of key in node.
         post_meta are placed at right side of table.
     confs : list, optional
-        Specify any of 'configure' key in node to confs.
-        If not specified, confs receive all of 'configure' key in node.
+        Specify any of key in node['configure'].
+        If not specified, confs receive all of key in node['configure'].
 
     Examples
     --------
