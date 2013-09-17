@@ -15,3 +15,6 @@ Usage (Supposed that current directory is the same as this file)
 --------
 Create json file of mete information.
 > $ ../bin/dataprocessor ./manip1.json
+
+Create html file.
+> $ ../bin/dataprocessor ./manip2.json
