@@ -1,0 +1,22 @@
+<table id="DataTable" border=1>
+  <thead>
+    <tr>
+      {%- for key in data["header"] %}
+        <th>{{key}}</th>
+      {%- endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {%- for index in range(data["name"]|length) %}
+      <tr align=right>
+        {%- for key in data["header"] %}
+          {%- if key == "name" %}
+            <td><a href="{{data["path"][index]}}/{{output_html}}">{{data[key][index]}}</a></td>
+          {%- else %}
+            <td>{{data[key][index]}}</td>
+          {%- endif %}
+        {%- endfor %}
+      </tr>
+    {%- endfor %}
+  </tbody>
+</table>
