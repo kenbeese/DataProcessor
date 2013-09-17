@@ -1,13 +1,17 @@
-カレントディレクトリをdata_dirに移動して、client_InfoManagerを使うとお試しができます。
+Including directory and files
+--------------
 
-../client_InfoManager -b                   サブコマンドのリスト取得
-../client_InfoManager lsrun                ランリスト
-../client_InfoManager lstag                タグリスト
-../client_InfoManager info run08           run08の情報を表示
-../client_InfoManager addRun run12         run12を追加。この名前とディレクトリ名は一致させてください
-../client_InfoManager settag run03 hoge    run03にhogeタグを追加
-../client_InfoManager rmtag  run03 hoge    run03のhogeタグを削除
-../client_InfoManager setc run03  hogehog  run03のコメントにhogehogを追加
-../client_InfoManager tagged chaotic       chaoticタグのついたrunの一覧
+- README: This file
+- manip1.json: sample json file for dataprocessor
+- datadir: sample dirctory for dataprocessor
+  - datadir/project1/run01/parameters.conf: run parameter file
+  - datadir/project1/run03/parameters.conf: run parameter file
+  - datadir/project2/run01/parameters.ini: run parameter file
+  - datadir/project2/run02/parameters.ini: run parameter file
+  - datadir/project2/run03/parameters.conf: run parameter file
 
-で操作できます。
+
+Usage (Supposed that current directory is the same as this file)
+--------
+Create json file of mete information.
+> $ ../bin/dataprocessor ./manip1.json
