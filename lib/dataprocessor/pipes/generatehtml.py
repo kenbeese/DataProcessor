@@ -51,7 +51,7 @@ def generate(node_list, template_dir, output_html,
 
     Notes:
     Output files are created at relative path of each node as same name.
-    Run node must have key 'configure'.
+    Run node must have key 'configure'. If not, the node is skipped.
     """
     template_dir = os.path.expanduser(template_dir)
     node_list = _strip_invalid_node(node_list)
