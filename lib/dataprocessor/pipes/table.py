@@ -34,7 +34,22 @@ def add(node_list, table_type="children", pre_meta=["name", "date"],
         post_meta=["tags", "comment"], confs=None):
     """
     Add parents or children information table to 'widgets' key.
+    Alignment sequence of table is pre_meta, confs and post_meta from left.
 
+    Parameters
+    ----------
+    table_type : string, optional
+        table_type is 'children' or 'parents'.
+    pre_meta : list, optional
+        pre_meta are placed at left side of table.
+    post_meta : list, optional
+        post_meta are placed at right side of table.
+    confs : list, optional
+        Specify any of 'configure' key in node to confs.
+        If not specified, confs receive all of 'configure' key in node.
+
+    Examples
+    --------
     >>> add([
     ...     {"path": "/tmp/project",
     ...      "children": ["/tmp/run1", "/tmp/run0"]},
