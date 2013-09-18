@@ -32,7 +32,7 @@ def add(node_list, node, no_validate_link=False):
         validate_link(node_list, node)
 
 
-def remove(node_list, node, no_validate_link=False):
+def remove(node_list, path, no_validate_link=False):
     """
     Remove node from node_list
 
@@ -55,7 +55,7 @@ def remove(node_list, node, no_validate_link=False):
     ...     "children": [],
     ... }]
     >>> node_list = copy.deepcopy(node_list_base)
-    >>> remove(node_list, node_list[0])
+    >>> remove(node_list, "/path/0")
     >>> node_list == [{
     ...     'path': '/path/1',
     ...     'parents': [],
@@ -71,7 +71,7 @@ def remove(node_list, node, no_validate_link=False):
     ... }]
     True
     >>> node_list = copy.deepcopy(node_list_base)
-    >>> remove(node_list, node_list[1])
+    >>> remove(node_list, "/path/1")
     >>> node_list == [{
     ...     'path': '/path/0',
     ...     'parents': [],
@@ -87,7 +87,7 @@ def remove(node_list, node, no_validate_link=False):
     ... }]
     True
     >>> node_list = copy.deepcopy(node_list_base)
-    >>> remove(node_list, node_list[3])
+    >>> remove(node_list, "/path/3")
     >>> node_list == [{
     ...     'path': '/path/0',
     ...     'parents': ['/path/1'],
@@ -103,7 +103,8 @@ def remove(node_list, node, no_validate_link=False):
     ... }]
     True
     """
-    if node not in node_list:
+    node = get(node_list, path)
+    if not node:
         raise RuntimeError("Removing non-existing node.")
     if not no_validate_link:
         path = node["path"]
