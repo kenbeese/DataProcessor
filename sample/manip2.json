@@ -1,0 +1,13 @@
+[
+    {"name": "scan_directory", "args": ["./datadir", ["*.conf", "*.ini"]]},
+    {"name": "configure",  "args": ["parameters.conf"], "kwds": {}},
+    {"name": "configure",  "args": ["parameters.ini"], "kwds": {}},
+    {"name": "add_table", "args": [],
+     "kwds": {"table_type": "parents",
+              "pre_meta": ["name"], "post_meta": [], "confs": []}},
+    {"name": "add_table", "args": [],
+     "kwds": {"table_type": "children",
+              "pre_meta": ["name"], "post_meta": []}},
+    {"name": "generate_html",
+     "args": ["../template", "output.html"]}
+]
