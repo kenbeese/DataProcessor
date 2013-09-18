@@ -22,7 +22,7 @@ def get(node_list, path):
 def add(node_list, node, no_validate_link=False):
     """
     Add node into node_list,
-    and check node["children"] and node["parent"]
+    and check node["children"] and node["parents"]
 
     If flag "no_validate_link" is specified,
     the check will be skipped.
@@ -48,57 +48,57 @@ def validate_link(node_list, node, ask_remove=True):
     validate the link of the node
 
     >>> node_list = [{
+    ...     "path": "/path/0",
+    ...     "parents": ["/path/1"],
+    ...     "children": ["/path/2", "/path/3"],
+    ... },{
     ...     "path": "/path/1",
-    ...     "parents": ["/path/2"],
-    ...     "children": ["/path/3", "/path/4"],
+    ...     "parents": [],
+    ...     "children": ["/path/0"],
     ... },{
     ...     "path": "/path/2",
-    ...     "parents": [],
-    ...     "children": ["/path/1"],
-    ... },{
-    ...     "path": "/path/3",
     ...     "parents": [], # incomplete
     ...     "children": [],
     ... },{
-    ...     "path": "/path/4",
-    ...     "parents": ["/path/1"],
-    ...     "children": ["/path/5"], # does not exist
+    ...     "path": "/path/3",
+    ...     "parents": ["/path/0"],
+    ...     "children": ["/path/4"], # does not exist
     ... }]
     >>> validate_link(node_list, node_list[0])
     >>> node_list == [{
+    ...     "path": "/path/0",
+    ...     "parents": ["/path/1"],
+    ...     "children": ["/path/2", "/path/3"],
+    ... },{
     ...     "path": "/path/1",
-    ...     "parents": ["/path/2"],
-    ...     "children": ["/path/3", "/path/4"],
+    ...     "parents": [],
+    ...     "children": ["/path/0"],
     ... },{
     ...     "path": "/path/2",
-    ...     "parents": [],
-    ...     "children": ["/path/1"],
-    ... },{
-    ...     "path": "/path/3",
-    ...     "parents": ["/path/1"], # refined
+    ...     "parents": ["/path/0"], # refined
     ...     "children": [],
     ... },{
-    ...     "path": "/path/4",
-    ...     "parents": ["/path/1"],
-    ...     "children": ["/path/5"], # This error is kept
+    ...     "path": "/path/3",
+    ...     "parents": ["/path/0"],
+    ...     "children": ["/path/4"], # This error is kept
     ... }]
     True
     >>> validate_link(node_list, node_list[3], ask_remove=False)
     >>> node_list == [{
+    ...     "path": "/path/0",
+    ...     "parents": ["/path/1"],
+    ...     "children": ["/path/2", "/path/3"],
+    ... },{
     ...     "path": "/path/1",
-    ...     "parents": ["/path/2"],
-    ...     "children": ["/path/3", "/path/4"],
+    ...     "parents": [],
+    ...     "children": ["/path/0"],
     ... },{
     ...     "path": "/path/2",
-    ...     "parents": [],
-    ...     "children": ["/path/1"],
-    ... },{
-    ...     "path": "/path/3",
-    ...     "parents": ["/path/1"],
+    ...     "parents": ["/path/0"],
     ...     "children": [],
     ... },{
-    ...     "path": "/path/4",
-    ...     "parents": ["/path/1"],
+    ...     "path": "/path/3",
+    ...     "parents": ["/path/0"],
     ...     "children": [], # removed
     ... }]
     True
