@@ -19,6 +19,19 @@ def get(node_list, path):
     return None
 
 
+def add(node_list, node, no_validate_link=False):
+    """
+    Add node into node_list,
+    and check node["children"] and node["parent"]
+
+    If flag "no_validate_link" is specified,
+    the check will be skipped.
+    """
+    node_list.append(node)
+    if not no_validate_link:
+        validate_links(node_list,node)
+
+
 def _ask_remove(path):
     print("No nodes whose path is %s does not exists.")
     ans = raw_input("Remove this link? [Y/n]")
