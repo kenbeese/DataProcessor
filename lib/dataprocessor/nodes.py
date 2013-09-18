@@ -29,7 +29,7 @@ def add(node_list, node, no_validate_link=False):
     """
     node_list.append(node)
     if not no_validate_link:
-        validate_links(node_list,node)
+        validate_link(node_list, node)
 
 
 def _ask_remove(path):
