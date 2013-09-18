@@ -32,6 +32,94 @@ def add(node_list, node, no_validate_link=False):
         validate_link(node_list, node)
 
 
+def remove(node_list, node, no_validate_link=False):
+    """
+    Remove node from node_list
+
+    >>> import copy
+    >>> node_list_base = [{
+    ...     "path": "/path/0",
+    ...     "parents": ["/path/1"],
+    ...     "children": ["/path/2", "/path/3"],
+    ... },{
+    ...     "path": "/path/1",
+    ...     "parents": [],
+    ...     "children": ["/path/0"],
+    ... },{
+    ...     "path": "/path/2",
+    ...     "parents": ["/path/0"],
+    ...     "children": [],
+    ... },{
+    ...     "path": "/path/3",
+    ...     "parents": ["/path/0"],
+    ...     "children": [],
+    ... }]
+    >>> node_list = copy.deepcopy(node_list_base)
+    >>> remove(node_list, node_list[0])
+    >>> node_list == [{
+    ...     'path': '/path/1',
+    ...     'parents': [],
+    ...     'children': []
+    ... }, {
+    ...     'path': '/path/2',
+    ...     'parents': [],
+    ...     'children': []
+    ... }, {
+    ...     'path': '/path/3',
+    ...     'parents': [],
+    ...     'children': []
+    ... }]
+    True
+    >>> node_list = copy.deepcopy(node_list_base)
+    >>> remove(node_list, node_list[1])
+    >>> node_list == [{
+    ...     'path': '/path/0',
+    ...     'parents': [],
+    ...     'children': ['/path/2', '/path/3']
+    ... }, {
+    ...     'path': '/path/2',
+    ...     'parents': ['/path/0'],
+    ...     'children': []
+    ... }, {
+    ...     'path': '/path/3',
+    ...     'parents': ['/path/0'],
+    ...     'children': []
+    ... }]
+    True
+    >>> node_list = copy.deepcopy(node_list_base)
+    >>> remove(node_list, node_list[3])
+    >>> node_list == [{
+    ...     'path': '/path/0',
+    ...     'parents': ['/path/1'],
+    ...     'children': ['/path/2']
+    ... }, {
+    ...     'path': '/path/1',
+    ...     'parents': [],
+    ...     'children': ['/path/0']
+    ... }, {
+    ...     'path': '/path/2',
+    ...     'parents': ['/path/0'],
+    ...     'children': []
+    ... }]
+    True
+    """
+    if node not in node_list:
+        raise RuntimeError("Removing non-existing node.")
+    if not no_validate_link:
+        path = node["path"]
+        for p_path in node["parents"]:
+            p_node = get(node_list, p_path)
+            if not p_node:
+                continue
+            p_node["children"].remove(path)
+        for c_path in node["children"]:
+            c_node = get(node_list, c_path)
+            if not c_node:
+                continue
+            c_node["parents"].remove(path)
+    node_list.remove(node)
+
+
 def _ask_remove(path):
     print("No nodes whose path is %s does not exists.")
     ans = raw_input("Remove this link? [Y/n]")
