@@ -14,31 +14,39 @@ def directory(node_list, root, whitelist):
     Project node has run node in its sub-directory.
 
 
+    Examples
+    --------
     >>> scandir = "/tmp/scan_dir"
     >>> _generate_test_directories(scandir)
     >>> _show_test_directories(scandir)
-    ('/tmp/scan_dir', ['run0', 'run1', 'run2', 'run3'], [])
+    ('/tmp/scan_dir', ['run0', 'run1', 'run2'], [])
     ('/tmp/scan_dir/run0', ['run0', 'run1'], ['test.conf'])
     ('/tmp/scan_dir/run0/run0', ['data'], [])
     ('/tmp/scan_dir/run0/run0/data', [], ['hoge.conf'])
     ('/tmp/scan_dir/run0/run1', [], ['test.conf'])
     ('/tmp/scan_dir/run1', [], ['test.conf'])
-    ('/tmp/scan_dir/run2', [], ['test.conf'])
-    ('/tmp/scan_dir/run3', ['data'], [])
-    ('/tmp/scan_dir/run3/data', [], ['test.conf'])
-    >>> directory([], scandir, ["*.conf"]) == [
+    ('/tmp/scan_dir/run2', ['data'], [])
+    ('/tmp/scan_dir/run2/data', [], ['test.conf'])
+    >>>
+    >>> node_list = [
+    ...     {'path': '/tmp/scan_dir/run0',
+    ...      'parents': [],   # empty
+    ...      'children': [],  # empty
+    ...      'name': 'run0',
+    ...      'type': 'run'}]
+    >>>
+    >>> directory(node_list, scandir, ["*.conf"]) == [
+    ...     {'path': '/tmp/scan_dir/run0',
+    ...      'parents': ['/tmp/scan_dir'],             #fill
+    ...      'children': ['/tmp/scan_dir/run0/run1'],  #fill
+    ...      'name': 'run0',
+    ...      'type': 'run'},
     ...     {'path': '/tmp/scan_dir',
     ...      'parents': [],
     ...      'children': ['/tmp/scan_dir/run0',
-    ...                   '/tmp/scan_dir/run1',
-    ...                   '/tmp/scan_dir/run2'],
+    ...                   '/tmp/scan_dir/run1'],
     ...      'name': 'scan_dir',
     ...      'type': 'project'},
-    ...     {'path': '/tmp/scan_dir/run0',
-    ...      'parents': ['/tmp/scan_dir'],
-    ...      'children': ['/tmp/scan_dir/run0/run1'],
-    ...      'name': 'run0',
-    ...      'type': 'run'},
     ...     {'path': '/tmp/scan_dir/run0/run0',
     ...      'parents': [],
     ...      'children': ['/tmp/scan_dir/run0/run0/data'],
@@ -60,17 +68,12 @@ def directory(node_list, root, whitelist):
     ...      'name': 'run1',
     ...      'type': 'run'},
     ...     {'path': '/tmp/scan_dir/run2',
-    ...      'parents': ['/tmp/scan_dir'],
-    ...      'children': [],
-    ...      'name': 'run2',
-    ...      'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run3',
     ...      'parents': [],
-    ...      'children': ['/tmp/scan_dir/run3/data'],
-    ...      'name': 'run3',
+    ...      'children': ['/tmp/scan_dir/run2/data'],
+    ...      'name': 'run2',
     ...      'type': 'project'},
-    ...     {'path': '/tmp/scan_dir/run3/data',
-    ...      'parents': ['/tmp/scan_dir/run3'],
+    ...     {'path': '/tmp/scan_dir/run2/data',
+    ...      'parents': ['/tmp/scan_dir/run2'],
     ...      'children': [],
     ...      'name': 'data',
     ...      'type': 'run'}
@@ -79,7 +82,7 @@ def directory(node_list, root, whitelist):
     >>> directory([], scandir, ["data"]) == [
     ...     {'path': '/tmp/scan_dir',
     ...      'parents': [],
-    ...      'children': ['/tmp/scan_dir/run3'],
+    ...      'children': ['/tmp/scan_dir/run2'],
     ...      'name': 'scan_dir',
     ...      'type': 'project'},
     ...     {'path': '/tmp/scan_dir/run0',
@@ -92,17 +95,17 @@ def directory(node_list, root, whitelist):
     ...      'children': [],
     ...      'name': 'run0',
     ...      'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run3',
+    ...     {'path': '/tmp/scan_dir/run2',
     ...      'parents': ['/tmp/scan_dir'],
     ...      'children': [],
-    ...      'name': 'run3',
+    ...      'name': 'run2',
     ...      'type': 'run'}
     ... ]
     True
     >>> directory([], scandir, ["data/hoge*", "data/test*"]) == [
     ...     {'path': '/tmp/scan_dir',
     ...      'parents': [],
-    ...      'children': ['/tmp/scan_dir/run3'],
+    ...      'children': ['/tmp/scan_dir/run2'],
     ...      'name': 'scan_dir',
     ...      'type': 'project'},
     ...     {'path': '/tmp/scan_dir/run0',
@@ -115,10 +118,10 @@ def directory(node_list, root, whitelist):
     ...      'children': [],
     ...      'name': 'run0',
     ...      'type': 'run'},
-    ...     {'path': '/tmp/scan_dir/run3',
+    ...     {'path': '/tmp/scan_dir/run2',
     ...      'parents': ['/tmp/scan_dir'],
     ...      'children': [],
-    ...      'name': 'run3',
+    ...      'name': 'run2',
     ...      'type': 'run'}
     ... ]
     True
@@ -171,17 +174,17 @@ def register(pipe_dics):
 
 def _generate_test_directories(root):
     os.mkdir(root)
-    for i in range(4):
-        os.mkdir(os.path.join(root, "run" + str(i)))
     for i in range(3):
+        os.mkdir(os.path.join(root, "run" + str(i)))
+    for i in range(2):
         open(os.path.join(root, "run" + str(i), "test.conf"),
              "w").close()
     for i in range(2):
         os.mkdir(os.path.join(root, "run0", "run" + str(i)))
-    os.mkdir(os.path.join(root, "run3", "data"))
+    os.mkdir(os.path.join(root, "run2", "data"))
     os.mkdir(os.path.join(root, "run0", "run0", "data"))
     open(os.path.join(root, "run0", "run1", "test.conf"), "w").close()
-    open(os.path.join(root, "run3", "data", "test.conf"), "w").close()
+    open(os.path.join(root, "run2", "data", "test.conf"), "w").close()
     open(os.path.join(root, "run0", "run0", "data", "hoge.conf"),
          "w").close()
 
