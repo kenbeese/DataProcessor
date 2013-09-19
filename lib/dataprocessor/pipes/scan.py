@@ -2,6 +2,8 @@
 import os
 from glob import glob
 
+from ..nodes import get, validate_link
+
 
 def directory(node_list, root, whitelist):
     """
@@ -125,11 +127,14 @@ def directory(node_list, root, whitelist):
     """
 
     root = os.path.abspath(os.path.expanduser(root))
+    scan_nodelist = []
     for path, dirs, files in os.walk(root):
         dirs.sort()
         node_type = None
         parents = []
         children = []
+        if not get(node_list, path) is None:
+                continue
         for child in dirs:
             for white in whitelist:
                 if glob(os.path.join(path, child, white)):
@@ -143,12 +148,13 @@ def directory(node_list, root, whitelist):
                 break
         if not node_type:
             continue
-        node_list.append({"path": path,
-                          "parents": parents,
-                          "children": children,
-                          "type": node_type,
-                          "name": os.path.basename(path),
-                          })
+        scan_nodelist.append({"path": path,
+                              "parents": parents,
+                              "children": children,
+                              "type": node_type,
+                              "name": os.path.basename(path),
+                              })
+    node_list = node_list + scan_nodelist
     return node_list
 
 
@@ -181,12 +187,3 @@ def _show_test_directories(root):
     for root, dirs, files in os.walk(root):
         dirs.sort()
         print((root, dirs, files))
-
-
-def _test():
-    import doctest
-    doctest.testmod()
-
-
-if __name__ == "__main__":
-    _test()
