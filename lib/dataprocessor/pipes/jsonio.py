@@ -15,7 +15,7 @@ def save(node_list, json_path, ask_replace=True):
             print("Skip save_json pipe.")
             return node_list
     with open(path, "w") as f:
-        json.dump(node_list, f)
+        json.dump(node_list, f, indent=4)
     return node_list
 
 
