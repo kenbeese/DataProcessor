@@ -154,7 +154,10 @@ def directory(node_list, root, whitelist):
                               "type": node_type,
                               "name": os.path.basename(path),
                               })
+    origin_len = len(node_list)
     node_list = node_list + scan_nodelist
+    for node in node_list[origin_len:-1]:
+        validate_link(node_list, node, ask_remove=False)
     return node_list
 
 
