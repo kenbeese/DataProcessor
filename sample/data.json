@@ -1,0 +1,10 @@
+[{
+        "comment": "comment dayo-",
+        "parents": [
+            "/home/kentaro/workspaces/DataProcessor/sample/datadir/project2"
+        ],
+        "path": "/home/kentaro/workspaces/DataProcessor/sample/datadir/project2/run03",
+        "type": "run",
+        "children": [],
+        "name": "run03"
+}]
