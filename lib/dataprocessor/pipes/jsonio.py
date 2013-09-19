@@ -8,7 +8,7 @@ def save(node_list, json_path, ask_replace=True):
     save node_list into a JSON file
     """
     path = os.path.expanduser(json_path)
-    if ask_replace and os.path.exists(json_path):
+    if ask_replace and os.path.exists(path):
         ans = raw_input("File %s already exists. Replace? [y/N]"
                         % json_path).lower()
         if ans not in ["yes", "y"]:
@@ -24,7 +24,7 @@ def load(node_list, json_path):
     load node_list from a JSON file
     """
     path = os.path.expanduser(json_path)
-    if not os.path.exists(json_path):
+    if not os.path.exists(path):
         raise RuntimeError("json path does not exist")
     with open(path, "r") as f:
         read_node_list = json.load(f)
