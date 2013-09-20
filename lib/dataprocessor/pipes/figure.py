@@ -1,5 +1,6 @@
 # coding=utf-8
 import os.path
+from .. import nodes
 
 
 def _check_files(path, figure_names):
@@ -27,7 +28,7 @@ def add_figure_node(node_list, path, figure_names,
     ...                 node_list,"/tmp/doctest/add_figure_node/fig1",
     ...                 ["fig1.eps", "fig1.png"],
     ...                 ["/path/to/run/data"],
-    ...                 check_files=False
+    ...                 check_files=False  # should be checked in practice
     ...             )
     >>> node_list == [{'path': '/tmp/doctest/add_figure_node/fig1',
     ...                'type': 'figure',
@@ -37,6 +38,10 @@ def add_figure_node(node_list, path, figure_names,
     True
     """
     path = os.path.expanduser(os.path.abspath(path))
+    if not isinstance(parents, list):
+        raise RuntimeError("'Parents' must be a list")
+    if not isinstance(figure_names, list):
+        raise RuntimeError("'figure_names' must be a list")
     if check_files:
         _check_files(path, figure_names)
     node = {
@@ -46,7 +51,7 @@ def add_figure_node(node_list, path, figure_names,
         "parents": parents,
         "children": [],
     }
-    node_list.append(node)
+    nodes.add(node_list, node)
     return node_list
 
 
