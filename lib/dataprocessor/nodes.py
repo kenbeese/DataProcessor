@@ -27,7 +27,11 @@ def add(node_list, node, no_validate_link=False):
     If flag "no_validate_link" is specified,
     the check will be skipped.
     """
-    node_list.append(node)
+    node_ = get(node_list, node["path"])
+    if node_:
+        node_.update(node)
+    else:
+        node_list.append(node)
     if not no_validate_link:
         validate_link(node_list, node)
 
