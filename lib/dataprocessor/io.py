@@ -25,9 +25,9 @@ def load(node_list, json_path):
     """
     load node_list from a JSON file
     """
-    path = os.path.expanduser(json_path)
+    path = utility.path_expand(json_path)
     if not os.path.exists(path):
-        raise RuntimeError("json path does not exist")
+        raise RuntimeError("JSON does not exist")
     with open(path, "r") as f:
         read_node_list = json.load(f)
     return node_list + read_node_list

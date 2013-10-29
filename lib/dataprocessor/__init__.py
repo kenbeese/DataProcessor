@@ -5,6 +5,14 @@ import json
 import pipes
 
 
+class DataProcessorError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return repr(self.msg)
+
+
 class InvalidManipulationJSONWarning(UserWarning):
     def __init__(self, name, msg):
         self.name = name
