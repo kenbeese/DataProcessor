@@ -1,0 +1,11 @@
+[
+    {"name": "load_json", "args": ["data_information.json"]},
+    {"name": "add_table", "args": [],
+     "kwds": {"table_type": "parents",
+              "pre_meta": ["name"], "post_meta": [], "confs": []}},
+    {"name": "add_table", "args": [],
+     "kwds": {"table_type": "children",
+              "pre_meta": ["name", "comment"], "post_meta": []}},
+    {"name": "generate_html",
+     "args": ["../template", "output.html"]}
+]

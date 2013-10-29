@@ -23,10 +23,10 @@ def execute(manip):
     for mn in manip:
         name = mn["name"]
         if name not in pipes.pipes_dics:
-            raise InvalidManipulationJSONWarning(name,"invalid name")
+            raise InvalidManipulationJSONWarning(name,"invalid pipe name")
         dic = pipes.pipes_dics[name]
         if len(mn["args"]) != len(dic["args"]):
-            raise InvalidManipulationJSONWarning(name,"invalid arguments")
+            raise InvalidManipulationJSONWarning(name,"The number of arguments mismatches")
         if "kwds" in mn and "kwds" in dic:
             kwds = {}
             for kwd in mn["kwds"]:
