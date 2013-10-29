@@ -22,3 +22,6 @@ Create html file.
 
 Read data.json and add configure and save to newdata.json
 > $ ../bin/dataprocessor ./manip3.json
+
+Add figure node
+> $ ../bin/regist_figure ./figures ./data_information.json datadir/project1/run01/fig1.eps
