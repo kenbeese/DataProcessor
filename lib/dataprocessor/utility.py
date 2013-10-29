@@ -1,4 +1,6 @@
 # coding=utf-8
+from __init__ import DataProcessorError
+import os.path
 
 
 def path_expand(path):
@@ -6,6 +8,11 @@ def path_expand(path):
     Get abstract path
     """
     return os.path.expanduser(os.path.abspath(path))
+
+
+def check_file(path):
+    if not os.path.exists(path):
+        raise DataProcessorError("File does not exist")
 
 
 def check_directory(path, silent=True):

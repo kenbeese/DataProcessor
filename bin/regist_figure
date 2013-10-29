@@ -1,0 +1,57 @@
+#!/usr/bin/python
+# coding=utf-8
+
+
+import argparse
+import os.path
+import sys
+
+sys.path = ([sys.path[0]]
+            + [os.path.join(os.path.dirname(__file__), "../lib")]
+            + sys.path[1:])
+from dataprocessor import figure, io, utility, nodes, DataProcessorError
+sys.path = [sys.path[0]] + sys.path[2:]
+
+
+def read_args():
+    parser = argparse.ArgumentParser(description="Register generated figures into DataProcessor")
+    parser.add_argument("figure_directory",help="The directory for saving figures")
+    parser.add_argument("nodes",help="The path of JSON file containing nodes")
+    parser.add_argument("figures",nargs="+",
+                        help="Paths of the figures that you want to register")
+    parser.add_argument("-R","--runs",dest="runs",nargs="+",
+                        help="Paths of directories containing run data.",
+                        default=[os.getcwd(),])
+    return parser.parse_args()
+
+
+def main():
+    args = read_args()
+    base_dir = utility.path_expand(args.figure_directory)
+    figs = [utility.path_expand(fig) for fig in args.figures]
+
+    if args.runs:
+        runs = [utility.path_expand(run) for run in args.runs]
+    else:
+        runs = [utility.path_expand(os.getcwd())]
+
+    try:
+        for fig in figs:
+            utility.check_file(fig)
+        for run in runs:
+            utility.check_directory(run)
+    except DataProcessorError, e:
+        print(e)
+        sys.exit(1)
+
+    node_list = io.load([], args.nodes)
+    for fig in figs:
+        node = figure.create_node(fig, [], runs, base_dir)
+        nodes.add(node_list, node)
+    io.save(node_list, args.nodes, ask_replace=False)
+
+
+if __name__ == "__main__":
+    main()
+else:
+    raise RuntimeError("registerfigure should not be imported")

@@ -2,14 +2,12 @@
 import os
 import shutil
 import hashlib
+from . import DataProcessorError
 
 
-class DataProcessorFigureError(Exception):
+class DataProcessorFigureError(DataProcessorError):
     def __init__(self, msg):
-        self.msg = msg
-
-    def __str__(self):
-        return repr(self.msg)
+        DataProcessorError.__init__(self, msg)
 
 
 def create_node(figure_path, incidentals_path, parents, base_dir):
@@ -50,6 +48,8 @@ def copy(fig_path, incidentals_path, base_dir):
 
 
 zero_hash = hashlib.sha1("")
+
+
 def calc_hash(figure_path):
     hash_str = hashlib.sha1(open(figure_path, 'r').read()).hexdigest()
     if hash_str == zero_hash:
