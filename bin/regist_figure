@@ -23,16 +23,20 @@ def read_args():
     parser.add_argument("figures", nargs="+",
                         help="Paths of the figures that you want to register")
     parser.add_argument("-R", "--runs", dest="runs", nargs="+",
-                        help="Paths of directories containing run data.",
-                        default=[os.getcwd(), ])
+                        help="Paths of directories containing run data.")
     return parser.parse_args()
 
 
 def main():
     args = read_args()
     base_dir = utility.path_expand(args.figure_directory)
+    utility.check_directory(base_dir)
+
     figs = [utility.path_expand(fig) for fig in args.figures]
-    runs = [utility.path_expand(run) for run in args.runs]
+    if args.runs:
+        runs = [utility.path_expand(run) for run in args.runs]
+    else:
+        runs = [os.path.dirname(fig) for fig in figs]
 
     try:
         for fig in figs:
@@ -45,7 +49,12 @@ def main():
 
     node_list = io.load([], args.json_file)
     for fig in figs:
-        node = figure.create_node(fig, [], runs, base_dir)
+        try:
+            node = figure.create_node(fig, [], runs, base_dir)
+        except figure.DataProcessorFigureError, e:
+            print(e)
+            print("Skip %s" % fig)
+            continue
         nodes.add(node_list, node)
     io.save(node_list, args.json_file, ask_replace=False)
 
