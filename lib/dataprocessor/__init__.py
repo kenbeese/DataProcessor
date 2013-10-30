@@ -23,10 +23,7 @@ class InvalidJSONError(Exception):
 
 
 def execute(manip):
-    """
-    execute pipeline
-    """
-    # TODO write doctest
+    """execute pipeline"""
     run_list = []
     for mn in manip:
         name = mn["name"]
@@ -41,13 +38,14 @@ def execute(manip):
                 if kwd not in dic["kwds"]:
                     continue
                 kwds[kwd] = mn["kwds"][kwd]
-            run_list = dic["func"](run_list,*mn["args"],**kwds)
+            run_list = dic["func"](run_list, *mn["args"], **kwds)
         else:
-            run_list = dic["func"](run_list,*mn["args"])
+            run_list = dic["func"](run_list, *mn["args"])
     return run_list
 
 
 def execute_from_json_str(manip_json_str):
+    """execute pipeline from JSON string"""
     manip = json.loads(manip_json_str)
     execute(manip)
 
