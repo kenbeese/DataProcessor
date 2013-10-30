@@ -17,6 +17,7 @@ def check_file(path):
     path = path_expand(path)
     if not os.path.exists(path):
         raise DataProcessorError("File does not exist")
+    return path
 
 
 def check_directory(path, silent=True):
@@ -33,7 +34,8 @@ def check_directory(path, silent=True):
     dir_path = path_expand(path)
     if not os.path.isdir(dir_path):
         if os.path.exists(dir_path):
-            raise DataProcessorError("Another file already exists in %s" % dir_path)
+            raise DataProcessorError("Another file already exists in %s"
+                                     % dir_path)
         if not silent:
             ans = raw_input("Create directory(%s)? [y/N]" % dir_path)
             if ans not in ["yes", "y"]:

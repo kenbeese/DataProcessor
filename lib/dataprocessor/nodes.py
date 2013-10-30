@@ -1,4 +1,5 @@
 # coding=utf-8
+from __init__ import DataProcessorError
 
 
 def get(node_list, path):
@@ -105,7 +106,7 @@ def remove(node_list, path, no_validate_link=False):
     """
     node = get(node_list, path)
     if not node:
-        raise RuntimeError("Removing non-existing node.")
+        raise DataProcessorError("Removing non-existing node.")
     if not no_validate_link:
         path = node["path"]
         for p_path in node["parents"]:

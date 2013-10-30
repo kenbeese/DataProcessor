@@ -1,4 +1,5 @@
 # coding=utf-8
+from __init__ import DataProcessorError
 from . import utility
 
 import json
@@ -27,7 +28,7 @@ def load(node_list, json_path):
     """
     path = utility.path_expand(json_path)
     if not os.path.exists(path):
-        raise RuntimeError("JSON does not exist")
+        raise DataProcessorError("JSON does not exist")
     with open(path, "r") as f:
         read_node_list = json.load(f)
     return node_list + read_node_list
