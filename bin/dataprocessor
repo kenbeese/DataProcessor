@@ -21,7 +21,7 @@ def main():
     with open(args.json_filename, 'r') as f:
         try:
             dataprocessor.execute_from_json_str(f.read())
-        except dataprocessor.InvalidManipulationJSONWarning as e:
+        except dataprocessor.InvalidJSONError as e:
             print("ERROR occurs in dataprocessor.")
             print(e)
             print("Please review your JSON file.")

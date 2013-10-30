@@ -13,7 +13,7 @@ class DataProcessorError(Exception):
         return repr(self.msg)
 
 
-class InvalidManipulationJSONWarning(UserWarning):
+class InvalidJSONError(Exception):
     def __init__(self, name, msg):
         self.name = name
         self.msg = msg
@@ -31,10 +31,10 @@ def execute(manip):
     for mn in manip:
         name = mn["name"]
         if name not in pipes.pipes_dics:
-            raise InvalidManipulationJSONWarning(name,"invalid pipe name")
+            raise InvalidJSONError(name, "invalid pipe name")
         dic = pipes.pipes_dics[name]
         if len(mn["args"]) != len(dic["args"]):
-            raise InvalidManipulationJSONWarning(name,"The number of arguments mismatches")
+            raise InvalidJSONError(name, "The number of arguments mismatches")
         if "kwds" in mn and "kwds" in dic:
             kwds = {}
             for kwd in mn["kwds"]:
