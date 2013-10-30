@@ -48,8 +48,3 @@ def execute_from_json_str(manip_json_str):
     """execute pipeline from JSON string"""
     manip = json.loads(manip_json_str)
     execute(manip)
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

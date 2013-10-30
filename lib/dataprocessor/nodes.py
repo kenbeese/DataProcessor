@@ -220,11 +220,3 @@ def validate_link(node_list, node, ask_remove=True):
             c_node["parents"].append(path)
     for path in remove_path_list:
         node["children"].remove(path)
-
-
-def _test():
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    _test()

@@ -42,8 +42,3 @@ def check_directory(path, silent=True):
                 raise DataProcessorError("Figure directory cannot be created.")
         os.makedirs(dir_path)
     return dir_path
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

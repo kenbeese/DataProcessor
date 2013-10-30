@@ -32,8 +32,3 @@ def load(node_list, json_path):
     with open(path, "r") as f:
         read_node_list = json.load(f)
     return node_list + read_node_list
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
