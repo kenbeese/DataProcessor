@@ -47,6 +47,52 @@ def check_directory(path, silent=True):
         if not silent:
             ans = raw_input("Create directory(%s)? [y/N]" % dir_path)
             if ans not in ["yes", "y"]:
-                raise DataProcessorError("Figure directory cannot be created.")
+                raise DataProcessorError("Directory cannot be created.")
         os.makedirs(dir_path)
     return dir_path
+
+
+def boolenize(arg):
+    """make arg boolen value
+
+    >>> boolenize(True)
+    True
+    >>> boolenize(False)
+    False
+
+    >>> boolenize(1)
+    True
+    >>> boolenize(0)
+    False
+    >>> boolenize(0.0)
+    True
+
+    >>> boolenize("True")
+    True
+    >>> boolenize("other words")
+    True
+    >>> boolenize("False")
+    False
+    >>> boolenize("false")
+    False
+    >>> boolenize("F")
+    False
+    >>> boolenize("f")
+    False
+    >>> boolenize("No")
+    False
+    >>> boolenize("no")
+    False
+    >>> boolenize("N")
+    False
+    >>> boolenize("n")
+    False
+    """
+    if type(arg) == str:
+        if arg == "":
+            return False
+        if arg in ["False", "false", "F", "f", "No", "no", "N", "n"]:
+            return False
+        return True
+    else:
+        return bool(arg)

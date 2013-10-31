@@ -6,8 +6,9 @@ import json
 import os.path
 
 
-def save(node_list, json_path, ask_replace=True):
+def save(node_list, json_path, silent=False):
     """save node_list into a JSON file"""
+    silent = utility.boolenize(silent)
     path = utility.path_expand(json_path)
     if ask_replace and os.path.exists(path):
         ans = raw_input("File %s already exists. Replace? [y/N]"
