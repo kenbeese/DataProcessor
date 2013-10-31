@@ -7,9 +7,7 @@ import os.path
 
 
 def save(node_list, json_path, ask_replace=True):
-    """
-    save node_list into a JSON file
-    """
+    """save node_list into a JSON file"""
     path = utility.path_expand(json_path)
     if ask_replace and os.path.exists(path):
         ans = raw_input("File %s already exists. Replace? [y/N]"
@@ -23,8 +21,16 @@ def save(node_list, json_path, ask_replace=True):
 
 
 def load(node_list, json_path):
-    """
-    load node_list from a JSON file
+    """load node_list from a JSON file
+
+    Args:
+        json_path(str): the path to JSON
+
+    Returns:
+        node_list(arg1) + [new node list]
+
+    Raise:
+        DataProcessorError: occurs when JSON file does not exist.
     """
     path = utility.path_expand(json_path)
     if not os.path.exists(path):

@@ -4,7 +4,7 @@ import os.path
 
 
 def path_expand(path):
-    """Get abstract path"""
+    """Get absolute path"""
     return os.path.expanduser(os.path.abspath(path))
 
 
@@ -12,7 +12,10 @@ def check_file(path):
     """Check whether file exists.
 
     Returns:
-        Abstract path of the argument
+        Absolute path of the argument
+
+    Raise:
+        DataProcessorError: occurs when the file does not exist.
     """
     path = path_expand(path)
     if not os.path.exists(path):
@@ -29,7 +32,12 @@ def check_directory(path, silent=True):
         silent: Ask whether create directory (default=True)
 
     Returns:
-        Abstract path of the directory
+        Absolute path of the directory
+
+    Raise:
+        DataProcessorError: occurs in two cases
+                            + another file (does not directory) exist
+                            + refused by user to create directory
     """
     dir_path = path_expand(path)
     if not os.path.isdir(dir_path):

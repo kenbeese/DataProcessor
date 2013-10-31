@@ -3,8 +3,7 @@ from __init__ import DataProcessorError
 
 
 def get(node_list, path):
-    """
-    search node from node_list by its path
+    """search node from node_list by its path
 
     >>> node_list = [{"path": "/path/1"}, {"path": "/path/2"},
     ...              {"path": "/path/3"}, {"path": "/path/4"}]
@@ -21,12 +20,15 @@ def get(node_list, path):
 
 
 def add(node_list, node, no_validate_link=False):
-    """
-    Add node into node_list,
-    and check node["children"] and node["parents"]
+    """Add a node into node_list
 
-    If flag "no_validate_link" is specified,
-    the check will be skipped.
+    This adds a node into node_list,
+    and validate links in node["children"] and node["parents"]
+
+    Args:
+        node_list(list): the list of nodes
+        node(dict): The node will be added into node_list
+        no_validate_link(bool, optional): skip link validation (default False)
     """
     node_list.append(node)
     if not no_validate_link:
@@ -34,8 +36,12 @@ def add(node_list, node, no_validate_link=False):
 
 
 def remove(node_list, path, no_validate_link=False):
-    """
-    Remove node from node_list
+    """Remove node from node_list
+
+    Args:
+        node_list(list): the list of nodes
+        path(str): The path of the node to be removed
+        no_validate_link(bool, optional): skip link validation (default False)
 
     >>> import copy
     >>> node_list_base = [{
@@ -122,17 +128,6 @@ def remove(node_list, path, no_validate_link=False):
     node_list.remove(node)
 
 
-def _ask_remove(path):
-    print("No nodes whose path is %s does not exists.")
-    ans = raw_input("Remove this link? [Y/n]")
-    if ans in ["n", "N", "no", "No"]:
-        print("Path %s is kept. Please fix manually." % path)
-        return False
-    else:
-        print("Removed.")
-        return True
-
-
 def validate_link(node_list, node, ask_remove=True):
     """
     validate the link of the node
@@ -194,6 +189,16 @@ def validate_link(node_list, node, ask_remove=True):
     True
     """
     path = node["path"]
+
+    def _ask_remove(path):
+        print("No nodes whose path is %s does not exists.")
+        ans = raw_input("Remove this link? [Y/n]")
+        if ans in ["n", "N", "no", "No"]:
+            print("Path %s is kept. Please fix manually." % path)
+            return False
+        else:
+            print("Removed.")
+            return True
 
     # for parents
     remove_path_list = []
