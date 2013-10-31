@@ -7,10 +7,16 @@ import os.path
 
 
 def save(node_list, json_path, silent=False):
-    """save node_list into a JSON file"""
+    """save node_list into a JSON file
+
+    Args:
+        json_path(str): the path to JSON
+        slient(bool, str, optional):
+            Ask whether replace JSON file (default=False)
+    """
     silent = utility.boolenize(silent)
     path = utility.path_expand(json_path)
-    if ask_replace and os.path.exists(path):
+    if not silent and os.path.exists(path):
         ans = raw_input("File %s already exists. Replace? [y/N]"
                         % json_path).lower()
         if ans not in ["yes", "y"]:

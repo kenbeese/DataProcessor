@@ -65,7 +65,7 @@ def boolenize(arg):
     >>> boolenize(0)
     False
     >>> boolenize(0.0)
-    True
+    False
 
     >>> boolenize("True")
     True

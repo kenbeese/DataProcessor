@@ -5,6 +5,10 @@ from __init__ import DataProcessorError
 def get(node_list, path):
     """search node from node_list by its path
 
+    Returns:
+        the node is returned if exists,
+        and `None` is returned if not.
+
     >>> node_list = [{"path": "/path/1"}, {"path": "/path/2"},
     ...              {"path": "/path/3"}, {"path": "/path/4"}]
     >>> get(node_list, "/path/3")
@@ -191,7 +195,7 @@ def validate_link(node_list, node, ask_remove=True):
     path = node["path"]
 
     def _ask_remove(path):
-        print("No nodes whose path is %s does not exists.")
+        print("No nodes whose path is %s does not exists." % path)
         ans = raw_input("Remove this link? [Y/n]")
         if ans in ["n", "N", "no", "No"]:
             print("Path %s is kept. Please fix manually." % path)
