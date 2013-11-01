@@ -1,6 +1,4 @@
 # coding=utf-8
-"""@dataprocessor
-"""
 import json
 import traceback
 from contextlib import contextmanager
@@ -9,6 +7,17 @@ import pipes
 
 
 class DataProcessorError(Exception):
+    """A runtime error occurred in DataProcessor
+
+    This exception is raised by invalid manipulation.
+    This exception will be caught by dataprocessor.execute,
+    and converted into InvalidJSONError.
+
+    Attribute
+    ----------
+    msg : str
+        A message for the error
+    """
     def __init__(self, msg):
         self.msg = msg
 
@@ -17,6 +26,15 @@ class DataProcessorError(Exception):
 
 
 class InvalidJSONError(Exception):
+    """A runtime error occurred in while processing manipulation
+
+    Attribute
+    ----------
+    name : str
+        The name of pipe in which error occurred.
+    msg : str
+        A message for the error
+    """
     def __init__(self, name, msg):
         self.name = name
         self.msg = msg
@@ -25,8 +43,23 @@ class InvalidJSONError(Exception):
         return "while processing pipe[%s]: %s" % (self.name, self.msg)
 
 
+@contextmanager
+def pipe_execute(name):
+    try:
+        yield
+    except DataProcessorError as e:
+        print(traceback.format_exc())
+        raise InvalidJSONError(name, e.msg)
+
+
 def execute(manip):
-    """execute pipeline"""
+    """execute pipeline defined in `manip`
+
+    Parameters
+    ----------
+    manip: list
+        A list defining manipulation
+    """
     run_list = []
     for mn in manip:
         name = mn["name"]
@@ -50,6 +83,9 @@ def execute(manip):
 
 
 def execute_from_json_str(manip_json_str):
-    """execute pipeline from JSON string"""
+    """execute pipeline from JSON string
+
+    See also `dataprocessor.execute`.
+    """
     manip = json.loads(manip_json_str)
     execute(manip)

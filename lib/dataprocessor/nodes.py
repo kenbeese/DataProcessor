@@ -47,6 +47,9 @@ def remove(node_list, path, no_validate_link=False):
         path(str): The path of the node to be removed
         no_validate_link(bool, optional): skip link validation (default False)
 
+    Raise:
+        DataProcessor: occurs when specified `path` does not exist in node_list
+
     >>> import copy
     >>> node_list_base = [{
     ...     "path": "/path/0",
