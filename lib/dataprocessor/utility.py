@@ -26,8 +26,10 @@ def check_file(path):
     ------
     DataProcessorError
         occurs in two cases:
+
         + when the file does not exist
         + file exist but it is a directory
+
     """
     path = path_expand(path)
     if not os.path.exists(path):
@@ -56,8 +58,10 @@ def check_directory(path, silent=True):
     ------
     DataProcessorError
         occurs in two cases
+
         + another file (does not directory) exist
         + refused by user to create directory
+
     """
     dir_path = path_expand(path)
     if not os.path.isdir(dir_path):
