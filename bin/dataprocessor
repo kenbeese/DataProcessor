@@ -22,6 +22,7 @@ def main():
     with open(json_fn, 'r') as f:
         dp.execute_from_json_str(f.read())
 
+
 if __name__ == "__main__":
     try:
         main()
@@ -29,4 +30,9 @@ if __name__ == "__main__":
         print("ERROR occurs in pipe '%s'" % e.name)
         print("Message: %s" % e.msg)
         print("Please review your JSON file.")
+        sys.exit(1)
+    except (dp.DataProcessorError, dp.__init__.DataProcessorError) as e:
+        print("ERROR in command-line arguments.")
+        print("Message: %s" % e.msg)
+        print(traceback.format_exc())
         sys.exit(1)

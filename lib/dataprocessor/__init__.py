@@ -86,6 +86,14 @@ def execute_from_json_str(manip_json_str):
     """execute pipeline from JSON string
 
     See also `dataprocessor.execute`.
+
+    Raises
+    ------
+    DataProcessorError
+        If fails to decode JSON.
     """
-    manip = json.loads(manip_json_str)
+    try:
+        manip = json.loads(manip_json_str)
+    except ValueError as e:
+        raise DataProcessorError("Cannot decode JSON file.")
     execute(manip)

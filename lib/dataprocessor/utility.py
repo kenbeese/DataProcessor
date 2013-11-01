@@ -20,6 +20,8 @@ def check_file(path):
     path = path_expand(path)
     if not os.path.exists(path):
         raise DataProcessorError("File does not exist")
+    if os.path.isdir(path):
+        raise DataProcessorError("%s is not a file but a directory" % path)
     return path
 
 
