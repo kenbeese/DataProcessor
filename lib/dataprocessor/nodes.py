@@ -5,7 +5,9 @@ from .exception import DataProcessorError
 def get(node_list, path):
     """search node from node_list by its path
 
-    Returns:
+    Returns
+    -------
+    node or None
         the node is returned if exists,
         and `None` is returned if not.
 
@@ -29,10 +31,14 @@ def add(node_list, node, no_validate_link=False):
     This adds a node into node_list,
     and validate links in node["children"] and node["parents"]
 
-    Args:
-        node_list(list): the list of nodes
-        node(dict): The node will be added into node_list
-        no_validate_link(bool, optional): skip link validation (default False)
+    Parameters
+    ----------
+    node_list: list
+        the list of nodes
+    node: dict
+        The node will be added into node_list
+    no_validate_link: bool, optional
+        skip link validation (default False)
     """
     node_list.append(node)
     if not no_validate_link:
@@ -42,13 +48,19 @@ def add(node_list, node, no_validate_link=False):
 def remove(node_list, path, no_validate_link=False):
     """Remove node from node_list
 
-    Args:
-        node_list(list): the list of nodes
-        path(str): The path of the node to be removed
-        no_validate_link(bool, optional): skip link validation (default False)
+    Parameters
+    ----------
+    node_list: list
+        the list of nodes
+    path: str
+        The path of the node to be removed
+    no_validate_link: bool, optional
+        skip link validation (default False)
 
-    Raise:
-        DataProcessor: occurs when specified `path` does not exist in node_list
+    Raises
+    ------
+    DataProcessorError
+        occurs when specified `path` does not exist in node_list
 
     >>> import copy
     >>> node_list_base = [{
@@ -136,8 +148,18 @@ def remove(node_list, path, no_validate_link=False):
 
 
 def validate_link(node_list, node, ask_remove=True):
-    """
-    validate the link of the node
+    """validate the link of the node
+
+    Check node["children"] and node["parents"] is correct.
+    If a link is incomplete, it will fixed (see the following example).
+
+    Parameters
+    ----------
+    node_list: list
+        the list of nodes
+    node: dict
+        a node will be checked.
+        This must belong to the `node_list`
 
     >>> node_list = [{
     ...     "path": "/path/0",

@@ -9,10 +9,12 @@ import os.path
 def save(node_list, json_path, silent=False):
     """save node_list into a JSON file
 
-    Args:
-        json_path(str): the path to JSON
-        slient(bool, str, optional):
-            Ask whether replace JSON file (default=False)
+    Parameters
+    ----------
+    json_path: str
+        the path to JSON
+    slient: bool, str, optional
+        Ask whether replace JSON file (default=False)
     """
     silent = utility.boolenize(silent)
     path = utility.path_expand(json_path)
@@ -30,14 +32,20 @@ def save(node_list, json_path, silent=False):
 def load(node_list, json_path):
     """load node_list from a JSON file
 
-    Args:
-        json_path(str): the path to JSON
+    Parameters
+    ----------
+    json_path: str
+        the path to JSON
 
-    Returns:
+    Returns
+    -------
+    list
         node_list(arg1) + [new node list]
 
-    Raise:
-        DataProcessorError: occurs when JSON file does not exist.
+    Raises
+    ------
+    DataProcessorError
+        occurs when JSON file does not exist.
     """
     path = utility.path_expand(json_path)
     if not os.path.exists(path):

@@ -10,7 +10,7 @@ class DataProcessorError(Exception):
     This exception will be caught in dataprocessor.execute,
     and converted into InvalidJSONError.
 
-    Attribute
+    Attributes
     ----------
     msg : str
         A message for the error
@@ -25,7 +25,7 @@ class DataProcessorError(Exception):
 class InvalidJSONError(Exception):
     """A runtime error occurred in processing manipulation
 
-    Attribute
+    Attributes
     ----------
     name : str
         The name of pipe in which error occurred.
