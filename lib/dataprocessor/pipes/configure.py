@@ -8,14 +8,14 @@ def add(node_list, filename, section="parameters"):
 
     Parameters
     ----------
-    filename: str
+    filename : str
         filename of parameter configure file
         If file is not exists, add null list.
 
-    section: str
+    section : str
         Specify section name in configure file.
 
-    Example
+    Examples
     ----------
     Create directory and file
 
