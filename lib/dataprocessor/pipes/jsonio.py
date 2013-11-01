@@ -6,7 +6,7 @@ def register(pipes_dics):
     pipes_dics["save_json"] = {
         "func": io.save,
         "args": ["json_path"],
-        "kwds": ["ask_replace"],
+        "kwds": ["silent"],
         "desc": "save node_list in a JSON file",
     }
     pipes_dics["load_json"] = {
