@@ -20,19 +20,19 @@ def main():
 
     json_fn = dp.utility.check_file(args.json_filename)
     with open(json_fn, 'r') as f:
-        dp.execute_from_json_str(f.read())
+        dp.execute.execute_from_json_str(f.read())
 
 
 if __name__ == "__main__":
     try:
         main()
-    except dp.InvalidJSONError as e:
+    except dp.exception.InvalidJSONError as e:
         print("ERROR occurs in pipe '%s'" % e.name)
         print("Message: %s" % e.msg)
         print("Please review your JSON file.")
         sys.exit(1)
-    except (dp.DataProcessorError, dp.__init__.DataProcessorError) as e:
+    except dp.exception.DataProcessorError as e:
+        print(traceback.format_exc())
         print("ERROR in command-line arguments.")
         print("Message: %s" % e.msg)
-        print(traceback.format_exc())
         sys.exit(1)

@@ -1,5 +1,5 @@
 # coding=utf-8
-from __init__ import DataProcessorError
+from .exception import DataProcessorError
 import os.path
 
 
