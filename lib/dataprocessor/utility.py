@@ -44,7 +44,7 @@ def check_directory(path, silent=True):
 
     Parameters
     ----------
-    silent: bool, optional
+    silent : bool, optional
         Ask whether create directory (default=True)
 
     Returns

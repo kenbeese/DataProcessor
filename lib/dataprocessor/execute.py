@@ -10,7 +10,7 @@ def execute(manip):
 
     Parameters
     ----------
-    manip: list
+    manip : list
         A list defining manipulation
     """
     run_list = []

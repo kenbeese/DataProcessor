@@ -11,9 +11,9 @@ def save(node_list, json_path, silent=False):
 
     Parameters
     ----------
-    json_path: str
+    json_path : str
         the path to JSON
-    slient: bool, str, optional
+    slient : bool, str, optional
         Ask whether replace JSON file (default=False)
     """
     silent = utility.boolenize(silent)
@@ -34,7 +34,7 @@ def load(node_list, json_path):
 
     Parameters
     ----------
-    json_path: str
+    json_path : str
         the path to JSON
 
     Returns

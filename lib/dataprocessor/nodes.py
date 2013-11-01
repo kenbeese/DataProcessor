@@ -33,11 +33,11 @@ def add(node_list, node, no_validate_link=False):
 
     Parameters
     ----------
-    node_list: list
+    node_list : list
         the list of nodes
-    node: dict
+    node : dict
         The node will be added into node_list
-    no_validate_link: bool, optional
+    skip_validate_link : bool, optional
         skip link validation (default False)
     """
     node_list.append(node)
@@ -50,9 +50,9 @@ def remove(node_list, path, no_validate_link=False):
 
     Parameters
     ----------
-    node_list: list
+    node_list : list
         the list of nodes
-    path: str
+    path : str
         The path of the node to be removed
     no_validate_link: bool, optional
         skip link validation (default False)
@@ -155,9 +155,9 @@ def validate_link(node_list, node, ask_remove=True):
 
     Parameters
     ----------
-    node_list: list
+    node_list : list
         the list of nodes
-    node: dict
+    node : dict
         a node will be checked.
         This must belong to the `node_list`
 
