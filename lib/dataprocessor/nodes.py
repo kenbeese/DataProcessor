@@ -25,7 +25,7 @@ def get(node_list, path):
     return None
 
 
-def add(node_list, node, no_validate_link=False):
+def add(node_list, node, skip_validate_link=False):
     """Add a node into node_list
 
     This adds a node into node_list,
@@ -41,11 +41,11 @@ def add(node_list, node, no_validate_link=False):
         skip link validation (default False)
     """
     node_list.append(node)
-    if not no_validate_link:
+    if not skip_validate_link:
         validate_link(node_list, node)
 
 
-def remove(node_list, path, no_validate_link=False):
+def remove(node_list, path, skip_validate_link=False):
     """Remove node from node_list
 
     Parameters
@@ -54,7 +54,7 @@ def remove(node_list, path, no_validate_link=False):
         the list of nodes
     path : str
         The path of the node to be removed
-    no_validate_link: bool, optional
+    skip_validate_link : bool, optional
         skip link validation (default False)
 
     Raises
@@ -132,7 +132,7 @@ def remove(node_list, path, no_validate_link=False):
     node = get(node_list, path)
     if not node:
         raise DataProcessorError("Removing non-existing node.")
-    if not no_validate_link:
+    if not skip_validate_link:
         path = node["path"]
         for p_path in node["parents"]:
             p_node = get(node_list, p_path)
@@ -147,7 +147,7 @@ def remove(node_list, path, no_validate_link=False):
     node_list.remove(node)
 
 
-def validate_link(node_list, node, ask_remove=True):
+def validate_link(node_list, node, silent=False):
     """validate the link of the node
 
     Check node["children"] and node["parents"] is correct.
@@ -219,7 +219,7 @@ def validate_link(node_list, node, ask_remove=True):
     """
     path = node["path"]
 
-    def _ask_remove(path):
+    def ask_remove(path):
         print("No nodes whose path is %s does not exists." % path)
         ans = raw_input("Remove this link? [Y/n]")
         if ans in ["n", "N", "no", "No"]:
@@ -234,7 +234,7 @@ def validate_link(node_list, node, ask_remove=True):
     for parent_path in node["parents"]:
         p_node = get(node_list, parent_path)
         if not p_node:
-            if not ask_remove or _ask_remove(parent_path):
+            if silent or ask_remove(parent_path):
                 remove_path_list.append(parent_path)
             continue
         if path not in p_node["children"]:
@@ -247,7 +247,7 @@ def validate_link(node_list, node, ask_remove=True):
     for child_path in node["children"]:
         c_node = get(node_list, child_path)
         if not c_node:
-            if not ask_remove or _ask_remove(child_path):
+            if silent or ask_remove(child_path):
                 remove_path_list.append(child_path)
             continue
         if path not in c_node["parents"]:
