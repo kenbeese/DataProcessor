@@ -24,6 +24,13 @@ you can make api reference of this library with following command.
 
 `doc/_build/html/index.html` is top page.
 
+If you add new file to `lib/dataprocessor` or delete file from `lib/dataprocessor`,
+please use following command before above command.
+
+    make -C doc updateref
+    make -C doc html
+
+
 Lisence
 ==========
 GPLv3
