@@ -73,6 +73,8 @@ def boolenize(arg):
     True
     >>> boolenize("False")
     False
+    >>> boolenize("falSE")
+    False
     >>> boolenize("false")
     False
     >>> boolenize("F")
@@ -81,6 +83,8 @@ def boolenize(arg):
     False
     >>> boolenize("No")
     False
+    >>> boolenize("NO")
+    False
     >>> boolenize("no")
     False
     >>> boolenize("N")
@@ -88,11 +92,6 @@ def boolenize(arg):
     >>> boolenize("n")
     False
     """
-    if type(arg) == str:
-        if arg == "":
-            return False
-        if arg in ["False", "false", "F", "f", "No", "no", "N", "n"]:
-            return False
-        return True
-    else:
-        return bool(arg)
+    if type(arg) == str and arg.lower() in ["false", "f", "no", "n"]:
+        return False
+    return bool(arg)
