@@ -1,10 +1,18 @@
 # coding=utf-8
+from .exception import DataProcessorError
 
 
 def get(node_list, path):
-    """
-    search node from node_list by its path
+    """search node from node_list by its path
 
+    Returns
+    -------
+    node or None
+        the node is returned if exists,
+        and `None` is returned if not.
+
+    Examples
+    --------
     >>> node_list = [{"path": "/path/1"}, {"path": "/path/2"},
     ...              {"path": "/path/3"}, {"path": "/path/4"}]
     >>> get(node_list, "/path/3")
@@ -19,27 +27,49 @@ def get(node_list, path):
     return None
 
 
-def add(node_list, node, no_validate_link=False):
-    """
-    Add node into node_list,
-    and check node["children"] and node["parents"]
+def add(node_list, node, skip_validate_link=False):
+    """Add a node into node_list
 
-    If flag "no_validate_link" is specified,
-    the check will be skipped.
+    This adds a node into node_list,
+    and validate links in node["children"] and node["parents"]
+
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes
+    node : dict
+        The node will be added into node_list
+    skip_validate_link : bool, optional
+        skip link validation (default False)
     """
     node_ = get(node_list, node["path"])
     if node_:
         node_.update(node)
     else:
         node_list.append(node)
-    if not no_validate_link:
+    if not skip_validate_link:
         validate_link(node_list, node)
 
 
-def remove(node_list, path, no_validate_link=False):
-    """
-    Remove node from node_list
+def remove(node_list, path, skip_validate_link=False):
+    """Remove node from node_list
 
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes
+    path : str
+        The path of the node to be removed
+    skip_validate_link : bool, optional
+        skip link validation (default False)
+
+    Raises
+    ------
+    DataProcessorError
+        occurs when specified `path` does not exist in node_list
+
+    Examples
+    --------
     >>> import copy
     >>> node_list_base = [{
     ...     "path": "/path/0",
@@ -109,8 +139,8 @@ def remove(node_list, path, no_validate_link=False):
     """
     node = get(node_list, path)
     if not node:
-        raise RuntimeError("Removing non-existing node.")
-    if not no_validate_link:
+        raise DataProcessorError("Removing non-existing node.")
+    if not skip_validate_link:
         path = node["path"]
         for p_path in node["parents"]:
             p_node = get(node_list, p_path)
@@ -125,21 +155,22 @@ def remove(node_list, path, no_validate_link=False):
     node_list.remove(node)
 
 
-def _ask_remove(path):
-    print("No nodes whose path is %s does not exists.")
-    ans = raw_input("Remove this link? [Y/n]")
-    if ans in ["n", "N", "no", "No"]:
-        print("Path %s is kept. Please fix manually." % path)
-        return False
-    else:
-        print("Removed.")
-        return True
+def validate_link(node_list, node, silent=False):
+    """validate the link of the node
 
+    Check node["children"] and node["parents"] is correct.
+    If a link is incomplete, it will fixed (see the following example).
 
-def validate_link(node_list, node, ask_remove=True):
-    """
-    validate the link of the node
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes
+    node : dict
+        a node will be checked.
+        This must belong to the `node_list`
 
+    Examples
+    --------
     >>> node_list = [{
     ...     "path": "/path/0",
     ...     "parents": ["/path/1"],
@@ -198,12 +229,22 @@ def validate_link(node_list, node, ask_remove=True):
     """
     path = node["path"]
 
+    def ask_remove(path):
+        print("No nodes whose path is %s does not exists." % path)
+        ans = raw_input("Remove this link? [Y/n]")
+        if ans in ["n", "N", "no", "No"]:
+            print("Path %s is kept. Please fix manually." % path)
+            return False
+        else:
+            print("Removed.")
+            return True
+
     # for parents
     remove_path_list = []
     for parent_path in node["parents"]:
         p_node = get(node_list, parent_path)
         if not p_node:
-            if not ask_remove or _ask_remove(parent_path):
+            if silent or ask_remove(parent_path):
                 remove_path_list.append(parent_path)
             continue
         if path not in p_node["children"]:
@@ -216,18 +257,10 @@ def validate_link(node_list, node, ask_remove=True):
     for child_path in node["children"]:
         c_node = get(node_list, child_path)
         if not c_node:
-            if not ask_remove or _ask_remove(child_path):
+            if silent or ask_remove(child_path):
                 remove_path_list.append(child_path)
             continue
         if path not in c_node["parents"]:
             c_node["parents"].append(path)
     for path in remove_path_list:
         node["children"].remove(path)
-
-
-def _test():
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    _test()
