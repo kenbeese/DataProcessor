@@ -2,6 +2,9 @@
 """@dataprocessor
 """
 import json
+import traceback
+from contextlib import contextmanager
+
 import pipes
 
 
@@ -38,9 +41,11 @@ def execute(manip):
                 if kwd not in dic["kwds"]:
                     continue
                 kwds[kwd] = mn["kwds"][kwd]
-            run_list = dic["func"](run_list, *mn["args"], **kwds)
+            with pipe_execute(name):
+                run_list = dic["func"](run_list, *mn["args"], **kwds)
         else:
-            run_list = dic["func"](run_list, *mn["args"])
+            with pipe_execute(name):
+                run_list = dic["func"](run_list, *mn["args"])
     return run_list
 
 
