@@ -1,10 +1,7 @@
 # coding=utf-8
-<<<<<<< HEAD
-from __init__ import DataProcessorError
-=======
-from .exception import DataProcessorError
->>>>>>> utilities
 import os.path
+
+from .exception import DataProcessorError
 
 
 def path_expand(path):

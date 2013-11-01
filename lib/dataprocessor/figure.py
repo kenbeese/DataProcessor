@@ -2,7 +2,8 @@
 import os
 import shutil
 import hashlib
-from . import DataProcessorError
+
+from .exception import DataProcessorError
 
 
 class DataProcessorFigureError(DataProcessorError):
@@ -64,17 +65,3 @@ def _generate_path(figure_path, base_dir):
         raise DataProcessorFigureError("Directory %s already exists."
                                        % dest_path)
     return dest_path
-
-
-def _check_path(path):
-    if not os.path.exists(path):
-        raise DataProcessorFigureError("Path %s is not found." % path)
-
-
-def _path_expand(path):
-    return os.path.expanduser(os.path.abspath(path))
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
