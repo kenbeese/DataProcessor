@@ -26,7 +26,7 @@ if __name__ == "__main__":
     try:
         main()
     except dp.InvalidJSONError as e:
-        print("ERROR occurs while reading JSON file.")
-        print(e)
+        print("ERROR occurs in pipe '%s'" % e.name)
+        print("Message: %s" % e.msg)
         print("Please review your JSON file.")
         sys.exit(1)

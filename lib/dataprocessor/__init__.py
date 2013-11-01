@@ -9,8 +9,8 @@ import pipes
 class DataProcessorError(Exception):
     """A runtime error occurred in DataProcessor
 
-    This exception is raised by invalid manipulation.
-    This exception will be caught by dataprocessor.execute,
+    This exception is raised when invalid manipulation is done.
+    This exception will be caught in dataprocessor.execute,
     and converted into InvalidJSONError.
 
     Attribute
@@ -26,7 +26,7 @@ class DataProcessorError(Exception):
 
 
 class InvalidJSONError(Exception):
-    """A runtime error occurred in while processing manipulation
+    """A runtime error occurred in processing manipulation
 
     Attribute
     ----------
@@ -40,7 +40,7 @@ class InvalidJSONError(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "while processing pipe[%s]: %s" % (self.name, self.msg)
+        return "[%s]: %s" % (self.name, self.msg)
 
 
 @contextmanager
