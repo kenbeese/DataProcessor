@@ -7,7 +7,9 @@ class InfoManager(object):
     """
     if specified optional, return elementTree object.
 
-    Usage:
+    Examples
+    --------
+
     >>> ### fill incomplete node_list. ###
     >>> info = InfoManager()
     >>> diclist = [{"path":"/tmp/run01", "date":"1982/9/32",
