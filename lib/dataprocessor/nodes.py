@@ -11,6 +11,8 @@ def get(node_list, path):
         the node is returned if exists,
         and `None` is returned if not.
 
+    Examples
+    --------
     >>> node_list = [{"path": "/path/1"}, {"path": "/path/2"},
     ...              {"path": "/path/3"}, {"path": "/path/4"}]
     >>> get(node_list, "/path/3")
@@ -62,6 +64,8 @@ def remove(node_list, path, skip_validate_link=False):
     DataProcessorError
         occurs when specified `path` does not exist in node_list
 
+    Examples
+    --------
     >>> import copy
     >>> node_list_base = [{
     ...     "path": "/path/0",
@@ -161,6 +165,8 @@ def validate_link(node_list, node, silent=False):
         a node will be checked.
         This must belong to the `node_list`
 
+    Examples
+    --------
     >>> node_list = [{
     ...     "path": "/path/0",
     ...     "parents": ["/path/1"],
