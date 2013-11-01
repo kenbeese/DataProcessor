@@ -5,10 +5,13 @@ import os.path
 def read(filepath, root_path="."):
     """
     read xml file.
+
     This function return the etree and root element.
     You can specify root element by xpath.
 
-    Usage:
+    Examples
+    --------
+
     >>> etree, root = read(xml_file_path, xpath)  # specify root by xpath
     >>> etree, root = read(xml_file_path)
     """
@@ -27,7 +30,9 @@ def readable(in_filepath, out_filepath=None):
     """
     modify xml file to be readable.
 
-    Usage:
+    Examples
+    --------
+
     >>> readable(xml_file_path) # replace xml file with new readable xml file.
     >>> readable(xml_file_path, output_path)
     """
