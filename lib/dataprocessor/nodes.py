@@ -207,7 +207,7 @@ def validate_link(node_list, node, silent=False):
     ...     "children": ["/path/4"], # This error is kept
     ... }]
     True
-    >>> validate_link(node_list, node_list[3], ask_remove=False)
+    >>> validate_link(node_list, node_list[3], silent=True)
     >>> node_list == [{
     ...     "path": "/path/0",
     ...     "parents": ["/path/1"],
