@@ -13,8 +13,12 @@ Requirements
 - sphinx (python documentation tools)
 - numpydoc (Sphinx extention)
 
-After installation of above library via PyPI,
-you can create api reference of this library with following command.
+If you have not installed these,
+
+    easy_install sphinx numpydoc
+
+After installation of above library,
+you can make api reference of this library with following command.
 
     make -C doc html
 
