@@ -3,9 +3,12 @@
 import argparse
 import os.path
 import sys
+import traceback
 
-sys.path = [sys.path[0]] + [os.path.join(os.path.dirname(__file__), "../lib")] + sys.path[1:]
-import dataprocessor
+sys.path = ([sys.path[0]]
+            + [os.path.join(os.path.dirname(__file__), "../lib")]
+            + sys.path[1:])
+import dataprocessor as dp
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
@@ -15,18 +18,21 @@ def main():
     parser.add_argument('json_filename')
     args = parser.parse_args()
 
-    if not os.path.exists(args.json_filename):
-        print("such file does not exists")
-        return 1
-    with open(args.json_filename, 'r') as f:
-        try:
-            dataprocessor.execute_from_json_str(f.read())
-        except dataprocessor.InvalidManipulationJSONWarning as e:
-            print("ERROR occurs in dataprocessor.")
-            print(e)
-            print("Please review your JSON file.")
-            sys.exit(1)
+    json_fn = dp.utility.check_file(args.json_filename)
+    with open(json_fn, 'r') as f:
+        dp.execute.execute_from_json_str(f.read())
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except dp.exception.InvalidJSONError as e:
+        print("ERROR occurs in pipe '%s'" % e.name)
+        print("Message: %s" % e.msg)
+        print("Please review your JSON file.")
+        sys.exit(1)
+    except dp.exception.DataProcessorError as e:
+        print(traceback.format_exc())
+        print("ERROR in command-line arguments.")
+        print("Message: %s" % e.msg)
+        sys.exit(1)
