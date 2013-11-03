@@ -33,21 +33,42 @@ def check_file(path):
     """
     path = path_expand(path)
     if not os.path.exists(path):
-        raise DataProcessorError("File does not exist")
+        raise DataProcessorError("File '%s' does not exist" % path)
     if os.path.isdir(path):
         raise DataProcessorError("%s is not a file but a directory" % path)
     return path
 
 
-def check_directory(path, silent=True):
-    """Check whether the directory exists.
+def check_directory(path):
+    """Check whether file exists.
+
+    Returns
+    -------
+    str
+        Absolute path of the argument
+
+    Raises
+    ------
+    DataProcessorError
+        occurs when the file does not exist or the file is not directory.
+    """
+    path = path_expand(path)
+    if not os.path.exists(path):
+        raise DataProcessorError("Directory '%s' does not exist" % path)
+    if not os.path.isdir(path):
+        raise DataProcessorError("%s is not a directory" % path)
+    return path
+
+
+def get_directory(path, silent=True):
+    """Get absolute path of the directory
 
     If it does not exist, it will be created.
 
     Parameters
     ----------
     silent : bool, optional
-        Ask whether create directory (default=True)
+        does not ask whether create directory (default=True)
 
     Returns
     -------
