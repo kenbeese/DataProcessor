@@ -1,6 +1,6 @@
 # coding=utf-8
 from .exception import DataProcessorError
-from . import utility
+from . import utility, nodes
 
 import json
 import os.path
@@ -53,3 +53,73 @@ def load(node_list, json_path):
     with open(path, "r") as f:
         read_node_list = json.load(f)
     return node_list + read_node_list
+
+
+class DataHolder(object):
+    """ A data holder
+
+    Manage and serialize node_list.
+    This class use JSON format to serialize.
+
+    Attributes
+    ----------
+    node_list : list
+        the managed `node_list`
+
+    Methods
+    -------
+    get()
+        returns managed node_list
+    add(node_list, skip_validate_link)
+        add nodes into managed `node_list`
+    replace(node_list, skip_validate_link)
+        swap managed `node_list` and `node_list` in the argument
+    serialize()
+        serialize node_list into file.
+        If you use `with` statement, you need not to call this.
+    """
+    _json_filename = "data.json"
+
+    def __init__(self, root_dir):
+        self.root_dir = utility.check_directory(root_dir)
+        self.data_path = os.path.join(self.root_dir, self._json_filename)
+        if os.path.exists(self.data_path):
+            self.node_list = load([], self.data_path)
+        else:
+            self.node_list = []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.serialize()
+
+    def get(self):
+        return self.node_list
+
+    def add(self, node_list, skip_validate_link=False):
+        """ add nodes into `node_list`
+
+        Parameters
+        ----------
+        skip_validate_link : bool, optional
+            skip link check (default=False)
+        """
+        for node in node_list:
+            nodes.add(self.node_list, node, skip_validate_link)
+
+    def replace(self, node_list, skip_validate_link=True):
+        """ swap node_list
+
+        Parameters
+        ----------
+        skip_validate_link : bool, optional
+            skip link validation about all nodes in new `node_list`
+        """
+        self.node_list = node_list
+        if not skip_validate_link:
+            for node in self.node_list:
+                nodes.validate_link(self.node_list, node)
+
+    def serialize(self):
+        save(self.node_list, self.data_path)
