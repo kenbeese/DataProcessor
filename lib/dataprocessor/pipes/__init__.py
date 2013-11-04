@@ -18,8 +18,3 @@ for mod in mod_list:
     except:
         continue
     register(pipes_dics)
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

@@ -49,14 +49,6 @@ pipes Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`opt_conf` Module
-----------------------
-
-.. automodule:: dataprocessor.pipes.opt_conf
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 :mod:`scan` Module
 ------------------
 
