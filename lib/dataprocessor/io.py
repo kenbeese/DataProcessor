@@ -55,11 +55,12 @@ def load(node_list, json_path):
     return node_list + read_node_list
 
 
-class DataHolder(object):
-    """ A data holder
+class DataHandler(object):
+    """ A data handler
 
-    Manage and serialize node_list.
-    This class use JSON format to serialize.
+    A utility class for save/load data into/from JSON file.
+    See the following example.
+    This class use JSON format for serializing.
 
     Attributes
     ----------
@@ -70,19 +71,31 @@ class DataHolder(object):
     -------
     get()
         returns managed node_list
-    add(node_list, skip_validate_link)
-        add nodes into managed `node_list`
+    add(node, skip_validate_link)
+        add node into managed node_list
     replace(node_list, skip_validate_link)
-        swap managed `node_list` and `node_list` in the argument
+        swap managed node_list and node_list in the argument
     serialize()
         serialize node_list into file.
         If you use `with` statement, you need not to call this.
-    """
-    _json_filename = "data.json"
 
-    def __init__(self, root_dir):
-        self.root_dir = utility.check_directory(root_dir)
-        self.data_path = os.path.join(self.root_dir, self._json_filename)
+    Examples
+    --------
+    >>> filename = "/tmp/DataHandlerTest.json"
+    >>> with DataHandler(filename, True) as dh:
+    ...     dh.add({"path" : "/path/to/data1", "name" : "data1"}, True)
+    >>> print(open(filename, 'r').read())
+    [
+        {
+            "path": "/path/to/data1", 
+            "name": "data1"
+        }
+    ]
+    >>> import os; os.remove(filename)
+    """
+    def __init__(self, filename, silent=False):
+        self.data_path = utility.path_expand(filename)
+        self.silent = silent
         if os.path.exists(self.data_path):
             self.node_list = load([], self.data_path)
         else:
@@ -97,16 +110,15 @@ class DataHolder(object):
     def get(self):
         return self.node_list
 
-    def add(self, node_list, skip_validate_link=False):
-        """ add nodes into `node_list`
+    def add(self, node, skip_validate_link=False):
+        """ add node into managed node_list
 
         Parameters
         ----------
         skip_validate_link : bool, optional
             skip link check (default=False)
         """
-        for node in node_list:
-            nodes.add(self.node_list, node, skip_validate_link)
+        nodes.add(self.node_list, node, skip_validate_link)
 
     def replace(self, node_list, skip_validate_link=True):
         """ swap node_list
@@ -122,4 +134,4 @@ class DataHolder(object):
                 nodes.validate_link(self.node_list, node)
 
     def serialize(self):
-        save(self.node_list, self.data_path)
+        save(self.node_list, self.data_path, self.silent)
