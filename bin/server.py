@@ -25,7 +25,7 @@ def start(args):
     lock_path = "/tmp/DataProcessorServer.pid"
 
     data_path = dp.utility.check_file(args.data_json)
-    cfg = {"data_path" : data_path}
+    cfg = {"data_path": data_path}
     with open(os.path.join(root_dir, "cfg.json"), 'w') as f:
         json.dump(cfg, f)
 
@@ -64,11 +64,12 @@ def main():
     start_psr.add_argument("data_json",
                            help="A path to JSON file in which data is saved.")
     start_psr.add_argument("-p", "--port", default=8080,
-                           help="Port for the server")
+                           help="Port for the server (default=8080)")
     start_psr.add_argument("--root",
                            default=os.path.join(os.path.dirname(__file__),
                                                 "../server"),
-                           help="The root dir where the server stands")
+                           help="""The root dir where the server stands
+                                   (default=${PROJECT_HOME}/server)""")
     start_psr.add_argument("--logfile", default="server.log",
                            help="The name of the log file")
 
