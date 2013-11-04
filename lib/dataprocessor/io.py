@@ -99,6 +99,7 @@ class DataHandler(object):
         if os.path.exists(self.data_path):
             self.node_list = load([], self.data_path)
         else:
+            print("Create new data in %s" % self.data_path)
             self.node_list = []
 
     def __enter__(self):
