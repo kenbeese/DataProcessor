@@ -18,6 +18,7 @@ def main():
     doctest.testmod(dp.exception)
     doctest.testmod(dp.execute)
     doctest.testmod(dp.nodes)
+    doctest.testmod(dp.pipes.addcomment)
     doctest.testmod(dp.pipes.configure)
     # doctest.testmod(dp.pipes.etreeio)
     doctest.testmod(dp.pipes.generatehtml)
