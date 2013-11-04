@@ -1,0 +1,21 @@
+#!/usr/bin/python
+# coding=utf-8
+import doctest
+import os.path
+import sys
+
+sys.path = [sys.path[0]] \
+    + [os.path.join(os.path.dirname(__file__), "../lib")] \
+    + sys.path[1:]
+import dataprocessor as dp
+sys.path = [sys.path[0]] + sys.path[2:]
+
+
+def main():
+    doctest.testmod(dp.pipes.scan)
+    doctest.testmod(dp.pipes.addcomment)
+    return
+
+
+if __name__ == "__main__":
+    main()
