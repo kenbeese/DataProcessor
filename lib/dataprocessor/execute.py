@@ -19,6 +19,24 @@ def check_manip(manip):
 
     Examples
     --------
+    >>> manip = [{"nae": "save_json", "args": ["out.json"], "kwds": {"silent" : "True"}}]
+    >>> try:
+    ...     check_manip(manip) # typo: "nae"
+    ... except InvalidJSONError as e:
+    ...     print("[%s] %s" % (e.name, e.msg))
+    [] pipe name is not defined
+    >>> manip = [{"name": "save_json", "arg": ["out.json"], "kwds": {"silent" : "True"}}]
+    >>> try:
+    ...     check_manip(manip) # typo: "arg"
+    ... except InvalidJSONError as e:
+    ...     print("[%s] %s" % (e.name, e.msg))
+    [save_json] attributes of pipes must be in 'name', 'args', 'kwds'
+    >>> manip = [{"name": "save_json", "args": ["out.json"], "kwd": {"silent" : "True"}}]
+    >>> try:
+    ...     check_manip(manip) # typo: "kwd"
+    ... except InvalidJSONError as e:
+    ...     print("[%s] %s" % (e.name, e.msg))
+    [save_json] attributes of pipes must be in 'name', 'args', 'kwds'
     >>> manip = [{"name": "sav_json", "args": ["out.json"], "kwds": {"silent" : "True"}}]
     >>> try:
     ...     check_manip(manip) # typo: "sav_json"
@@ -30,7 +48,7 @@ def check_manip(manip):
     ...     check_manip(manip) # argument mismatch
     ... except InvalidJSONError as e:
     ...     print("[%s] %s" % (e.name, e.msg))
-    [save_json] The number of arguments mismatches
+    [save_json] the number of arguments mismatches
     >>> manip = [{"name": "load_json", "args": ["in.json"], "kwds": {"silent": "True"}}]
     >>> try:
     ...     check_manip(manip) # `load_json` does not have "kwds"
@@ -45,12 +63,18 @@ def check_manip(manip):
     [save_json] keyword argument 'silnt' does not exist
     """
     for mn in manip:
+        if "name" not in mn:
+            raise InvalidJSONError("", "pipe name is not defined")
         name = mn["name"]
+        for k in mn:
+            if k not in ["name", "args", "kwds"]:
+                msg = "attributes of pipes must be in 'name', 'args', 'kwds'"
+                raise InvalidJSONError(name, msg)
         if name not in pipes.pipes_dics:
             raise InvalidJSONError(name, "invalid pipe name")
         dic = pipes.pipes_dics[name]
         if len(mn["args"]) != len(dic["args"]):
-            raise InvalidJSONError(name, "The number of arguments mismatches")
+            raise InvalidJSONError(name, "the number of arguments mismatches")
         if "kwds" in mn:
             if "kwds" not in dic:
                 raise InvalidJSONError(name, "pipe does not have 'kwds'")
