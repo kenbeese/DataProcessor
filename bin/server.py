@@ -6,6 +6,7 @@ import os.path
 import sys
 import json
 import argparse
+import urllib2
 import BaseHTTPServer
 import CGIHTTPServer
 from daemon import DaemonContext
@@ -54,6 +55,16 @@ def stop(args):
         raise dp.exception.DataProcessorError("Server does not stand")
 
 
+def install(args):
+    """ install jQuery """
+    root_dir = dp.utility.check_directory(args.root)
+    dest_path = os.path.join(root_dir, "js")
+    jquery_filename = "jquery-1.10.2.js"
+    jquery_url = "http://code.jquery.com/" + jquery_filename
+    with open(os.path.join(dest_path,jquery_filename),"w") as f:
+        f.write(urllib2.urlopen(jquery_url).read())
+
+
 def main():
     parser = argparse.ArgumentParser()
     sub_psr = parser.add_subparsers()
@@ -76,6 +87,15 @@ def main():
     # stop
     stop_psr = sub_psr.add_parser("stop", help="kill articles server")
     stop_psr.set_defaults(func=stop)
+
+    # install
+    install_psr = sub_psr.add_parser("install", help="install jQuery")
+    install_psr.set_defaults(func=install)
+    install_psr.add_argument("--root",
+                           default=os.path.join(os.path.dirname(__file__),
+                                                "../server"),
+                           help="""The root dir where the server stands
+                                   (default=${PROJECT_HOME}/server)""")
 
     # call
     args = parser.parse_args()
