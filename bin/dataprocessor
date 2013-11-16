@@ -27,9 +27,9 @@ if __name__ == "__main__":
     try:
         main()
     except dp.exception.InvalidJSONError as e:
-        print("ERROR occurs in pipe '%s'" % e.name)
-        print("Message: %s" % e.msg)
-        print("Please review your JSON file.")
+        print("ERROR found in your JSON")
+        print("Pipe name: %s" % e.name)
+        print("Message  : %s" % e.msg)
         sys.exit(1)
     except dp.exception.DataProcessorError as e:
         print(traceback.format_exc())
