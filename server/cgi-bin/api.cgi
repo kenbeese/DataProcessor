@@ -36,7 +36,33 @@ def manip(req):
 
 
 def pipe(req):
-    raise DataProcessorError("API 'pipe' has not been implemented yet.")
+    _check("name", req)
+    name = req.form["name"].value
+    _check("args", req)
+    args = _load_json(req.form["args"].value)
+    _check("kwds", req)
+    kwds = _load_json(req.form["kwds"].value)
+
+    with open("cfg.json") as f:
+        cfg = json.load(f)
+    data_path = cfg["data_path"]
+    manip = [
+        {
+            "name": "load_json",
+            "args": [data_path, ],
+        },
+        {
+            "name": name,
+            "args": args,
+            "kwds": kwds,
+        },
+        {
+            "name": "save_json",
+            "args": [data_path, ],
+            "kwds": {"silent": True},
+        },
+    ]
+    dp.execute.execute(manip)
 
 
 def switch():
