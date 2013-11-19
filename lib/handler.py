@@ -26,6 +26,25 @@ class Response(object):
     You can use this class by making instance of this class
     before sending Response.
 
+    Examples
+    --------
+    * JSON
+    >>> res = Response("json")
+    >>> res.set_body("{'exit_code' : 0}")
+    >>> print(res) # doctest: +SKIP
+
+    * HTML
+    >>> res = Response("html")
+    >>> res.set_body('''
+    ...     <!DOCTYPE html>
+    ...     <html>
+    ...         <body>
+    ...             <h1>My Home Page!</h1>
+    ...         </body>
+    ...     </html>
+    ...     ''')
+    >>> print(res) # doctest: +SKIP
+
     """
 
     def __init__(self, content_type="html", charset='utf-8'):
@@ -51,7 +70,11 @@ class Response(object):
         return self.headers.get(name, None)
 
     def set_body(self, bodystr):
-        """Return the string of <body> tag."""
+        """Set the body of response.
+
+        See Examples of this class.
+
+        """
         self.body = bodystr
 
     def make_output(self, timestamp=None):
