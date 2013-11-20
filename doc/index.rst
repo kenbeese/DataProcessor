@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 4
 
    references/dataprocessor
+   references/handler
 
 
 Indices and tables
