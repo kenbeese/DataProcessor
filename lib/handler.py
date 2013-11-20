@@ -14,10 +14,10 @@ class Request(object):
 
     """A class handling HTTP requests."""
 
-    def __init__(self, environ=os.environ):
+    def __init__(self, environ={}):
         self.form = cgi.FieldStorage()
         self.environ = environ
-
+        
 
 class Response(object):
 
