@@ -109,7 +109,8 @@ class Table(object):
     """table widget class.
 
     Create table from dictionary in node.
-    Also search dictionary recursively.
+    If node has dictionary in its values,
+    also search dictionary recursively. (e.g. node[key1][key2]...[keyn])
 
     Parameters
     ----------
@@ -118,7 +119,16 @@ class Table(object):
     groups : list of dic, optional
         Specify elements in table for each group.
         Default is one group which get all of 'configure' key.
-        one group has three keys at most.
+        One group has three keys below at most.
+        ----
+        dict_path : list of str, optional
+            List of key. Default is node itself.
+            Search dictionary recursively by `dict_path`.
+        items : list of str, optional
+            List of key in dictionary specified by `dict_path`.
+            Table has only items in `items`.
+        name : str, optional
+            Group name. Default is "/".join(`dict_path`).
 
     Examples
     --------
