@@ -22,7 +22,6 @@ def main():
     doctest.testmod(dp.pipes.addcomment)
     doctest.testmod(dp.pipes.configure)
     # doctest.testmod(dp.pipes.etreeio)
-    doctest.testmod(dp.pipes.generatehtml)
     doctest.testmod(dp.pipes.infomanager)
     doctest.testmod(dp.pipes.jsonio)
     doctest.testmod(dp.pipes.scan)

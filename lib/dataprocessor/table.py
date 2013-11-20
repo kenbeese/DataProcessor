@@ -95,7 +95,11 @@ class _TableData(object):
 
     def __copy_value(self, dic_out, dic_in, key):
         try:
-            value = str(dic_in[key])
+            value = dic_in[key]
+            if type(value) == str:
+                value = unicode(value, "utf-8")
+            else:
+                value = unicode(value)
         except KeyError:
             value = ""
         try:
@@ -133,22 +137,14 @@ class Table(object):
     Examples
     --------
     >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
-    ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': 'test',
+    ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': u'testあ',
     ...              'configure': {'nx':1, 'ny':2}},
     ...             {'path': '/tmp/run1', 'name': 'run1',
     ...              'configure': {'nx': 10, 'ny': 20}}]
     >>> tble = Table(nodelist[0], nodelist,
     ...              groups=[{'dict_path': ['configure']},
     ...                      {'items': ['comment', 'path'], 'name': 'node'}])
-    >>> tble._table_data.table == [
-    ...     {'nx': ['1', '10'], 'ny': ['2', '20']},
-    ...     {'comment': ['test', ''], 'path': ['/tmp/run0', '/tmp/run1']}]
-    >>> tble._table_data.type == 'table'
-    >>> tble._table_data.tags == ['children']
-    >>> tble._table_data.col_groupname == ['configure', 'node']
-    >>> tble._table_data.row_name == ['run0', 'run1']
-    >>> tble._table_data.col_name == [['nx', 'ny'], ['comment', 'path']]
-    >>> tble._table_data.row_path == ['/tmp/run0', '/tmp/run1']
+    >>> tble._table_data.table
     >>>
     >>> html_str = tble.render()
 
