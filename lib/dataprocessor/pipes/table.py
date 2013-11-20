@@ -1,37 +1,109 @@
 # coding=utf-8
+from jinja2 import Template
+
+from ..nodes import get
 
 
-def _get_confs(node):
-    confs = []
-    for conf in node["configure"]:
-        if conf not in confs:
-            confs.append(conf)
-    confs.sort()
-    confs.sort(key=len)
-    return confs
+class _TableData(object):
+    """
+    table data manager.
+    """
+
+    def __init__(self, node, node_list, table_type, groups):
+        self.type = "table"
+        self.tags = [table_type]
+        self.table = []
+
+        self._dict_path = self.__get_dict_path(groups)
+        self._linked_node = self.__get_linked_node(node_list, node[table_type]) # case: empty list
+
+        self.col_groupname = self.__get_groupname(groups, self._dict_path)
+        self.row_name = self.__get_valuelist(self._linked_node, "name") # case: node has no 'name' key.
+        self.row_path = self.__get_valuelist(self._linked_node, "path")
+        self.col_name = self.__get_col_name(groups, self._dict_path,
+                                            self._linked_node)
+
+        for idx in range(len(groups)):
+            tble = {}
+            for node in self._linked_node:
+                dic = self.__get_dic_from_path(node, self.dict_path[idx])
+                for key in self.col_name[idx]:
+                    self.__copy_value(tble, dic, key)
+            self.table.append(tble)
+
+    def __get_dict_path(self, groups):
+        dict_path = []
+        for group in groups:
+            if not "dict_path" in group or group["dict_path"] is None:
+                dict_path.append([])
+            else:
+                dict_path.append(group["dict_path"])
+        return dict_path
+
+    def __get_groupname(self, groups, dict_path):
+        groupname = []
+        for group in groups:
+            if not "name" in group or group["name"] is None:
+                groupname.append("/".join(dict_path)) # case: dict_path is not list.
+            else:
+                groupname.append(group["name"])
+        return groupname
+
+    def __get_linked_node(self, node_list, path_list):
+        linked_node = []
+        for path in sorted(path_list):
+            node = get(node_list, path)
+            if not node is None:
+                linked_node.append(node)
+        return linked_node
+
+    def __get_valuelist(self, dict_list, keyname):
+        value = []
+        for dic in dict_list:
+            if keyname in dic:
+                value.append(dic[keyname])
+            else:
+                value.append("")
+        return value
+
+    def __get_col_name(self, groups, dict_path, linked_node):
+        col_name = []
+        if not linked_node:
+            return col_name
+        for group in groups:
+            group_idx = groups.index(group)
+            dic = self.__get_dic_from_path(linked_node[0],
+                                           dict_path[group_idx])
+            if not "items" in group or group["items"] is None:
+                col_name.append(self.__get_allkeys(dic))
+            else:
+                col_name.append(group["items"])
+        return col_name
+
+    def __get_allkeys(self, dic):
+        keys = list(dic.keys())
+        keys.sort()
+        keys.sort(key=len)
+        return keys
+
+    def __get_dic_from_path(self, node, dict_path):
+        dic = node
+        for key in dict_path:
+            dic = dic[key] # case: node has no key.
+        return dic
+
+    def __copy_value(self, dic_out, dic_in, key):
+        try:
+            value = str(dic_in[key])
+        except KeyError:
+            value = ""
+        try:
+            dic_out[key].append(value)
+        except KeyError:
+            dic_out[key] = [value]
 
 
-def _copy_value(dic_out, dic_in, key):
-    if key in dic_in:
-        value = dic_in[key]
-    else:
-        value = None
-    if key in dic_out:
-        dic_out[key].append(value)
-    else:
-        dic_out[key] = [value]
-    return dic_out
-
-
-def _check_path(path, node_list):
-    for node in node_list:
-        if path == node["path"]:
-            return node
-    return None
-
-
-def add(node_list, table_type="children", pre_meta=["name", "date"],
-        post_meta=["tags", "comment"], confs=None):
+class Table(object):
     """
     Add parents or children information table to 'widgets' key.
     Alignment sequence of table is pre_meta, confs and post_meta from left.
@@ -56,68 +128,60 @@ def add(node_list, table_type="children", pre_meta=["name", "date"],
 
     Examples
     --------
-    >>> add([
-    ...     {"path": "/tmp/project",
-    ...      "children": ["/tmp/run1", "/tmp/run0"]},
-    ...     {"path": "/tmp/run0", "name": "run0",
-    ...      "comment": "test", "configure": {"nx": 1, "ny": 2}},
-    ...     {"path": "/tmp/run1", "name": "run1",
-    ...      "configure": {"nx": 10, "ny": 20}},
-    ...     ],
-    ...     table_type="children", pre_meta=["name"], post_meta=["comment"],
-    ...    )[0] == {
-    ...      'path': '/tmp/project', 'children': ['/tmp/run1', '/tmp/run0'],
-    ...      'widgets': [{'type': 'table', 'tags': ['children'], 'data':
-    ...          {'comment': ['test', None], 'name': ['run0', 'run1'],
-    ...           'path': ['/tmp/run0', '/tmp/run1'],
-    ...           'header': ['name', 'nx', 'ny', 'comment'],
-    ...           'nx': [1, 10], 'ny': [2, 20]}}]}
+    >>> ## second child has no 'comment' key. ##
+    >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
+    ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': 'test',
+    ...              'configure': {'nx':1, 'ny':2}},
+    ...             {'path': '/tmp/run1', 'name': 'run1',
+    ...              'configure': {'nx': 10, 'ny': 20}}]
+    >>> tble = Table(nodelist[0], nodelist)
+    >>> tble.widget == {
+    ...     'type': 'table', 'tags': ['children'],
+    ...     'data': {'comment': ['test', None], 'name': ['run0', 'run1'],
+    ...              'tags': [None, None], 'nx': [1, 10], 'ny': [2, 20],
+    ...              'header': ['name', 'comment', 'nx', 'ny', 'tags'],
+    ...              'path': ['/tmp/run0', '/tmp/run1']}}
     True
+    >>>
+    >>> ## second child has no 'configure' key. ##
+    >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
+    ...             {'path': '/tmp/run0', 'name': 'run0',
+    ...              'configure': {'nx': 10, 'ny': 20}},
+    ...             {'path': '/tmp/run1', 'name': 'run1'}]
+    >>> tble = Table(nodelist[0], nodelist, pre_meta=["name"])
+    >>> tble.widget = {
+    ...     'type': 'table', 'tags': ['children'],
+    ...     'data': {'name': ['run0', 'run1'], 'tags': [None, None],
+    ...              'nx': [10, None], 'ny': [20, None],
+    ...              'header': ['name', 'nx', 'ny', 'tags'],
+    ...              'path': ['/tmp/run0', '/tmp/run1']}}
+    >>>
+    >>> ## 'configure' of first child is empty. ##
+    >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
+    ...             {'path': '/tmp/run0', 'name': 'run0', 'configure': {}},
+    ...             {'path': '/tmp/run1', 'name': 'run1',
+    ...              'configure': {'nx': 10, 'ny': 20}}]
+    >>> tble = Table(nodelist[0], nodelist, pre_meta=["name"])
+    >>> tble.widget == {
+    ...     'type': 'table', 'tags': ['children'],
+    ...     'data': {'path': ['/tmp/run0', '/tmp/run1'],
+    ...              'header': ['name', 'tags'],
+    ...              'name': ['run0', 'run1'], 'tags': [None, None]}}
+    True
+    >>>
+    >>>
+    >>> html = tble.render('../../../template/widget_table.html', 'o.html')
     """
-    for node in node_list:
+
+    def __init__(self, node, node_list, table_type="children",
+                 groups=[{"dict_path": ["configure"],
+                          "items": None, "name": None},
+                         ]):
         if not table_type in node:
-            continue
-        widget = {"type": "table", "tags": [table_type]}
-        data = {}
-        config = confs
-        for path in sorted(node[table_type]):
-            linked_node = _check_path(path, node_list)
-            if linked_node is None:
-                continue
-            for key in set(pre_meta + post_meta + ["path"]):
-                data = _copy_value(data, linked_node, key)
-            if not "configure" in linked_node:
-                continue
-            if config is None:
-                config = _get_confs(linked_node)
-            for key in config:
-                data = _copy_value(data, linked_node["configure"], key)
-        if not data:
-            continue
-        if config is None:
-            config = []
-        data["header"] = pre_meta + config + post_meta
-        widget["data"] = data
-        if not "widgets" in node:
-            node["widgets"] = [widget]
-        else:
-            node["widgets"].append(widget)
-    return node_list
+            raise RuntimeError("node has no '{0}' key".format(table_type))
+        self.table_data = self._TableData(node, node_list, table_type, groups)
 
-
-def register(pipes_dics):
-    pipes_dics["add_table"] = {
-        "func": add,
-        "args": [],
-        "desc": "add parents or children information table as widget",
-        "kwds": ["table_type", "pre_meta", "post_meta", "confs"],
-        }
-
-
-def _test():
-    import doctest
-    doctest.testmod()
-
-
-if __name__ == "__main__":
-    _test()
+    def render(self, template, output_html="output.html"):
+        with open(template, "r") as f:
+            tmpl = Template(f.read())
+        return tmpl.render(self.widget, output_html=output_html)
