@@ -1,13 +1,14 @@
 # coding=utf-8
+import os.path
+
 from jinja2 import Template
 
-from ..nodes import get
+from nodes import get
 
 
 class _TableData(object):
-    """
-    table data manager.
-    """
+
+    """table data manager."""
 
     def __init__(self, node, node_list, table_type, groups):
         self.type = "table"
@@ -26,7 +27,7 @@ class _TableData(object):
         for idx in range(len(groups)):
             tble = {}
             for node in self._linked_node:
-                dic = self.__get_dic_from_path(node, self.dict_path[idx])
+                dic = self.__get_dic_from_path(node, self._dict_path[idx])
                 for key in self.col_name[idx]:
                     self.__copy_value(tble, dic, key)
             self.table.append(tble)
@@ -42,11 +43,11 @@ class _TableData(object):
 
     def __get_groupname(self, groups, dict_path):
         groupname = []
-        for group in groups:
-            if not "name" in group or group["name"] is None:
-                groupname.append("/".join(dict_path)) # case: dict_path is not list.
+        for idx in range(len(groups)):
+            if not "name" in groups[idx] or groups[idx]["name"] is None:
+                groupname.append("/".join(dict_path[idx])) # case: dict_path is not list.
             else:
-                groupname.append(group["name"])
+                groupname.append(groups[idx]["name"])
         return groupname
 
     def __get_linked_node(self, node_list, path_list):
@@ -104,73 +105,43 @@ class _TableData(object):
 
 
 class Table(object):
-    """
-    Add parents or children information table to 'widgets' key.
-    Alignment sequence of table is pre_meta, confs and post_meta from left.
 
-    notes:
-    If any one of pre_meta and post_meta is same as confs,
-    this function become something wrong.
+    """table widget class.
+
+    Create table from dictionary in node.
+    Also search dictionary recursively.
 
     Parameters
     ----------
-    table_type : string, optional
-        table_type is 'children' or 'parents'.
-    pre_meta : list, optional
-        Specify any of key in node.
-        pre_meta are placed at left side of table.
-    post_meta : list, optional
-        Specify any of key in node.
-        post_meta are placed at right side of table.
-    confs : list, optional
-        Specify any of key in node['configure'].
-        If not specified, confs receive all of key in node['configure'].
+    table_type : {'children', 'parents'}
+        Table is composed of nodes in node[`table_type`].
+    groups : list of dic, optional
+        Specify elements in table for each group.
+        Default is one group which get all of 'configure' key.
+        one group has three keys at most.
 
     Examples
     --------
-    >>> ## second child has no 'comment' key. ##
     >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
     ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': 'test',
     ...              'configure': {'nx':1, 'ny':2}},
     ...             {'path': '/tmp/run1', 'name': 'run1',
     ...              'configure': {'nx': 10, 'ny': 20}}]
-    >>> tble = Table(nodelist[0], nodelist)
-    >>> tble.widget == {
-    ...     'type': 'table', 'tags': ['children'],
-    ...     'data': {'comment': ['test', None], 'name': ['run0', 'run1'],
-    ...              'tags': [None, None], 'nx': [1, 10], 'ny': [2, 20],
-    ...              'header': ['name', 'comment', 'nx', 'ny', 'tags'],
-    ...              'path': ['/tmp/run0', '/tmp/run1']}}
-    True
+    >>> tble = Table(nodelist[0], nodelist,
+    ...              groups=[{'dict_path': ['configure']},
+    ...                      {'items': ['comment', 'path'], 'name': 'node'}])
+    >>> tble._table_data.table == [
+    ...     {'nx': ['1', '10'], 'ny': ['2', '20']},
+    ...     {'comment': ['test', ''], 'path': ['/tmp/run0', '/tmp/run1']}]
+    >>> tble._table_data.type == 'table'
+    >>> tble._table_data.tags == ['children']
+    >>> tble._table_data.col_groupname == ['configure', 'node']
+    >>> tble._table_data.row_name == ['run0', 'run1']
+    >>> tble._table_data.col_name == [['nx', 'ny'], ['comment', 'path']]
+    >>> tble._table_data.row_path == ['/tmp/run0', '/tmp/run1']
     >>>
-    >>> ## second child has no 'configure' key. ##
-    >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
-    ...             {'path': '/tmp/run0', 'name': 'run0',
-    ...              'configure': {'nx': 10, 'ny': 20}},
-    ...             {'path': '/tmp/run1', 'name': 'run1'}]
-    >>> tble = Table(nodelist[0], nodelist, pre_meta=["name"])
-    >>> tble.widget = {
-    ...     'type': 'table', 'tags': ['children'],
-    ...     'data': {'name': ['run0', 'run1'], 'tags': [None, None],
-    ...              'nx': [10, None], 'ny': [20, None],
-    ...              'header': ['name', 'nx', 'ny', 'tags'],
-    ...              'path': ['/tmp/run0', '/tmp/run1']}}
-    >>>
-    >>> ## 'configure' of first child is empty. ##
-    >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
-    ...             {'path': '/tmp/run0', 'name': 'run0', 'configure': {}},
-    ...             {'path': '/tmp/run1', 'name': 'run1',
-    ...              'configure': {'nx': 10, 'ny': 20}}]
-    >>> tble = Table(nodelist[0], nodelist, pre_meta=["name"])
-    >>> tble.widget == {
-    ...     'type': 'table', 'tags': ['children'],
-    ...     'data': {'path': ['/tmp/run0', '/tmp/run1'],
-    ...              'header': ['name', 'tags'],
-    ...              'name': ['run0', 'run1'], 'tags': [None, None]}}
-    True
-    >>>
-    >>>
-    >>> html = tble.render('../../../template/widget_table.html', 'o.html')
+    >>> html_str = tble.render()
+
     """
 
     def __init__(self, node, node_list, table_type="children",
@@ -179,9 +150,20 @@ class Table(object):
                          ]):
         if not table_type in node:
             raise RuntimeError("node has no '{0}' key".format(table_type))
-        self.table_data = self._TableData(node, node_list, table_type, groups)
+        self._table_data = _TableData(node, node_list, table_type, groups)
 
-    def render(self, template, output_html="output.html"):
+    def render(self):
+        """Get a piece of html for table.
+
+        Returns
+        -------
+        str
+            A piece of html composed of the parameters in constructor.
+
+        """
+
+        template = os.path.join(os.path.dirname(__file__),
+                                "../../template/widget_table.html")
         with open(template, "r") as f:
             tmpl = Template(f.read())
-        return tmpl.render(self.widget, output_html=output_html)
+        return tmpl.render(data=self._table_data)

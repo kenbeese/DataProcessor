@@ -26,7 +26,7 @@ def main():
     doctest.testmod(dp.pipes.infomanager)
     doctest.testmod(dp.pipes.jsonio)
     doctest.testmod(dp.pipes.scan)
-    doctest.testmod(dp.pipes.table)
+    doctest.testmod(dp.table)
 
     doctest.testmod(handler)
     return
