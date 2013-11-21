@@ -17,10 +17,12 @@ class _TableData(object):
         self.table = []
 
         self._dict_path = self.__get_dict_path(groups)
-        self._linked_node = self.__get_linked_node(node_list, node[table_type]) # case: empty list
+        self._linked_node = self.__get_linked_node(node_list, node[table_type])
+        # case: empty list
 
         self.col_groupname = self.__get_groupname(groups, self._dict_path)
-        self.row_name = self.__get_valuelist(self._linked_node, "name") # case: node has no 'name' key.
+        self.row_name = self.__get_valuelist(self._linked_node, "name")
+        # case: node has no 'name' key.
         self.row_path = self.__get_valuelist(self._linked_node, "path")
         self.col_name = self.__get_col_name(groups, self._dict_path,
                                             self._linked_node)
@@ -46,7 +48,8 @@ class _TableData(object):
         groupname = []
         for idx in range(len(groups)):
             if not "name" in groups[idx] or groups[idx]["name"] is None:
-                groupname.append("/".join(dict_path[idx])) # case: dict_path is not list.
+                groupname.append("/".join(dict_path[idx]))
+                # case: dict_path is not list.
             else:
                 groupname.append(groups[idx]["name"])
         return groupname
@@ -91,7 +94,7 @@ class _TableData(object):
     def __get_dic_from_path(self, node, dict_path):
         dic = node
         for key in dict_path:
-            dic = dic[key] # case: node has no key.
+            dic = dic[key]  # case: node has no key.
         return dic
 
     def __copy_value(self, dic_out, dic_in, key):
@@ -119,7 +122,7 @@ class Table(object):
 
     Parameters
     ----------
-    table_type : {'children', 'parents'}
+    table_type : {'children', 'parents'}, optional
         Table is composed of nodes in node[`table_type`].
     groups : list of dic, optional
         Specify elements in table for each group.
