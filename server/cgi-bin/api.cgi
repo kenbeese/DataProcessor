@@ -17,12 +17,19 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def manip(req):
+    """ do a full manipulation """
     manip = json.loads(req.get("manip"))
     dp.execute.check_manip(manip)
     dp.execute.execute(manip)
 
 
 def pipe(req):
+    """ execute a manipulation s.t. [load, pipe, save]
+
+    The pipe API do a single pipe to the data
+    specified when the server stand.
+
+    """
     if req.has("kwds"):
         pipe = {
             "name": req.get["name"],
@@ -51,6 +58,7 @@ def pipe(req):
 
 
 def switch():
+    """ switch two APIs {manip, pipe} """
     req = handler.Request()
     types = {"manip": manip, "pipe": pipe, }
     t = req.get("type")
