@@ -52,7 +52,7 @@ class Request(object):
         bool
 
         """
-        return (name in req.form)
+        return (name in self.form)
 
 
 class Response(object):

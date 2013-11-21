@@ -32,14 +32,14 @@ def pipe(req):
     """
     if req.has("kwds"):
         pipe = {
-            "name": req.get["name"],
-            "args": json.loads(req.get["args"]),
-            "kwds": json.loads(req.get["kwds"])
+            "name": req.get("name"),
+            "args": json.loads(req.get("args")),
+            "kwds": json.loads(req.get("kwds"))
         }
     else:
         pipe = {
-            "name": req.get["name"],
-            "args": json.loads(req.get["args"]),
+            "name": req.get("name"),
+            "args": json.loads(req.get("args")),
         }
 
     with open("cfg.json") as f:
