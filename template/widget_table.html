@@ -18,11 +18,11 @@
   </thead>
   <tbody>
     {%- for irow in range(data.row_name|length) %}
-      <tr align=right>
-        <td>{{data.row_name[irow]}}</td>
+        <tr align=right path={{data.row_path[irow]}}>
+        <td class="name">{{data.row_name[irow]}}</td>
         {%- for igroup in range(ngroup) %}
           {%- for colname in data.col_name[igroup] %}
-            <td>{{data.table[igroup][colname][irow]}}</td>
+            <td class={{colname}}>{{data.table[igroup][colname][irow]}}</td>
           {%- endfor %}
         {%- endfor %}
       </tr>
