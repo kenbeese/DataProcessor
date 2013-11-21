@@ -17,7 +17,22 @@ class Request(object):
     def __init__(self, environ={}):
         self.form = cgi.FieldStorage()
         self.environ = environ
-        
+
+    def get(self, name):
+        """ get value of request
+
+        Parameters
+        ----------
+        name: str
+            key of the request
+
+        Raises
+        ------
+        KeyError
+            raises if request does not have element with `name`
+        """
+        return self.form[name].value
+
 
 class Response(object):
 
