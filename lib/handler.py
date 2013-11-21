@@ -1,7 +1,6 @@
 # coding:utf-8
-
+"""Handler of HTTP requasts and responses."""
 import cgi
-import os
 import time
 
 
@@ -19,7 +18,7 @@ class Request(object):
         self.environ = environ
 
     def get(self, name):
-        """ get value of request
+        """Get value of request.
 
         Parameters
         ----------
@@ -40,7 +39,7 @@ class Request(object):
         return self.form[name].value
 
     def has(self, name):
-        """ ask whether request has `name`
+        """Ask whether request has `name`.
 
         Parameters
         ----------
