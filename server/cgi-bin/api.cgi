@@ -32,6 +32,7 @@ def _load_json(val_str):
 def manip(req):
     _check("manip", req)
     manip = _load_json(req.form["manip"].value)
+    dp.execute.check_manip(manip)
     dp.execute.execute(manip)
 
 
@@ -85,3 +86,5 @@ if __name__ == "__main__":
         handler.operation_fail(message)
     except DataProcessorError as e:
         handler.operation_fail(e.msg)
+    except Exception:
+        handler.operation_fail("unknown error")

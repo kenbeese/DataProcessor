@@ -7,7 +7,7 @@ $(function(){
     $("nav#ManipJSON>button").bind("click", function(event){
         var manip_json = this.previousSibling.value;
         $(this).siblings("span").text("sending...");
-        $.getJSON("/cgi-bin/api.cgi", 
+        $.post("/cgi-bin/api.cgi", 
             {
                 "type": "manip",
                 "manip": manip_json
@@ -20,6 +20,6 @@ $(function(){
                 }else{
                     $result.text("Error: " + res["message"]);
                 }
-            });
+            }, "json");
     });
 });
