@@ -5,48 +5,125 @@ from .exception import DataProcessorError, InvalidJSONError, pipe_execute
 import pipes
 
 
-def execute(manip):
-    """execute pipeline defined in `manip`
+def check_manip(manip):
+    """ check whether maniplation is valid
 
     Parameters
     ----------
     manip : list
         A list defining manipulation
+
+    Raises
+    ------
+    InvalidJSONError
+        It is raised if manipulation is invalid.
+
+    Examples
+    --------
+    >>> def do_check_manip(manip):
+    ...     try:
+    ...         check_manip(manip)
+    ...     except InvalidJSONError as e:
+    ...         print("[%s] %s" % (e.name, e.msg))
+    >>> do_check_manip([{"nae": "save_json", # typo: "nae"
+    ...                  "args": ["out.json"],
+    ...                  "kwds": {"silent" : "True"}}])
+    [] pipe name is not defined
+    >>> do_check_manip([{"name": "save_json",
+    ...                  "arg": ["out.json"], # typo: "arg"
+    ...                  "kwds": {"silent" : "True"}}])
+    [save_json] attributes of pipes must be in 'name', 'args', 'kwds'
+    >>> do_check_manip([{"name": "save_json",
+    ...                  "args": ["out.json"],
+    ...                  "kwd": {"silent" : "True"}}]) # typo: "kwd"
+    [save_json] attributes of pipes must be in 'name', 'args', 'kwds'
+    >>> do_check_manip([{"name": "sav_json", # typo: "sav_json"
+    ...                  "args": ["out.json"],
+    ...                  "kwds": {"silent" : "True"}}])
+    [sav_json] invalid pipe name
+    >>> do_check_manip([{"name": "save_json",
+    ...                  "args": [], # argument mismatch
+    ...                  "kwds": {"silent" : "True"}}])
+    [save_json] the number of arguments mismatches
+    >>> do_check_manip([{"name": "load_json",
+    ...                  "args": ["in.json"],
+    ...                  "kwds": {"silent": "True"}}])
+    ...                  # `load_json` does not have "kwds"
+    [load_json] pipe does not have 'kwds'
+    >>> do_check_manip([{"name": "save_json",
+    ...                  "args": ["out.json"],
+    ...                  "kwds": {"silnt" : "True"}}])
+    ...                  # typo in keywords: "silnt"
+    [save_json] keyword argument 'silnt' does not exist
     """
-    run_list = []
     for mn in manip:
+        if "name" not in mn:
+            raise InvalidJSONError("", "pipe name is not defined")
         name = mn["name"]
+        for k in mn:
+            if k not in ["name", "args", "kwds"]:
+                msg = "attributes of pipes must be in 'name', 'args', 'kwds'"
+                raise InvalidJSONError(name, msg)
         if name not in pipes.pipes_dics:
             raise InvalidJSONError(name, "invalid pipe name")
         dic = pipes.pipes_dics[name]
         if len(mn["args"]) != len(dic["args"]):
-            raise InvalidJSONError(name, "The number of arguments mismatches")
-        if "kwds" in mn and "kwds" in dic:
-            kwds = {}
+            raise InvalidJSONError(name, "the number of arguments mismatches")
+        if "kwds" in mn:
+            if "kwds" not in dic:
+                raise InvalidJSONError(name, "pipe does not have 'kwds'")
             for kwd in mn["kwds"]:
                 if kwd not in dic["kwds"]:
-                    continue
-                kwds[kwd] = mn["kwds"][kwd]
-            with pipe_execute(name):
-                run_list = dic["func"](run_list, *mn["args"], **kwds)
+                    msg = "keyword argument '%s' does not exist"
+                    raise InvalidJSONError(name, msg % kwd)
         else:
-            with pipe_execute(name):
-                run_list = dic["func"](run_list, *mn["args"])
-    return run_list
+            mn["kwds"] = {}
+
+
+def execute(manip):
+    """execute pipeline defined in `manip`
+
+    This function does not check whether `manip` is valid.
+    Please check by `.check_manip`
+
+    Parameters
+    ----------
+    manip : list
+        A list defining manipulation
+
+    Returns
+    -------
+    node_list : list
+    """
+    node_list = []
+    for mn in manip:
+        name = mn["name"]
+        dic = pipes.pipes_dics[name]
+        args = mn["args"]
+        kwds = mn["kwds"]
+        with pipe_execute(name):
+            node_list = dic["func"](node_list, *args, **kwds)
+    return node_list
 
 
 def execute_from_json_str(manip_json_str):
     """execute pipeline from JSON string
 
-    See also `dataprocessor.execute`.
+    This do `check_manip` and `execute`.
 
     Raises
     ------
-    DataProcessorError
-        If fails to decode JSON.
+    InvalidJSONError
+        It is raised if manipulation is invalid.
+        See also `.check_manip`
+
+    Returns
+    -------
+    node_list : list
     """
     try:
         manip = json.loads(manip_json_str)
     except ValueError:
         raise DataProcessorError("Cannot decode JSON file.")
-    execute(manip)
+    check_manip(manip)
+    return execute(manip)

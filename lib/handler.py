@@ -11,19 +11,40 @@ _monthname = [None, "Jan", "Feb", "Mar", "Apr", "May", "Jun",
 
 
 class Request(object):
-    """
-    A class handling HTTP requests
-    """
-    def __init__(self, environ=os.environ):
+
+    """A class handling HTTP requests."""
+
+    def __init__(self, environ={}):
         self.form = cgi.FieldStorage()
         self.environ = environ
-
+        
 
 class Response(object):
+
     """The class handring Response of HTTP.
 
     You can use this class by making instance of this class
     before sending Response.
+
+    Examples
+    --------
+    * JSON
+    >>> res = Response("json")
+    >>> res.set_body("{'exit_code' : 0}")
+    >>> print(res) # doctest: +SKIP
+
+    * HTML
+    >>> res = Response("html")
+    >>> res.set_body('''
+    ...     <!DOCTYPE html>
+    ...     <html>
+    ...         <body>
+    ...             <h1>My Home Page!</h1>
+    ...         </body>
+    ...     </html>
+    ...     ''')
+    >>> print(res) # doctest: +SKIP
+
     """
 
     def __init__(self, content_type="html", charset='utf-8'):
@@ -41,19 +62,23 @@ class Response(object):
         self.body = ""
 
     def set_header(self,  name,  value):
-        """set header of Response"""
+        """Set header of Response."""
         self.headers[name] = value
 
     def get_header(self, name):
-        """get the header which already set"""
+        """Get the header which already set and return object."""
         return self.headers.get(name, None)
 
     def set_body(self, bodystr):
-        """return the text which output as Response"""
+        """Set the body of response.
+
+        See Examples of this class.
+
+        """
         self.body = bodystr
 
     def make_output(self, timestamp=None):
-        """make Response text including header and text"""
+        """Make Response text including header and text and return str."""
         if timestamp is None:
             timestamp = time.time()
         year, month, day, hh, mm, ss, wd, y, z = time.gmtime(timestamp)
@@ -66,7 +91,7 @@ class Response(object):
         return headers+'\n\n'+self.body
 
     def __str__(self):
-        """convert Request into text"""
+        """Convert Request and return string."""
         return self.make_output()
 
 

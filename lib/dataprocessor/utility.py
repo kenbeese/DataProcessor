@@ -11,7 +11,7 @@ def path_expand(path):
     str
         Absolute path of the argument
     """
-    return os.path.expanduser(os.path.abspath(path))
+    return os.path.abspath(os.path.expanduser(path))
 
 
 def check_file(path):
