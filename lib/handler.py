@@ -1,7 +1,6 @@
 # coding:utf-8
-
+"""Handler of HTTP requasts and responses."""
 import cgi
-import os
 import time
 
 
@@ -17,7 +16,43 @@ class Request(object):
     def __init__(self, environ={}):
         self.form = cgi.FieldStorage()
         self.environ = environ
-        
+
+    def get(self, name):
+        """Get value of request.
+
+        Parameters
+        ----------
+        name: str
+            key of the request
+
+        Returns
+        -------
+        str
+            the value of request
+
+        Raises
+        ------
+        KeyError
+            raises if request does not have element with `name`
+
+        """
+        return self.form[name].value
+
+    def has(self, name):
+        """Ask whether request has `name`.
+
+        Parameters
+        ----------
+        name: str
+            key of the request
+
+        Returns
+        -------
+        bool
+
+        """
+        return (name in self.form)
+
 
 class Response(object):
 
