@@ -6,7 +6,7 @@ A data processing library.
 Sample usage is written in `sample/README.md`
 
 
-Build documentation
+Build HTML documents
 ===================
 Requirements
 
@@ -19,16 +19,9 @@ If you have not installed these,
 
 After installation of above library,
 you can make api reference of this library with following command.
-
     make -C doc html
 
 `doc/_build/html/index.html` is top page.
-
-If you add new file to `lib/dataprocessor` or delete file from `lib/dataprocessor`,
-please use following command before above command.
-
-    make -C doc updateref
-    make -C doc html
 
 
 Lisence

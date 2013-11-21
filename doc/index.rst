@@ -11,8 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 4
 
-   references/dataprocessor
-
+   references/modules
+   
 
 Indices and tables
 ==================

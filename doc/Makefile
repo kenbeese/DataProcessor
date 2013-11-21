@@ -55,7 +55,7 @@ clean:
 updateref:
 	$(SPHINXAPIDOC) -f -o $(REFERENCEDIR) $(LIBDIR)
 
-html:
+html: updateref
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
