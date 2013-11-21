@@ -16,61 +16,44 @@ from dataprocessor.exception import DataProcessorError, InvalidJSONError
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
-def _check(key, req):
-    if key not in req.form:
-        raise DataProcessorError("Request must include '%s'" % key)
-
-
-def _load_json(val_str):
-    try:
-        val = json.loads(val_str)
-    except ValueError:
-        raise DataProcessorError("JSON is invalid")
-    return val
-
-
 def manip(req):
-    _check("manip", req)
-    manip = _load_json(req.form["manip"].value)
+    manip = json.loads(req.get("manip"))
     dp.execute.check_manip(manip)
     dp.execute.execute(manip)
 
 
 def pipe(req):
-    _check("name", req)
-    name = req.form["name"].value
-    _check("args", req)
-    args = _load_json(req.form["args"].value)
-    _check("kwds", req)
-    kwds = _load_json(req.form["kwds"].value)
+    if req.has("kwds"):
+        pipe = {
+            "name": req.get["name"],
+            "args": json.loads(req.get["args"]),
+            "kwds": json.loads(req.get["kwds"])
+        }
+    else:
+        pipe = {
+            "name": req.get["name"],
+            "args": json.loads(req.get["args"]),
+        }
 
     with open("cfg.json") as f:
         cfg = json.load(f)
     data_path = cfg["data_path"]
-    manip = [
-        {
-            "name": "load_json",
-            "args": [data_path, ],
-        },
-        {
-            "name": name,
-            "args": args,
-            "kwds": kwds,
-        },
-        {
-            "name": "save_json",
-            "args": [data_path, ],
-            "kwds": {"silent": True},
-        },
-    ]
+
+    pipe_load = {"name": "load_json", "args": [data_path, ], }
+    pipe_save = {
+        "name": "save_json",
+        "args": [data_path, ],
+        "kwds": {"silent": True},
+    }
+    manip = [pipe_load, pipe, pipe_save]
+    dp.execute.check_manip(manip)
     dp.execute.execute(manip)
 
 
 def switch():
     req = handler.Request()
-    _check("type", req)
     types = {"manip": manip, "pipe": pipe, }
-    t = req.form["type"].value
+    t = req.get("type")
     if t not in types:
         raise DataProcessorError("'type' must be in the followings: "
                                  + (" ".join(types.keys())))
@@ -81,6 +64,10 @@ if __name__ == "__main__":
     try:
         switch()
         handler.operation_success()
+    except KeyError as key:
+        handler.operation_fail("Request must include '%s'" % key)
+    except ValueError:
+        handler.operation_fail("JSON is invalid")
     except InvalidJSONError as e:
         message = "ERROR occurs in pipe '%s'; %s" % (e.name, e.msg)
         handler.operation_fail(message)
