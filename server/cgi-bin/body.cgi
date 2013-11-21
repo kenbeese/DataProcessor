@@ -16,24 +16,6 @@ from dataprocessor.exception import DataProcessorError
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
-def _check(key, req):
-    if key not in req.form:
-        raise DataProcessorError("Request must include '%s'" % key)
-
-
-def _get(key, req):
-    _check(key, req)
-    return req.form[key].value
-
-
-def _load_json(val_str):
-    try:
-        val = json.loads(val_str)
-    except ValueError:
-        raise DataProcessorError("JSON is invalid")
-    return val
-
-
 def projects(req):
     with open("cfg.json") as f:
         cfg = json.load(f)
@@ -70,8 +52,8 @@ def projects(req):
 
 
 def widgets(req):
-    path = _get("path", req)
-    table_type = _get("table_type", req)
+    path = req.get("path")
+    table_type = req.get("table_type")
 
     with open("cfg.json") as f:
         cfg = json.load(f)
@@ -93,9 +75,8 @@ def widgets(req):
 
 def switch():
     req = handler.Request()
-    _check("type", req)
     types = {"Projects": projects, "Widgets": widgets}
-    t = req.form["type"].value
+    t = req.get("type")
     if t not in types:
         raise DataProcessorError("'type' must be in the followings: "
                                  + (" ".join(types.keys())))
@@ -105,5 +86,11 @@ def switch():
 if __name__ == "__main__":
     try:
         switch()
+    except KeyError as key:
+        handler.operation_fail("Request must include '%s'" % key)
+    except ValueError:
+        handler.operation_fail("JSON is invalid")
     except DataProcessorError as e:
         handler.operation_fail(e.msg)
+    except Exception:
+        handler.operation_fail("unknown error")
