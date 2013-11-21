@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # coding=utf-8
+"""API of web app."""
 
 import os.path
 import sys

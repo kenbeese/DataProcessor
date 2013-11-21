@@ -21,7 +21,7 @@ Requirements
 Build HTML documents
 ===================
 Requirements
-
+------------
 - sphinx (python documentation tools)
 - numpydoc (Sphinx extention)
 
@@ -29,6 +29,8 @@ If you have not installed these,
 
     easy_install sphinx numpydoc
 
+Build
+-----
 After installation of above library,
 you can make api reference of this library with following command.
     make -C doc html

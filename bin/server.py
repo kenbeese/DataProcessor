@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # coding=utf-8
+"""Start/Stop a simple HTTP server."""
 
 import os
 import os.path
@@ -56,12 +57,12 @@ def stop(args):
 
 
 def install(args):
-    """ install jQuery """
+    """Install jQuery."""
     root_dir = dp.utility.check_directory(args.root)
     dest_path = os.path.join(root_dir, "js")
     jquery_filename = "jquery-1.10.2.js"
     jquery_url = "http://code.jquery.com/" + jquery_filename
-    with open(os.path.join(dest_path,jquery_filename),"w") as f:
+    with open(os.path.join(dest_path, jquery_filename), "w") as f:
         f.write(urllib2.urlopen(jquery_url).read())
 
 
@@ -92,9 +93,9 @@ def main():
     install_psr = sub_psr.add_parser("install", help="install jQuery")
     install_psr.set_defaults(func=install)
     install_psr.add_argument("--root",
-                           default=os.path.join(os.path.dirname(__file__),
-                                                "../server"),
-                           help="""The root dir where the server stands
+                             default=os.path.join(os.path.dirname(__file__),
+                                                  "../server"),
+                             help="""The root dir where the server stands
                                    (default=${PROJECT_HOME}/server)""")
 
     # call
