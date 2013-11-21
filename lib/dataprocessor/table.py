@@ -3,7 +3,8 @@ import os.path
 
 from jinja2 import Template
 
-from nodes import get
+from .nodes import get
+from .exception import DataProcessorError
 
 
 class _TableData(object):
@@ -144,8 +145,6 @@ class Table(object):
     >>> tble = Table(nodelist[0], nodelist,
     ...              groups=[{'dict_path': ['configure']},
     ...                      {'items': ['comment', 'path'], 'name': 'node'}])
-    >>> tble._table_data.table
-    >>>
     >>> html_str = tble.render()
 
     """
@@ -155,7 +154,7 @@ class Table(object):
                           "items": None, "name": None},
                          ]):
         if not table_type in node:
-            raise RuntimeError("node has no '{0}' key".format(table_type))
+            raise DataProcessorError("node has no '%s' key" % table_type)
         self._table_data = _TableData(node, node_list, table_type, groups)
 
     def render(self):

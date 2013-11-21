@@ -16,10 +16,10 @@ doctest_modules = [dp.io,
                    dp.utility,
                    dp.execute,
                    dp.nodes,
+                   dp.table,
                    dp.pipes.addcomment,
                    dp.pipes.configure,
                    dp.pipes.scan,
-                   dp.pipes.table,
                    handler]
 
 
