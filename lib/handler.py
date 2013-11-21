@@ -26,12 +26,33 @@ class Request(object):
         name: str
             key of the request
 
+        Returns
+        -------
+        str
+            the value of request
+
         Raises
         ------
         KeyError
             raises if request does not have element with `name`
+
         """
         return self.form[name].value
+
+    def has(self, name):
+        """ ask whether request has `name`
+
+        Parameters
+        ----------
+        name: str
+            key of the request
+
+        Returns
+        -------
+        bool
+
+        """
+        return (name in req.form)
 
 
 class Response(object):
