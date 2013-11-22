@@ -24,7 +24,7 @@ def projects(req):
     data_path = cfg["data_path"]
 
     res_data = {
-        "keys": ["name", "tags", "comment", "path"]
+        "keys": ["name", "comment", "tags", "path"]
         }
 
     tbl = []
