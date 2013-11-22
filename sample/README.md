@@ -20,18 +20,14 @@ Create json file of mete information "data\_information.json".
 
     $ ../bin/dataprocessor ./manip1.json
 
-Create html file from data\_information.json.
-
-    $ ../bin/dataprocessor ./manip2.json  # Read meta information and transform html
-
 Read data\_information.json and add configure and save to newdata.json
 
-    $ ../bin/dataprocessor ./manip3.json
+    $ ../bin/dataprocessor ./manip2.json
 
 Read data\_information.json and add comment and save to newdata.json
 Please change "/path/to/node" in "manip4.json" such as "${PWD}/datadir/project1/run01".
 
-    $ ../bin/dataprocessor ./manip4.json
+    $ ../bin/dataprocessor ./manip3.json
 
 
 bin/server.py (for webapp)
@@ -59,7 +55,7 @@ It can be download by the following script:
 
 Then the library code is downloaded into `../server/js/`.
 
-start server
+Start server
 ------------
 
 Since the main objective of the webapp is browsing and managing data,
