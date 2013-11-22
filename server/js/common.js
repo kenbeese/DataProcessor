@@ -24,6 +24,7 @@ function send_comment(comment, path){
 }
 
 function enable_comment_edit(){
+    $("td.comment").off("click");
     $("td.comment").bind("click", function(event){
         var comment = this.innerHTML;
         var path = $(this).parent().attr("path");
@@ -38,6 +39,7 @@ function enable_comment_edit(){
 }
 
 function enable_comment_input(){
+    $("input.comment").off("click");
     $("input.comment").bind("blur", function(event){
         var comment = this.value;
         var path = $(this).parent().attr("path");
@@ -52,7 +54,7 @@ function enable_comment_input(){
     })
 }
 
-function generate_widget_html(title, widgets){
+function widget_html(title, widgets){
     var $widget_html = $("<div>").addClass("Widget");
     $("<h2>")
         .addClass("WidgetTitle")
@@ -68,6 +70,7 @@ function generate_widget_html(title, widgets){
 }
 
 function enable_name_link(){
+    $("td.name").off("click");
     $("td.name").bind("click", function(event){
         var name = this.innerHTML;
         var path = $(this).parent().attr("path");
@@ -77,8 +80,9 @@ function enable_name_link(){
                 "path": path,
                 "table_type": "children"
             }, function(widgets){
-                var $widget_html = generate_widget_html(name, widgets);
+                var $widget_html = widget_html(name, widgets);
                 $("section#Widgets").append($widget_html);
+                enable_name_link();
                 enable_edit();
             });
     });

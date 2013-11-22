@@ -4,8 +4,9 @@
 
 import os.path
 import sys
-import cgitb
 import json
+import traceback
+import cgitb
 cgitb.enable()
 
 sys.path = ([sys.path[0]]
@@ -83,4 +84,6 @@ if __name__ == "__main__":
     except DataProcessorError as e:
         handler.operation_fail(e.msg)
     except Exception:
+        with open("error.log", 'a+') as f:
+            f.write(traceback.format_exc())
         handler.operation_fail("unknown error")
