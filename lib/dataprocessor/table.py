@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Create a part of HTML of table."""
 import os.path
 
 from jinja2 import Template
