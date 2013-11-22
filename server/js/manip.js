@@ -1,4 +1,4 @@
-function ready_Manip(){
+$(function(){
     $("nav#Manip")
         .append($("<textarea>").attr("placeholder", "manipulation").attr("rows", 0))
         .append($("<button>").text("execute"))
@@ -15,8 +15,4 @@ function ready_Manip(){
                 notice_api_result(res, st);
             }, "json");
     });
-}
-
-$(function(){
-    ready_Manip();
 });
