@@ -37,7 +37,7 @@ function widget_html(title, widgets){
 }
 
 /**
- * ready table 
+ * ready table
  */
 function ready_table(){
     $("tbody>tr")
