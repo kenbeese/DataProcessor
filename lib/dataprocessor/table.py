@@ -4,12 +4,15 @@ import os.path
 from jinja2 import Template
 
 from .nodes import get
+from .utility import path_expand
 from .exception import DataProcessorError
 
 
 class _TableData(object):
 
     """table data manager.
+
+    This class form data needed template from arguments.
 
     Examples
     --------
@@ -47,11 +50,9 @@ class _TableData(object):
 
         self._dict_path = self.__get_dict_path(groups)
         self._linked_node = self.__get_linked_node(node_list, node[table_type])
-        # case: empty list
 
         self.col_groupname = self.__get_groupname(groups, self._dict_path)
         self.row_name = self.__get_valuelist(self._linked_node, "name")
-        # case: node has no 'name' key.
         self.row_path = self.__get_valuelist(self._linked_node, "path")
         self.col_name = self.__get_col_name(groups, self._dict_path,
                                             self._linked_node)
@@ -78,7 +79,6 @@ class _TableData(object):
         for idx in range(len(groups)):
             if not "name" in groups[idx] or groups[idx]["name"] is None:
                 groupname.append("/".join(dict_path[idx]))
-                # case: dict_path is not list.
             else:
                 groupname.append(groups[idx]["name"])
         return groupname
@@ -101,6 +101,12 @@ class _TableData(object):
         return value
 
     def __get_col_name(self, groups, dict_path, linked_node):
+        def get_allkeys(dic):
+            keys = list(dic.keys())
+            keys.sort()
+            keys.sort(key=len)
+            return keys
+
         col_name = []
         if not linked_node:
             return col_name
@@ -109,21 +115,17 @@ class _TableData(object):
             dic = self.__get_dic_from_path(linked_node[0],
                                            dict_path[group_idx])
             if not "items" in group or group["items"] is None:
-                col_name.append(self.__get_allkeys(dic))
+                col_name.append(get_allkeys(dic))
             else:
                 col_name.append(group["items"])
         return col_name
 
-    def __get_allkeys(self, dic):
-        keys = list(dic.keys())
-        keys.sort()
-        keys.sort(key=len)
-        return keys
-
     def __get_dic_from_path(self, node, dict_path):
         dic = node
         for key in dict_path:
-            dic = dic[key]  # case: node has no key.
+            if not key in dic:
+                raise DataProcessorError("`dict_path` is invalid")
+            dic = dic[key]
         return dic
 
     def __copy_value(self, dic_out, dic_in, key):
@@ -167,6 +169,14 @@ class Table(object):
         name : str, optional
             Group name. Default is "/".join(`dict_path`).
 
+    Raises
+    ------
+    DataProcessorError
+        Occurs in three cases:
+        + No path exist.
+        + Node to the `path` has no `table_type` key.
+        + fail to search dictionary recursively: `dict_path` is invalid.
+
     Examples
     --------
     >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
@@ -174,17 +184,20 @@ class Table(object):
     ...              'configure': {'nx':1, 'ny':2}},
     ...             {'path': '/tmp/run1', 'name': 'run1',
     ...              'configure': {'nx': 10, 'ny': 20}}]
-    >>> tble = Table(nodelist[0], nodelist,
+    >>> tble = Table('/tmp', nodelist,
     ...              groups=[{'dict_path': ['configure']},
     ...                      {'items': ['comment', 'path'], 'name': 'node'}])
     >>> html_str = tble.render()
 
     """
 
-    def __init__(self, node, node_list, table_type="children",
+    def __init__(self, path, node_list, table_type="children",
                  groups=[{"dict_path": ["configure"],
                           "items": None, "name": None},
                          ]):
+        node = get(node_list, path_expand(path))
+        if node is None:
+            raise DataProcessorError("Any node don't have path: %s" % path)
         if not table_type in node:
             raise DataProcessorError("node has no '%s' key" % table_type)
         self._table_data = _TableData(node, node_list, table_type, groups)
