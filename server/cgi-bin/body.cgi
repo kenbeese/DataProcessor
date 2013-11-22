@@ -3,8 +3,9 @@
 """Generate HTML parts."""
 import os.path
 import sys
-import cgitb
 import json
+import traceback
+import cgitb
 cgitb.enable()
 
 sys.path = ([sys.path[0]]
@@ -23,7 +24,7 @@ def projects(req):
     data_path = cfg["data_path"]
 
     res_data = {
-        "keys": ["name", "tags", "comment", "path"]
+        "keys": ["name", "comment", "tags", "path"]
         }
 
     tbl = []
@@ -69,13 +70,13 @@ def widgets(req):
         cfg = json.load(f)
     data_path = cfg["data_path"]
 
-    groups = [{'items': ['comment', 'tags'], 'name': 'node'},
-              {'dict_path': ['configure']},
-              ]
     with dp.io.DataHandler(data_path, silent=True) as dh:
         node_list = dh.get()
-        node = dp.nodes.get(node_list, path)
-        tbl = dp.table.Table(node, node_list, table_type, groups)
+        groups = [
+            {'items': ['comment', 'tags'], 'name': 'node'},
+            {'dict_path': ['configure']},
+        ]
+        tbl = dp.table.Table(path, node_list, table_type, groups)
         html_str = tbl.render()
 
     res = handler.Response("json")
@@ -103,4 +104,6 @@ if __name__ == "__main__":
     except DataProcessorError as e:
         handler.operation_fail(e.msg)
     except Exception:
+        with open("error.log", 'a+') as f:
+            f.write(traceback.format_exc())
         handler.operation_fail("unknown error")
