@@ -3,3 +3,5 @@ _build
 *.pyc
 server/js/jquery-1.10.2.js
 references
+server/cfg.json
+server/server.log
