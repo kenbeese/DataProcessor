@@ -33,7 +33,6 @@ $(function(){
                 }
                 $("nav#Projects>table>tbody").append($tbody);
             }
-            enable_edit();
-            enable_name_link();
+            ready_table()
         });
 });
