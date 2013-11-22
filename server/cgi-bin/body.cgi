@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # coding=utf-8
-
+"""Generate HTML parts."""
 import os.path
 import sys
 import cgitb
@@ -17,6 +17,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def projects(req):
+    """Generate a part of HTML about Project List."""
     with open("cfg.json") as f:
         cfg = json.load(f)
     data_path = cfg["data_path"]
@@ -41,7 +42,8 @@ def projects(req):
                 "tags": node["tags"],
                 "comment": node["comment"],
                 })
-    def mycmp(x,y):
+
+    def mycmp(x, y):
         return cmp(x["name"], y["name"])
     tbl.sort(mycmp)
     res_data["table"] = tbl
@@ -52,6 +54,14 @@ def projects(req):
 
 
 def widgets(req):
+    """
+    Generate some parts of HTML about widgets such as table and figure.
+
+    Notes
+    -----
+    Generating figure part is not implemented yet.
+
+    """
     path = req.get("path")
     table_type = req.get("table_type")
 
@@ -59,10 +69,9 @@ def widgets(req):
         cfg = json.load(f)
     data_path = cfg["data_path"]
 
-    groups=[
-            {'items': ['comment', 'tags'], 'name': 'node'},
-            {'dict_path': ['configure']},
-            ]
+    groups = [{'items': ['comment', 'tags'], 'name': 'node'},
+              {'dict_path': ['configure']},
+              ]
     with dp.io.DataHandler(data_path, silent=True) as dh:
         node_list = dh.get()
         node = dp.nodes.get(node_list, path)
@@ -70,8 +79,9 @@ def widgets(req):
         html_str = tbl.render()
 
     res = handler.Response("json")
-    res.set_body(json.dumps([html_str,]))
+    res.set_body(json.dumps([html_str, ]))
     print(res)
+
 
 def switch():
     req = handler.Request()
