@@ -21,6 +21,12 @@ function widget_html(title, widgets){
         .addClass("WidgetTitle")
         .text(title)
         .appendTo($widget_html);
+    $("<button>")
+        .text("hide")
+        .bind("click", function(event){
+            $(this).parent().remove();
+        })
+        .appendTo($widget_html);
 
     for(var i=0; i<widgets.length; i++){
         $(widgets[i])
