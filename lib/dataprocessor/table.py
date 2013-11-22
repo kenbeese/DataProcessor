@@ -9,7 +9,36 @@ from .exception import DataProcessorError
 
 class _TableData(object):
 
-    """table data manager."""
+    """table data manager.
+
+    Examples
+    --------
+    >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
+    ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': 'test',
+    ...              'configure': {'nx':1, 'ny':2}},
+    ...             {'path': '/tmp/run1', 'name': 'run1',
+    ...              'configure': {'nx': 10, 'ny': 20}}]
+    >>> table_data = _TableData(nodelist[0], nodelist, "children",
+    ...              groups=[{'dict_path': ['configure']},
+    ...                      {'items': ['comment', 'path'], 'name': 'node'}])
+    >>> table_data.table == [
+    ...     {'nx': ['1', '10'], 'ny': ['2', '20']},
+    ...     {'comment': ['test', ''], 'path': ['/tmp/run0', '/tmp/run1']}]
+    True
+    >>> table_data.type == 'table'
+    True
+    >>> table_data.tags == ['children']
+    True
+    >>> table_data.col_groupname == ['configure', 'node']
+    True
+    >>> table_data.row_name == ['run0', 'run1']
+    True
+    >>> table_data.col_name == [['nx', 'ny'], ['comment', 'path']]
+    True
+    >>> table_data.row_path == ['/tmp/run0', '/tmp/run1']
+    True
+
+    """
 
     def __init__(self, node, node_list, table_type, groups):
         self.type = "table"
