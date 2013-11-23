@@ -9,7 +9,8 @@ import sys
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
             + sys.path[1:])
-from dataprocessor import figure, io, utility, nodes, DataProcessorError
+from dataprocessor import figure, io, utility, nodes
+from dataprocessor.exception import DataProcessorError
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
