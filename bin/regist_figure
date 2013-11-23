@@ -10,7 +10,7 @@ import sys
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
             + sys.path[1:])
-from dataprocessor import figure, io, utility, nodes
+from dataprocessor import figure, io, utility
 from dataprocessor.exception import DataProcessorError
 sys.path = [sys.path[0]] + sys.path[2:]
 
@@ -26,7 +26,8 @@ def read_args():
                         help="Paths of the figures that you want to register")
     parser.add_argument("-R", "--runs", dest="runs", nargs="+",
                         help="Paths of directories containing run data.")
-    parser.add_argument("-g", "--generators", dest="generators", nargs="+",
+    parser.add_argument("-g", "--generators", dest="generators",
+                        nargs="+", default=[],
                         help="Paths of generator files (s.t. fig.gp, fig.py)")
     return parser.parse_args()
 
@@ -36,7 +37,7 @@ def main():
     figure_directory = utility.check_directory(args.figure_directory)
     json_file = utility.check_file(args.json_file)
 
-    with io.DataHandler(json_file) as dh:
+    with io.DataHandler(json_file, silent=True) as dh:
         node_list = dh.get()
         figure.register(node_list, args.figures, figure_directory,
                         args.runs, args.generators)

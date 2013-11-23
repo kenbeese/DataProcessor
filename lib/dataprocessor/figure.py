@@ -1,6 +1,5 @@
 # coding=utf-8
 import os
-import shutil
 import hashlib
 
 from . import utility, nodes
@@ -55,23 +54,19 @@ def new_node(figure_path, generators, figure_directory,
     Raises
     ------
     DataProcessorFigureError
-        raised in the following two cases:
-
-        - the figure is empty
-        - a same figure is already registered
+        raised when the figure is empty
 
     """
     hash_str = calc_hash(figure_path)
     if hash_str == zero_hash():
         raise DataProcessorFigureError("Figure is empty")
     dest_path = destination_path(figure_path, figure_directory)
-    if os.path.exists(dest_path):
-        raise DataProcessorFigureError("Same figure is already managed")
-    os.mkdir(dest_path)
-    shutil.copy2(figure_path, dest_path)
+    if not os.path.exists(dest_path):
+        os.mkdir(dest_path)
+    utility.copy_file(figure_path, dest_path)
     for gen in generators:
-        gen_path = utility.check_directory(gen)
-        shutil.copy2(gen_path, dest_path)
+        gen_path = utility.check_file(gen)
+        utility.copy_file(gen_path, dest_path)
     return {
         "path": dest_path,
         "type": "figure",

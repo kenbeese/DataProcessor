@@ -111,5 +111,5 @@ and `./data_information.json` as `json_file`.
 Then the register command becomes as follows:
 
     $ mkdir figures
-    $ ../bin/regist_figure ./figures ./data_information.json datadir/project1/run01/fig1.png
+    $ ../bin/regist_figure ./figures ./data_information.json datadir/project1/run01/fig1.png -g datadir/project1/run01/fig1.gp
 
