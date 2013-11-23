@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # coding=utf-8
-import doctest
+"""Execute all test of this project."""
 import os.path
 import sys
 
@@ -11,20 +11,26 @@ import dataprocessor as dp
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
+doctest_modules = [dp.io,
+                   dp.utility,
+                   dp.execute,
+                   dp.nodes,
+                   dp.pipes.addcomment,
+                   dp.pipes.configure,
+                   dp.pipes.scan,
+                   dp.pipes.table]
+
+
+def create_doctest_suite():
+    from doctest import DocTestSuite
+    from unittest import TestSuite
+    return TestSuite((DocTestSuite(module) for module in doctest_modules))
+    
+
 def main():
-    doctest.testmod(dp)
-    doctest.testmod(dp.io)
-    doctest.testmod(dp.utility)
-    doctest.testmod(dp.exception)
-    doctest.testmod(dp.execute)
-    doctest.testmod(dp.nodes)
-    doctest.testmod(dp.pipes.configure)
-    # doctest.testmod(dp.pipes.etreeio)
-    doctest.testmod(dp.pipes.generatehtml)
-    doctest.testmod(dp.pipes.infomanager)
-    doctest.testmod(dp.pipes.jsonio)
-    doctest.testmod(dp.pipes.scan)
-    doctest.testmod(dp.pipes.table)
+    from unittest import TextTestRunner
+    suite = create_doctest_suite()
+    TextTestRunner(verbosity=2).run(suite)
     return
 
 
