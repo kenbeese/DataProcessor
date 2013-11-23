@@ -36,5 +36,3 @@ if __name__ == "__main__":
         print("ERROR in command-line arguments.")
         print("Message: %s" % e.msg)
         sys.exit(1)
-else:
-    raise RuntimeError("dataprocessor should not be imported")

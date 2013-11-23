@@ -42,11 +42,7 @@ def add(node_list, node, skip_validate_link=False):
     skip_validate_link : bool, optional
         skip link validation (default False)
     """
-    node_ = get(node_list, node["path"])
-    if node_:
-        node_.update(node)
-    else:
-        node_list.append(node)
+    node_list.append(node)
     if not skip_validate_link:
         validate_link(node_list, node)
 
