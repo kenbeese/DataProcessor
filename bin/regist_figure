@@ -4,6 +4,7 @@
 
 import argparse
 import os.path
+import traceback
 import sys
 
 sys.path = ([sys.path[0]]
@@ -25,42 +26,29 @@ def read_args():
                         help="Paths of the figures that you want to register")
     parser.add_argument("-R", "--runs", dest="runs", nargs="+",
                         help="Paths of directories containing run data.")
+    parser.add_argument("-g", "--generators", dest="generators", nargs="+",
+                        help="Paths of generator files (s.t. fig.gp, fig.py)")
     return parser.parse_args()
 
 
 def main():
     args = read_args()
-    base_dir = utility.path_expand(args.figure_directory)
-    utility.check_directory(base_dir)
+    figure_directory = utility.check_directory(args.figure_directory)
+    json_file = utility.check_file(args.json_file)
 
-    figs = [utility.path_expand(fig) for fig in args.figures]
-    if args.runs:
-        runs = [utility.path_expand(run) for run in args.runs]
-    else:
-        runs = [os.path.dirname(fig) for fig in figs]
-
-    try:
-        for fig in figs:
-            utility.check_file(fig)
-        for run in runs:
-            utility.check_directory(run)
-    except DataProcessorError, e:
-        print(e)
-        sys.exit(1)
-
-    node_list = io.load([], args.json_file)
-    for fig in figs:
-        try:
-            node = figure.create_node(fig, [], runs, base_dir)
-        except figure.DataProcessorFigureError, e:
-            print(e)
-            print("Skip %s" % fig)
-            continue
-        nodes.add(node_list, node)
-    io.save(node_list, args.json_file, ask_replace=False)
+    with io.DataHandler(json_file) as dh:
+        node_list = dh.get()
+        figure.register(node_list, args.figures, figure_directory,
+                        args.runs, args.generators)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except DataProcessorError as e:
+        print("Error occurs:\n%s" % e.msg)
+        print("See also the following traceback\n")
+        print(traceback.format_exc())
+        sys.exit(1)
 else:
-    raise RuntimeError("registerfigure should not be imported")
+    raise RuntimeError("register_figure should not be imported")
