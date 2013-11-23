@@ -27,4 +27,4 @@ Please change "/path/to/node" in "manip4.json" such as "${PWD}/datadir/project1/
 > $ ../bin/dataprocessor ./manip4.json
 
 Add figure node
-> $ ../bin/regist_figure ./figures ./data_information.json datadir/project1/run01/fig1.eps
+> $ ../bin/regist_figure ./figures ./data_information.json datadir/project1/run01/fig1.png
