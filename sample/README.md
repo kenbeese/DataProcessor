@@ -79,3 +79,33 @@ stop server
 
 The following command stops the server.
    $ ../bin/server.py stop
+
+
+bin/register_figure
+=================
+
+identifier of figure
+--------------------
+In DataProcessor, figures are managed as nodes in `node_list`.
+The executable script `register_figure` registers your figure.
+Then the figure is copied into `figure_directory`;
+if `fig1.png` is registered, it will be copied into
+`figure_directory/<hash hexdigits>/fig1.png`.
+`<hash hexdigits>` is a SHA-1 hash value of `fig1.png`.
+This is the id of the figure.
+
+Add a figure node
+-----------------
+To add a figure node into node_list,
+you must specify
+
+- `figure_directory` into where the figures are copied
+- `json_file` which contains `node_list`
+
+In this sample, you should use `./figure` as `figure_directory`,
+and `./data_information.json` as `json_file`.
+Then the register command becomes as follows:
+
+    $ mkdir figures
+    $ ../bin/register_figure ./figures ./data_information.json datadir/project1/run01/fig1.png -g datadir/project1/run01/fig1.gp
+
