@@ -27,7 +27,7 @@ def get(node_list, path):
     return None
 
 
-def add(node_list, node, skip_validate_link=False):
+def add(node_list, node, skip_validate_link=False, check_unique=True):
     """Add a node into node_list
 
     This adds a node into node_list,
@@ -41,8 +41,18 @@ def add(node_list, node, skip_validate_link=False):
         The node will be added into node_list
     skip_validate_link : bool, optional
         skip link validation (default False)
+    check_unique : bool, optional
+        check whether the node has already exist (default True)
+        This option may cost a large amount of time.
     """
-    node_list.append(node)
+    if check_unique:
+        node0 = get(node_list, node["path"])
+        if node0:
+            node0.update(node)
+        else:
+            node_list.append(node)
+    else:
+        node_list.append(node)
     if not skip_validate_link:
         validate_link(node_list, node)
 
