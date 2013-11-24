@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # coding=utf-8
-
+"""Register figures to node_list."""
 
 import argparse
 import os.path

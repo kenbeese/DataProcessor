@@ -97,7 +97,7 @@ This is the id of the figure.
 Add a figure node
 -----------------
 To add a figure node into node_list,
-you must specify 
+you must specify
 
 - `figure_directory` into where the figures are copied
 - `json_file` which contains `node_list`

@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Handling node for figures."""
 import os
 import hashlib
 
@@ -7,22 +8,25 @@ from .exception import DataProcessorError
 
 
 class DataProcessorFigureError(DataProcessorError):
+
+    """Exception about figure."""
+
     def __init__(self, msg):
         DataProcessorError.__init__(self, msg)
 
 
 def zero_hash():
-    """ Return a SHA-1 hash of empty figure """
+    """ Return a SHA-1 hash of empty figure. """
     return hashlib.sha1("")
 
 
 def calc_hash(figure_path):
-    """ Return a SHA-1 hash of the figure """
+    """ Return a SHA-1 hash of the figure. """
     return hashlib.sha1(open(figure_path, 'r').read()).hexdigest()
 
 
 def destination_path(figure_path, figure_directory):
-    """ Returns the path of a directory where the figure will be copied
+    """ Return the path of a directory where the figure will be copied.
 
     This is also an ID of the figure in DataProcessor.
 
@@ -41,7 +45,7 @@ def destination_path(figure_path, figure_directory):
 
 def new_node(figure_path, generators, figure_directory,
              parents, children=[]):
-    """ copy figure and incidentals and return corresponding node
+    """ Copy figure and incidentals and return corresponding node.
 
     Parameters
     ----------
@@ -83,7 +87,7 @@ def new_node(figure_path, generators, figure_directory,
 
 
 def register(node_list, figures, figure_directory, runs=[], generators=[]):
-    """ register figure into `node_list`
+    """ Register figure into `node_list`.
 
     Parameters
     ----------

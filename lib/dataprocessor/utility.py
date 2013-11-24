@@ -1,16 +1,18 @@
 # coding=utf-8
+"""Some useful tools of dataprocessor."""
 from .exception import DataProcessorError
 import os.path
 import shutil
 
 
 def path_expand(path):
-    """Get absolute path
+    """Get absolute path.
 
     Returns
     -------
     str
         Absolute path of the argument
+
     """
     return os.path.abspath(os.path.expanduser(path))
 
@@ -52,6 +54,7 @@ def check_directory(path):
     ------
     DataProcessorError
         occurs when the file does not exist or the file is not directory.
+
     """
     path = path_expand(path)
     if not os.path.exists(path):
@@ -62,7 +65,7 @@ def check_directory(path):
 
 
 def get_directory(path, silent=True):
-    """Get absolute path of the directory
+    """Get absolute path of the directory.
 
     If it does not exist, it will be created.
 
@@ -99,7 +102,7 @@ def get_directory(path, silent=True):
 
 
 def copy_file(from_path, to_path):
-    """ copy a file """
+    """ copy a file. """
     from_path = check_file(from_path)
     to_path = path_expand(to_path)
     if os.path.exists(to_path) and os.path.isdir(to_path):
@@ -139,8 +142,14 @@ def copy_file(from_path, to_path):
 
 
 def boolenize(arg):
-    """make arg boolen value
+    """Make arg boolen value.
 
+    Returns
+    -------
+    bool
+
+    Examples
+    --------
     >>> boolenize(True)
     True
     >>> boolenize(False)
@@ -177,6 +186,7 @@ def boolenize(arg):
     False
     >>> boolenize("n")
     False
+
     """
     if type(arg) == str and arg.lower() in ["false", "f", "no", "n"]:
         return False
