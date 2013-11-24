@@ -22,12 +22,12 @@ Create json file of mete information "data\_information.json".
 
 Read data\_information.json and add configure and save to newdata.json
 
-    $ ../bin/dataprocessor ./manip3.json
+    $ ../bin/dataprocessor ./manip2.json
 
 Read data\_information.json and add comment and save to newdata.json
 Please change "/path/to/node" in "manip4.json" such as "${PWD}/datadir/project1/run01".
 
-    $ ../bin/dataprocessor ./manip4.json
+    $ ../bin/dataprocessor ./manip3.json
 
 
 bin/server.py (for webapp)
