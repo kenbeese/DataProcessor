@@ -33,7 +33,7 @@ function widget_html(title, widgets){
             .addClass("WidgetBody")
             .appendTo($widget_html);
     }
-    return $widget_html
+    return $widget_html;
 }
 
 /**
@@ -72,7 +72,7 @@ function ready_table(){
         .on("blur", "input.comment", function(event){
             var comment = this.value;
             var path = $(this).parent().attr("path");
-            send_comment(comment, path)
+            send_comment(comment, path);
             $(this).replaceWith(
                 $("<td>")
                     .addClass("comment")

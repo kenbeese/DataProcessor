@@ -4,8 +4,8 @@ $(function(){
     );
     $.getJSON("/cgi-bin/body.cgi", {"type": "Projects"},
         function(res){
-            var keys = res["keys"]
-            var table = res["table"]
+            var keys = res["keys"];
+            var table = res["table"];
 
             /* Header */
             keys = keys;
@@ -33,6 +33,6 @@ $(function(){
                 }
                 $("nav#Projects>table>tbody").append($tbody);
             }
-            ready_table()
+            ready_table();
         });
 });
