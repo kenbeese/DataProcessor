@@ -50,6 +50,12 @@ def new_node(figure_path, generators, figure_directory,
     generators : list
         the paths of files which should be managed with the figure
         s.t. gunplot file, python script, etc...
+    figure_directory : str
+        the base directory where figures are saved
+    parents : list
+        will be copied into node["parents"]
+    children : list, optional
+        will be copied into node["children"]
 
     Raises
     ------
@@ -81,11 +87,17 @@ def register(node_list, figures, figure_directory, runs=[], generators=[]):
 
     Parameters
     ----------
+    node_list : list
+        node_list
     figures : list
         the present paths of figures
-
+    figure_directory : str
+        the base directory where figures are saved
+    runs : list
+        The paths of runs related to these figures.
+        They will be saved into node["parents"]
     generators : list
-        the paths of files which should be managed with the figure
+        the paths of files which should be managed with the figure;
         s.t. gunplot file, python script, etc...
 
     """

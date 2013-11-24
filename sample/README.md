@@ -20,10 +20,6 @@ Create json file of mete information "data\_information.json".
 
     $ ../bin/dataprocessor ./manip1.json
 
-Create html file from data\_information.json.
-
-    $ ../bin/dataprocessor ./manip2.json  # Read meta information and transform html
-
 Read data\_information.json and add configure and save to newdata.json
 
     $ ../bin/dataprocessor ./manip3.json
