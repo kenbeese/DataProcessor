@@ -1,8 +1,10 @@
 # coding=utf-8
+"""Pipes of configure."""
 import os.path
 from ConfigParser import SafeConfigParser
 
 from ..utility import read_configure
+
 
 def add(node_list, filename, section="parameters"):
     """
@@ -22,9 +24,14 @@ def add(node_list, filename, section="parameters"):
     list
         node_list which is a list of dict.
 
+    Examples
+    --------
+    >>> add(node_list, "configure.conf")
+    >>> # Change load section.
+    >>> add(node_list, "configure.conf", "defaults")
+
     """
 
-    new_list = []
     node_key = "configure"
     for node in node_list:
         confpath = os.path.join(node["path"], filename)
@@ -49,6 +56,32 @@ def add(node_list, filename, section="parameters"):
 
 
 def no_section(node_list, filename, split_char="=", comment_char=["#"]):
+    """
+    Add configure to node_list.
+
+    Parameters
+    ----------
+    filename : str
+        filename of parameter configure file
+        If file is not exists, add null list.
+    split_char : str
+        Specify the deliminator char.
+    comment_char : str
+        Specify the comment line signal char.
+
+    Returns
+    -------
+    list
+        node_list which is a list of dict.
+
+    Examples
+    --------
+    >>> no_section(node_list, "foo.conf")
+    >>> # Change deliminator and comment line signal
+    >>> no_section(node_list, "foo.conf", split_char=":", comment_char="!")
+
+    """
+
     for node in node_list:
         path = node["path"]
         cfg_path = os.path.join(path, filename)
@@ -74,11 +107,3 @@ def register(pipes_dics):
         "kwds": ["split_char", "comment_char"],
         "desc": "Read parameter file (without section)",
     }
-
-
-def _test():
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    _test()

@@ -7,7 +7,7 @@ import unittest
 sys.path = [sys.path[0]] \
     + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
     + sys.path[1:]
-from dataprocessor.pipes.configure import add
+from dataprocessor.pipes.configure import add, no_section
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
@@ -114,8 +114,8 @@ hgoe = 3
 hogehoge = 2"""},
                           {"name": "parameter2.conf",
                            "contents": """[default]
-hgoe = 4
-dsaf = ohd"""}]
+hgoe : 4
+dsaf : ohd"""}]
         self._create_conf_files(list_file_dict)
 
         # there is no parameter.conf
@@ -134,6 +134,36 @@ dsaf = ohd"""}]
                                     "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
 
+    def test_no_section(self):
+        import copy
+        original_node_list = copy.deepcopy(self.node_list)
+        list_file_dict = [{"name": "parameter1.conf",
+                           "contents": """
+# comment
+hgoe = 3
+hogehoge = 2"""},
+                          {"name": "parameter2.conf",
+                           "contents": """
+! comment
+hgoe :  4
+dsaf : ohd"""}]
+        self._create_conf_files(list_file_dict)
+
+        # there is no parameter.conf
+        no_section(self.node_list, "parameter.conf")
+        added_dict = {}
+        self._check_node_list(original_node_list, added_dict)
+
+        # Add parameter1.conf to node_list
+        no_section(self.node_list, "parameter1.conf")
+        added_dict = {"configure": {"hgoe": "3", "hogehoge": "2"}}
+        self._check_node_list(original_node_list, added_dict)
+
+        # Add parameter2.conf to added node_list
+        no_section(self.node_list, "parameter2.conf", ":", "!")
+        added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
+                                    "hogehoge": "2"}}
+        self._check_node_list(original_node_list, added_dict)
 
 if __name__ == '__main__':
     unittest.main()
