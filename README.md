@@ -15,7 +15,7 @@ The usage of this script is also written in `sample/README.md`
 Requirements
 ------------
 
-- python-daemon (for stand a HTTP server as a daemon)
+- python-daemon ver.1.6 (for stand a HTTP server as a daemon)
 
 
 Build HTML documents
