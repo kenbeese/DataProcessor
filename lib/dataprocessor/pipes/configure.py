@@ -1,6 +1,8 @@
 # coding=utf-8
+import os.path
 from ConfigParser import SafeConfigParser
 
+from ..utility import read_configure
 
 def add(node_list, filename, section="parameters"):
     """
@@ -70,7 +72,6 @@ def add(node_list, filename, section="parameters"):
     >>> os.rmdir("/tmp/run02/")
     """
 
-    import os.path
     new_list = []
     node_key = "configure"
     for node in node_list:
@@ -97,12 +98,31 @@ def add(node_list, filename, section="parameters"):
     return new_list
 
 
+def no_section(node_list, filename, split_char="=", comment_char=["#"]):
+    for node in node_list:
+        path = node["path"]
+        cfg_path = os.path.join(path, filename)
+        if not os.path.exists(cfg_path):
+            continue
+        cfg = read_configure(cfg_path, split_char, comment_char)
+        if "configure" not in node:
+            node["configure"] = {}
+        node["configure"].update(cfg)
+    return node_list
+
+
 def register(pipes_dics):
     pipes_dics["configure"] = {
         "func": add,
         "args": ["filename"],
         "kwds": ["section"],
-        "desc": "Read parameter file",
+        "desc": "Read parameter file (use ConfigParser)",
+    }
+    pipes_dics["configure_no_section"] = {
+        "func": no_section,
+        "args": ["filename"],
+        "kwds": ["split_char", "comment_char"],
+        "desc": "Read parameter file (without section)",
     }
 
 
