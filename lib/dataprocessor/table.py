@@ -102,30 +102,30 @@ class _TableData(object):
         return value
 
     def __get_col_name(self, groups, dict_path, linked_node):
-        def get_allkeys(dic):
-            keys = list(dic.keys())
-            keys.sort()
-            keys.sort(key=len)
-            return keys
-
         col_name = []
         if not linked_node:
             return col_name
         for group in groups:
-            group_idx = groups.index(group)
-            dic = self.__get_dic_from_path(linked_node[0],
-                                           dict_path[group_idx])
-            if not "items" in group or group["items"] is None:
-                col_name.append(get_allkeys(dic))
-            else:
+            if "items" in group and group["items"] is not None:
                 col_name.append(group["items"])
+                continue
+            group_idx = groups.index(group)
+            allkeys = set([])
+            for node in linked_node:
+                dic = self.__get_dic_from_path(node, dict_path[group_idx])
+                allkeys = allkeys | set(dic.keys())
+            if not allkeys:
+                raise DataProcessorError(
+                    "No any node have dic specified `dict_path`")
+            allkeys = sorted(list(allkeys), key=lambda x: (len(x), x))
+            col_name.append(allkeys)
         return col_name
 
     def __get_dic_from_path(self, node, dict_path):
         dic = node
         for key in dict_path:
             if not key in dic:
-                raise DataProcessorError("`dict_path` is invalid")
+                return {}
             dic = dic[key]
         return dic
 
