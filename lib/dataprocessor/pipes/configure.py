@@ -70,6 +70,7 @@ def add(node_list, filename, section="parameters"):
     >>> os.remove("/tmp/run01/parameter2.conf")
     >>> os.rmdir("/tmp/run01/")
     >>> os.rmdir("/tmp/run02/")
+
     """
 
     new_list = []

@@ -114,7 +114,7 @@ def get_directory(path, silent=True):
 
 
 def copy_file(from_path, to_path):
-    """ copy a file. """
+    """ Copy a file. """
     from_path = check_file(from_path)
     to_path = path_expand(to_path)
     if os.path.exists(to_path) and os.path.isdir(to_path):
@@ -154,7 +154,7 @@ def copy_file(from_path, to_path):
 
 
 def read_configure(filename, split_char="=", comment_char=["#"]):
-    """ read configure file without sections
+    """ Read configure file without sections.
 
     Parameters
     ----------
@@ -167,6 +167,11 @@ def read_configure(filename, split_char="=", comment_char=["#"]):
     comment_char : list of str, optional
         The line starting with chars in this list will be skipped.
         (default=["#"])
+
+    Returns
+    -------
+    dict
+        {parameter-name: value} dictionary.
 
     """
     f = open(filename, 'r')
