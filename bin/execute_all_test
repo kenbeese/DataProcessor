@@ -14,7 +14,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 sys.path = [sys.path[0]] \
     + [os.path.join(os.path.dirname(__file__), "../test")] \
     + sys.path[1:]
-from test_dataprocessor import test_pipes
+import test_dataprocessor as tdp
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
@@ -28,7 +28,7 @@ doctest_modules = [dp.io,
                    dp.pipes.scan,
                    handler]
 
-test_moudles = [test_pipes.test_configure, ]
+test_moudles = [tdp.test_pipes.test_configure, ]
 
 
 def create_doctest_suite(test_suite):
