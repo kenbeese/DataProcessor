@@ -1,0 +1,9 @@
+td.comment{
+    white-space: nowrap;
+    width: 300px;
+}
+input.comment{
+    background: #CCCCCC;
+    width: 300px;
+    size: 120;
+}

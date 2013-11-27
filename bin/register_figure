@@ -1,0 +1,57 @@
+#!/usr/bin/python
+# coding=utf-8
+"""Register figures to node_list."""
+
+import argparse
+import os.path
+import traceback
+import sys
+
+sys.path = ([sys.path[0]]
+            + [os.path.join(os.path.dirname(__file__), "../lib")]
+            + sys.path[1:])
+from dataprocessor import figure, io, utility
+from dataprocessor.exception import DataProcessorError
+sys.path = [sys.path[0]] + sys.path[2:]
+
+
+def read_args():
+    parser = argparse.ArgumentParser(description="""
+                Register generated figures into DataProcessor.
+                The options -R and -g must be specified after ususal arguments.
+                """)
+    parser.add_argument("figure_directory",
+                        help="The directory for saving figures")
+    parser.add_argument("json_file",
+                        help="The path of JSON file containing nodes")
+    parser.add_argument("figures", nargs="+",
+                        help="Paths of the figures that you want to register")
+    parser.add_argument("-R", "--runs", dest="runs", nargs="+",
+                        help="Paths of runs related to figures")
+    parser.add_argument("-g", "--generators", dest="generators",
+                        nargs="+", default=[],
+                        help="Paths of generator files (s.t. fig.gp, fig.py)")
+    return parser.parse_args()
+
+
+def main():
+    args = read_args()
+    figure_directory = utility.check_directory(args.figure_directory)
+    json_file = utility.check_file(args.json_file)
+
+    with io.DataHandler(json_file, silent=True) as dh:
+        node_list = dh.get()
+        figure.register(node_list, args.figures, figure_directory,
+                        args.runs, args.generators)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except DataProcessorError as e:
+        print("Error occurs:\n%s" % e.msg)
+        print("See also the following traceback\n")
+        print(traceback.format_exc())
+        sys.exit(1)
+else:
+    raise RuntimeError("register_figure should not be imported")

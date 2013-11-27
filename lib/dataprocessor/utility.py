@@ -6,6 +6,7 @@ Some useful tools for dataprocessor are included.
 """
 from .exception import DataProcessorError
 import os.path
+import shutil
 
 
 def path_expand(path):
@@ -110,6 +111,80 @@ def get_directory(path, silent=True):
                 raise DataProcessorError("Directory cannot be created.")
         os.makedirs(dir_path)
     return dir_path
+
+
+def copy_file(from_path, to_path):
+    """ Copy a file. """
+    from_path = check_file(from_path)
+    to_path = path_expand(to_path)
+    if os.path.exists(to_path) and os.path.isdir(to_path):
+        to_dir = to_path
+        to_name = os.path.basename(from_path)
+    else:
+        to_dir = os.path.dirname(to_path)
+        to_name = os.path.basename(to_path)
+    if not os.path.exists(to_dir):
+        os.makedirs(to_dir)
+    dest_path = os.path.join(to_dir, to_name)
+    if not os.path.exists(dest_path):
+        shutil.copy2(from_path, dest_path)
+        return
+    else:
+        print("A file already exists in %s" % dest_path)
+        from_con = open(from_path, 'r').read()
+        dest_con = open(dest_path, 'r').read()
+        if from_con == dest_con:
+            print("They are same contents. Skip copy.")
+            return
+        else:
+            while(True):
+                ans = raw_input("Replace %s? [y/N]:" % dest_path)
+                if ans.upper() in ["Y", "YES"]:
+                    shutil.copy2(from_path, dest_path)
+                    return
+                else:
+                    name = raw_input("Enter new name:")
+                    new_dest = os.path.join(to_dir, name)
+                    if os.path.exists(new_dest):
+                        print("It also exits")
+                        continue
+                    else:
+                        shutil.copy2(from_path, new_dest)
+                        return
+
+
+def read_configure(filename, split_char="=", comment_char=["#"]):
+    """ Read configure file without sections.
+
+    Parameters
+    ----------
+    filename : str
+        The file name of the configure file
+    split_char : str, optional
+        The lines in configure file are splited by this char (default "=").
+        If your configure has line s.t. `a : 1.2`,
+        then you should set `split_char=":"`.
+    comment_char : list of str, optional
+        The line starting with chars in this list will be skipped.
+        (default=["#"])
+
+    Returns
+    -------
+    dict
+        {parameter-name: value} dictionary.
+
+    """
+    f = open(filename, 'r')
+    config = {}
+    for line in f:
+        if line[0] in comment_char or line == "\n":
+            continue
+        lines = line.strip().split(split_char)
+        if(len(lines) != 2):
+            print("invalid line : "+line)
+            continue
+        config[lines[0].strip()] = lines[1].strip()
+    return config
 
 
 def boolenize(arg):
