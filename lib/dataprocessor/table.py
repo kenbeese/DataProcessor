@@ -180,6 +180,8 @@ class Table(object):
 
     Examples
     --------
+    If you have following list and you call as follows,
+
     >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
     ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': u'testあ',
     ...              'configure': {'nx':1, 'ny':2}},
@@ -189,6 +191,35 @@ class Table(object):
     ...              groups=[{'dict_path': ['configure']},
     ...                      {'items': ['comment', 'path'], 'name': 'node'}])
     >>> html_str = tble.render()
+
+    you can get html string of following formatted table.
+
+    |      |         node        | configure |
+    |------+---------+-----------+-----------|
+    |      | comment | path      | nx  | ny  |
+    |------+---------+-----------+-----+-----|
+    | run0 |  testあ | /tmp/run0 |  1  |  2  |
+    | run1 |         | /tmp/run1 |  10 |  20 |
+
+    Another example.
+
+    >>> node_list = [{"path": "/path/to",
+    ...               "children": ["/path/to/1", "/path/to/2"]},
+    ...              {"path": "/path/to/1", "name": "n1", "val1": 1,
+    ...               "hoge": {"hoge": {"hoge": {"val4": 4}}}},
+    ...              {"path": "/path/to/2", "name": "h1", "val2": 2,
+    ...               "hoge1": {"hoge2": {"hoge3": {"val3": 4}}}}]
+    >>> tbl = Table("/path/to", node_list,
+    ...             groups=[{"items": ["val1", "val2"], "name": "some name"},
+    ...                     {"dict_path": ["hoge1", "hoge2", "hoge3"]}])
+    >>> html_str = tbl.render()
+
+    |   |  some name  |   hoge/hoge/hoge   |
+    |---+------+------+----------+---------|
+    |   | val1 | val2 | val3     |   val4  |
+    |---+------+------+----------+---------|
+    |h1 |      |   2  |    4     |         |
+    |n1 |   1  |      |          |    4    |
 
     """
 
