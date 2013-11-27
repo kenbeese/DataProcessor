@@ -11,6 +11,12 @@ import dataprocessor as dp
 import handler
 sys.path = [sys.path[0]] + sys.path[2:]
 
+sys.path = [sys.path[0]] \
+    + [os.path.join(os.path.dirname(__file__), "../test")] \
+    + sys.path[1:]
+from test_dataprocessor import test_pipes
+sys.path = [sys.path[0]] + sys.path[2:]
+
 
 doctest_modules = [dp.io,
                    dp.utility,
@@ -19,20 +25,32 @@ doctest_modules = [dp.io,
                    dp.table,
                    dp.figure,
                    dp.pipes.addcomment,
-                   dp.pipes.configure,
                    dp.pipes.scan,
                    handler]
 
+test_moudles = [test_pipes.test_configure, ]
 
-def create_doctest_suite():
+
+def create_doctest_suite(test_suite):
     from doctest import DocTestSuite
-    from unittest import TestSuite
-    return TestSuite((DocTestSuite(module) for module in doctest_modules))
-    
+    for module in doctest_modules:
+        test_suite.addTest((DocTestSuite(module)))
+    return test_suite
+
+
+def create_test_suite(test_suite):
+    from unittest import TestLoader
+    loader = TestLoader()
+    for module in test_moudles:
+        test_suite.addTest(loader.loadTestsFromModule(module))
+    return test_suite
+
 
 def main():
-    from unittest import TextTestRunner
-    suite = create_doctest_suite()
+    from unittest import TextTestRunner, TestSuite
+    suite = TestSuite()
+    suite = create_doctest_suite(suite)
+    suite = create_test_suite(suite)
     TextTestRunner(verbosity=2).run(suite)
     return
 
