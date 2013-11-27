@@ -11,7 +11,7 @@ from .exception import DataProcessorError
 
 class _TableData(object):
 
-    """table data manager.
+    """Manage table data.
 
     This class form data needed template from arguments.
 
@@ -19,14 +19,14 @@ class _TableData(object):
     --------
     >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
     ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': 'test',
-    ...              'configure': {'nx':1, 'ny':2}},
+    ...              'configure': {'nx':1}},
     ...             {'path': '/tmp/run1', 'name': 'run1',
-    ...              'configure': {'nx': 10, 'ny': 20}}]
+    ...              'configure': {'ny': 20}}]
     >>> table_data = _TableData(nodelist[0], nodelist, "children",
     ...              groups=[{'dict_path': ['configure']},
     ...                      {'items': ['comment', 'path'], 'name': 'node'}])
     >>> table_data.table == [
-    ...     {'nx': ['1', '10'], 'ny': ['2', '20']},
+    ...     {'nx': ['1', ''], 'ny': ['', '20']},
     ...     {'comment': ['test', ''], 'path': ['/tmp/run0', '/tmp/run1']}]
     True
     >>> table_data.type == 'table'
@@ -146,7 +146,7 @@ class _TableData(object):
 
 class Table(object):
 
-    """table widget class.
+    """Create table widget.
 
     Create table from dictionary in node.
     If node has dictionary in its values,
