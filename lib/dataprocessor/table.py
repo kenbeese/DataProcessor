@@ -194,12 +194,12 @@ class Table(object):
 
     you can get html string of following formatted table.
 
-    |      |         node        | configure |
-    |------+---------+-----------+-----------|
-    |      | comment | path      | nx  | ny  |
-    |------+---------+-----------+-----+-----|
-    | run0 |  testあ | /tmp/run0 |  1  |  2  |
-    | run1 |         | /tmp/run1 |  10 |  20 |
+    |      | configure |         node        |
+    |------+-----------+---------+-----------|
+    |      | nx  | ny  | comment | path      |
+    |------+-----+-----+---------+-----------|
+    | run0 |  1  |  2  |  testあ | /tmp/run0 |
+    | run1 |  10 |  20 |         | /tmp/run1 |
 
     Another example.
 
