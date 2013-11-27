@@ -15,7 +15,7 @@ The usage of this script is also written in `sample/README.md`
 Requirements
 ------------
 
-- python-daemon (for stand a HTTP server as a daemon)
+- python-daemon (>= 1.6) (for stand a HTTP server as a daemon)
 
 
 Build HTML documents
@@ -27,7 +27,7 @@ Requirements
 
 If you have not installed these,
 
-    easy_install sphinx numpydoc
+    # easy_install sphinx numpydoc
 
 Build
 -----

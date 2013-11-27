@@ -16,7 +16,7 @@ Including directory and files
 
 Usage (Supposed that current directory is the same as this file)
 --------
-Create json file of mete information "data\_information.json".
+Create json file of meta information "data\_information.json".
 
     $ ../bin/dataprocessor ./manip1.json
 
@@ -25,7 +25,7 @@ Read data\_information.json and add configure and save to newdata.json
     $ ../bin/dataprocessor ./manip2.json
 
 Read data\_information.json and add comment and save to newdata.json
-Please change "/path/to/node" in "manip4.json" such as "${PWD}/datadir/project1/run01".
+Please change "/path/to/node" in "manip3.json" such as "${PWD}/datadir/project1/run01".
 
     $ ../bin/dataprocessor ./manip3.json
 
