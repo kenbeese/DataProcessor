@@ -179,7 +179,7 @@ def read_configure(filename, split_char="=", comment_char=["#"]):
     for line in f:
         if line[0] in comment_char or line == "\n":
             continue
-        lines = line.strip("\n").strip().split(split_char)
+        lines = line.strip().split(split_char)
         if(len(lines) != 2):
             print("invalid line : "+line)
             continue
