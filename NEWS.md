@@ -11,6 +11,15 @@ This version includes the following new features.
     - editable comment
     - dynamically loading tables
 - figure node
+- document generator (using Sphinx)
+- submodules in dataprocessor/
+    - exception.py
+    - execute.py
+    - figure.py
+    - io.py
+    - nodes.py
+    - table.py
+    - utility.py
 
 Removed
 -------
@@ -22,9 +31,4 @@ These features are replaced by the webapp.
 - etreeio.py
 - infomanager.py
 - table.py (refactored to dataprocessor/table.py)
-
-Modified
---------
-
-Many :)
 
