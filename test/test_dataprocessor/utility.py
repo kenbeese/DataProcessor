@@ -54,7 +54,7 @@ class TestNodeListAndDir(unittest.TestCase):
                 os.mkdir(path)
                 node = {"path": path,
                         "type": "run",
-                        "name": os.path.basename(path)
+                        "name": os.path.basename(path),
                         "children": [],
                         "parents": [], }
                 self.node_list.append(node)
