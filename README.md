@@ -21,7 +21,7 @@ Requirements
 For Developer
 =============
 
-If you want to develop this tools, please read [Developer Guide](developer.md "Developer Guide").
+If you want to develop this tools, please read [Developer Guide](doc/developer.md "Developer Guide").
 
 Lisence
 ==========
