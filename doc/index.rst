@@ -12,7 +12,7 @@ Contents:
    :maxdepth: 4
 
    references/modules
-   
+   test-references/modules
 
 Indices and tables
 ==================

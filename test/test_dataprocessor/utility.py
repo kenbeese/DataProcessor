@@ -13,9 +13,9 @@ class TestNodeListAndDir(unittest.TestCase):
 
     Attributes
     ----------
-    tempdir_paths: list
+    tempdir_paths : list
         list of project root dir path
-    node_list: list
+    node_list : list
 
     """
 
@@ -34,7 +34,7 @@ class TestNodeListAndDir(unittest.TestCase):
 
         parameters
         ----------
-        rundir_num: int, optional
+        rundir_num : int, optional
             number of rundir
 
         """
@@ -43,12 +43,18 @@ class TestNodeListAndDir(unittest.TestCase):
         self.tempdir_paths = [tempfile.mkdtemp(), ]
         for tempdir_path in self.tempdir_paths:
             node = {"path": tempdir_path,
-                    "type": "project", }
+                    "type": "project",
+                    "name": os.path.basename(tempdir_path),
+                    "children": [],
+                    "parents": [], }
             self.node_list.append(node)
 
             for i in range(rundir_num):
                 path = os.path.join(tempdir_path, "run%02d" % i)
                 os.mkdir(path)
                 node = {"path": path,
-                        "type": "run"}
+                        "type": "run",
+                        "name": os.path.basename(path),
+                        "children": [],
+                        "parents": [], }
                 self.node_list.append(node)
