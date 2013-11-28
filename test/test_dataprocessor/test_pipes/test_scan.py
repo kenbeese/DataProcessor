@@ -17,9 +17,9 @@ class TestScan(TestNodeListAndDir):
 
     Attributes
     ----------
-    tempdir_paths: list
+    tempdir_paths : list
         list of project root dir path
-    node_list: list
+    node_list : list
 
     """
 
@@ -93,7 +93,8 @@ class TestScan(TestNodeListAndDir):
         """Test for initial scan."""
         node_list = []
         root_dir = self.tempdir_paths[0]
-        node_list = directory(node_list, root_dir, ["data/hoge*", "data/test*"])
+        node_list = directory(node_list, root_dir,
+                              ["data/hoge*", "data/test*"])
         compare_node_list = [
             {'path': root_dir,
              'parents': [],
@@ -121,7 +122,7 @@ class TestScan(TestNodeListAndDir):
         """Test for rescan."""
         root_dir = self.tempdir_paths[0]
         node_list = [{'path': os.path.join(root_dir, "run0"),
-                      'parents': [], # empty
+                      'parents': [],   # empty
                       'children': [],  # empty
                       'name': 'run0',
                       'type': 'run'}]

@@ -13,9 +13,9 @@ class TestNodeListAndDir(unittest.TestCase):
 
     Attributes
     ----------
-    tempdir_paths: list
+    tempdir_paths : list
         list of project root dir path
-    node_list: list
+    node_list : list
 
     """
 
@@ -34,7 +34,7 @@ class TestNodeListAndDir(unittest.TestCase):
 
         parameters
         ----------
-        rundir_num: int, optional
+        rundir_num : int, optional
             number of rundir
 
         """

@@ -20,9 +20,9 @@ class TestConfigure(TestNodeListAndDir):
 
     Attributes
     ----------
-    tempdir_paths: list
+    tempdir_paths : list
         list of project root dir path
-    node_list: list
+    node_list : list
 
     """
 
@@ -31,10 +31,10 @@ class TestConfigure(TestNodeListAndDir):
 
         Parameters
         ----------
-        list_file_dict: list
+        list_file_dict : list
             list of dict as follows,
             [{"name": "filename", "contents": "string of file contents"}, ]
-        check_type: bool (False)
+        check_type : bool (False)
             If True, only create configure file on node with type run.
 
         """
