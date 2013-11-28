@@ -12,6 +12,7 @@ Do a manipulation on server.
 `/cgi-bin/api.cgi`
 
 ### Request
+
 ```
 "type" : "manip"
 "manip" : json_str
@@ -21,18 +22,22 @@ Do a manipulation on server.
 JSON will be returned.
 
 If the manipulation succeed:
+
 ```json
 {
     "exit_code" : 0
 }
 ```
+
 If the manipulation fails:
+
 ```json
 {
     "exit_code" : exit_code,
     "message" : error_message
 }
 ```
+
 See also `handler.operation_sucess` and `handler.operation_fail`.
 
 pipe
@@ -44,14 +49,16 @@ Do a manipulation s.t. [load, pipe, save].
 `/cgi-bin/api.cgi`
 
 ### Request
+
 ```
 "type" : "pipe"
 "name" : "name_of_pipe"
-"args" : args_json  # JSON string of list 
+"args" : args_json  # JSON string of list
 "kwds" : kwds_json  # JSON string of dictionary, optional
 ```
 
 This will create a manipulation s.t.
+
 ```json
 [
     {"name": "load_json", "args", ["data.json"]},
@@ -72,6 +79,7 @@ Get a project list
 `/cgi-bin/body.cgi`
 
 ### Request
+
 ```
 "type" : "Projects"
 ```
@@ -110,6 +118,7 @@ Get HTML parts
 `/cgi-bin/body.cgi`
 
 ### Request
+
 ```
 "type" : "Widgets"
 "path" : "path_of_node"
@@ -125,6 +134,7 @@ See also `lib/dataprocessor/table.py`.
 JSON will be returned.
 
 In this version, only table widget is implemented.
+
 ```json
 [
     "<table class='[table_type]TableWidget'>
@@ -142,6 +152,7 @@ In this version, only table widget is implemented.
 In the future version, another type of widgets
 such that figure widget will be implemented.
 Then it will becomes as follows.
+
 ```json
 [
     "<table class='[table_type]TableWidget'>
@@ -159,4 +170,3 @@ Then it will becomes as follows.
     </div>"
 ]
 ```
-
