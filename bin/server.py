@@ -24,7 +24,7 @@ def start(args):
     port = int(args.port)
     root_dir = dp.utility.check_directory(args.root)
     log_path = os.path.join(root_dir, args.logfile)
-    lock_path = "/tmp/DataProcessorServer.pid"
+    lock_path = args.lockfile
 
     data_path = dp.utility.check_file(args.data_json)
     cfg = {"data_path": data_path}
@@ -47,7 +47,7 @@ def start(args):
 
 
 def stop(args):
-    lock_path = "/tmp/DataProcessorServer.pid"
+    lock_path = args.lockfile
     if os.path.exists(lock_path):
         pid = int(open(lock_path, 'r').read())
         os.kill(pid, 15)
@@ -84,9 +84,13 @@ def main():
                                    (default=${PROJECT_HOME}/server)""")
     start_psr.add_argument("--logfile", default="server.log",
                            help="The name of the log file")
+    start_psr.add_argument("--lockfile", default="/tmp/DataProcessorServer.pid",
+                           help="Lock filename")
 
     # stop
     stop_psr = sub_psr.add_parser("stop", help="kill articles server")
+    stop_psr.add_argument("--lockfile", default="/tmp/DataProcessorServer.pid",
+                           help="Lock filename")
     stop_psr.set_defaults(func=stop)
 
     # install
