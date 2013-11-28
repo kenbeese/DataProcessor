@@ -50,5 +50,6 @@ class TestNodeListAndDir(unittest.TestCase):
                 path = os.path.join(tempdir_path, "run%02d" % i)
                 os.mkdir(path)
                 node = {"path": path,
-                        "type": "run"}
+                        "type": "run",
+                        "name": os.path.basename(path)}
                 self.node_list.append(node)

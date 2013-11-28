@@ -28,7 +28,8 @@ doctest_modules = [dp.io,
                    dp.pipes.scan,
                    handler]
 
-test_moudles = [tdp.test_pipes.test_configure, ]
+test_moudles = [tdp.test_pipes.test_configure,
+                tdp.test_pipes.test_scan, ]
 
 
 def create_doctest_suite(test_suite):
