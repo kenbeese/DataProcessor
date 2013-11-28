@@ -115,6 +115,3 @@ dsaf : ohd"""}]
         added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
                                     "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
-
-if __name__ == '__main__':
-    unittest.main()

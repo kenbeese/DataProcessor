@@ -43,7 +43,10 @@ class TestNodeListAndDir(unittest.TestCase):
         self.tempdir_paths = [tempfile.mkdtemp(), ]
         for tempdir_path in self.tempdir_paths:
             node = {"path": tempdir_path,
-                    "type": "project", }
+                    "type": "project",
+                    "name": os.path.basename(tempdir_path),
+                    "children": [],
+                    "parents": [], }
             self.node_list.append(node)
 
             for i in range(rundir_num):
@@ -51,5 +54,7 @@ class TestNodeListAndDir(unittest.TestCase):
                 os.mkdir(path)
                 node = {"path": path,
                         "type": "run",
-                        "name": os.path.basename(path)}
+                        "name": os.path.basename(path)
+                        "children": [],
+                        "parents": [], }
                 self.node_list.append(node)
