@@ -33,9 +33,10 @@ Build
 -----
 After installation of above library,
 you can make api reference of this library with following command.
-    make -C doc html
 
-`doc/_build/html/index.html` is top page.
+    $ make -C doc html
+
+The file `doc/_build/html/index.html` is top page.
 
 
 Lisence
