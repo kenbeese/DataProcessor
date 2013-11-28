@@ -46,13 +46,13 @@ Do a manipulation s.t. [load, pipe, save].
 ### Request
 ```
 "type" : "pipe"
-"name" : name_of_pipe
-"args" : args_json # list 
-"kwds" : kwds_json  # dict, optional
+"name" : "name_of_pipe"
+"args" : args_json  # JSON string of list 
+"kwds" : kwds_json  # JSON string of dictionary, optional
 ```
 
 This will create a manipulation s.t.
-```
+```json
 [
     {"name": "load_json", "args", ["data.json"]},
     {"name": "name_of_pipe", "args": json.loads(args_json), "kwds": json.loads(kwds_json)},
@@ -127,7 +127,7 @@ JSON will be returned.
 In this version, only table widget is implemented.
 ```json
 [
-    "<table class="[table_type]TableWidget">
+    "<table class='[table_type]TableWidget'>
         <thead>
         <tr>...</tr>
         </thead>
