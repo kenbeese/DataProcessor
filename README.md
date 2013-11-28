@@ -18,27 +18,6 @@ Requirements
 - python-daemon (>= 1.6) (for stand a HTTP server as a daemon)
 
 
-Build HTML documents
-====================
-Requirements
-------------
-- sphinx (python documentation tools)
-- numpydoc (Sphinx extention)
-
-If you have not installed these,
-
-    # easy_install sphinx numpydoc
-
-Build
------
-After installation of above library,
-you can make api reference of this library with following command.
-
-    $ make -C doc html
-
-The file `doc/_build/html/index.html` is top page.
-
-
 For Developer
 =============
 

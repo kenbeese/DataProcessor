@@ -1,3 +1,50 @@
+dataprocessor library
+=====================
+
+Internal Data Structure
+-----------------------
+This library handle list of dictionary(`node**).
+Here, we call the list **node_list**.
+
+The **node** is a dictionary, which at least have following keys.
+
+  + **path**  
+      ID of this **node** and this **node** belong to its **path**.
+  + **name**  
+      Name of this **node**.
+  + **parents**  
+      Path list of upper level **node**.
+  + **children**  
+      Path list of lower level **node**.
+  + **type**  
+      Specify **node** type. Now, **run**, **project** and **figure** are supported.
+
+Of course, additional keys are allowed.
+This library add/delete some **node** to **node_list**,
+add/delete some keys and values to each node.
+
+API reference
+-------------
+You can build dataprocessor API HTML reference.
+
+### Requirements
+- sphinx (python documentation tools)
+- numpydoc (Sphinx extention)
+
+If you have not installed these,
+
+    # easy_install sphinx numpydoc
+
+### Build
+
+After installation of above library,
+you can make api reference of this library with following command.
+
+    $ make -C doc html
+
+The file `doc/_build/html/index.html` is top page.
+
+
 
 server API reference
 ====================
