@@ -3,7 +3,7 @@ DataProcessor
 
 A data processing library.
 
-Sample usage is written in `sample/README.md`
+Sample usage is written in [here](sample/README.md "Sample Usage").
 
 WebApp
 ======
@@ -38,6 +38,11 @@ you can make api reference of this library with following command.
 
 The file `doc/_build/html/index.html` is top page.
 
+
+For Developer
+=============
+
+If you want to develop this tools, please read [Developer Guide](developer.md "Developer Guide").
 
 Lisence
 ==========
