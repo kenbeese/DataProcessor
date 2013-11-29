@@ -71,6 +71,31 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
         validate_link(node_list, node)
 
 
+def check_duplicate(node_list):
+    """ check duplicate node
+
+    If duplicated nodes are found, they will be merged.
+
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes
+
+    Returns
+    -------
+    node_list : list
+
+    """
+    new_node_list = []
+    for node in node_list:
+        node0 = get(new_node_list, node["path"])
+        if not node0:
+            new_node_list.append(node)
+            continue
+        node0.update(node)
+    return new_node_list
+
+
 def remove(node_list, path, skip_validate_link=False):
     """Remove node from node_list.
 
