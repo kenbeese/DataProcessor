@@ -11,7 +11,7 @@ from .exception import DataProcessorError
 
 class _TableData(object):
 
-    """table data manager.
+    """Manage table data.
 
     This class form data needed template from arguments.
 
@@ -19,14 +19,14 @@ class _TableData(object):
     --------
     >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
     ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': 'test',
-    ...              'configure': {'nx':1, 'ny':2}},
+    ...              'configure': {'nx':1}},
     ...             {'path': '/tmp/run1', 'name': 'run1',
-    ...              'configure': {'nx': 10, 'ny': 20}}]
+    ...              'configure': {'ny': 20}}]
     >>> table_data = _TableData(nodelist[0], nodelist, "children",
     ...              groups=[{'dict_path': ['configure']},
     ...                      {'items': ['comment', 'path'], 'name': 'node'}])
     >>> table_data.table == [
-    ...     {'nx': ['1', '10'], 'ny': ['2', '20']},
+    ...     {'nx': ['1', ''], 'ny': ['', '20']},
     ...     {'comment': ['test', ''], 'path': ['/tmp/run0', '/tmp/run1']}]
     True
     >>> table_data.type == 'table'
@@ -102,30 +102,30 @@ class _TableData(object):
         return value
 
     def __get_col_name(self, groups, dict_path, linked_node):
-        def get_allkeys(dic):
-            keys = list(dic.keys())
-            keys.sort()
-            keys.sort(key=len)
-            return keys
-
         col_name = []
         if not linked_node:
             return col_name
         for group in groups:
-            group_idx = groups.index(group)
-            dic = self.__get_dic_from_path(linked_node[0],
-                                           dict_path[group_idx])
-            if not "items" in group or group["items"] is None:
-                col_name.append(get_allkeys(dic))
-            else:
+            if "items" in group and group["items"] is not None:
                 col_name.append(group["items"])
+                continue
+            group_idx = groups.index(group)
+            allkeys = set([])
+            for node in linked_node:
+                dic = self.__get_dic_from_path(node, dict_path[group_idx])
+                allkeys = allkeys | set(dic.keys())
+            if not allkeys:
+                raise DataProcessorError(
+                    "No any node have dic specified `dict_path`")
+            allkeys = sorted(list(allkeys), key=lambda x: (len(x), x))
+            col_name.append(allkeys)
         return col_name
 
     def __get_dic_from_path(self, node, dict_path):
         dic = node
         for key in dict_path:
             if not key in dic:
-                raise DataProcessorError("`dict_path` is invalid")
+                return {}
             dic = dic[key]
         return dic
 
@@ -146,7 +146,7 @@ class _TableData(object):
 
 class Table(object):
 
-    """table widget class.
+    """Create table widget.
 
     Create table from dictionary in node.
     If node has dictionary in its values,
@@ -180,6 +180,8 @@ class Table(object):
 
     Examples
     --------
+    If you have following list and you call as follows,
+
     >>> nodelist = [{'path': '/tmp', 'children': ['/tmp/run1', '/tmp/run0']},
     ...             {'path': '/tmp/run0', 'name': 'run0', 'comment': u'testあ',
     ...              'configure': {'nx':1, 'ny':2}},
@@ -189,6 +191,41 @@ class Table(object):
     ...              groups=[{'dict_path': ['configure']},
     ...                      {'items': ['comment', 'path'], 'name': 'node'}])
     >>> html_str = tble.render()
+
+    you can get html string of following formatted table.
+
+    +------+-----------+---------------------+
+    |      | configure |         node        |
+    |      +-----+-----+---------+-----------+
+    |      | nx  | ny  | comment | path      |
+    +======+=====+=====+=========+===========+
+    | run0 |  1  |  2  |  testあ | /tmp/run0 |
+    +------+-----+-----+---------+-----------+
+    | run1 | 10  |  20 |         | /tmp/run1 |
+    +------+-----+-----+---------+-----------+
+
+    Another example.
+
+    >>> node_list = [{"path": "/path/to",
+    ...               "children": ["/path/to/1", "/path/to/2"]},
+    ...              {"path": "/path/to/1", "name": "n1", "val1": 1,
+    ...               "hoge1": {"hoge2": {"hoge3": {"val4": 4}}}},
+    ...              {"path": "/path/to/2", "name": "h1", "val2": 2,
+    ...               "hoge1": {"hoge2": {"hoge3": {"val3": 4}}}}]
+    >>> tbl = Table("/path/to", node_list,
+    ...             groups=[{"items": ["val1", "val2"], "name": "some name"},
+    ...                     {"dict_path": ["hoge1", "hoge2", "hoge3"]}])
+    >>> html_str = tbl.render()
+
+    +---+-------------+--------------------+
+    |   |  some name  |  hoge1/hoge2/hoge3 |
+    +   +------+------+----------+---------+
+    |   | val1 | val2 | val3     |   val4  |
+    +===+======+======+==========+=========+
+    |h1 |  n   |   2  |    4     |         |
+    +---+------+------+----------+---------+
+    |n1 |   1  |      |          |    4    |
+    +---+------+------+----------+---------+
 
     """
 
