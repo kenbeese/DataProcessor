@@ -1,14 +1,10 @@
 Pipes
 =====
 
-- [addcomment](#addcomment)
+- [add_comment](#add_comment)
 - [configure](#configure)
-- [figure](#figure)
-- [jsonio](#jsonio)
-- [scan](#scan)
 
-
-addcomment
+add_comment
 ----------
 
 Add a comment to node.
@@ -24,11 +20,44 @@ None
 configure
 ---------
 
-figure
-------
+Read parameter file. i.e. a node
+```json
+{
+    "path" : "/path/to/data",
+}
+```
+will become as follows:
+```json
+{
+    "path" : "/path/to/data",
+    "configure" : {
+        "a" : "1.2",
+        "val1" : "aaa"
+        }
+}
+```
 
-jsonio
-------
 
-scan
-----
+The configure file should be in `.ini` format:
+
+```
+[default]
+a = 1.2
+val1 = "aaa"
+
+[section1]
+b = 2.1
+```
+
+### args
+
+1. filename : name of configure file
+
+If you set `configure.ini` for this argument,
+the configure file placed in `/path/to/data/configure.ini` will be load.
+
+### kwds
+
+#### section (default: "parameters")
+You must specify section such as `default` or `section1` in above case.
+
