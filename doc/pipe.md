@@ -8,8 +8,8 @@ Pipes
 - [scan](#scan)
 
 
-addcomment {#addcomment})
--------------------------
+addcomment
+----------
 
 Add a comment to node.
 
@@ -21,14 +21,14 @@ Add a comment to node.
 ### kwds
 None
 
-configure {#configure})
------------------------
+configure
+---------
 
-figure {#figure})
------------------
+figure
+------
 
-jsonio {#jsonio})
------------------
+jsonio
+------
 
-scan {#scan})
--------------
+scan
+----
