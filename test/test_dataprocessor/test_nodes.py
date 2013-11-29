@@ -82,6 +82,64 @@ class TestNodes(unittest.TestCase):
             {"path": "/added/path", "parents": [], "children": ["/path/3"]}]
         self.assertEqual(node_list, compare_node_list)
 
+    def test_add_update_skip_validate_link(self):
+        node_list = copy.deepcopy(self.node_list)
+        new_node = {
+                "path": "/path/0",
+                "parents": ["/path/2"],
+                "children": ["/path/1", "/path/3"]
+            }
+        nodes.add(node_list, new_node, skip_validate_link=True)
+
+        compare_node_list = [
+            {"path": "/path/0", "parents": ["/path/2"],
+             "children": ["/path/1", "/path/3"]}, # updated
+            {"path": "/path/1", "parents": [],
+             "children": ["/path/0"]},
+            {"path": "/path/2", "parents": ["/path/0"],
+             "children": []},
+            {"path": "/path/3", "parents": ["/path/0"],
+             "children": []}]
+        self.assertEqual(node_list, compare_node_list)
+
+    def test_add_update_validate_link(self):
+        node_list = copy.deepcopy(self.node_list)
+        new_node = {
+                "path": "/path/1",
+                "parents": ["/path/0"],
+                "children": []
+            }
+        nodes.add(node_list, new_node)
+
+        compare_node_list = [
+            {"path": "/path/0", "parents": ["/path/1"],
+             "children": ["/path/2", "/path/3", "/path/1"]},
+            {"path": "/path/1", "parents": ["/path/0"],
+             "children": []},
+            {"path": "/path/2", "parents": ["/path/0"],
+             "children": []},
+            {"path": "/path/3", "parents": ["/path/0"],
+             "children": []}]
+        self.assertEqual(node_list, compare_node_list)
+
+    def test_add_replace_skip_validate_link(self):
+        node_list = copy.deepcopy(self.node_list)
+        node_list[0]["comment"] = "madoka"
+        new_node = copy.deepcopy(self.node_list[0])
+        nodes.add(node_list, new_node, skip_validate_link=True, strategy="replace")
+
+        compare_node_list = [
+            {"path": "/path/1", "parents": [],
+             "children": ["/path/0"]},
+            {"path": "/path/2", "parents": ["/path/0"],
+             "children": []},
+            {"path": "/path/3", "parents": ["/path/0"],
+             "children": []},
+            {"path": "/path/0", "parents": ["/path/1"],
+             "children": ["/path/2", "/path/3"]},
+            ]
+        self.assertEqual(node_list, compare_node_list)
+
     def test_remove_skip_validate_link(self):
         node_list = copy.deepcopy(self.node_list)
         nodes.remove(node_list, "/path/0", skip_validate_link=True)
@@ -94,8 +152,6 @@ class TestNodes(unittest.TestCase):
     def test_remove_validate_link1(self):
         node_list = copy.deepcopy(self.node_list)
         nodes.remove(node_list, "/path/0")
-        # This state is OK? These node are not related to some node.
-        # Such node is allowed only when the node type is project.
         compare_node_list = [
             {"path": "/path/1", "parents": [], "children": []},
             {"path": "/path/2", "parents": [], "children": []},

@@ -67,6 +67,10 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
         elif strategy is "replace":
             node_list.remove(node0)
             node_list.append(node)
+        else:
+            raise DataProcessorError("Invalid strategy: %s" % strategy)
+    else:
+        node_list.append(node)
     if not skip_validate_link:
         validate_link(node_list, node)
 
