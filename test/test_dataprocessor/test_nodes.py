@@ -147,7 +147,7 @@ class TestNodes(unittest.TestCase):
              "children": ["/not/exists"],                    # does not exist
              }]
         # remove not exist parents link
-        nodes.validate_link(node_list, node_list[0], False)
+        nodes.validate_link(node_list, node_list[0], True)
         # remove not exist children link
-        nodes.validate_link(node_list, node_list[3], False)
+        nodes.validate_link(node_list, node_list[3], True)
         self.assertEqual(node_list, self.node_list)
