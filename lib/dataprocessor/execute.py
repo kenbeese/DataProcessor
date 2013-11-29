@@ -2,7 +2,7 @@
 import json
 
 from .exception import DataProcessorError, InvalidJSONError, pipe_execute
-import pipes
+from . import pipes
 
 
 def check_manip(manip):

@@ -3,7 +3,7 @@ DataProcessor
 
 A data processing library.
 
-Sample usage is written in `sample/README.md`
+Sample usage is written in [here](sample/README.md "Sample Usage").
 
 WebApp
 ======
@@ -15,11 +15,11 @@ The usage of this script is also written in `sample/README.md`
 Requirements
 ------------
 
-- python-daemon (for stand a HTTP server as a daemon)
+- python-daemon (>= 1.6) (for stand a HTTP server as a daemon)
 
 
 Build HTML documents
-===================
+====================
 Requirements
 ------------
 - sphinx (python documentation tools)
@@ -27,16 +27,22 @@ Requirements
 
 If you have not installed these,
 
-    easy_install sphinx numpydoc
+    # easy_install sphinx numpydoc
 
 Build
 -----
 After installation of above library,
 you can make api reference of this library with following command.
-    make -C doc html
 
-`doc/_build/html/index.html` is top page.
+    $ make -C doc html
 
+The file `doc/_build/html/index.html` is top page.
+
+
+For Developer
+=============
+
+If you want to develop this tools, please read [Developer Guide](developer.md "Developer Guide").
 
 Lisence
 ==========

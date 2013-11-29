@@ -1,9 +1,10 @@
 # coding=utf-8
+"""Tools for manipulation of node_list."""
 from .exception import DataProcessorError
 
 
 def get(node_list, path):
-    """search node from node_list by its path
+    """Search node from node_list by its path.
 
     Returns
     -------
@@ -20,6 +21,7 @@ def get(node_list, path):
     >>> node = get(node_list, "/path/5") # no node exists
     >>> print(node)
     None
+
     """
     for node in node_list:
         if path == node["path"]:
@@ -28,10 +30,11 @@ def get(node_list, path):
 
 
 def add(node_list, node, skip_validate_link=False, check_unique=True):
-    """Add a node into node_list
+    """Add a node into node_list.
 
     This adds a node into node_list,
-    and validate links in node["children"] and node["parents"]
+    and validate links in node["children"] and node["parents"].
+    In detail of validate link, see `validate_link`.
 
     Parameters
     ----------
@@ -44,6 +47,16 @@ def add(node_list, node, skip_validate_link=False, check_unique=True):
     check_unique : bool, optional
         check whether the node has already exist (default True)
         This option may cost a large amount of time.
+
+    Examples
+    --------
+    >>> node_list = [{"path": "/some/path", "children": [], "parents": []}]
+    >>> added_node = {"path": "/added/path", "children": ["/some/path"],
+    ...               "parents": []}
+    >>> add(node_list, added_node)
+
+    If skip_validate_link=True, snode_list[0]["parents"] is not filled.
+
     """
     if check_unique:
         node0 = get(node_list, node["path"])
@@ -58,7 +71,9 @@ def add(node_list, node, skip_validate_link=False, check_unique=True):
 
 
 def remove(node_list, path, skip_validate_link=False):
-    """Remove node from node_list
+    """Remove node from node_list.
+
+    In detail of validate link, see `validate_link`.
 
     Parameters
     ----------
@@ -76,72 +91,14 @@ def remove(node_list, path, skip_validate_link=False):
 
     Examples
     --------
-    >>> import copy
-    >>> node_list_base = [{
-    ...     "path": "/path/0",
-    ...     "parents": ["/path/1"],
-    ...     "children": ["/path/2", "/path/3"],
-    ... },{
-    ...     "path": "/path/1",
-    ...     "parents": [],
-    ...     "children": ["/path/0"],
-    ... },{
-    ...     "path": "/path/2",
-    ...     "parents": ["/path/0"],
-    ...     "children": [],
-    ... },{
-    ...     "path": "/path/3",
-    ...     "parents": ["/path/0"],
-    ...     "children": [],
-    ... }]
-    >>> node_list = copy.deepcopy(node_list_base)
-    >>> remove(node_list, "/path/0")
-    >>> node_list == [{
-    ...     'path': '/path/1',
-    ...     'parents': [],
-    ...     'children': []
-    ... }, {
-    ...     'path': '/path/2',
-    ...     'parents': [],
-    ...     'children': []
-    ... }, {
-    ...     'path': '/path/3',
-    ...     'parents': [],
-    ...     'children': []
-    ... }]
-    True
-    >>> node_list = copy.deepcopy(node_list_base)
-    >>> remove(node_list, "/path/1")
-    >>> node_list == [{
-    ...     'path': '/path/0',
-    ...     'parents': [],
-    ...     'children': ['/path/2', '/path/3']
-    ... }, {
-    ...     'path': '/path/2',
-    ...     'parents': ['/path/0'],
-    ...     'children': []
-    ... }, {
-    ...     'path': '/path/3',
-    ...     'parents': ['/path/0'],
-    ...     'children': []
-    ... }]
-    True
-    >>> node_list = copy.deepcopy(node_list_base)
-    >>> remove(node_list, "/path/3")
-    >>> node_list == [{
-    ...     'path': '/path/0',
-    ...     'parents': ['/path/1'],
-    ...     'children': ['/path/2']
-    ... }, {
-    ...     'path': '/path/1',
-    ...     'parents': [],
-    ...     'children': ['/path/0']
-    ... }, {
-    ...     'path': '/path/2',
-    ...     'parents': ['/path/0'],
-    ...     'children': []
-    ... }]
-    True
+    >>> node_list = [{"path": "/remove/path", "children": [],
+    ...               "parents": ["/some/path"]},
+    ...              {"path": "/some/path", "children": ["/remove/path"],
+    ...               "parents": []}]
+    >>> remove(node_list, "/remove/path")
+
+    If skip_validate_link=True, node_list[1]["chilrdren"] is not removed.
+
     """
     node = get(node_list, path)
     if not node:
@@ -162,7 +119,7 @@ def remove(node_list, path, skip_validate_link=False):
 
 
 def validate_link(node_list, node, silent=False):
-    """validate the link of the node
+    """Validate the link of the node.
 
     Check node["children"] and node["parents"] is correct.
     If a link is incomplete, it will fixed (see the following example).
@@ -177,61 +134,33 @@ def validate_link(node_list, node, silent=False):
 
     Examples
     --------
-    >>> node_list = [{
-    ...     "path": "/path/0",
-    ...     "parents": ["/path/1"],
-    ...     "children": ["/path/2", "/path/3"],
-    ... },{
-    ...     "path": "/path/1",
-    ...     "parents": [],
-    ...     "children": ["/path/0"],
-    ... },{
-    ...     "path": "/path/2",
-    ...     "parents": [], # incomplete
-    ...     "children": [],
-    ... },{
-    ...     "path": "/path/3",
-    ...     "parents": ["/path/0"],
-    ...     "children": ["/path/4"], # does not exist
-    ... }]
-    >>> validate_link(node_list, node_list[0])
-    >>> node_list == [{
-    ...     "path": "/path/0",
-    ...     "parents": ["/path/1"],
-    ...     "children": ["/path/2", "/path/3"],
-    ... },{
-    ...     "path": "/path/1",
-    ...     "parents": [],
-    ...     "children": ["/path/0"],
-    ... },{
-    ...     "path": "/path/2",
-    ...     "parents": ["/path/0"], # refined
-    ...     "children": [],
-    ... },{
-    ...     "path": "/path/3",
-    ...     "parents": ["/path/0"],
-    ...     "children": ["/path/4"], # This error is kept
-    ... }]
+    Fill node_list[0]'s parents and node_list[1]'s children
+
+    >>> node_list = [
+    ...     {"path": "/path/0", "parents": [], "children": []},
+    ...     {"path": "/path/1", "parents": [], "children": []},
+    ...     {"path": "/path/2", "parents": ["/path/1"],
+    ...      "children": ["/path/0"]}]
+    >>> validate_link(node_list, node_list[2])
+    >>> node_list == [
+    ...     {"path": "/path/0", "parents": ["/path/2"], "children": []},
+    ...     {"path": "/path/1", "parents": [], "children": ["/path/2"]},
+    ...     {"path": "/path/2", "parents": ["/path/1"],
+    ...      "children": ["/path/0"]}]
     True
-    >>> validate_link(node_list, node_list[3], silent=True)
-    >>> node_list == [{
-    ...     "path": "/path/0",
-    ...     "parents": ["/path/1"],
-    ...     "children": ["/path/2", "/path/3"],
-    ... },{
-    ...     "path": "/path/1",
-    ...     "parents": [],
-    ...     "children": ["/path/0"],
-    ... },{
-    ...     "path": "/path/2",
-    ...     "parents": ["/path/0"],
-    ...     "children": [],
-    ... },{
-    ...     "path": "/path/3",
-    ...     "parents": ["/path/0"],
-    ...     "children": [], # removed
-    ... }]
+
+    Remove node_list[1]'s children.
+
+    >>> node_list = [
+    ...     {"path": "/path/0", "parents": [], "children": ["/path/1"]},
+    ...     {"path": "/path/1", "parents": ["/path/0"],
+    ...      "children": ["/not/exist"]}]
+    >>> validate_link(node_list, node_list[1], silent=True)
+    >>> node_list == [
+    ...     {"path": "/path/0", "parents": [], "children": ["/path/1"]},
+    ...     {"path": "/path/1", "parents": ["/path/0"], "children": []}]
     True
+
     """
     path = node["path"]
 

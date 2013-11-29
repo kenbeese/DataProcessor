@@ -114,7 +114,7 @@ def get_directory(path, silent=True):
 
 
 def copy_file(from_path, to_path):
-    """ copy a file. """
+    """ Copy a file. """
     from_path = check_file(from_path)
     to_path = path_expand(to_path)
     if os.path.exists(to_path) and os.path.isdir(to_path):
@@ -151,6 +151,40 @@ def copy_file(from_path, to_path):
                     else:
                         shutil.copy2(from_path, new_dest)
                         return
+
+
+def read_configure(filename, split_char="=", comment_char=["#"]):
+    """ Read configure file without sections.
+
+    Parameters
+    ----------
+    filename : str
+        The file name of the configure file
+    split_char : str, optional
+        The lines in configure file are splited by this char (default "=").
+        If your configure has line s.t. `a : 1.2`,
+        then you should set `split_char=":"`.
+    comment_char : list of str, optional
+        The line starting with chars in this list will be skipped.
+        (default=["#"])
+
+    Returns
+    -------
+    dict
+        {parameter-name: value} dictionary.
+
+    """
+    f = open(filename, 'r')
+    config = {}
+    for line in f:
+        if line[0] in comment_char or line == "\n":
+            continue
+        lines = line.strip().split(split_char)
+        if(len(lines) != 2):
+            print("invalid line : "+line)
+            continue
+        config[lines[0].strip()] = lines[1].strip()
+    return config
 
 
 def boolenize(arg):
