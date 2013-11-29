@@ -11,8 +11,8 @@ Add a comment to node.
 
 ### args
 
-1. comment
-1. node_path 
+1. **comment**
+1. **node_path**
 
 ### kwds
 None
@@ -51,13 +51,12 @@ b = 2.1
 
 ### args
 
-1. filename : name of configure file
+1. **filename** : name of configure file
 
 If you set `configure.ini` for this argument,
 the configure file placed in `/path/to/data/configure.ini` will be load.
 
 ### kwds
 
-#### section (default: "parameters")
+- **section** (default: "parameters")  
 You must specify section such as `default` or `section1` in above case.
-
