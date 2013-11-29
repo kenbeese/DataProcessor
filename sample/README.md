@@ -13,21 +13,44 @@ Including directory and files
   - datadir/project2/run02/parameters.ini: run parameter file
   - datadir/project2/run03/parameters.conf: run parameter file
 
+Data processing procedure
+-----
+This library collects and processes information of run directories.
+
+Each run directory or project, which consists of multiple run directories,
+is referred to as **node**.
+Using this library, you can manipulate a list of **node** via **pipe**s.
+A **pipe** corresponds to a single manipulation.
+For exapmle, you can add new run directories or projects, add some comments to them,
+or collect information of parameters from each run directory.
+
+dataprocessor executes a procedure, that is, a list of **pipe**s
+described in the specified json file and modify a list of **node**
+stored in another json file.
+Details of **pipe**s is documented in doc/pipe.md.
+
+You can also execute some **pipe**s via WebApp explained in the below.
 
 Usage
 -----
-Supposed that current directory is the same as this file.
+Move to this sample directory.
 
-Create json file of meta information "data\_information.json".
+The procedure described in manip1.json adds run directories to
+a list of **node** searching configure files,
+add collected parameter information of run directories to the list,
+and save them to "data\_information.json".
 
     $ ../bin/dataprocessor ./manip1.json
 
-Read data\_information.json and add configure and save to newdata.json
+Read data\_information.json and add parameter configuration information again,
+and save to newdata.json.
 
     $ ../bin/dataprocessor ./manip2.json
 
-Read data\_information.json and add comment and save to newdata.json
-Please change "/path/to/node" in "manip3.json" such as "${PWD}/datadir/project1/run01".
+Read data\_information.json, add a comment to **node**
+specified by "/path/to/node" and save to newdata.json.
+For example, change "/path/to/node" to "${PWD}/datadir/project1/run01"
+in manip3.json to add a comment to run01 of project1.
 
     $ ../bin/dataprocessor ./manip3.json
 
