@@ -209,7 +209,7 @@ class Table(object):
     >>> node_list = [{"path": "/path/to",
     ...               "children": ["/path/to/1", "/path/to/2"]},
     ...              {"path": "/path/to/1", "name": "n1", "val1": 1,
-    ...               "hoge": {"hoge": {"hoge": {"val4": 4}}}},
+    ...               "hoge1": {"hoge2": {"hoge3": {"val4": 4}}}},
     ...              {"path": "/path/to/2", "name": "h1", "val2": 2,
     ...               "hoge1": {"hoge2": {"hoge3": {"val3": 4}}}}]
     >>> tbl = Table("/path/to", node_list,
@@ -218,7 +218,7 @@ class Table(object):
     >>> html_str = tbl.render()
 
     +---+-------------+--------------------+
-    |   |  some name  |   hoge/hoge/hoge   |
+    |   |  some name  |  hoge1/hoge2/hoge3 |
     +   +------+------+----------+---------+
     |   | val1 | val2 | val3     |   val4  |
     +===+======+======+==========+=========+
