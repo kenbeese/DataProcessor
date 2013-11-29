@@ -55,7 +55,7 @@ def check_file(path):
 
 
 def check_directory(path):
-    """Check whether file exists.
+    """Check whether directory exists.
 
     Returns
     -------
@@ -113,8 +113,34 @@ def get_directory(path, silent=True):
     return dir_path
 
 
-def copy_file(from_path, to_path):
-    """ Copy a file. """
+def copy_file(from_path, to_path, silent="interactive"):
+    """ Copy a file.
+
+    If `to_path` already exist, check whether it is same file.
+    When there are same file, skip.
+    When there are different, replace the file or change file name.
+
+    Moreover, when destination directory does not exist, create the direcotry.
+
+    Parameters
+    ----------
+    from_path : str
+    to_path : str
+    silent : str, optional, {"replace", "error", "skip", "interactive"}
+        This value specify when `to_path` already exists.
+          + "replace" : `to_path` file is replaced.
+          + "error" : raise DataProcessorError.
+          + "skip" : do nothing.
+          + "interactive" : specify on the prompt.
+
+    Raises
+    ------
+    DataProcessorError
+        Occur in two cases
+            + Silent keyword is invalid.
+            + Silent = "error" and `to_path` already exists.
+
+    """
     from_path = check_file(from_path)
     to_path = path_expand(to_path)
     if os.path.exists(to_path) and os.path.isdir(to_path):
@@ -137,20 +163,32 @@ def copy_file(from_path, to_path):
             print("They are same contents. Skip copy.")
             return
         else:
-            while(True):
-                ans = raw_input("Replace %s? [y/N]:" % dest_path)
-                if ans.upper() in ["Y", "YES"]:
-                    shutil.copy2(from_path, dest_path)
-                    return
-                else:
-                    name = raw_input("Enter new name:")
-                    new_dest = os.path.join(to_dir, name)
-                    if os.path.exists(new_dest):
-                        print("It also exits")
-                        continue
-                    else:
-                        shutil.copy2(from_path, new_dest)
+            if not silent in ["interactive", "error", "replace", "skip"]:
+                raise DataProcessorError("Silent kwd: %s is invalid." % silent)
+            if silent is "interactive":
+                while(True):
+                    ans = raw_input("Replace %s? [y/N]:" % dest_path)
+                    if ans.upper() in ["Y", "YES"]:
+                        shutil.copy2(from_path, dest_path)
                         return
+                    else:
+                        name = raw_input("Enter new name:")
+                        new_dest = os.path.join(to_dir, name)
+                        if os.path.exists(new_dest):
+                            print("It also exits")
+                            continue
+                        else:
+                            shutil.copy2(from_path, new_dest)
+                            return
+            elif silent is "error":
+                raise DataProcessorError("%s already exist." % dest_path)
+            elif silent is "replace":
+                shutil.copy2(from_path, dest_path)
+                return
+            elif silent is "skip":
+                print("%s already exist. Skip copy."
+                      % dest_path)
+                return
 
 
 def read_configure(filename, split_char="=", comment_char=["#"]):

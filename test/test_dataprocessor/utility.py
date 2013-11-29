@@ -16,10 +16,15 @@ class TestNodeListAndDir(unittest.TestCase):
     tempdir_paths : list
         list of project root dir path
     node_list : list
+    rundir_nums : list
+        number list of rundir in `tempdir_paths`
 
     """
 
     def setUp(self):
+        self.tempdir_paths = []
+        self.rundir_nums = []
+        self.node_list = []
         self._create_dir_and_node_list(rundir_num=3)
 
     def tearDown(self):
@@ -39,8 +44,8 @@ class TestNodeListAndDir(unittest.TestCase):
 
         """
 
-        self.node_list = []
-        self.tempdir_paths = [tempfile.mkdtemp(), ]
+        self.rundir_nums.append(rundir_num)
+        self.tempdir_paths.append(tempfile.mkdtemp())
         for tempdir_path in self.tempdir_paths:
             node = {"path": tempdir_path,
                     "type": "project",
