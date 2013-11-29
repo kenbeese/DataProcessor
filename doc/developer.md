@@ -3,7 +3,7 @@ dataprocessor library
 
 Internal Data Structure
 -----------------------
-This library handle list of dictionary(`node**).
+This library handle list of dictionary(**node**).
 Here, we call the list **node_list**.
 
 The **node** is a dictionary, which at least have following keys.
