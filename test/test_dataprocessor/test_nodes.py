@@ -122,18 +122,32 @@ class TestNodes(unittest.TestCase):
             {"path": "/path/2", "parents": ["/path/0"], "children": []}]
         self.assertEqual(node_list, compare_node_list)
 
-    def test_validate_link(self):
+    def test_validate_link_complete(self):
         node_list = [
             {"path": "/path/0", "parents": ["/path/1"],
              "children": ["/path/2"]},                      # incomplete
             {"path": "/path/1", "parents": [], "children": ["/path/0"]},
             {"path": "/path/2", "parents": [],              # incomplete
              "children": []},
-            {"path": "/path/3", "parents": ["/path/0"],
-             "children": ["/not/exist"],                    # does not exist
-             }]
+            {"path": "/path/3", "parents": ["/path/0"], "children": [],}]
         # complete /path/2
         nodes.validate_link(node_list, node_list[0])
-        # Remove not exist path and complete /path/0
-        nodes.validate_link(node_list, node_list[3], silent=True)
+        # complete /path/0
+        nodes.validate_link(node_list, node_list[3])
+        self.assertEqual(node_list, self.node_list)
+
+    def test_validate_link_remove(self):
+        node_list = [
+            {"path": "/path/0",
+             "parents": ["/path/1", "/not/exists2"],  # does not exist
+             "children": ["/path/2", "/path/3"]},
+            {"path": "/path/1", "parents": [], "children": ["/path/0"]},
+            {"path": "/path/2", "parents": ["/path/0"], "children": []},
+            {"path": "/path/3", "parents": ["/path/0"],
+             "children": ["/not/exists"],                    # does not exist
+             }]
+        # remove not exist parents link
+        nodes.validate_link(node_list, node_list[0], False)
+        # remove not exist children link
+        nodes.validate_link(node_list, node_list[3], False)
         self.assertEqual(node_list, self.node_list)
