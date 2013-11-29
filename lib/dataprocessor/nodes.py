@@ -29,7 +29,7 @@ def get(node_list, path):
     return None
 
 
-def add(node_list, node, skip_validate_link=False, check_unique=True):
+def add(node_list, node, skip_validate_link=False, strategy="update"):
     """Add a node into node_list.
 
     This adds a node into node_list,
@@ -44,9 +44,10 @@ def add(node_list, node, skip_validate_link=False, check_unique=True):
         The node will be added into node_list
     skip_validate_link : bool, optional
         skip link validation (default False)
-    check_unique : bool, optional
-        check whether the node has already exist (default True)
-        This option may cost a large amount of time.
+    strategy : str, optional {"update", "replace"}
+        If there is a node, which will
+        - "update"
+        - "replace"
 
     Examples
     --------
@@ -58,14 +59,14 @@ def add(node_list, node, skip_validate_link=False, check_unique=True):
     If skip_validate_link=True, snode_list[0]["parents"] is not filled.
 
     """
-    if check_unique:
-        node0 = get(node_list, node["path"])
-        if node0:
+    node0 = get(node_list, node["path"])
+    if node0:
+        if strategy is "update":
             node0.update(node)
-        else:
+            node = node0
+        elif strategy is "replace":
+            node_list.remove(node0)
             node_list.append(node)
-    else:
-        node_list.append(node)
     if not skip_validate_link:
         validate_link(node_list, node)
 
