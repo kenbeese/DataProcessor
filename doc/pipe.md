@@ -11,6 +11,16 @@ Pipes
 addcomment {#addcomment})
 -------------------------
 
+Add a comment to node.
+
+### args
+
+1. comment
+1. node_path 
+
+### kwds
+None
+
 configure {#configure})
 -----------------------
 
