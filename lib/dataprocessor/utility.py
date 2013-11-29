@@ -113,7 +113,7 @@ def get_directory(path, silent=True):
     return dir_path
 
 
-def copy_file(from_path, to_path, silent="interactive"):
+def copy_file(from_path, to_path, strategy="interactive"):
     """ Copy a file.
 
     If `to_path` already exist, check whether it is same file.
@@ -126,19 +126,19 @@ def copy_file(from_path, to_path, silent="interactive"):
     ----------
     from_path : str
     to_path : str
-    silent : str, optional, {"replace", "error", "skip", "interactive"}
-        This value specify when `to_path` already exists.
-          + "replace" : `to_path` file is replaced.
-          + "error" : raise DataProcessorError.
+    strategy : str, optional, {"interactive", "replace", "skip", "error"}
+        This specify the action when `to_path` already exists.
+          + "interactive" : ask on the prompt.
+          + "replace" : `to_path` file will be replaced.
           + "skip" : do nothing.
-          + "interactive" : specify on the prompt.
+          + "error" : raise DataProcessorError.
 
     Raises
     ------
     DataProcessorError
         Occur in two cases
-            + Silent keyword is invalid.
-            + Silent = "error" and `to_path` already exists.
+            + Invalid `strategy` keyword is specified.
+            + `to_path` already exists and the `strategy` is "error".
 
     """
     from_path = check_file(from_path)
@@ -163,9 +163,7 @@ def copy_file(from_path, to_path, silent="interactive"):
             print("They are same contents. Skip copy.")
             return
         else:
-            if not silent in ["interactive", "error", "replace", "skip"]:
-                raise DataProcessorError("Silent kwd: %s is invalid." % silent)
-            if silent is "interactive":
+            if strategy is "interactive":
                 while(True):
                     ans = raw_input("Replace %s? [y/N]:" % dest_path)
                     if ans.upper() in ["Y", "YES"]:
@@ -180,15 +178,16 @@ def copy_file(from_path, to_path, silent="interactive"):
                         else:
                             shutil.copy2(from_path, new_dest)
                             return
-            elif silent is "error":
-                raise DataProcessorError("%s already exist." % dest_path)
-            elif silent is "replace":
+            elif strategy is "replace":
                 shutil.copy2(from_path, dest_path)
                 return
-            elif silent is "skip":
-                print("%s already exist. Skip copy."
-                      % dest_path)
+            elif strategy is "skip":
+                print("%s already exist. Skip copy." % dest_path)
                 return
+            elif strategy is "error":
+                raise DataProcessorError("%s already exist." % dest_path)
+            else:
+                raise DataProcessorError("Invalid strategy: %s" % strategy)
 
 
 def read_configure(filename, split_char="=", comment_char=["#"]):
