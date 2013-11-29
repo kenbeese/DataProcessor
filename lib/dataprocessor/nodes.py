@@ -174,28 +174,21 @@ def validate_link(node_list, node, silent=False):
             print("Removed.")
             return True
 
-    # for parents
-    remove_path_list = []
-    for parent_path in node["parents"]:
-        p_node = get(node_list, parent_path)
-        if not p_node:
-            if silent or ask_remove(parent_path):
-                remove_path_list.append(parent_path)
-            continue
-        if path not in p_node["children"]:
-            p_node["children"].append(path)
-    for path in remove_path_list:
-        node["parents"].remove(path)
+    def validate(check_key):
+        against_key = {"parents": "children", "children": "parents"}[check_key]
+        link_path_list = []
+        for link_path in node[check_key]:
+            link_node = get(node_list, link_path)
+            if link_node:
+                link_path_list.append(link_path)
+                if path not in link_node[against_key]:
+                    link_node[against_key].append(path)
+            else:
+                if silent:
+                    continue
+                if ask_remove(path):
+                    link_path_list.append(link_path)
+        node[check_key] = link_path_list
 
-    # for children
-    remove_path_list = []
-    for child_path in node["children"]:
-        c_node = get(node_list, child_path)
-        if not c_node:
-            if silent or ask_remove(child_path):
-                remove_path_list.append(child_path)
-            continue
-        if path not in c_node["parents"]:
-            c_node["parents"].append(path)
-    for path in remove_path_list:
-        node["children"].remove(path)
+    validate("parents")
+    validate("children")
