@@ -7,7 +7,7 @@ import os.path
 
 
 def save(node_list, json_path, silent=False):
-    """save node_list into a JSON file
+    """Save node_list into a JSON file.
 
     Parameters
     ----------
@@ -15,6 +15,11 @@ def save(node_list, json_path, silent=False):
         the path to JSON
     slient : bool, str, optional
         Ask whether replace JSON file (default=False)
+
+    Returns
+    -------
+    list : node_list
+
     """
     silent = utility.boolenize(silent)
     path = utility.path_expand(json_path)
@@ -30,7 +35,7 @@ def save(node_list, json_path, silent=False):
 
 
 def load(node_list, json_path):
-    """load node_list from a JSON file
+    """Load node_list from a JSON file.
 
     Parameters
     ----------
@@ -46,6 +51,7 @@ def load(node_list, json_path):
     ------
     DataProcessorError
         occurs when JSON file does not exist.
+
     """
     path = utility.path_expand(json_path)
     if not os.path.exists(path):
@@ -56,7 +62,8 @@ def load(node_list, json_path):
 
 
 class DataHandler(object):
-    """ A data handler
+
+    """ A data handler.
 
     A utility class for save/load data into/from JSON file.
     See the following example.
@@ -83,16 +90,21 @@ class DataHandler(object):
     --------
     >>> filename = "/tmp/DataHandlerTest.json"
     >>> with DataHandler(filename, True) as dh:
-    ...     dh.add({"path" : "/path/to/data1", "name" : "data1"}, True)
+    ...     dh.add({"path" : "/path/to/data1", "name" : "data1",
+    ...             "parents": [], "children": []})
     >>> print(open(filename, 'r').read())
     [
         {
             "path": "/path/to/data1", 
-            "name": "data1"
+            "parents": [], 
+            "name": "data1", 
+            "children": []
         }
     ]
     >>> import os; os.remove(filename)
+
     """
+
     def __init__(self, filename, silent=False):
         self.data_path = utility.path_expand(filename)
         self.silent = silent
@@ -113,22 +125,24 @@ class DataHandler(object):
         return self.node_list
 
     def add(self, node, skip_validate_link=False):
-        """ add node into managed node_list
+        """ Add node into managed node_list.
 
         Parameters
         ----------
         skip_validate_link : bool, optional
             skip link check (default=False)
+
         """
         nodes.add(self.node_list, node, skip_validate_link)
 
     def replace(self, node_list, skip_validate_link=True):
-        """ swap node_list
+        """ Swap node_list.
 
         Parameters
         ----------
         skip_validate_link : bool, optional
             skip link validation about all nodes in new `node_list`
+
         """
         self.node_list = node_list
         if not skip_validate_link:
