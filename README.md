@@ -8,7 +8,7 @@ Data processing
 This library collects and processes information of "run"s.
 
 ### node
-If you are a physicist or a computer scientist,
+If you are a scientist,
 you may have huge data which are almost same but slightly different.
 We call each of these data as "run",
 and series of them as "project".
