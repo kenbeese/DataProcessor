@@ -81,4 +81,5 @@ def register(pipe_dics):
         "func": directory,
         "args": ["root_path", "whitelist"],
         "desc": "scan direcoty structure",
+        "kwds": ["followlinks"],
     }
