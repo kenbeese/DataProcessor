@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Scan directories as nodes."""
 import os
 from glob import glob
 
@@ -9,9 +10,18 @@ from ..utility import boolenize
 def directory(node_list, root, whitelist, followlinks=False):
     """Scan nodes from all directories under the directory 'root'.
 
-    Run node has one or more file or directory
-    which satisfies node_dir/whitelist.
-    Project node has run node in its sub-directory.
+    Parameters
+    ----------
+    root : str
+        Scan directories recursively under the directory `root`.
+    whitelist : list of str
+        Run node has one or more file or directory
+        which satisfies run_node_dir/`whitelist`.
+        And project nodes satisfy project_dir/run_node_dir/`whitelist`.
+        str can be specified by wildcard.
+    followlinks : bool, optional
+        Whether scan in symbolic link. (default=False)
+        Be aware that setting this to True may lead to infinite recursion.
 
     Examples
     --------
