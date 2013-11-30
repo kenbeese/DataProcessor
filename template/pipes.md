@@ -3,35 +3,35 @@ pipes
 =====
 
 {%- for pipe in pipes %}
-- [{{pipe}}](#{{pipe}})
+- [{{pipe["name"]}}](#{{pipe["name"]}})
 {%- endfor %}
 
 {%- for pipe in pipes %}
 
-{{pipe}}
+{{pipe["name"]}}
 ----
-{{pipes[pipe]["desc"]}}
+{{pipe["desc"]}}
 
 ### args
-{%- if "args" not in pipes[pipe] or pipes[pipe]["args"] | length == 0 %}
+{%- if "args" not in pipe or pipe["args"] | length == 0 %}
 None
 {%- else %}
-{%- for arg in pipes[pipe]["args"] %}
+{%- for arg in pipe["args"] %}
 {{loop.index}}. **{{arg}}**
 {%- endfor %}
 {%- endif %}
 
 ### kwds
-{%- if "kwds" not in pipes[pipe] or pipes[pipe]["kwds"] | length == 0 %}
+{%- if "kwds" not in pipe or pipe["kwds"] | length == 0 %}
 None
 {%- else %}
-{%- for kwd in pipes[pipe]["kwds"] %}
+{%- for kwd in pipe["kwds"] %}
 - **{{kwd}}**
 {%- endfor %}
 {%- endif %}
 
 ### docstring
-{{ pipes[pipe]["func"].__doc__ }}
+{{ pipe["func"].__doc__ }}
 
 [top](#pipes)
 
