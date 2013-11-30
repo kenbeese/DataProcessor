@@ -2,6 +2,7 @@
 pipes
 =====
 - [add_comment](#add_comment)
+- [plugin_configure](#plugin_configure)
 - [configure](#configure)
 - [configure_no_section](#configure_no_section)
 - [load_json](#load_json)
@@ -15,7 +16,7 @@ add comment to node with path
 
 ### args
 1. **comment**
-1. **path**
+2. **path**
 
 ### kwds
 None
@@ -48,7 +49,71 @@ None
 
 [top](#pipes)
 
-<hr>
+---------------------
+
+plugin_configure
+----
+add run cofigure
+
+### args
+1. **conf_filename**
+
+### kwds
+None
+
+### docstring
+
+    Add configure dictionary to run_list
+
+    Usage:
+
+    >>> import os
+    >>> os.mkdir("/tmp/run01/")
+    >>> os.mkdir("/tmp/run02/")
+    >>> filestring = '''[sec1]
+    ... conf1 = 3
+    ... conf2 = 4
+    ... [sec2]
+    ... conf4 = 2
+    ... conf5 = 5
+    ... '''
+    >>> f = open("/tmp/run01/para.conf", "w")
+    >>> f.write(filestring)
+    >>> f.close()
+    >>> filestring = '''[sec1]
+    ... conf1 = 21
+    ... conf2 = 1
+    ... [sec2]
+    ... conf4 = 3.23
+    ... conf5 = 42
+    ... '''
+    >>> f = open("/tmp/run02/para.conf", "w")
+    >>> f.write(filestring)
+    >>> f.close()
+    >>> filestring = '''[rundir]
+    ... conf_name = para.conf
+    ... '''
+    >>> f = open("/tmp/runs.conf", "w")
+    >>> f.write(filestring)
+    >>> f.close()
+    >>> node_list = [{"path":"/tmp/run02"}, {"path":"/tmp/run01"}]
+    >>> add(node_list, "para.conf") == [
+    ...     {'path':'/tmp/run02',
+    ...     'configure':{'conf1':'21', 'conf2': '1',
+    ...                  'conf4': '3.23', 'conf5': '42'}},
+    ...     {'path':'/tmp/run01',
+    ...     'configure':{'conf1':'3', 'conf2': '4',
+    ...                  'conf4': '2', 'conf5': '5'}}]
+    True
+    >>> os.remove("/tmp/run01/para.conf")
+    >>> os.remove("/tmp/run02/para.conf")
+    >>> os.rmdir("/tmp/run01/")
+    >>> os.rmdir("/tmp/run02/")
+    
+
+[top](#pipes)
+
+---------------------
 
 configure
 ----
@@ -88,7 +153,7 @@ Read parameter file (use ConfigParser)
 
 [top](#pipes)
 
-<hr>
+---------------------
 
 configure_no_section
 ----
@@ -130,7 +195,7 @@ Read parameter file (without section)
 
 [top](#pipes)
 
-<hr>
+---------------------
 
 load_json
 ----
@@ -163,7 +228,7 @@ load node_list from a JSON file
 
 [top](#pipes)
 
-<hr>
+---------------------
 
 register_figure
 ----
@@ -171,7 +236,7 @@ add figure node into node_list
 
 ### args
 1. **figures**
-1. **figure_directory**
+2. **figure_directory**
 
 ### kwds
 - **runs**
@@ -199,7 +264,7 @@ add figure node into node_list
 
 [top](#pipes)
 
-<hr>
+---------------------
 
 save_json
 ----
@@ -224,7 +289,7 @@ save node_list into a JSON file
 
 [top](#pipes)
 
-<hr>
+---------------------
 
 scan_directory
 ----
@@ -232,7 +297,7 @@ scan direcoty structure
 
 ### args
 1. **root_path**
-1. **whitelist**
+2. **whitelist**
 
 ### kwds
 None
@@ -264,4 +329,4 @@ None
 
 [top](#pipes)
 
-<hr>
+---------------------

@@ -17,7 +17,7 @@ pipes
 None
 {%- else %}
 {%- for arg in pipes[pipe]["args"] %}
-1. **{{arg}}**
+{{loop.index}}. **{{arg}}**
 {%- endfor %}
 {%- endif %}
 
@@ -35,5 +35,6 @@ None
 
 [top](#pipes)
 
-<hr>
+---------------------
+
 {%- endfor %}
