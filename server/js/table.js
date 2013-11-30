@@ -80,4 +80,34 @@ function ready_table(){
                     .attr("path", path)
                 );
         });
-}
+
+    // Sort
+    var sortOrder = 1;
+    $("div.Widget>table>thead>tr.items").off("click", "th");
+    $("div.Widget>table>thead>tr.items")
+        .on("click", "th", function(){
+            var $rows = $(this).parents("table").children("tbody").find("tr");
+            var col = $(this).index();
+            console.log(col);
+            $rows.sort(function(a, b){
+                return compare(a, b, col) * sortOrder;
+            });
+
+            $(this).parents("table").children("tbody")
+                .empty().append($rows);
+
+            // mark sort order
+            var arrow = sortOrder === 1 ? "▲" : "▼";
+            $(this).parent().find('span').remove();
+            var span = $('<span>');
+            $(this).prepend(span);
+            $(this).find('span').text(arrow);
+
+            // change sort order
+            sortOrder *= - 1;
+        });
+    function compare(a, b, col) {
+        var _a = $(a).find('td').eq(col).text();
+        var _b = $(b).find('td').eq(col).text();
+        return (_a * 1 - _b * 1);
+    }};
