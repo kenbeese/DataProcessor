@@ -3,26 +3,43 @@ DataProcessor
 
 A data processing library.
 
-Sample usage is written in [here](sample/README.md "Sample Usage").
-
-Data processing procedure
+Data processing
 -----
-This library collects and processes information of run directories.
+This library collects and processes information of "run"s.
 
-Each run directory or project, which consists of multiple run directories,
-is referred to as **node**.
-Using this library, you can manipulate a list of **node** via **pipe**s.
-A **pipe** corresponds to a single manipulation.
-For exapmle, you can add new run directories or projects, add some comments to them,
-or collect information of parameters from each run directory.
+### node
+If you are a physicist or a computer scientist,
+you may have huge data which are almost same but slightly different.
+We call each of these data as "run",
+and series of them as "project".
+Since these runs and projects will be related each others,
+we can consider a network of them.
+Thus we call each of runs and projects as **node**.
+We assume that each of runs and projects has their directory,
+and the path of the directory is unique.
+So the identifier of **node** is the path of its directory.
 
-dataprocessor executes a procedure, that is, a list of **pipe**s
-described in the specified json file and modify a list of **node**
-stored in another json file.
+### pipe
+This library introduce **pipe** corresponding to a single manipulation for **node**s;
+since this library manages nodes by a list of node (called **node_list**),
+**pipe** do a single manipulation for **node_list**.
+For exapmle, 
+
+- "scan" pipe gathers runs or projects and appends it into the node_list,
+- "add_comment" pipe add some comments to a specified node
+- "configure" pipe collects information of parameters from each run directory.
+
+You can easily combine them to satisfy your purpose.
+We call combined pipes as **manipulations**, and specified in JSON format.
 Details of **pipe**s is documented in [pipes list](doc/pipe.md).
 
-You can also execute some **pipe**s via WebApp explained in the below.
 
+### manipulations
+The executable script `bin/dataprocessor` executes a procedure, that is, a list of **pipe**s
+described in the specified json file and modify a list of **node**
+stored in another json file.
+You can also execute some **pipe**s via WebApp explained in the below.
+Sample usage is written in [here](sample/README.md "Sample Usage").
 
 WebApp
 ======
