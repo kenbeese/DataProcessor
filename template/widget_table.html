@@ -2,17 +2,17 @@
   <thead>
     {%- set ngroup = data.col_groupname|length %}
     <tr class="group">
-      <th></th>
+      <th> </th>
       {%- for igroup in range(ngroup) %}
         {%- set num  = data.col_name[igroup]|length %}
         <th colspan="{{num}}">{{data.col_groupname[igroup]}}</th>
       {%- endfor %}
     </tr>
     <tr class="items">
-      <th>name</th>
+      <th class="name">name</th>
       {%- for igroup in range(ngroup) %}
         {%- for colname in data.col_name[igroup] %}
-          <th>{{colname}}</th>
+          <th class="{{colname}} {{data.col_groupname[igroup]}}">{{colname}}</th>
         {%- endfor %}
       {%- endfor %}
     </tr>
@@ -23,7 +23,7 @@
         <td class="name">{{data.row_name[irow]}}</td>
         {%- for igroup in range(ngroup) %}
           {%- for colname in data.col_name[igroup] %}
-            <td class={{colname}}>{{data.table[igroup][colname][irow]}}</td>
+            <td class="{{colname}} {{data.col_groupname[igroup]}}">{{data.table[igroup][colname][irow]}}</td>
           {%- endfor %}
         {%- endfor %}
       </tr>

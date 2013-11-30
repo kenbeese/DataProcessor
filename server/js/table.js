@@ -33,6 +33,18 @@ function widget_html(title, widgets){
             .addClass("WidgetBody")
             .appendTo($widget_html);
     }
+    // create hide and show checkbox
+    var $items = $widget_html.find("table.childrenTableWidget>thead>tr.items>th");
+    var $div_check = $("<div>").addClass("hide-show").text("Show or Hide: ");
+    for (var i = 0; i<$items.length;i++){
+        var $label = $("<label>").text($items.eq(i).text());
+        // create check box
+        $label.prepend(
+            $("<input>").attr("type", "checkbox")
+                .attr("checked", "True").addClass($items.eq(i).text()));
+        $div_check.append($label);
+    }
+    $widget_html.find("table.childrenTableWidget").before($div_check);
     return $widget_html;
 }
 
@@ -128,4 +140,56 @@ function ready_table(){
             return (__a - __b);
         }
     };
-}
+
+/**2
+ * Hide or Show table Item
+*/
+    $("section").on("click", "div.hide-show>label>input",
+                    function(){
+                        var now_class = $(this).attr("class");
+                        var selector = "th." + now_class + ","+"td." + now_class;
+
+                        if ($(this).is(":checked")){
+                            $(this).parents("div.Widget").find(selector).show();
+                        } else {
+                            $(this).parents("div.Widget").find(selector).hide();
+                        }
+                        correct_width_table($(this).parents("div.Widget")
+                                            .find("table.childrenTableWidget"));
+                    });
+
+    function correct_width_table($table_object){
+        var $groups = $table_object.find("thead>tr.group>th");
+        // create group name list
+        var group_list = [];
+        for (var i = 0; i<$groups.length; i++){
+            group_list.push($groups.eq(i).text());
+        }
+        // count group number
+        var group_num = {};
+        for (var i = 0; i<group_list.length; i++){
+            group_num[group_list[i]] = 0;
+        }
+        // count each group number
+        var $items = $table_object.find("thead>tr.items>th");
+        for (var i = 0; i<$items.length; i++){
+            if ($items.is(":visible")) {
+                for (var j = 0; j<group_list.lenth; i++){
+                    var group_name = group_list[j];
+                    if (group_name == ""){
+                        group_num[""] += 1;
+                        continue;
+                    } else {
+                        if ($items[i].hasClass(group_name)){
+                            group_num[group_name] += 1;
+                        };
+                    }
+                }
+            }
+        }
+        // correct width of table.
+        for (var i = 0; i<$groups.length; i++){
+            $groups.eq(i).attr("colspan", group_num[$groups.eq(i).text()]);
+        }
+    }
+    }
