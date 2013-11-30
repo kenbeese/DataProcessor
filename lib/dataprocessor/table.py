@@ -160,20 +160,21 @@ class Table(object):
         Specify elements in table for each group.
         Default is one group which get all of 'configure' key.
         One group has three keys below at most.
-        ----
-        dict_path : list of str, optional
+
+        - dict_path : list of str, optional
             List of key. Default is node itself.
             Search dictionary recursively by `dict_path`.
-        items : list of str, optional
+        - items : list of str, optional
             List of key in dictionary specified by `dict_path`.
             Table has only items in `items`.
-        name : str, optional
+        - name : str, optional
             Group name. Default is "/".join(`dict_path`).
 
     Raises
     ------
     DataProcessorError
         Occurs in three cases:
+
         + No path exist.
         + Node to the `path` has no `table_type` key.
         + fail to search dictionary recursively: `dict_path` is invalid.
