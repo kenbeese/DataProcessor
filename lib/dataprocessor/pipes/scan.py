@@ -19,8 +19,8 @@ def directory(node_list, root, whitelist, followlinks=False):
         which satisfies run_node_dir/`whitelist`.
         And project nodes satisfy project_dir/run_node_dir/`whitelist`.
         str can be specified by wildcard.
-    followlinks : bool, optional
-        Whether scan in symbolic link. (default=False)
+    followlinks : {'False', 'True'}, optional
+        Whether scan in symbolic link.
         Be aware that setting this to True may lead to infinite recursion.
 
     Examples
@@ -79,7 +79,7 @@ def directory(node_list, root, whitelist, followlinks=False):
 def register(pipe_dics):
     pipe_dics["scan_directory"] = {
         "func": directory,
-        "args": ["root_path", "whitelist"],
-        "desc": "scan direcoty structure",
+        "args": ["root", "whitelist"],
         "kwds": ["followlinks"],
+        "desc": "Scan nodes from all directories under the directory 'root'.",
     }
