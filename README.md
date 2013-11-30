@@ -35,9 +35,28 @@ Details of **pipe**s is documented in [pipes list](doc/pipe.md).
 
 
 ### manipulations
+You can execute some pipes written in `manipulations.json` with following command.
+
+    $ bin/dataprocessor manipulations.json
+
+Following JSON executes first **pipe-name1**, next **pipe-name2**.
+**pipe**'s arguments are specified in **args** key.(**THE ORDER OF ARGS IS IMPORTANT**)
+**pipe**'s optional arguments(keywords) are specified in **kwds** key.
+Currently supported **pipe** are listed in [here](doc/pipes.md).
+Sample JSON file is in `sample` dir.
+
+
+```json
+[
+    {"name": "pipe-name1", "args": ["argument1", "argument2"], "kwds": {"keywords1": "some-value"}},
+    {"name": "pipe-name2", "args": ["argument1"]}
+]
+```
+
+
 The executable script `bin/dataprocessor` executes a procedure, that is, a list of **pipe**s
-described in the specified json file and modify a list of **node**
-stored in another json file.
+described in the specified JSON file and modify a list of **node**
+stored in another JSON file.
 You can also execute some **pipe**s via WebApp explained in the below.
 Sample usage is written in [here](sample/README.md "Sample Usage").
 
