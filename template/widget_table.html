@@ -1,20 +1,30 @@
-<table id="DataTable" border=1>
+<table class={{data.tags[0] + "TableWidget"}} border=1>
   <thead>
-    <tr>
-      {%- for key in data["header"] %}
-        <th>{{key}}</th>
+    {%- set ngroup = data.col_groupname|length %}
+    <tr class="group">
+      <th></th>
+      {%- for igroup in range(ngroup) %}
+        {%- set num  = data.col_name[igroup]|length %}
+        <th colspan="{{num}}">{{data.col_groupname[igroup]}}</th>
+      {%- endfor %}
+    </tr>
+    <tr class="items">
+      <th>name</th>
+      {%- for igroup in range(ngroup) %}
+        {%- for colname in data.col_name[igroup] %}
+          <th>{{colname}}</th>
+        {%- endfor %}
       {%- endfor %}
     </tr>
   </thead>
   <tbody>
-    {%- for index in range(data["name"]|length) %}
-      <tr align=right>
-        {%- for key in data["header"] %}
-          {%- if key == "name" %}
-            <td><a href="{{data["path"][index]}}/{{output_html}}">{{data[key][index]}}</a></td>
-          {%- else %}
-            <td>{{data[key][index]}}</td>
-          {%- endif %}
+    {%- for irow in range(data.row_name|length) %}
+        <tr align=right path={{data.row_path[irow]}}>
+        <td class="name">{{data.row_name[irow]}}</td>
+        {%- for igroup in range(ngroup) %}
+          {%- for colname in data.col_name[igroup] %}
+            <td class={{colname}}>{{data.table[igroup][colname][irow]}}</td>
+          {%- endfor %}
         {%- endfor %}
       </tr>
     {%- endfor %}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="pipes">pipes</h1>
+<ul>
+<li><a href="#add_comment">add_comment</a></li>
+<li><a href="#configure">configure</a></li>
+<li><a href="#configure_no_section">configure_no_section</a></li>
+<li><a href="#load_json">load_json</a></li>
+<li><a href="#register_figure">register_figure</a></li>
+<li><a href="#save_json">save_json</a></li>
+<li><a href="#scan_directory">scan_directory</a></li>
+</ul>
+<h2 id="add_comment">add_comment</h2>
+<p>add comment to node with path</p>
+<h3 id="args">args</h3>
+<ol type="1">
+<li><strong>comment</strong></li>
+<li><strong>path</strong></li>
+</ol>
+<h3 id="kwds">kwds</h3>
+<p>None</p>
+<h3 id="docstring">docstring</h3>
+<pre><code>Add comment to node spedcified path.
+
+Parameters
+----------
+comment: str
+       comment.
+
+node_path: str
+    This path specify the unique node.
+
+Examples
+--------
+&gt;&gt;&gt; node_list = [{&quot;path&quot;: &quot;/path/to/hoge&quot;},
+...              {&quot;path&quot;: &quot;/path/to/hogehoge&quot;}]
+&gt;&gt;&gt; add(node_list, &quot;some comments&quot;, &quot;/path/to/hoge&quot;) == [
+...     {&quot;path&quot;: &quot;/path/to/hoge&quot;, &quot;comment&quot;: &quot;some comments&quot;},
+...     {&quot;path&quot;: &quot;/path/to/hogehoge&quot;}]
+True
+&gt;&gt;&gt; add(node_list, &quot;some comments aho&quot;, &quot;/path/to/hogehoge/&quot;)
+Traceback (most recent call last):
+    ...
+Warning: There is no node with specified path. path = /path/to/hogehoge/</code></pre>
+<p><a href="#pipes">top</a></p>
+<hr>
+
+<h2 id="configure">configure</h2>
+<p>Read parameter file (use ConfigParser)</p>
+<h3 id="args-1">args</h3>
+<ol type="1">
+<li><strong>filename</strong></li>
+</ol>
+<h3 id="kwds-1">kwds</h3>
+<ul>
+<li><strong>section</strong></li>
+</ul>
+<h3 id="docstring-1">docstring</h3>
+<pre><code>Add configure to node_list.
+
+Parameters
+----------
+filename : str
+    filename of parameter configure file
+    If file is not exists, add null list.
+
+section : str
+    Specify section name in configure file.
+
+Returns
+-------
+list
+    node_list which is a list of dict.
+
+Examples
+--------
+&gt;&gt;&gt; add(node_list, &quot;configure.conf&quot;)
+&gt;&gt;&gt; # Change load section.
+&gt;&gt;&gt; add(node_list, &quot;configure.conf&quot;, &quot;defaults&quot;)</code></pre>
+<p><a href="#pipes">top</a></p>
+<hr>
+
+<h2 id="configure_no_section">configure_no_section</h2>
+<p>Read parameter file (without section)</p>
+<h3 id="args-2">args</h3>
+<ol type="1">
+<li><strong>filename</strong></li>
+</ol>
+<h3 id="kwds-2">kwds</h3>
+<ul>
+<li><strong>split_char</strong></li>
+<li><strong>comment_char</strong></li>
+</ul>
+<h3 id="docstring-2">docstring</h3>
+<pre><code>Add configure to node_list.
+
+Parameters
+----------
+filename : str
+    filename of parameter configure file
+    If file is not exists, add null list.
+split_char : str
+    Specify the deliminator char.
+comment_char : str
+    Specify the comment line signal char.
+
+Returns
+-------
+list
+    node_list which is a list of dict.
+
+Examples
+--------
+&gt;&gt;&gt; no_section(node_list, &quot;foo.conf&quot;)
+&gt;&gt;&gt; # Change deliminator and comment line signal
+&gt;&gt;&gt; no_section(node_list, &quot;foo.conf&quot;, split_char=&quot;:&quot;, comment_char=&quot;!&quot;)</code></pre>
+<p><a href="#pipes">top</a></p>
+<hr>
+
+<h2 id="load_json">load_json</h2>
+<p>load node_list from a JSON file</p>
+<h3 id="args-3">args</h3>
+<ol type="1">
+<li><strong>json_path</strong></li>
+</ol>
+<h3 id="kwds-3">kwds</h3>
+<p>None</p>
+<h3 id="docstring-3">docstring</h3>
+<p>load node_list from a JSON file</p>
+<pre><code>Parameters
+----------
+json_path : str
+    the path to JSON
+
+Returns
+-------
+list
+    node_list(arg1) + [new node list]
+
+Raises
+------
+DataProcessorError
+    occurs when JSON file does not exist.</code></pre>
+<p><a href="#pipes">top</a></p>
+<hr>
+
+<h2 id="register_figure">register_figure</h2>
+<p>add figure node into node_list</p>
+<h3 id="args-4">args</h3>
+<ol type="1">
+<li><strong>figures</strong></li>
+<li><strong>figure_directory</strong></li>
+</ol>
+<h3 id="kwds-4">kwds</h3>
+<ul>
+<li><strong>runs</strong></li>
+<li><strong>generators</strong></li>
+</ul>
+<h3 id="docstring-4">docstring</h3>
+<p>Register figure into <code>node_list</code>.</p>
+<pre><code>Parameters
+----------
+node_list : list
+    node_list
+figures : list
+    the present paths of figures
+figure_directory : str
+    the base directory where figures are saved
+runs : list
+    The paths of runs related to these figures.
+    They will be saved into node[&quot;parents&quot;]
+generators : list
+    the paths of files which should be managed with the figure;
+    s.t. gunplot file, python script, etc...</code></pre>
+<p><a href="#pipes">top</a></p>
+<hr>
+
+<h2 id="save_json">save_json</h2>
+<p>save node_list in a JSON file</p>
+<h3 id="args-5">args</h3>
+<ol type="1">
+<li><strong>json_path</strong></li>
+</ol>
+<h3 id="kwds-5">kwds</h3>
+<ul>
+<li><strong>silent</strong></li>
+</ul>
+<h3 id="docstring-5">docstring</h3>
+<p>save node_list into a JSON file</p>
+<pre><code>Parameters
+----------
+json_path : str
+    the path to JSON
+slient : bool, str, optional
+    Ask whether replace JSON file (default=False)</code></pre>
+<p><a href="#pipes">top</a></p>
+<hr>
+
+<h2 id="scan_directory">scan_directory</h2>
+<p>scan direcoty structure</p>
+<h3 id="args-6">args</h3>
+<ol type="1">
+<li><strong>root_path</strong></li>
+<li><strong>whitelist</strong></li>
+</ol>
+<h3 id="kwds-6">kwds</h3>
+<p>None</p>
+<h3 id="docstring-6">docstring</h3>
+<pre><code>Search nodes from all directories under the directory &#39;root&#39;.
+
+Run node has one or more file or directory
+which satisfies node_dir/whitelist.
+Project node has run node in its sub-directory.
+
+Examples
+--------
+
+Initialize node_list.
+&gt;&gt;&gt; node_list = directory([], &quot;scandir_path&quot;, [&quot;data/hoge*&quot;, &quot;*foo*&quot;])
+
+Rescan node_list.
+&gt;&gt;&gt; node_list = [
+...     {&#39;path&#39;: &#39;/tmp/scan_dir/run0&#39;,
+...      &#39;parents&#39;: [],   # empty
+...      &#39;children&#39;: [],  # empty
+...      &#39;name&#39;: &#39;run0&#39;,
+...      &#39;type&#39;: &#39;run&#39;}]
+&gt;&gt;&gt; node_list = directory([], &quot;scandir_path&quot;, [&quot;*.conf&quot;])</code></pre>
+<p><a href="#pipes">top</a></p>
+<hr>
+</body>
+</html>
