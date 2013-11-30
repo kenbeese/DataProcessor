@@ -1,5 +1,26 @@
-bin/dataprocessor
-============
+Table of Contents
+===============
+
+- [Typical Usage](#Typical Usage)
+- [bin/dataprocessor](#bin/dataprocessor)
+- [bin/server.py](#bin/server.py)
+- [bin/register_figure](#bin/register_figure)
+
+
+Typical Usage
+================
+Move to this sample directory.
+
+    $ ../bin/dataprocessor ./manip1.json
+    $ ../bin/server.py install
+    $ ../bin/server.py start data_information.json
+
+Open http://localhost:8080/index.html with your favorite browser.
+You can see following run directories and some additional information in its page.
+
+
+The detail description of each command is written in following section.
+
 
 Including directory and files
 --------------
@@ -13,23 +34,9 @@ Including directory and files
   - datadir/project2/run02/parameters.ini: run parameter file
   - datadir/project2/run03/parameters.conf: run parameter file
 
-Data processing procedure
------
-This library collects and processes information of run directories.
 
-Each run directory or project, which consists of multiple run directories,
-is referred to as **node**.
-Using this library, you can manipulate a list of **node** via **pipe**s.
-A **pipe** corresponds to a single manipulation.
-For exapmle, you can add new run directories or projects, add some comments to them,
-or collect information of parameters from each run directory.
-
-dataprocessor executes a procedure, that is, a list of **pipe**s
-described in the specified json file and modify a list of **node**
-stored in another json file.
-Details of **pipe**s is documented in doc/pipe.md.
-
-You can also execute some **pipe**s via WebApp explained in the below.
+bin/dataprocessor
+============
 
 Usage
 -----
@@ -54,6 +61,7 @@ in manip3.json to add a comment to run01 of project1.
 
     $ ../bin/dataprocessor ./manip3.json
 
+In detail, how to write `manipulation.json` and pipe's list are written in [here](../doc/pipes.md).
 
 bin/server.py (for webapp)
 ==========================

@@ -5,6 +5,25 @@ A data processing library.
 
 Sample usage is written in [here](sample/README.md "Sample Usage").
 
+Data processing procedure
+-----
+This library collects and processes information of run directories.
+
+Each run directory or project, which consists of multiple run directories,
+is referred to as **node**.
+Using this library, you can manipulate a list of **node** via **pipe**s.
+A **pipe** corresponds to a single manipulation.
+For exapmle, you can add new run directories or projects, add some comments to them,
+or collect information of parameters from each run directory.
+
+dataprocessor executes a procedure, that is, a list of **pipe**s
+described in the specified json file and modify a list of **node**
+stored in another json file.
+Details of **pipe**s is documented in [pipes list](doc/pipe.md).
+
+You can also execute some **pipe**s via WebApp explained in the below.
+
+
 WebApp
 ======
 You can browse your data managed with DataProcessor by a DataProcessor webapp.
