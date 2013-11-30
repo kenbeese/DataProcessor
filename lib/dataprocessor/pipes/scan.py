@@ -4,11 +4,14 @@ import os
 from glob import glob
 
 from ..nodes import get, validate_link
-from ..utility import boolenize
+from ..utility import path_expand, boolenize
 
 
 def directory(node_list, root, whitelist, followlinks=False):
     """Scan nodes from all directories under the directory 'root'.
+
+    If one directory has properties of both of 'run' and 'project',
+    type of the directory is set to 'run'.
 
     Parameters
     ----------
@@ -19,13 +22,12 @@ def directory(node_list, root, whitelist, followlinks=False):
         which satisfies run_node_dir/`whitelist`.
         And project nodes satisfy project_dir/run_node_dir/`whitelist`.
         str can be specified by wildcard.
-    followlinks : bool, optional
-        Whether scan in symbolic link. (default=False)
+    followlinks : {'False', 'True'}, optional
+        Whether scan in symbolic link.
         Be aware that setting this to True may lead to infinite recursion.
 
     Examples
     --------
-
     Initialize node_list.
     >>> node_list = directory([], "scandir_path", ["data/hoge*", "*foo*"])
 
@@ -40,7 +42,7 @@ def directory(node_list, root, whitelist, followlinks=False):
 
     """
 
-    root = os.path.abspath(os.path.expanduser(root))
+    root = path_expand(root)
     followlinks = boolenize(followlinks)
     scan_nodelist = []
     for path, dirs, files in os.walk(root, followlinks=followlinks):
@@ -79,6 +81,7 @@ def directory(node_list, root, whitelist, followlinks=False):
 def register(pipe_dics):
     pipe_dics["scan_directory"] = {
         "func": directory,
-        "args": ["root_path", "whitelist"],
-        "desc": "scan direcoty structure",
+        "args": ["root", "whitelist"],
+        "kwds": ["followlinks"],
+        "desc": "Scan nodes from all directories under the directory 'root'.",
     }
