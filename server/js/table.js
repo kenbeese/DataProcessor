@@ -108,10 +108,24 @@ function ready_table(){
 
                         // change sort order
                         sortOrder *= - 1;
-                    });
+ });
     function compare(a, b, col) {
         var _a = $(a).find('td').eq(col).text();
         var _b = $(b).find('td').eq(col).text();
-        return (_a * 1 - _b * 1);
+        if (isNaN(parseFloat(_a))) {
+            // var __a = _a.toLowerCase();
+            // var __b = _b.toLowerCase();
+            var __a = _a;
+            var __b = _b;
+            if (__a < __b) //sort string ascending
+                return -1;
+            if (__a > __b)
+                return 1;
+            return 0; //default return value (no sorting)
+        } else {
+            var __a = __a * parseFloat(_a);
+            var __b = __b * parseFloat(_b);
+            return (__a - __b);
+        }
     };
 }
