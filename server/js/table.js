@@ -135,8 +135,8 @@ function ready_table(){
                 return 1;
             return 0; //default return value (no sorting)
         } else {
-            var __a = __a * parseFloat(_a);
-            var __b = __b * parseFloat(_b);
+            var __a = parseFloat(_a);
+            var __b = parseFloat(_b);
             return (__a - __b);
         }
     };
