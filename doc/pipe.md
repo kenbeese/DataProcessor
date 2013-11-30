@@ -3,6 +3,7 @@ Pipes
 
 - [add_comment](#add_comment)
 - [configure](#configure)
+- [scan_directory](#scan_directory)
 
 add_comment
 ----------
@@ -60,3 +61,18 @@ the configure file placed in `/path/to/data/configure.ini` will be load.
 
 - **section** (default: "parameters")  
 You must specify section such as `default` or `section1` in above case.
+
+scan_directory
+--------------
+
+Scan directories and gather basic data.
+This pipe walk around directories under `root_path` and cache them.
+This also introduce types of directories: "project" and "run".
+
+### args
+
+1. **root_path** : path of root directory from which scan start
+1. **white_list** : A list of file names.  
+
+### kwds
+None
