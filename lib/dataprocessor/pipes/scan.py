@@ -4,7 +4,7 @@ import os
 from glob import glob
 
 from ..nodes import get, validate_link
-from ..utility import boolenize
+from ..utility import path_expand, boolenize
 
 
 def directory(node_list, root, whitelist, followlinks=False):
@@ -40,7 +40,7 @@ def directory(node_list, root, whitelist, followlinks=False):
 
     """
 
-    root = os.path.abspath(os.path.expanduser(root))
+    root = path_expand(root)
     followlinks = boolenize(followlinks)
     scan_nodelist = []
     for path, dirs, files in os.walk(root, followlinks=followlinks):
