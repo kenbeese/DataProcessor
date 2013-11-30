@@ -1,10 +1,10 @@
 Table of Contents
 ===============
 
-- [Typical Usage](#Typical Usage)
-- [bin/dataprocessor](#bin/dataprocessor)
-- [bin/server.py](#bin/server.py)
-- [bin/register_figure](#bin/register_figure)
+- [Typical Usage](#typical-usage)
+- [dataprocessor](#dataprocessor)
+- [server.py (for webapp](#serverpy-for-webapp)
+- [register_figure](#register_figure)
 
 
 Typical Usage
@@ -35,7 +35,7 @@ Including directory and files
   - datadir/project2/run03/parameters.conf: run parameter file
 
 
-bin/dataprocessor
+dataprocessor
 ============
 
 Usage
@@ -63,8 +63,8 @@ in manip3.json to add a comment to run01 of project1.
 
 In detail, how to write `manipulation.json` and pipe's list are written in [here](../doc/pipes.md).
 
-bin/server.py (for webapp)
-==========================
+server.py (for webapp)
+==========
 
 You have to install `python-daemon` first:
     # easy_install python-daemon
@@ -121,7 +121,7 @@ The following command stops the server.
    $ ../bin/server.py stop
 
 
-bin/register_figure
+register_figure
 =================
 
 identifier of figure
