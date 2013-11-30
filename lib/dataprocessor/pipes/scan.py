@@ -3,11 +3,11 @@ import os
 from glob import glob
 
 from ..nodes import get, validate_link
+from ..utility import boolenize
 
 
-def directory(node_list, root, whitelist):
-    """
-    Search nodes from all directories under the directory 'root'.
+def directory(node_list, root, whitelist, followlinks=False):
+    """Scan nodes from all directories under the directory 'root'.
 
     Run node has one or more file or directory
     which satisfies node_dir/whitelist.
@@ -31,8 +31,9 @@ def directory(node_list, root, whitelist):
     """
 
     root = os.path.abspath(os.path.expanduser(root))
+    followlinks = boolenize(followlinks)
     scan_nodelist = []
-    for path, dirs, files in os.walk(root):
+    for path, dirs, files in os.walk(root, followlinks=followlinks):
         dirs.sort()
         node_type = None
         parents = []
