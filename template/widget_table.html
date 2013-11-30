@@ -1,14 +1,15 @@
 <table class={{data.tags[0] + "TableWidget"}} border=1>
   <thead>
     {%- set ngroup = data.col_groupname|length %}
-    <tr>
-      <th rowspan="2"></th>
+    <tr class="group">
+      <th></th>
       {%- for igroup in range(ngroup) %}
         {%- set num  = data.col_name[igroup]|length %}
         <th colspan="{{num}}">{{data.col_groupname[igroup]}}</th>
       {%- endfor %}
     </tr>
-    <tr>
+    <tr class="items">
+      <th>name</th>
       {%- for igroup in range(ngroup) %}
         {%- for colname in data.col_name[igroup] %}
           <th>{{colname}}</th>
