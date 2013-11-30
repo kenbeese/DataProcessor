@@ -10,6 +10,9 @@ from ..utility import path_expand, boolenize
 def directory(node_list, root, whitelist, followlinks=False):
     """Scan nodes from all directories under the directory 'root'.
 
+    If one directory has properties of both of 'run' and 'project',
+    type of the directory is set to 'run'.
+
     Parameters
     ----------
     root : str
@@ -25,7 +28,6 @@ def directory(node_list, root, whitelist, followlinks=False):
 
     Examples
     --------
-
     Initialize node_list.
     >>> node_list = directory([], "scandir_path", ["data/hoge*", "*foo*"])
 
