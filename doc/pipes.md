@@ -234,17 +234,20 @@ Save node_list into a JSON file.
 
 scan_directory
 ----
-scan direcoty structure
+Scan nodes from all directories under the directory 'root'.
 
 ### args
-1. **root_path**
+1. **root**
 2. **whitelist**
 
 ### kwds
-None
+- **followlinks**
 
 ### docstring
 Scan nodes from all directories under the directory 'root'.
+
+    If one directory has properties of both of 'run' and 'project',
+    type of the directory is set to 'run'.
 
     Parameters
     ----------
@@ -255,13 +258,12 @@ Scan nodes from all directories under the directory 'root'.
         which satisfies run_node_dir/`whitelist`.
         And project nodes satisfy project_dir/run_node_dir/`whitelist`.
         str can be specified by wildcard.
-    followlinks : bool, optional
-        Whether scan in symbolic link. (default=False)
+    followlinks : {'False', 'True'}, optional
+        Whether scan in symbolic link.
         Be aware that setting this to True may lead to infinite recursion.
 
     Examples
     --------
-
     Initialize node_list.
     >>> node_list = directory([], "scandir_path", ["data/hoge*", "*foo*"])
 
