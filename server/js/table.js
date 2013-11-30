@@ -40,12 +40,12 @@ function widget_html(title, widgets){
  * ready table
  */
 function ready_table(){
-    $("tbody>tr")
-        .off("click", "td.name")
-        .off("click", "td.comment")
-        .off("blur", "input.comment");
-    $("tbody>tr")
-        .on("click", "td.name", function(event){
+    $("section, nav#Projects")
+        .off("click", "table>tbody>tr>td.name")
+        .off("click", "table>tbody>tr>td.comment")
+        .off("blur", "table>tbody>tr>input.comment");
+    $("section, nav#Projects")
+        .on("click", "table>tbody>tr>td.name", function(event){
             var name = this.innerHTML;
             var path = $(this).parent().attr("path");
             $.getJSON("/cgi-bin/body.cgi",
@@ -59,7 +59,7 @@ function ready_table(){
                     ready_table();
                 });
         })
-        .on("click", "td.comment", function(event){
+        .on("click", "table>tbody>tr>td.comment", function(event){
             var comment = this.innerHTML;
             var path = $(this).parent().attr("path");
             $(this).replaceWith(
@@ -69,7 +69,7 @@ function ready_table(){
                     .attr("path", path)
                 );
         })
-        .on("blur", "input.comment", function(event){
+        .on("blur", "table>tbody>tr>input.comment", function(event){
             var comment = this.value;
             var path = $(this).parent().attr("path");
             send_comment(comment, path);
@@ -81,33 +81,37 @@ function ready_table(){
                 );
         });
 
-    // Sort
+/**
+ * Sort table
+ */
     var sortOrder = 1;
-    $("div.Widget>table>thead>tr.items").off("click", "th");
-    $("div.Widget>table>thead>tr.items")
-        .on("click", "th", function(){
-            var $rows = $(this).parents("table").children("tbody").find("tr");
-            var col = $(this).index();
-            console.log(col);
-            $rows.sort(function(a, b){
-                return compare(a, b, col) * sortOrder;
-            });
+    $("section").off("click", "div.Widget>table>thead>tr.items>th");
+    $("section").on("click", "div.Widget>table>thead>tr.items>th",
+                    function(){
+                        // get tbody
+                        var $rows = $(this).parents("table").children("tbody").find("tr");
+                        var col = $(this).index();
 
-            $(this).parents("table").children("tbody")
-                .empty().append($rows);
+                        // Sort
+                        $rows.sort(function(a, b){
+                            return compare(a, b, col) * sortOrder;
+                        });
+                        $(this).parents("table").children("tbody")
+                            .empty().append($rows);
 
-            // mark sort order
-            var arrow = sortOrder === 1 ? "▲" : "▼";
-            $(this).parent().find('span').remove();
-            var span = $('<span>');
-            $(this).prepend(span);
-            $(this).find('span').text(arrow);
+                        // update mark of sort order
+                        var arrow = sortOrder === 1 ? "▲" : "▼";
+                        $(this).parent().find('span').remove();
+                        var span = $('<span>');
+                        $(this).prepend(span);
+                        $(this).find('span').text(arrow);
 
-            // change sort order
-            sortOrder *= - 1;
-        });
+                        // change sort order
+                        sortOrder *= - 1;
+                    });
     function compare(a, b, col) {
         var _a = $(a).find('td').eq(col).text();
         var _b = $(b).find('td').eq(col).text();
         return (_a * 1 - _b * 1);
-    }};
+    };
+}
