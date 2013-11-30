@@ -2,7 +2,6 @@
 pipes
 =====
 - [add_comment](#add_comment)
-- [plugin_configure](#plugin_configure)
 - [configure](#configure)
 - [configure_no_section](#configure_no_section)
 - [load_json](#load_json)
@@ -45,70 +44,6 @@ None
     Traceback (most recent call last):
         ...
     Warning: There is no node with specified path. path = /path/to/hogehoge/
-    
-
-[top](#pipes)
-
----------------------
-
-plugin_configure
-----
-add run cofigure
-
-### args
-1. **conf_filename**
-
-### kwds
-None
-
-### docstring
-
-    Add configure dictionary to run_list
-
-    Usage:
-
-    >>> import os
-    >>> os.mkdir("/tmp/run01/")
-    >>> os.mkdir("/tmp/run02/")
-    >>> filestring = '''[sec1]
-    ... conf1 = 3
-    ... conf2 = 4
-    ... [sec2]
-    ... conf4 = 2
-    ... conf5 = 5
-    ... '''
-    >>> f = open("/tmp/run01/para.conf", "w")
-    >>> f.write(filestring)
-    >>> f.close()
-    >>> filestring = '''[sec1]
-    ... conf1 = 21
-    ... conf2 = 1
-    ... [sec2]
-    ... conf4 = 3.23
-    ... conf5 = 42
-    ... '''
-    >>> f = open("/tmp/run02/para.conf", "w")
-    >>> f.write(filestring)
-    >>> f.close()
-    >>> filestring = '''[rundir]
-    ... conf_name = para.conf
-    ... '''
-    >>> f = open("/tmp/runs.conf", "w")
-    >>> f.write(filestring)
-    >>> f.close()
-    >>> node_list = [{"path":"/tmp/run02"}, {"path":"/tmp/run01"}]
-    >>> add(node_list, "para.conf") == [
-    ...     {'path':'/tmp/run02',
-    ...     'configure':{'conf1':'21', 'conf2': '1',
-    ...                  'conf4': '3.23', 'conf5': '42'}},
-    ...     {'path':'/tmp/run01',
-    ...     'configure':{'conf1':'3', 'conf2': '4',
-    ...                  'conf4': '2', 'conf5': '5'}}]
-    True
-    >>> os.remove("/tmp/run01/para.conf")
-    >>> os.remove("/tmp/run02/para.conf")
-    >>> os.rmdir("/tmp/run01/")
-    >>> os.rmdir("/tmp/run02/")
     
 
 [top](#pipes)
@@ -208,7 +143,7 @@ load node_list from a JSON file
 None
 
 ### docstring
-load node_list from a JSON file
+Load node_list from a JSON file.
 
     Parameters
     ----------
@@ -224,6 +159,7 @@ load node_list from a JSON file
     ------
     DataProcessorError
         occurs when JSON file does not exist.
+
     
 
 [top](#pipes)
@@ -277,7 +213,7 @@ save node_list in a JSON file
 - **silent**
 
 ### docstring
-save node_list into a JSON file
+Save node_list into a JSON file.
 
     Parameters
     ----------
@@ -285,6 +221,11 @@ save node_list into a JSON file
         the path to JSON
     slient : bool, str, optional
         Ask whether replace JSON file (default=False)
+
+    Returns
+    -------
+    list : node_list
+
     
 
 [top](#pipes)
