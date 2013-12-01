@@ -167,29 +167,30 @@ function ready_table(){
         }
         // count group number
         var group_num = {};
-        for (var i = 0; i<group_list.length; i++){
+        for (var i in group_list){
             group_num[group_list[i]] = 0;
         }
         // count each group number
         var $items = $table_object.find("thead>tr.items>th");
         for (var i = 0; i<$items.length; i++){
-            if ($items.is(":visible")) {
-                for (var j = 0; j<group_list.lenth; i++){
-                    var group_name = group_list[j];
-                    if (group_name == ""){
-                        group_num[""] += 1;
-                        continue;
+            if ($items.eq(i).is(":visible")) {
+                for (var j in group_list){
+                    if (group_list[j] == ""){
+                        if ($items.eq(i).text() == "name"){
+                            group_num[""] += 1;
+                            break;
+                        }
                     } else {
-                        if ($items[i].hasClass(group_name)){
-                            group_num[group_name] += 1;
-                        };
-                    }
-                }
-            }
-        }
+                        if ($items.eq(i).hasClass(group_list[j])){
+                            group_num[group_list[j]] += 1;
+                            break;
+                        }}}}}
+        console.log(group_num);
         // correct width of table.
         for (var i = 0; i<$groups.length; i++){
             $groups.eq(i).attr("colspan", group_num[$groups.eq(i).text()]);
-        }
-    }
-    }
+            if (group_num[$groups.eq(i).text()] == 0){
+                $groups.eq(i).hide();
+            } else {
+                $groups.eq(i).show();
+            }}}}

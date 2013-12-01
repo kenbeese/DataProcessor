@@ -2,7 +2,7 @@
   <thead>
     {%- set ngroup = data.col_groupname|length %}
     <tr class="group">
-      <th> </th>
+      <th></th>
       {%- for igroup in range(ngroup) %}
         {%- set num  = data.col_name[igroup]|length %}
         <th colspan="{{num}}">{{data.col_groupname[igroup]}}</th>
