@@ -41,7 +41,7 @@ function widget_html(title, widgets){
         // create check box
         $label.prepend(
             $("<input>").attr("type", "checkbox")
-                .attr("checked", "True").addClass($items.eq(i).text()));
+                .attr("checked", "True").addClass($items.eq(i).attr("class")));
         $div_check.append($label);
     }
     $widget_html.find("table.childrenTableWidget").before($div_check);
@@ -163,7 +163,7 @@ function ready_table(){
         // create group name list
         var group_list = [];
         for (var i = 0; i<$groups.length; i++){
-            group_list.push($groups.eq(i).text());
+            group_list.push($groups.eq(i).data("group"));
         }
         // count group number
         var group_num = {};
@@ -175,21 +175,15 @@ function ready_table(){
         for (var i = 0; i<$items.length; i++){
             if ($items.eq(i).is(":visible")) {
                 for (var j in group_list){
-                    if (group_list[j] == ""){
-                        if ($items.eq(i).text() == "name"){
-                            group_num[""] += 1;
-                            break;
-                        }
-                    } else {
-                        if ($items.eq(i).hasClass(group_list[j])){
-                            group_num[group_list[j]] += 1;
-                            break;
-                        }}}}}
+                    if ($items.eq(i).data("group") == group_list[j]){
+                        group_num[group_list[j]] += 1;
+                        break;
+                    }}}}
         console.log(group_num);
         // correct width of table.
         for (var i = 0; i<$groups.length; i++){
-            $groups.eq(i).attr("colspan", group_num[$groups.eq(i).text()]);
-            if (group_num[$groups.eq(i).text()] == 0){
+            $groups.eq(i).attr("colspan", group_num[$groups.eq(i).data("group")]);
+            if (group_num[$groups.eq(i).data("group")] == 0){
                 $groups.eq(i).hide();
             } else {
                 $groups.eq(i).show();
