@@ -25,15 +25,15 @@ Typically, **node** contains path, name, and paths of connected nodes.
 This library introduce **pipe** corresponding to a single manipulation for **node**s;
 since this library manages nodes by a list of node (called **node_list**),
 **pipe** do a single manipulation for **node_list**.
-For exapmle, 
+For example, 
 
-- "scan" pipe gathers runs or projects and appends it into the node_list,
-- "add_comment" pipe add some comments to a specified node
+- "scan_directory" pipe gathers runs or projects and appends it into the node_list.
+- "add_comment" pipe add some comments to a specified node.
 - "configure" pipe collects information of parameters from each run directory.
 
 You can easily combine them to satisfy your purpose.
 We call combined pipes as **manipulations**, and specified in JSON format.
-Details of **pipe**s is documented in [pipes list](doc/pipe.md).
+Details of **pipe**s is documented in [pipes list](doc/pipes.md).
 
 
 ### manipulations
@@ -44,8 +44,8 @@ When it is written in `manipulations.json`, you can do manipulations by the foll
     $ bin/dataprocessor manipulations.json
 
 The following JSON executes first **pipe-name1**, next **pipe-name2**.
-**pipe**'s arguments are specified in **args** key.(**THE ORDER OF ARGS IS IMPORTANT**)
-**pipe**'s optional arguments(keywords) are specified in **kwds** key.
+The **pipe**'s arguments are specified in **args** key.(**THE ORDER OF ARGS IS IMPORTANT**)
+The **pipe**'s optional arguments(keywords) are specified in **kwds** key.
 Currently supported **pipe** are listed in [here](doc/pipes.md).
 
 ```json
@@ -57,7 +57,7 @@ Currently supported **pipe** are listed in [here](doc/pipes.md).
 This JSON file is in `sample` dir.
 
 If you add a comment in node_list, you should want to save it.
-We recommend that you save is by JSON format.
+We recommend that you save it by JSON format.
 There exist JSON saver and loader pipes.
 
 WebApp
@@ -71,6 +71,7 @@ Requirements
 ------------
 
 - python-daemon (>= 1.6) (for stand a HTTP server as a daemon)
+- jinja2 (for convering template)
 
 
 For Developer
