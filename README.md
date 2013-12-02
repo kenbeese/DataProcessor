@@ -71,7 +71,7 @@ Requirements
 ------------
 
 - python-daemon (>= 1.6) (for stand a HTTP server as a daemon)
-- jinja2 (for convering template)
+- jinja2 (for converting template)
 
 
 For Developer
