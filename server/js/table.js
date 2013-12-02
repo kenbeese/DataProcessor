@@ -38,8 +38,7 @@ function widget_html(title, widgets){
     var $div_check = $("<div>").addClass("hide-show").text("Show or Hide: ");
     for (var i = 0; i<$items.length;i++){
         // checked item strings are set to bold
-        var $label = $("<label>").text($items.eq(i).text())
-                .css("font-weight", "bold");
+        var $label = $("<label>").text($items.eq(i).text()).css("font-weight", "bold");
         // create check box and hide checkbox
         $label.prepend(
             $("<input>").attr("type", "checkbox")
@@ -150,12 +149,13 @@ function ready_table(){
     $("section").on("click", "div.hide-show>label>input",
                     function(){
                         var now_class = $(this).attr("class");
-                        var selector = "th." + now_class + ","+"td." + now_class;
+                        var selector = "table th." + now_class +
+                                ", table td." + now_class +
+                                ", table input." + now_class;
                         if ($(this).is(":checked")){
                             $(this).parent().css("font-weight", "bold").css("color", "black");
                             $(this).parents("div.Widget").find(selector).show();
                         } else {
-
                             $(this).parent().css("font-weight", "normal").css("color", "gray");
                             $(this).parents("div.Widget").find(selector).hide();
                         }
@@ -184,7 +184,6 @@ function ready_table(){
                         group_num[group_list[j]] += 1;
                         break;
                     }}}}
-        console.log(group_num);
         // correct width of table.
         for (var i = 0; i<$groups.length; i++){
             $groups.eq(i).attr("colspan", group_num[$groups.eq(i).data("group")]);
