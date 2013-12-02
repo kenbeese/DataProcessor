@@ -37,12 +37,15 @@ function widget_html(title, widgets){
     var $items = $widget_html.find("table.childrenTableWidget>thead>tr.items>th");
     var $div_check = $("<div>").addClass("hide-show").text("Show or Hide: ");
     for (var i = 0; i<$items.length;i++){
-        var $label = $("<label>").text($items.eq(i).text());
-        // create check box
+        // checked item strings are set to bold
+        var $label = $("<label>").text($items.eq(i).text())
+                .css("font-weight", "bold");
+        // create check box and hide checkbox
         $label.prepend(
             $("<input>").attr("type", "checkbox")
-                .attr("checked", "True").addClass($items.eq(i).attr("class")));
+                .attr("checked", "True").addClass($items.eq(i).text()).hide());
         $div_check.append($label);
+        $div_check.append($("<span>").text(" "));
     }
     $widget_html.find("table.childrenTableWidget").before($div_check);
     return $widget_html;
@@ -148,10 +151,12 @@ function ready_table(){
                     function(){
                         var now_class = $(this).attr("class");
                         var selector = "th." + now_class + ","+"td." + now_class;
-
                         if ($(this).is(":checked")){
+                            $(this).parent().css("font-weight", "bold").css("color", "black");
                             $(this).parents("div.Widget").find(selector).show();
                         } else {
+
+                            $(this).parent().css("font-weight", "normal").css("color", "gray");
                             $(this).parents("div.Widget").find(selector).hide();
                         }
                         correct_width_table($(this).parents("div.Widget")

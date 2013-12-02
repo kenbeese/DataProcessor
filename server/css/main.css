@@ -18,6 +18,16 @@ label:hover{
 }
 
 
+div.hide-show{
+    line-height: 180%;
+}
+
+label{
+    border: 1px solid #AAAAAA;
+    background: #eff;
+    padding: 0px 2px 0px;
+}
+
 tr:nth-child(odd)
        {
        background-color: #fff;
