@@ -41,6 +41,8 @@ class _TableData(object):
     True
     >>> table_data.row_path == ['/tmp/run0', '/tmp/run1']
     True
+    >>> table_data.path == '/tmp'
+    True
 
     """
 
@@ -57,6 +59,7 @@ class _TableData(object):
         self.row_path = self.__get_valuelist(self._linked_node, "path")
         self.col_name = self.__get_col_name(groups, self._dict_path,
                                             self._linked_node)
+        self.path = node["path"]
 
         for idx in range(len(groups)):
             tble = {}
