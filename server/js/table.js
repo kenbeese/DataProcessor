@@ -36,16 +36,31 @@ function widget_html(title, widgets){
     // create hide and show checkbox
     var $items = $widget_html.find("table.childrenTableWidget>thead>tr.items>th");
     var $div_check = $("<div>").addClass("hide-show").text("Show or Hide: ");
+    var previous_group = "";
+    var $group = "";
+    var $label = "";
+    var $input = "";
     for (var i = 0; i<$items.length;i++){
         // checked item strings are set to bold
-        var $label = $("<label>").text($items.eq(i).text()).css("font-weight", "bold");
+        var now_item = $items.eq(i).attr("class");
+        var group = $items.eq(i).data("group");
+        if (group != previous_group) {
+            $div_check.append($group);
+            $group = $("<div>").text(": ").addClass("group");
+            $label = $("<label>").text(group).addClass("group").css("font-weight", "bold");
+            $input = $("<input>").attr("type", "checkbox")
+                .attr("checked", true).data("group", group);
+            $group.prepend($label.prepend($input));
+        }
+        $label = $("<label>").text(now_item).addClass("item").css("font-weight", "bold");
         // create check box and hide checkbox
-        $label.prepend(
-            $("<input>").attr("type", "checkbox")
-                .attr("checked", "True").addClass($items.eq(i).text()).hide());
-        $div_check.append($label);
-        $div_check.append($("<span>").text(" "));
+        $label.prepend($("<input>").attr("type", "checkbox")
+                       .attr("checked", true).addClass($items.eq(i).attr("class")));
+        $group.append($label);
+        $group.append($("<span>").text(" "));
+        previous_group = group;
     }
+    $div_check.append($group);
     $widget_html.find("table.childrenTableWidget").before($div_check);
     return $widget_html;
 }
@@ -145,10 +160,10 @@ function ready_table(){
         }
     };
 
-/**2
+/**
  * Hide or Show table Item
 */
-    $("section").on("click", "div.hide-show>label>input",
+    $("section").on("click", "div.hide-show>div.group>label.item>input",
                     function(){
                         var now_class = $(this).attr("class");
                         var selector = "table th." + now_class +
@@ -193,4 +208,26 @@ function ready_table(){
                 $groups.eq(i).hide();
             } else {
                 $groups.eq(i).show();
-            }}}}
+            }}}
+
+    $("section").on("click", "div.hide-show>div.group>label.group>input",
+                    function(){
+                        var now_group = $(this).data("group");
+                        var selector = "table th[data-group=" + now_group + "]" +
+                                ", table td[data-group=" + now_group + "]";
+                        if ($(this).is(":checked")){
+                            $(this).parent().css("font-weight", "bold").css("color", "black");
+                            $(this).parent().siblings().css("font-weight", "bold").css("color", "black");
+                            $(this).parent().siblings().children().attr("checked", true);
+                            $(this).parents("div.Widget").find(selector).show();
+                        } else {
+                            $(this).parent().css("font-weight", "normal").css("color", "gray");
+                            $(this).parent().siblings().css("font-weight", "normal").css("color", "gray");
+                            $(this).parent().siblings().children().attr("checked", false);
+                            $(this).parents("div.Widget").find(selector).hide();
+                        }
+                        correct_width_table($(this).parents("div.Widget").find("table.childrenTableWidget"));
+                    });
+
+
+            }

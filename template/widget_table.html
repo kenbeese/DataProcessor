@@ -20,7 +20,7 @@
   <tbody>
     {%- for irow in range(data.row_name|length) %}
         <tr align=right path={{data.row_path[irow]}}>
-        <td class="name">{{data.row_name[irow]}}</td>
+        <td class="name" data-group="name">{{data.row_name[irow]}}</td>
         {%- for igroup in range(ngroup) %}
           {%- for colname in data.col_name[igroup] %}
             <td class="{{colname}}" data-group="{{data.col_groupname[igroup]}}">{{data.table[igroup][colname][irow]}}</td>
