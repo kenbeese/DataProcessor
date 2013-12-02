@@ -82,7 +82,6 @@ function create_editable_table($widget_html){
         previous_group = group;
     });
     $div_check.append($group);
-
     $widget_html.find("table.childrenTableWidget").before($div_check);
     // hide previously hidden item.
     $widget_html.find("div.hide-show span.item").each( function(){
@@ -204,17 +203,17 @@ function ready_table(){
         var now_item = $this.data("item");
         var selector = "table th." + now_item +
                 ", table td." + now_item;
-        if ($this.data("show")){
+        if ($this.data("show") == 1){
             $this.css("font-weight", "normal").css("color", "gray");
             $this.parents("div.Widget").find(selector).hide();
             $this.data("show", 0);
-            $.cookie($(this).parents("div.Widget").find("table").attr("path") + "-" +
+            $.cookie($this.parents("div.Widget").find("table").attr("path") + "-" +
                      $this.data("group") + "-" + now_item + "-show", 0);
         } else {
             $this.css("font-weight", "bold").css("color", "black");
             $this.parents("div.Widget").find(selector).show();
             $this.data("show", 1);
-            $.cookie($(this).parents("div.Widget").find("table").attr("path") + "-" +
+            $.cookie($this.parents("div.Widget").find("table").attr("path") + "-" +
                      $this.data("group") + "-" + now_item + "-show", 1);
         }
         correct_width_table($this.parents("div.Widget")
@@ -229,7 +228,7 @@ function ready_table(){
                         var now_group = $(this).data("group");
                         var selector = "table th[data-group=" + now_group + "]" +
                                 ", table td[data-group=" + now_group + "]";
-                        if ($(this).data("show")){
+                        if ($(this).data("show") == 1){
                             $(this).css("font-weight", "normal").css("color", "gray");
                             $(this).siblings().css("font-weight", "normal").css("color", "gray");
                             $(this).siblings().data("show", 0);
