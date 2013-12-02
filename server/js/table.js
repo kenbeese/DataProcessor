@@ -35,10 +35,10 @@ function widget_html(title, widgets){
     }
     // create hide and show checkbox
     var $items = $widget_html.find("table.childrenTableWidget>thead>tr.items>th");
-    var $div_check = $("<div>").addClass("hide-show").text("Show or Hide: ");
+    var $div_check = $("<div>").addClass("hide-show");
     var previous_group = "";
     var $group = "";
-    var $label = "";
+    var $span = "";
     var $input = "";
     for (var i = 0; i<$items.length;i++){
         // checked item strings are set to bold
@@ -46,17 +46,15 @@ function widget_html(title, widgets){
         var group = $items.eq(i).data("group");
         if (group != previous_group) {
             $div_check.append($group);
-            $group = $("<div>").text(": ").addClass("group");
-            $label = $("<label>").text(group).addClass("group").css("font-weight", "bold");
-            $input = $("<input>").attr("type", "checkbox")
-                .attr("checked", true).data("group", group);
-            $group.prepend($label.prepend($input));
+            $group = $("<div>").text(": ");
+            $span = $("<span>").text(group).addClass("group")
+                .css("font-weight", "bold")
+                .data("group", group).data("show", true);
+            $group.prepend($span);
         }
-        $label = $("<label>").text(now_item).addClass("item").css("font-weight", "bold");
-        // create check box and hide checkbox
-        $label.prepend($("<input>").attr("type", "checkbox")
-                       .attr("checked", true).addClass($items.eq(i).attr("class")));
-        $group.append($label);
+        $span = $("<span>").text(now_item).addClass("item").css("font-weight", "bold")
+            .data("item", now_item).data("show", true);
+        $group.append($span);
         $group.append($("<span>").text(" "));
         previous_group = group;
     }
@@ -163,18 +161,22 @@ function ready_table(){
 /**
  * Hide or Show table Item
 */
-    $("section").on("click", "div.hide-show>div.group>label.item>input",
+    $("section")
+        .off("click", "div.hide-show>div>span.item");
+    $("section").on("click", "div.hide-show>div>span.item",
                     function(){
-                        var now_class = $(this).attr("class");
-                        var selector = "table th." + now_class +
-                                ", table td." + now_class +
-                                ", table input." + now_class;
-                        if ($(this).is(":checked")){
-                            $(this).parent().css("font-weight", "bold").css("color", "black");
-                            $(this).parents("div.Widget").find(selector).show();
-                        } else {
-                            $(this).parent().css("font-weight", "normal").css("color", "gray");
+                        var now_item = $(this).data("item");
+                        var selector = "table th." + now_item +
+                                ", table td." + now_item;
+                        console.log($(this).data("show"));
+                        if ($(this).data("show")){
+                            $(this).css("font-weight", "normal").css("color", "gray");
                             $(this).parents("div.Widget").find(selector).hide();
+                            $(this).data("show", false);
+                        } else {
+                            $(this).css("font-weight", "bold").css("color", "black");
+                            $(this).parents("div.Widget").find(selector).show();
+                            $(this).data("show", true);
                         }
                         correct_width_table($(this).parents("div.Widget")
                                             .find("table.childrenTableWidget"));
@@ -194,7 +196,7 @@ function ready_table(){
         }
         // count each group number
         var $items = $table_object.find("thead>tr.items>th");
-        for (var i = 0; i<$items.length; i++){
+        for (var i = 0; i<$items.length; i++){ //
             if ($items.eq(i).is(":visible")) {
                 for (var j in group_list){
                     if ($items.eq(i).data("group") == group_list[j]){
@@ -210,21 +212,26 @@ function ready_table(){
                 $groups.eq(i).show();
             }}}
 
-    $("section").on("click", "div.hide-show>div.group>label.group>input",
+
+    $("section")
+        .off("click", "div.hide-show>div>span.group");
+    $("section").on("click", "div.hide-show>div>span.group",
                     function(){
                         var now_group = $(this).data("group");
                         var selector = "table th[data-group=" + now_group + "]" +
                                 ", table td[data-group=" + now_group + "]";
-                        if ($(this).is(":checked")){
-                            $(this).parent().css("font-weight", "bold").css("color", "black");
-                            $(this).parent().siblings().css("font-weight", "bold").css("color", "black");
-                            $(this).parent().siblings().children().attr("checked", true);
-                            $(this).parents("div.Widget").find(selector).show();
-                        } else {
-                            $(this).parent().css("font-weight", "normal").css("color", "gray");
-                            $(this).parent().siblings().css("font-weight", "normal").css("color", "gray");
-                            $(this).parent().siblings().children().attr("checked", false);
+                        if ($(this).data("show")){
+                            $(this).css("font-weight", "normal").css("color", "gray");
+                            $(this).siblings().css("font-weight", "normal").css("color", "gray");
+                            $(this).siblings().data("show", false);
+                            $(this).data("show", false);
                             $(this).parents("div.Widget").find(selector).hide();
+                        } else {
+                            $(this).css("font-weight", "bold").css("color", "black");
+                            $(this).siblings().css("font-weight", "bold").css("color", "black");
+                            $(this).siblings().data("show", true);
+                            $(this).data("show", true);
+                            $(this).parents("div.Widget").find(selector).show();
                         }
                         correct_width_table($(this).parents("div.Widget").find("table.childrenTableWidget"));
                     });
