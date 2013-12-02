@@ -3,7 +3,7 @@ td.comment{
     width: 300px;
 }
 
-td.comment:hover{
+td.comment:hover, td.name:hover, label:hover{
     background: #DDDDDD;
 }
 
@@ -13,14 +13,10 @@ tr>input.comment{
     size: 120;
 }
 
-label:hover{
-    background: #DDDDDD;
-}
-
-
 div.hide-show{
     line-height: 180%;
 }
+
 
 label{
     border: 1px solid #AAAAAA;
