@@ -3,7 +3,7 @@ td.comment{
     width: 300px;
 }
 
-td.comment:hover{
+td.comment:hover, td.name:hover, label:hover{
     background: #DDDDDD;
 }
 
@@ -12,11 +12,6 @@ tr>input.comment{
     width: 300px;
     size: 120;
 }
-
-label:hover{
-    background: #DDDDDD;
-}
-
 
 tr:nth-child(odd)
        {
