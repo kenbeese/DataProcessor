@@ -44,8 +44,8 @@ When it is written in `manipulations.json`, you can do manipulations by the foll
     $ bin/dataprocessor manipulations.json
 
 The following JSON executes first **pipe-name1**, next **pipe-name2**.
-The **pipe**'s arguments are specified in **args** key.(**THE ORDER OF ARGS IS IMPORTANT**)
-The **pipe**'s optional arguments(keywords) are specified in **kwds** key.
+**pipe**'s arguments are specified in **args** key.(**THE ORDER OF ARGS IS IMPORTANT**)
+**pipe**'s optional arguments(keywords) are specified in **kwds** key.
 Currently supported **pipe** are listed in [here](doc/pipes.md).
 
 ```json
