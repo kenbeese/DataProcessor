@@ -21,7 +21,7 @@ function correct_width_table($table_object){
         group_num[group_list[i]] = 0;
     }
     // count each group number
-    $table_object.parent().find("div.hide-show div>span.item").each(function(){
+    $table_object.parent().find("div.tableMenu div>span.item").each(function(){
         if ($(this).hasClass("show")) {
             for (var j in group_list){
                 if ($(this).data("group") == group_list[j]){
@@ -43,7 +43,7 @@ function add_menu($widget_html){
 
     // create hide and show checkbox
     var $items = $widget_html.find("table.childrenTableWidget>thead>tr.items>th");
-    var $div_check = $("<div>").addClass("hide-show");
+    var $div_check = $("<div>").addClass("tableMenu");
     var previous_group = "";
     var $group;
     /* create following group blocks
@@ -86,7 +86,7 @@ function add_menu($widget_html){
     $div_check.append($group);
     $widget_html.find("table.childrenTableWidget").before($div_check);
     // hide previously hidden item.
-    $widget_html.find("div.hide-show span.item").each( function(){
+    $widget_html.find("div.tableMenu span.item").each( function(){
         if (! $(this).hasClass("show")){
             var selector = "table th." + $(this).data("item") +
                     ", table td." + $(this).data("item");
@@ -108,9 +108,9 @@ function enable_name_link($wrap_table){
             var name = this.innerHTML;
             var path = $(this).parent().attr("path");
             get_widgets(path, function($widget){
-                $wrap_table = add_widget(name, $widget);
-                ready_table_all($wrap_table);
-            })
+                add_widget(name, $widget);
+                ready_table();
+            });
         });
 }
 
@@ -191,8 +191,8 @@ function enable_show_hide($wrap_table){
      * wrap_table : wrap set including tables
      */
     $wrap_table
-        .off("click", "div.hide-show>div>span.item")
-        .on("click", "div.hide-show>div>span.item", function(){
+        .off("click", "div.tableMenu>div>span.item")
+        .on("click", "div.tableMenu>div>span.item", function(){
             var now_item = $(this).data("item");
             var selector = "table th." + now_item +
                     ", table td." + now_item;
@@ -210,8 +210,8 @@ function enable_show_hide($wrap_table){
             correct_width_table($(this).parents("div.Widget")
                                 .find("table.childrenTableWidget"));
         })
-        .off("click", "div.hide-show>div>span.group")
-        .on("click", "div.hide-show>div>span.group", function(){
+        .off("click", "div.tableMenu>div>span.group")
+        .on("click", "div.tableMenu>div>span.group", function(){
             var now_group = $(this).data("group");
             var selector = "table th[data-group=" + now_group + "]" +
                     ", table td[data-group=" + now_group + "]";

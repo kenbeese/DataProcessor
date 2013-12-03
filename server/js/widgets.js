@@ -32,6 +32,5 @@ function add_widget(title, $widget_inner_html){
         })
         .appendTo($widget_html);
     return $widget_html.append($widget_inner_html)
-                       .appendTo("section#Widgets")
+                       .appendTo("section#Widgets");
 }
-

@@ -13,23 +13,23 @@ tr>input.comment{
     size: 120;
 }
 
-div.hide-show{
+div.tableMenu{
     line-height: 180%;
 
 }
 
-div.hide-show>div{
+div.tableMenu>div{
     border: 2px outset #000000;
     padding: 0px 2px;
     margin: 5px 0px;
 }
 
-div.hide-show span{
+div.tableMenu span{
     font-weight: normal;
     color: glay;
 }
 
-div.hide-show span.show{
+div.tableMenu span.show{
     font-weight: bold;
     color: black;
 }
