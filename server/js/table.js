@@ -69,7 +69,7 @@ function ready_table(){
                     .attr("value", comment)
                     .attr("path", path)
                 );
-            $parent.find("input.comment").focus();
+            $parent.children("input.comment").focus();
         })
         .on("blur", "table>tbody>tr>input.comment", function(event){
             var comment = this.value;
