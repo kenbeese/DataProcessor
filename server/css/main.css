@@ -24,7 +24,15 @@ div.hide-show>div{
     margin: 5px 0px;
 }
 
+div.hide-show span{
+    font-weight: normal;
+    color: glay;
+}
 
+div.hide-show span.show{
+    font-weight: bold;
+    color: black;
+}
 
 span.item{
     border: 1px solid #AAAAAA;

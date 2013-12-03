@@ -60,8 +60,7 @@ function create_editable_table($widget_html){
         if (group != previous_group){
             $div_check.append($group);
             $group = $("<div>").text(": ");
-            var $span = $("<span>").text(group).addClass("group").addClass("show").data("group", group);;
-            $span.css("font-weight", "bold");
+            var $span = $("<span>").text(group).addClass("group").addClass("show").data("group", group);
             $group.prepend($span);
         }
         // read coockie data
@@ -78,7 +77,6 @@ function create_editable_table($widget_html){
         if (show == "1") {
             $span.addClass("show");
         }
-        $span.css("font-weight", "bold");
         $group.append($span);
         $group.append($("<span>").text(" "));
         // for next group
@@ -91,7 +89,6 @@ function create_editable_table($widget_html){
         if (! $(this).hasClass("show")){
             var selector = "table th." + $(this).data("item") +
                     ", table td." + $(this).data("item");
-            $(this).css("font-weight", "normal").css("color", "gray");
             $(this).parents("div.Widget").find(selector).hide();
         }});
     correct_width_table($widget_html.find("table.childrenTableWidget"));
@@ -207,13 +204,11 @@ function ready_table(){
         var selector = "table th." + now_item +
                 ", table td." + now_item;
         if ($this.hasClass("show")){
-            $this.css("font-weight", "normal").css("color", "gray");
             $this.parents("div.Widget").find(selector).hide();
             $this.removeClass("show");
             $.cookie($this.parents("div.Widget").find("table").attr("path") + "-" +
                      $this.data("group") + "-" + now_item + "-show", 0);
         } else {
-            $this.css("font-weight", "bold").css("color", "black");
             $this.parents("div.Widget").find(selector).show();
             $this.addClass("show");
             $.cookie($this.parents("div.Widget").find("table").attr("path") + "-" +
@@ -232,8 +227,6 @@ function ready_table(){
                         var selector = "table th[data-group=" + now_group + "]" +
                                 ", table td[data-group=" + now_group + "]";
                         if ($(this).hasClass("show")){
-                            $(this).css("font-weight", "normal").css("color", "gray");
-                            $(this).siblings().css("font-weight", "normal").css("color", "gray");
                             $(this).siblings().removeClass("show");
                             $(this).siblings().each(function(){
                                 $.cookie($(this).parents("div.Widget").find("table").attr("path") + "-" +
@@ -243,8 +236,6 @@ function ready_table(){
                             $(this).removeClass("show");
                             $(this).parents("div.Widget").find(selector).hide();
                         } else {
-                            $(this).css("font-weight", "bold").css("color", "black");
-                            $(this).siblings().css("font-weight", "bold").css("color", "black");
                             $(this).siblings().addClass("show");
                             $(this).siblings().filter(".item").each(function(){
                                 $.cookie($(this).parents("div.Widget").find("table").attr("path") + "-" +
