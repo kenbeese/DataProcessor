@@ -60,7 +60,7 @@ function create_editable_table($widget_html){
         if (group != previous_group){
             $div_check.append($group);
             $group = $("<div>").text(": ");
-            var $span = $("<span>").text(group).addClass("group").data("show", 1).data("group", group);;
+            var $span = $("<span>").text(group).addClass("group").addClass("show").data("group", group);;
             $span.css("font-weight", "bold");
             $group.prepend($span);
         }
@@ -74,7 +74,10 @@ function create_editable_table($widget_html){
         }
         // set visible state
         $span = $("<span>").text(now_item).addClass("item");
-        $span.data("item", now_item).data("group", group).data("show", show);
+        $span.data("item", now_item).data("group", group);
+        if (show == "1") {
+            $span.addClass("show");
+        }
         $span.css("font-weight", "bold");
         $group.append($span);
         $group.append($("<span>").text(" "));
@@ -85,7 +88,7 @@ function create_editable_table($widget_html){
     $widget_html.find("table.childrenTableWidget").before($div_check);
     // hide previously hidden item.
     $widget_html.find("div.hide-show span.item").each( function(){
-        if ($(this).data("show") == 0){
+        if (! $(this).hasClass("show")){
             var selector = "table th." + $(this).data("item") +
                     ", table td." + $(this).data("item");
             $(this).css("font-weight", "normal").css("color", "gray");
@@ -203,16 +206,16 @@ function ready_table(){
         var now_item = $this.data("item");
         var selector = "table th." + now_item +
                 ", table td." + now_item;
-        if ($this.data("show") == 1){
+        if ($this.hasClass("show")){
             $this.css("font-weight", "normal").css("color", "gray");
             $this.parents("div.Widget").find(selector).hide();
-            $this.data("show", 0);
+            $this.removeClass("show");
             $.cookie($this.parents("div.Widget").find("table").attr("path") + "-" +
                      $this.data("group") + "-" + now_item + "-show", 0);
         } else {
             $this.css("font-weight", "bold").css("color", "black");
             $this.parents("div.Widget").find(selector).show();
-            $this.data("show", 1);
+            $this.addClass("show");
             $.cookie($this.parents("div.Widget").find("table").attr("path") + "-" +
                      $this.data("group") + "-" + now_item + "-show", 1);
         }
@@ -228,27 +231,27 @@ function ready_table(){
                         var now_group = $(this).data("group");
                         var selector = "table th[data-group=" + now_group + "]" +
                                 ", table td[data-group=" + now_group + "]";
-                        if ($(this).data("show") == 1){
+                        if ($(this).hasClass("show")){
                             $(this).css("font-weight", "normal").css("color", "gray");
                             $(this).siblings().css("font-weight", "normal").css("color", "gray");
-                            $(this).siblings().data("show", 0);
+                            $(this).siblings().removeClass("show");
                             $(this).siblings().each(function(){
                                 $.cookie($(this).parents("div.Widget").find("table").attr("path") + "-" +
                                          $(this).data("group") + "-" +
                                          $(this).data("item") + "-show", 0);
                             });
-                            $(this).data("show", 0);
+                            $(this).removeClass("show");
                             $(this).parents("div.Widget").find(selector).hide();
                         } else {
                             $(this).css("font-weight", "bold").css("color", "black");
                             $(this).siblings().css("font-weight", "bold").css("color", "black");
-                            $(this).siblings().data("show", 1);
-                            $(this).siblings().each(function(){
+                            $(this).siblings().addClass("show");
+                            $(this).siblings().filter(".item").each(function(){
                                 $.cookie($(this).parents("div.Widget").find("table").attr("path") + "-" +
                                          $(this).data("group") + "-" +
                                          $(this).data("item") + "-show", 1);
                             });
-                            $(this).data("show", 1);
+                            $(this).addClass("show");
                             $(this).parents("div.Widget").find(selector).show();
                         }
                         correct_width_table($(this).parents("div.Widget").find("table.childrenTableWidget"));
@@ -271,7 +274,7 @@ function correct_width_table($table_object){
     }
     // count each group number
     $table_object.parent().find("div.hide-show div>span.item").each(function(){
-        if ($(this).data("show") == 1) {
+        if ($(this).hasClass("show")) {
             for (var j in group_list){
                 if ($(this).data("group") == group_list[j]){
                     group_num[group_list[j]] += 1;
