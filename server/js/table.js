@@ -108,8 +108,8 @@ function enable_name_link($wrap_table){
             var name = this.innerHTML;
             var path = $(this).parent().attr("path");
             get_widgets(path, function($widget){
-                add_widget(name, $widget);
-                ready_table();
+                $wrap_table = add_widget(name, $widget);
+                ready_table_all($wrap_table);
             });
         });
 }
