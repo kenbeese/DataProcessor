@@ -108,8 +108,8 @@ function enable_name_link($wrap_table){
             var name = this.innerHTML;
             var path = $(this).parent().attr("path");
             get_widgets(path, function($widget){
-                add_widget(name, $widget);
-                ready_table();
+                $wrap_table = add_widget(name, $widget);
+                ready_table_all($wrap_table);
             })
         });
 }
@@ -238,12 +238,15 @@ function enable_show_hide($wrap_table){
         });
 }
 
-function ready_table(){
-    var $wrap_table_all = $("section#Widgets,nav#Projects");
-    var $wrap_table_widgets = $("section#Widgets");
-    add_menu($wrap_table_widgets);
-    enable_name_link($wrap_table_all);
-    enable_editable_comment($wrap_table_all);
-    enable_sort($wrap_table_widgets);
-    enable_show_hide($wrap_table_widgets);
+function ready_table_common($wrap_table){
+    enable_name_link($wrap_table);
+    enable_editable_comment($wrap_table);
+}
+
+function ready_table_all($wrap_table){
+    add_menu($wrap_table);
+    enable_name_link($wrap_table);
+    enable_editable_comment($wrap_table);
+    enable_sort($wrap_table);
+    enable_show_hide($wrap_table);
 }

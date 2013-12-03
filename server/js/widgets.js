@@ -31,7 +31,7 @@ function add_widget(title, $widget_inner_html){
             $(this).parent().remove();
         })
         .appendTo($widget_html);
-    $widget_html.append($widget_inner_html);
-    $("section#Widgets").append($widget_html)
+    return $widget_html.append($widget_inner_html)
+                       .appendTo("section#Widgets")
 }
 
