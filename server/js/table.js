@@ -48,9 +48,9 @@ function add_menu($widget_html){
     var $group;
     /* create following group blocks
      <div>
-     <span class="group" show=1 group="group1">group1</span>:
-     <span class="item" show=? group="group1">item1</span>
-     <span class="item" show=? group="group1">item2</span>
+     <span class="group show" show=1 data-group="group1">group1</span>:
+     <span class="item show" data-item="item1" data-group="group1">item1</span>
+     <span class="item show" data-item="item2" data-group="group1">item2</span>
      </div>
      */
     $items.each(function (){
@@ -61,7 +61,8 @@ function add_menu($widget_html){
         if (group != previous_group){
             $div_check.append($group);
             $group = $("<div>").text(": ");
-            var $span = $("<span>").text(group).addClass("group").addClass("show").data("group", group);
+            var $span = $("<span>").text(group).addClass("group")
+                    .addClass("show").attr("data-group", group);
             $group.prepend($span);
         }
         // read coockie data
@@ -74,7 +75,7 @@ function add_menu($widget_html){
         }
         // set visible state
         $span = $("<span>").text(now_item).addClass("item");
-        $span.data("item", now_item).data("group", group);
+        $span.attr("data-item", now_item).attr("data-group", group);
         if (show == "1") {
             $span.addClass("show");
         }
@@ -127,11 +128,13 @@ function enable_editable_comment($wrap_table){
             var comment = this.innerHTML;
             var path = $(this).parent().attr("path");
             var $parent = $(this).parent();
+            var group = $(this).data("group");
             $(this).replaceWith(
                 $("<input>")
                     .addClass("comment")
                     .attr("value", comment)
                     .attr("path", path)
+                    .attr("data-group", group)
                 );
             $parent.children("input.comment").focus();
         })
@@ -139,12 +142,14 @@ function enable_editable_comment($wrap_table){
         .on("blur", "table>tbody>tr>input.comment", function(event){
             var comment = this.value;
             var path = $(this).parent().attr("path");
+            var group = $(this).data("group");
             send_comment(comment, path);
             $(this).replaceWith(
                 $("<td>")
                     .addClass("comment")
                     .text(comment)
                     .attr("path", path)
+                    .attr("data-group", group)
                 );
         });
 }
