@@ -62,12 +62,14 @@ function ready_table(){
         .on("click", "table>tbody>tr>td.comment", function(event){
             var comment = this.innerHTML;
             var path = $(this).parent().attr("path");
+            var $parent = $(this).parent();
             $(this).replaceWith(
                 $("<input>")
                     .addClass("comment")
                     .attr("value", comment)
                     .attr("path", path)
                 );
+            $parent.children("input.comment").focus();
         })
         .on("blur", "table>tbody>tr>input.comment", function(event){
             var comment = this.value;
