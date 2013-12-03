@@ -133,7 +133,7 @@ function enable_editable_comment($wrap_table){
                     .attr("value", comment)
                     .attr("path", path)
                 );
-            $parent.find("input.comment").focus();
+            $parent.children("input.comment").focus();
         })
         .off("blur", "table>tbody>tr>input.comment")
         .on("blur", "table>tbody>tr>input.comment", function(event){
