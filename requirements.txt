@@ -1,0 +1,2 @@
+jinja2>=1.7
+python-daemon>=1.6

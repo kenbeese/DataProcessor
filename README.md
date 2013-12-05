@@ -1,5 +1,6 @@
 DataProcessor
 =============
+[![Build Status](https://travis-ci.org/kenbeese/DataProcessor.png)](https://travis-ci.org/kenbeese/DataProcessor)
 
 A data processing library.
 
