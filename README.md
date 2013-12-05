@@ -1,6 +1,6 @@
 DataProcessor
 =============
-[![Build Status](https://secure.travis-ci.org/kenbeese/DataProcessor.png?branch=master(https://travis-ci.org/kenbeese/DataProcessor)
+[![Build Status](https://travis-ci.org/kenbeese/DataProcessor.png)](https://travis-ci.org/kenbeese/DataProcessor)
 
 A data processing library.
 
