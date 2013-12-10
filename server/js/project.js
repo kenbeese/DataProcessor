@@ -33,6 +33,6 @@ $(function(){
                 }
                 $("nav#Projects>table>tbody").append($tbody);
             }
-            ready_table();
+            ready_table_common($("nav#Projects"));
         });
 });

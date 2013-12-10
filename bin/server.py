@@ -60,10 +60,16 @@ def install(args):
     """Install jQuery."""
     root_dir = dp.utility.check_directory(args.root)
     dest_path = os.path.join(root_dir, "js")
+
     jquery_filename = "jquery-1.10.2.js"
     jquery_url = "http://code.jquery.com/" + jquery_filename
     with open(os.path.join(dest_path, jquery_filename), "w") as f:
         f.write(urllib2.urlopen(jquery_url).read())
+
+    jquery_cookie_filename = "jquery.cookie.js"
+    jquery_cookie_url = "https://raw.github.com/carhartl/jquery-cookie/master/" + jquery_cookie_filename
+    with open(os.path.join(dest_path, jquery_cookie_filename), "w") as f:
+        f.write(urllib2.urlopen(jquery_cookie_url).read())
 
 
 def main():
