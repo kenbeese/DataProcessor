@@ -45,9 +45,11 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
     skip_validate_link : bool, optional
         skip link validation (default False)
     strategy : str, optional {"update", "replace"}
-        If there is a node, which will
-        - "update"
-        - "replace"
+        The strategy for the case
+        where there exists a node whose "path" is same as new one
+
+        - "update" : use dict.update to update existing node
+        - "replace" : replace existing node with new node
 
     Examples
     --------
@@ -76,7 +78,34 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
 
 
 def check_duplicate(node_list):
-    """ check duplicate node
+    """ check if duplicated nodes exist
+
+    only check their paths
+
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes (not modified)
+
+    Returns
+    -------
+    list of str
+        return the list of duplicated nodes' paths
+
+    """
+    paths = []
+    dup_paths = []
+    for node in node_list:
+        path = node["path"]
+        if path not in paths:
+            paths.append(path)
+        else:
+            dup_paths.append(path)
+    return dup_paths
+
+
+def merge_duplicate(node_list):
+    """ merge duplicate node
 
     If duplicated nodes are found, they will be merged.
 
