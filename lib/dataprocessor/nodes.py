@@ -127,6 +127,7 @@ def merge_duplicate(node_list):
     """ merge duplicate node
 
     If duplicated nodes are found, they will be merged.
+    The latter node has priority in merging (see Examples)
 
     Parameters
     ----------
@@ -136,6 +137,15 @@ def merge_duplicate(node_list):
     Returns
     -------
     node_list : list
+
+    Examples
+    --------
+    >>> node_list = [
+    ...     {"path": "/path/1", "attr1": "value1"},
+    ...     {"path": "/path/1", "attr1": "value2"},
+    ... ]
+    >>> merge_duplicate(node_list)
+    [{'path': '/path/1', 'attr1': 'value2'}]
 
     """
     new_node_list = []
