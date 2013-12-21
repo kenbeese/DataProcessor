@@ -1,21 +1,33 @@
 # coding=utf-8
+"""Scan directories as nodes."""
 import os
 from glob import glob
 
 from ..nodes import get, validate_link
+from ..utility import path_expand, boolenize
 
 
-def directory(node_list, root, whitelist):
-    """
-    Search nodes from all directories under the directory 'root'.
+def directory(node_list, root, whitelist, followlinks=False):
+    """Scan nodes from all directories under the directory 'root'.
 
-    Run node has one or more file or directory
-    which satisfies node_dir/whitelist.
-    Project node has run node in its sub-directory.
+    If one directory has properties of both of 'run' and 'project',
+    type of the directory is set to 'run'.
+
+    Parameters
+    ----------
+    root : str
+        Scan directories recursively under the directory `root`.
+    whitelist : list of str
+        Run node has one or more file or directory
+        which satisfies run_node_dir/`whitelist`.
+        And project nodes satisfy project_dir/run_node_dir/`whitelist`.
+        str can be specified by wildcard.
+    followlinks : {'False', 'True'}, optional
+        Whether scan in symbolic link.
+        Be aware that setting this to True may lead to infinite recursion.
 
     Examples
     --------
-
     Initialize node_list.
     >>> node_list = directory([], "scandir_path", ["data/hoge*", "*foo*"])
 
@@ -30,9 +42,10 @@ def directory(node_list, root, whitelist):
 
     """
 
-    root = os.path.abspath(os.path.expanduser(root))
+    root = path_expand(root)
+    followlinks = boolenize(followlinks)
     scan_nodelist = []
-    for path, dirs, files in os.walk(root):
+    for path, dirs, files in os.walk(root, followlinks=followlinks):
         dirs.sort()
         node_type = None
         parents = []
@@ -68,6 +81,7 @@ def directory(node_list, root, whitelist):
 def register(pipe_dics):
     pipe_dics["scan_directory"] = {
         "func": directory,
-        "args": ["root_path", "whitelist"],
-        "desc": "scan direcoty structure",
+        "args": ["root", "whitelist"],
+        "kwds": ["followlinks"],
+        "desc": "Scan nodes from all directories under the directory 'root'.",
     }

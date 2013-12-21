@@ -2,8 +2,56 @@ td.comment{
     white-space: nowrap;
     width: 300px;
 }
-input.comment{
-    background: #CCCCCC;
+
+td.comment:hover, td.name:hover, span:hover{
+    background: #DDDDDD;
+}
+
+tr>input.comment{
+    background: #EEEEEE;
     width: 300px;
     size: 120;
 }
+
+div.tableMenu{
+    line-height: 180%;
+
+}
+
+div.tableMenu>div{
+    border: 2px outset #000000;
+    padding: 0px 2px;
+    margin: 5px 0px;
+}
+
+div.tableMenu span{
+    font-weight: normal;
+    color: glay;
+}
+
+div.tableMenu span.show{
+    font-weight: bold;
+    color: black;
+}
+
+span.item{
+    border: 1px solid #AAAAAA;
+    background: #eff;
+    padding: 0px 2px 0px;
+}
+
+span.group{
+    border: 2px solid #AAAAAA;
+    background: #aff;
+    padding: 0px 2px 0px;
+}
+
+tr:nth-child(odd)
+       {
+       background-color: #fff;
+       }
+
+tr:nth-child(even)
+       {
+       background-color: #dff;
+       }

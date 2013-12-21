@@ -1,17 +1,18 @@
-<table class={{data.tags[0] + "TableWidget"}} border=1>
+<table class={{data.tags[0] + "TableWidget"}} path={{data.path}} border=1>
   <thead>
     {%- set ngroup = data.col_groupname|length %}
-    <tr>
-      <th rowspan="2"></th>
+    <tr class="group">
+      <th class="name" data-group="name"></th>
       {%- for igroup in range(ngroup) %}
         {%- set num  = data.col_name[igroup]|length %}
-        <th colspan="{{num}}">{{data.col_groupname[igroup]}}</th>
+        <th colspan="{{num}}" data-group="{{data.col_groupname[igroup]}}">{{data.col_groupname[igroup]}}</th>
       {%- endfor %}
     </tr>
-    <tr>
+    <tr class="items">
+      <th class="name" data-group="name">name</th>
       {%- for igroup in range(ngroup) %}
         {%- for colname in data.col_name[igroup] %}
-          <th>{{colname}}</th>
+          <th class="{{colname}}" data-group="{{data.col_groupname[igroup]}}">{{colname}}</th>
         {%- endfor %}
       {%- endfor %}
     </tr>
@@ -19,10 +20,10 @@
   <tbody>
     {%- for irow in range(data.row_name|length) %}
         <tr align=right path={{data.row_path[irow]}}>
-        <td class="name">{{data.row_name[irow]}}</td>
+        <td class="name" data-group="name">{{data.row_name[irow]}}</td>
         {%- for igroup in range(ngroup) %}
           {%- for colname in data.col_name[igroup] %}
-            <td class={{colname}}>{{data.table[igroup][colname][irow]}}</td>
+            <td class="{{colname}}" data-group="{{data.col_groupname[igroup]}}">{{data.table[igroup][colname][irow]}}</td>
           {%- endfor %}
         {%- endfor %}
       </tr>
