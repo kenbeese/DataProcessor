@@ -208,3 +208,30 @@ class TestNodes(unittest.TestCase):
         # remove not exist children link
         nodes.validate_link(node_list, node_list[3], True)
         self.assertEqual(node_list, self.node_list)
+
+    def test_merge_duplicate(self):
+        node_list = [
+            {"path": "/path/0", "parents": ["/path/1"],
+             "children": ["/path/2", "/path/3"]},
+            {"path": "/path/1", "parents": [],
+             "children": ["/path/0"]},
+            {"path": "/path/2", "parents": ["/path/0"],
+             "children": []},
+            {"path": "/path/3", "parents": ["/path/0"],
+             "children": [], "attr1": "value1"},
+            {"path": "/path/3", "parents": ["/path/0"],
+             "children": [], "attr1": "value2"}  # duplicated
+        ]
+        node_list_ans = [
+            {"path": "/path/0", "parents": ["/path/1"],
+             "children": ["/path/2", "/path/3"]},
+            {"path": "/path/1", "parents": [],
+             "children": ["/path/0"]},
+            {"path": "/path/2", "parents": ["/path/0"],
+             "children": []},
+            {"path": "/path/3", "parents": ["/path/0"],
+             "children": [], "attr1": "value2"}  # updated by later one
+        ]
+
+        node_list = nodes.merge_duplicate(node_list)
+        self.assertEqual(node_list, node_list_ans)

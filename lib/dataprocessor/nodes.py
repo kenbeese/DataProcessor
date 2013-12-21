@@ -92,6 +92,25 @@ def check_duplicate(node_list):
     list of str
         return the list of duplicated nodes' paths
 
+    Examples
+    --------
+    >>> node_list = [
+    ...     {"path": "/path/0", "parents": ["/path/1"],
+    ...      "children": ["/path/2", "/path/3"]},
+    ...     {"path": "/path/1", "parents": [],
+    ...      "children": ["/path/0"]},
+    ...     {"path": "/path/2", "parents": ["/path/0"],
+    ...      "children": []},
+    ...     {"path": "/path/2", "parents": ["/path/0"],
+    ...      "children": []},  # duplicated
+    ...     {"path": "/path/3", "parents": ["/path/0"],
+    ...      "children": [], "attr1": "value1"},
+    ...     {"path": "/path/3", "parents": ["/path/0"],
+    ...      "children": [], "attr1": "value2"}  # duplicated
+    ... ]
+    >>> check_duplicate(node_list)
+    ['/path/2', '/path/3']
+
     """
     paths = []
     dup_paths = []
