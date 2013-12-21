@@ -56,3 +56,37 @@ class TestIo(unittest.TestCase):
 
         node_list = io.load([], self.jsonfile)
         self.assertEqual(node_list, compare_node_list)
+
+    def test_sync_datahandler(self):
+        node_list = [{"path": "/path/to/hogehoge", "name": ""}]
+
+        # Create json file
+        io.save(node_list, self.jsonfile, silent=True)
+
+        import time
+
+        def do_update1():
+            with io.SyncDataHandler(self.jsonfile, silent=True) as data:
+                node_list = data.get()
+                node_list[0]["name"] += "update1"
+                time.sleep(1)
+
+        def do_update2():
+            with io.SyncDataHandler(self.jsonfile, silent=True) as data:
+                node_list = data.get()
+                node_list[0]["name"] += "update2"
+                time.sleep(1)
+
+        from threading import Thread
+
+        t1 = Thread(target=do_update1)
+        t2 = Thread(target=do_update2)
+        t1.start()
+        time.sleep(0.1)
+        t2.start()
+        t1.join()
+        t2.join()
+
+        node_list_last = io.load([], self.jsonfile)
+        node_list_ans = [{"path": "/path/to/hogehoge", "name": "update1update2"}]
+        self.assertEqual(node_list_last, node_list_ans)

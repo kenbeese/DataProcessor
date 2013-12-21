@@ -3,7 +3,9 @@ from .exception import DataProcessorError
 from . import utility, nodes
 
 import json
+import os
 import os.path
+import time
 
 
 def save(node_list, json_path, silent=False):
@@ -88,38 +90,31 @@ class DataHandler(object):
 
     Examples
     --------
-    >>> filename = "/tmp/DataHandlerTest.json"
-    >>> with DataHandler(filename, True) as dh:
+    >>> with DataHandler(filename, silent=True) as dh:  # doctest: +SKIP
     ...     dh.add({"path" : "/path/to/data1", "name" : "data1",
     ...             "parents": [], "children": []})
-    >>> print(open(filename, 'r').read())
-    [
-        {
-            "path": "/path/to/data1", 
-            "parents": [], 
-            "name": "data1", 
-            "children": []
-        }
-    ]
-    >>> import os; os.remove(filename)
 
     """
 
     def __init__(self, filename, silent=False):
         self.data_path = utility.path_expand(filename)
         self.silent = silent
-        if os.path.exists(self.data_path):
-            self.node_list = load([], self.data_path)
-        else:
-            if not silent:
-                print("Create new data in %s" % self.data_path)
-            self.node_list = []
+        self.load()
 
     def __enter__(self):
+        self.load()  # reload
         return self
 
     def __exit__(self, type, value, traceback):
         self.serialize()
+
+    def load(self):
+        if os.path.exists(self.data_path):
+            self.node_list = load([], self.data_path)
+        else:
+            if not self.silent:
+                print("Create new data in %s" % self.data_path)
+            self.node_list = []
 
     def get(self):
         return self.node_list
@@ -151,3 +146,38 @@ class DataHandler(object):
 
     def serialize(self):
         save(self.node_list, self.data_path, self.silent)
+
+
+class SyncDataHandler(DataHandler):
+
+    """ A synced data handler
+
+    This lock reading/writing JSON file.
+
+    """
+    def __init__(self, filename, silent=False,
+                 lock_prefix="SyncDH", lock_dir="/tmp",
+                 duration=0.1):
+        DataHandler.__init__(self, filename, silent)
+        self.pid = os.getpid()
+        fn = lock_prefix + "_" + os.path.basename(filename)
+        self.lock_fn = os.path.join(lock_dir, fn)
+        self.duration = duration
+
+    def __enter__(self):
+        while(True):
+            if os.path.exists(self.lock_fn):
+                time.sleep(self.duration)
+            else:
+                with open(self.lock_fn, 'w') as f:
+                    f.write(str(self.pid))
+                break
+        return DataHandler.__enter__(self)
+
+    def __exit__(self, type, value, traceback):
+        with open(self.lock_fn, 'r') as f:
+            pid = int(f.read())
+        if pid != self.pid:
+            raise DataProcessorError("PID missmatch")
+        os.remove(self.lock_fn)
+        DataHandler.__exit__(self, type, value, traceback)
