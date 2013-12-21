@@ -85,15 +85,15 @@ class TestNodes(unittest.TestCase):
     def test_add_update_skip_validate_link(self):
         node_list = copy.deepcopy(self.node_list)
         new_node = {
-                "path": "/path/0",
-                "parents": ["/path/2"],
-                "children": ["/path/1", "/path/3"]
-            }
+            "path": "/path/0",
+            "parents": ["/path/2"],
+            "children": ["/path/1", "/path/3"]
+        }
         nodes.add(node_list, new_node, skip_validate_link=True)
 
         compare_node_list = [
             {"path": "/path/0", "parents": ["/path/2"],
-             "children": ["/path/1", "/path/3"]}, # updated
+             "children": ["/path/1", "/path/3"]},  # updated
             {"path": "/path/1", "parents": [],
              "children": ["/path/0"]},
             {"path": "/path/2", "parents": ["/path/0"],
@@ -105,10 +105,10 @@ class TestNodes(unittest.TestCase):
     def test_add_update_validate_link(self):
         node_list = copy.deepcopy(self.node_list)
         new_node = {
-                "path": "/path/1",
-                "parents": ["/path/0"],
-                "children": []
-            }
+            "path": "/path/1",
+            "parents": ["/path/0"],
+            "children": []
+        }
         nodes.add(node_list, new_node)
 
         compare_node_list = [
@@ -126,7 +126,8 @@ class TestNodes(unittest.TestCase):
         node_list = copy.deepcopy(self.node_list)
         node_list[0]["comment"] = "madoka"
         new_node = copy.deepcopy(self.node_list[0])
-        nodes.add(node_list, new_node, skip_validate_link=True, strategy="replace")
+        nodes.add(node_list, new_node, skip_validate_link=True,
+                  strategy="replace")
 
         compare_node_list = [
             {"path": "/path/1", "parents": [],
@@ -185,7 +186,7 @@ class TestNodes(unittest.TestCase):
             {"path": "/path/1", "parents": [], "children": ["/path/0"]},
             {"path": "/path/2", "parents": [],              # incomplete
              "children": []},
-            {"path": "/path/3", "parents": ["/path/0"], "children": [],}]
+            {"path": "/path/3", "parents": ["/path/0"], "children": [], }]
         # complete /path/2
         nodes.validate_link(node_list, node_list[0])
         # complete /path/0
