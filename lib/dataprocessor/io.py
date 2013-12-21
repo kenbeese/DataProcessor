@@ -167,6 +167,11 @@ class SyncDataHandler(DataHandler):
     def __enter__(self):
         while(True):
             if os.path.exists(self.lock_fn):
+                if not self.silent:
+                    with open(self.lock_fn, 'r') as f:
+                        pid = int(f.read())
+                    print("Waiting to lock %s ..." % self.data_path)
+                    print("PID of the locking process is %d" % pid)
                 time.sleep(self.duration)
             else:
                 with open(self.lock_fn, 'w') as f:
@@ -179,5 +184,5 @@ class SyncDataHandler(DataHandler):
             pid = int(f.read())
         if pid != self.pid:
             raise DataProcessorError("PID missmatch")
-        os.remove(self.lock_fn)
         DataHandler.__exit__(self, type, value, traceback)
+        os.remove(self.lock_fn)
