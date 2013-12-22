@@ -150,11 +150,12 @@ class DataHandler(object):
 
 class SyncDataHandler(DataHandler):
 
-    """ A synced data handler
+    """ A synced data handler.
 
     This lock reading/writing JSON file.
 
     """
+
     def __init__(self, filename, silent=False,
                  lock_prefix="SyncDH", lock_dir="/tmp",
                  duration=0.1):
