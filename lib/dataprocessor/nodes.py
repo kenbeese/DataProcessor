@@ -78,7 +78,7 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
 
 
 def check_duplicate(node_list):
-    """ check if duplicated nodes exist
+    """ Check if duplicated nodes exist.
 
     only check their paths
 
@@ -124,7 +124,7 @@ def check_duplicate(node_list):
 
 
 def merge_duplicate(node_list):
-    """ merge duplicate node
+    """ Merge duplicate node.
 
     If duplicated nodes are found, they will be merged.
     The latter node has priority in merging (see Examples)
