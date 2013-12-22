@@ -15,12 +15,19 @@ sys.path = [sys.path[0]] + sys.path[2:]
 def main():
     parser = argparse.ArgumentParser(description="""
                 command line interface for DataProcessor pipeline""")
-    parser.add_argument('json_filename')
+    parser.add_argument('manip_json')
+    parser.add_argument('-d', "--data", help="The path of data JSON")
     args = parser.parse_args()
 
-    json_fn = dp.utility.check_file(args.json_filename)
-    with open(json_fn, 'r') as f:
-        dp.execute.execute_from_json_str(f.read())
+    json_fn = dp.utility.check_file(args.manip_json)
+    if args.data:
+        data_fn = dp.utility.path_expand(args.data)
+        with open(json_fn, 'r') as f, dp.io.SyncDataHandler(data_fn,
+                                                            duration=1) as dh:
+            dp.execute.execute_from_json_str(f.read(), dh.get())
+    else:
+        with open(json_fn, 'r') as f:
+            dp.execute.execute_from_json_str(f.read())
 
 
 if __name__ == "__main__":

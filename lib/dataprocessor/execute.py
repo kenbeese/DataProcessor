@@ -80,7 +80,7 @@ def check_manip(manip):
             mn["kwds"] = {}
 
 
-def execute(manip):
+def execute(manip, node_list=[]):
     """execute pipeline defined in `manip`
 
     This function does not check whether `manip` is valid.
@@ -90,12 +90,13 @@ def execute(manip):
     ----------
     manip : list
         A list defining manipulation
+    node_list : list, optional
+        initial node_list (default=[])
 
     Returns
     -------
     node_list : list
     """
-    node_list = []
     for mn in manip:
         name = mn["name"]
         dic = pipes.pipes_dics[name]
@@ -106,7 +107,7 @@ def execute(manip):
     return node_list
 
 
-def execute_from_json_str(manip_json_str):
+def execute_from_json_str(manip_json_str, node_list=[]):
     """execute pipeline from JSON string
 
     This do `check_manip` and `execute`.
@@ -126,4 +127,4 @@ def execute_from_json_str(manip_json_str):
     except ValueError:
         raise DataProcessorError("Cannot decode JSON file.")
     check_manip(manip)
-    return execute(manip)
+    return execute(manip, node_list)
