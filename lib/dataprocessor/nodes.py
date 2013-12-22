@@ -29,7 +29,7 @@ def get(node_list, path):
     return None
 
 
-def add(node_list, node, skip_validate_link=False):
+def add(node_list, node, skip_validate_link=False, strategy="update"):
     """Add a node into node_list.
 
     This adds a node into node_list,
@@ -44,6 +44,12 @@ def add(node_list, node, skip_validate_link=False):
         The node will be added into node_list
     skip_validate_link : bool, optional
         skip link validation (default False)
+    strategy : str, optional {"update", "replace"}
+        The strategy for the case
+        where there exists a node whose "path" is same as new one
+
+        - "update" : use dict.update to update existing node
+        - "replace" : replace existing node with new node
 
     Examples
     --------
@@ -55,9 +61,101 @@ def add(node_list, node, skip_validate_link=False):
     If skip_validate_link=True, snode_list[0]["parents"] is not filled.
 
     """
-    node_list.append(node)
+    node0 = get(node_list, node["path"])
+    if node0:
+        if strategy is "update":
+            node0.update(node)
+            node = node0
+        elif strategy is "replace":
+            node_list.remove(node0)
+            node_list.append(node)
+        else:
+            raise DataProcessorError("Invalid strategy: %s" % strategy)
+    else:
+        node_list.append(node)
     if not skip_validate_link:
         validate_link(node_list, node)
+
+
+def check_duplicate(node_list):
+    """ check if duplicated nodes exist
+
+    only check their paths
+
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes (not modified)
+
+    Returns
+    -------
+    list of str
+        return the list of duplicated nodes' paths
+
+    Examples
+    --------
+    >>> node_list = [
+    ...     {"path": "/path/0", "parents": ["/path/1"],
+    ...      "children": ["/path/2", "/path/3"]},
+    ...     {"path": "/path/1", "parents": [],
+    ...      "children": ["/path/0"]},
+    ...     {"path": "/path/2", "parents": ["/path/0"],
+    ...      "children": []},
+    ...     {"path": "/path/2", "parents": ["/path/0"],
+    ...      "children": []},  # duplicated
+    ...     {"path": "/path/3", "parents": ["/path/0"],
+    ...      "children": [], "attr1": "value1"},
+    ...     {"path": "/path/3", "parents": ["/path/0"],
+    ...      "children": [], "attr1": "value2"}  # duplicated
+    ... ]
+    >>> check_duplicate(node_list)
+    ['/path/2', '/path/3']
+
+    """
+    paths = []
+    dup_paths = []
+    for node in node_list:
+        path = node["path"]
+        if path not in paths:
+            paths.append(path)
+        else:
+            dup_paths.append(path)
+    return dup_paths
+
+
+def merge_duplicate(node_list):
+    """ merge duplicate node
+
+    If duplicated nodes are found, they will be merged.
+    The latter node has priority in merging (see Examples)
+
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes
+
+    Returns
+    -------
+    node_list : list
+
+    Examples
+    --------
+    >>> node_list = [
+    ...     {"path": "/path/1", "attr1": "value1"},
+    ...     {"path": "/path/1", "attr1": "value2"},
+    ... ]
+    >>> merge_duplicate(node_list)
+    [{'path': '/path/1', 'attr1': 'value2'}]
+
+    """
+    new_node_list = []
+    for node in node_list:
+        node0 = get(new_node_list, node["path"])
+        if not node0:
+            new_node_list.append(node)
+            continue
+        node0.update(node)
+    return new_node_list
 
 
 def remove(node_list, path, skip_validate_link=False):
