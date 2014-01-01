@@ -21,8 +21,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 def manip(req):
     """ Do a full manipulation. """
     manip = json.loads(req.get("manip"))
-    dp.execute.check_manip(manip)
-    dp.execute.execute(manip)
+    do_manip(manip)
 
 
 def pipe(req):
@@ -44,6 +43,10 @@ def pipe(req):
             "args": json.loads(req.get("args")),
         }
     manip = [pipe]
+    do_manip(manip)
+
+
+def do_manip(manip):
     dp.execute.check_manip(manip)
 
     with open("cfg.json") as f:
