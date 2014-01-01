@@ -43,20 +43,15 @@ def pipe(req):
             "name": req.get("name"),
             "args": json.loads(req.get("args")),
         }
+    manip = [pipe]
+    dp.execute.check_manip(manip)
 
     with open("cfg.json") as f:
         cfg = json.load(f)
     data_path = cfg["data_path"]
 
-    pipe_load = {"name": "load_json", "args": [data_path, ], }
-    pipe_save = {
-        "name": "save_json",
-        "args": [data_path, ],
-        "kwds": {"silent": True},
-    }
-    manip = [pipe_load, pipe, pipe_save]
-    dp.execute.check_manip(manip)
-    dp.execute.execute(manip)
+    with dp.io.SyncDataHandler(data_path, duration=1, silent=True) as dh:
+        dp.execute.execute(manip, dh.get())
 
 
 def switch():
