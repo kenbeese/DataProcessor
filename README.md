@@ -10,6 +10,9 @@ DataProcessor is a framework for managing meta data of numerical analysis.
 This allows you to gather meta data of your data,
 to write command to process your data, and to browse your data.
 
+In order to read the following explaination and to use this framework,
+you should be familiar with JSON format.
+
 If you only want to use browsing feature,
 you can skip to [Browsing](Browsing).
 
@@ -39,8 +42,8 @@ In other words, pipes are implemented as a function
 which receives `node_list` as an argument and returns processed `node_list`.
 For example, 
 
-- `save` pipe saves `node_list` into a JSON file.
-- `load` pipe loads `node_list` from a JSON file.
+- `save_json` pipe saves `node_list` into a JSON file.
+- `load_json` pipe loads `node_list` from a JSON file.
 - `scan_directory` pipe gathers runs or projects and appends it into `node_list`.
 - `add_comment` pipe add comments to a specified node.
 - `configure` pipe collects meta data of each run.
@@ -48,14 +51,17 @@ For example,
 You can combine them to satisfy your purpose.
 If you want to scan your data and save meta data into a JSON file,
 the combined pipes can be written as follows:
-```
-                       +----------------+    +-----------+    +------+
-[node_list (empty)] => | scan_directory | => | configure | => | save | 
-                       +----------------+    +-----------+    +------+
-```
+
+                           +----------------+    +-----------+    +-----------+
+    [node_list (empty)] => | scan_directory | => | configure | => | save_json |
+                           +----------------+    +-----------+    +-----------+
+
 As `node_list` pass through pipes, it will be modified:
 
 1. `node_list` is empty at first
+```
+node_list = []
+```
 1. `scan_directory` gathers meta data and `node_list` becomes
 ```
 node_list = [
@@ -81,31 +87,82 @@ node_list = [
 1. `save` does not change `node_list` but saves it into a JSON file.
 
 We call a series of pipes as **manipulations**.
-The detail of pipes is documented in [pipes list](doc/pipes.md).
+The detail of pipes is documented in [pipes](doc/pipes.md).
 
 ### manipulations
 You can execute **manipulations** with an executable script [bin/dataprocessor](sample/README.md#dataprocessor).
 You must specify manipulations by a JSON file.
-You can do manipulations by the following command:
-
-    $ bin/dataprocessor manipulations.json
-
-The following JSON executes first **pipe-name1**, next **pipe-name2**.
-**pipe**'s arguments are specified in **args** key.(**THE ORDER OF ARGS IS IMPORTANT**)
-**pipe**'s optional arguments(keywords) are specified in **kwds** key.
-Currently supported **pipe** are listed in [here](doc/pipes.md).
+For example, the above example corresponds to the following JSON format:
 
 ```json
 [
-    {"name": "pipe-name1", "args": ["argument1", "argument2"], "kwds": {"keywords1": "some-value"}},
-    {"name": "pipe-name2", "args": ["argument1"]}
+    {"name": "scan_directory", "args": ["./datadir", ["*.conf", "*.ini"]]},
+    {"name": "configure", "args": ["parameters.conf"], "kwds": {}},
+    {"name": "save_json", "args": ["data.json"],  "kwds": {}}
 ]
 ```
-This JSON file is in `sample` dir.
 
-If you add a comment in node_list, you should want to save it.
-We recommend that you save it by JSON format.
-There exist JSON saver and loader pipes.
+If you save this into `manip.json`,
+you can do manipulations by the following command:
+
+    $ bin/dataprocessor manip.json
+
+Another sample is here:
+
+    +-----------+    +-------------+    +-----------+
+    | load_json | => | add_comment | => | save_json |
+    +-----------+    +-------------+    +-----------+
+
+1. load `node_list` from a JSON file `data.json`
+1. write a comment in `node_list`
+1. save `node_list` into the same JSON file
+
+Corresponding JSON is following:
+
+```json
+[
+    {"name": "load_json", "args": ["data.json"]},
+    {"name": "add_comment", "args": ["comment comment", "/path/to/node"]},
+    {"name": "save_json", "args": ["data.json"],  "kwds": {}}
+]
+```
+
+Saving this JSON into `manip.json`,
+this manipulations is executed by the following command:
+
+    $ bin/dataprocessor manip.json
+
+Most part of manipulations will be in such form;
+load data, do a pipe, and save data.
+
+However, if two `dataprocessor` run simultaneously,
+there data I/O conflict:
+
+1. process1 loads
+1. process2 loads
+1. process1 saves
+1. process2 saves < conflict:
+the JSON file is different from that when process2 read it.
+
+In order to avoid this, synced I/O are preserved:
+Save the following JSON into a `manip_sync.json`.
+
+```json
+[
+    {"name": "add_comment", "args": ["comment comment", "/path/to/node"]},
+]
+```
+And then 
+
+    $ bin/dataprocessor --data=data.json manip_sync.json
+
+or
+
+    $ bin/dataprocessor -d data.json manip_sync.json
+
+The option `--data` or `-d` enable you to strip `load_json` and `save_json`.
+In addition, the JSON file is locked:
+the process started latter will wait unless the former finish.
 
 WebApp
 ======
