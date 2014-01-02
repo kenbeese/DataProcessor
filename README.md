@@ -48,11 +48,11 @@ For example,
 You can combine them to satisfy your purpose.
 If you want to scan your data and save meta data into a JSON file,
 the combined pipes can be written as follows:
-<pre>
+```
                        +----------------+    +-----------+    +------+
 [node_list (empty)] => | scan_directory | => | configure | => | save | 
                        +----------------+    +-----------+    +------+
-<pre>
+```
 As `node_list` pass through pipes, it will be modified:
 
 1. `node_list` is empty at first
