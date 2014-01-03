@@ -144,7 +144,7 @@ there data I/O conflict:
 1. process2 saves < conflict:
 the JSON file is different from that when process2 read it.
 
-In order to avoid this, synced I/O are preserved:
+In order to avoid this, synchronized I/O are provided.
 Save the following JSON into a `manip_sync.json`.
 
 ```json
