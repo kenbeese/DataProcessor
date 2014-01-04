@@ -62,6 +62,7 @@ As `node_list` pass through pipes, it will be modified:
 ```
 node_list = []
 ```
+
 1. `scan_directory` gathers meta data and `node_list` becomes
 ```
 node_list = [
@@ -70,6 +71,7 @@ node_list = [
     ...
 ]
 ```
+
 1. `configure` appends an attribute "configure"
 ```
 node_list = [
@@ -84,6 +86,7 @@ node_list = [
     ...
 ]
 ```
+
 1. `save` does not change `node_list` but saves it into a JSON file.
 
 We call a series of pipes as **manipulations**.
