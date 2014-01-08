@@ -33,6 +33,12 @@ and install the required libraries to the environment,
 
     $ virtualenv env && env/bin/pip install -r requirements.txt
 
+If you want to specify python version,
+
+    $ virtualenv env -p /usr/bin/python2.7 && env/bin/pip install -r requirements.txt
+
+Please change the appropriate python path.
+
 Enter the virtual environment,
 
     $ source env/bin/activate
