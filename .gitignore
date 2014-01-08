@@ -7,3 +7,4 @@ references
 test-references
 server/cfg.json
 server/server.log
+env
