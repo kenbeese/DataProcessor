@@ -14,7 +14,7 @@ In order to read the following explaination and to use this framework,
 you should be familiar with JSON format.
 
 If you only want to use browsing feature,
-you can skip to [Browsing](Browsing).
+you can skip to [WebApp](#WebApp).
 
 This introduces three basic concepts:
 
