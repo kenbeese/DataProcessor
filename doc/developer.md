@@ -1,6 +1,7 @@
 dataprocessor library
 =====================
 
+
 Internal Data Structure
 -----------------------
 This library handle list of dictionary(**node**).
@@ -23,27 +24,41 @@ Of course, additional keys are allowed.
 This library add/delete some **node** to **node_list**,
 add/delete some keys and values to each node.
 
+
+Prepare development environment
+------------------------------------
+Please install `virtualenv` and `pip`.
+On the top directory of this project, create virtual enveronment of development
+and install the required libraries to the environment,
+
+    $ virtualenv env && env/bin/pip install -r requirements.txt
+
+If you want to specify python version,
+
+    $ virtualenv env -p /usr/bin/python2.7 && env/bin/pip install -r requirements.txt
+
+Please change the appropriate python path.
+
+Enter the virtual environment,
+
+    $ source env/bin/activate
+
+Exit the environment.
+
+    $ deactivate
+
 API reference
 -------------
 You can build dataprocessor API HTML reference.
 
-### Requirements
-- sphinx (python documentation tools)
-- numpydoc (Sphinx extention)
-
-If you have not installed these,
-
-    # easy_install sphinx numpydoc
-
 ### Build
 
-After installation of above library,
+After preparation of the above development environment,
 you can make api reference of this library with following command.
 
     $ make -C doc html
 
 The file `doc/_build/html/index.html` is top page.
-
 
 
 server API reference
