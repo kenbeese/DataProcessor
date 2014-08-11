@@ -157,17 +157,20 @@ class SyncDataHandler(DataHandler):
     """
 
     def __init__(self, filename, silent=False,
-                 lock_prefix="SyncDH", lock_dir="/tmp",
+                 lock_dir="/tmp",
+                 prefix="SyncDH",
                  duration=0.1):
         DataHandler.__init__(self, filename, silent)
         self.pid = os.getpid()
-        fn = lock_prefix + "_" + os.path.basename(filename)
-        self.lock_fn = os.path.join(lock_dir, fn)
+        self.lock_dir = os.path.join(lock_dir,
+                                     prefix + utility.path_expand(filename)
+                                                     .replace("/", "_"))
+        self.lock_fn = os.path.join(self.lock_dir, "pid")
         self.duration = duration
 
     def __enter__(self):
         while(True):
-            if os.path.exists(self.lock_fn):
+            if os.path.exists(self.lock_dir):
                 if not self.silent:
                     with open(self.lock_fn, 'r') as f:
                         pid = int(f.read())
@@ -175,6 +178,7 @@ class SyncDataHandler(DataHandler):
                     print("PID of the locking process is %d" % pid)
                 time.sleep(self.duration)
             else:
+                os.mkdir(self.lock_dir)
                 with open(self.lock_fn, 'w') as f:
                     f.write(str(self.pid))
                 break
@@ -187,3 +191,4 @@ class SyncDataHandler(DataHandler):
             raise DataProcessorError("PID missmatch")
         DataHandler.__exit__(self, type, value, traceback)
         os.remove(self.lock_fn)
+        os.rmdir(self.lock_dir)
