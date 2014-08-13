@@ -24,10 +24,10 @@ def add(node_list, comment, node_path):
     ...     {"path": "/path/to/hoge", "comment": "some comments"},
     ...     {"path": "/path/to/hogehoge"}]
     True
-    >>> add(node_list, "some comments aho", "/path/to/hogehoge/")
+    >>> add(node_list, "some comments aho", "/path/to/hogehom")
     Traceback (most recent call last):
         ...
-    Warning: There is no node with specified path. path = /path/to/hogehoge/
+    Warning: There is no node with specified path. path = /path/to/hogehom
     """
     path = path_expand(node_path)
     node = get(node_list, path)
