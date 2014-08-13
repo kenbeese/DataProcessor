@@ -82,6 +82,7 @@ class TestIo(unittest.TestCase):
         t1 = Thread(target=do_update1)
         t2 = Thread(target=do_update2)
         t1.start()
+        time.sleep(0.001)
         t2.start()
         t1.join()
         t2.join()
