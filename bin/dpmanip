@@ -12,7 +12,7 @@ import dataprocessor as dp
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--output", action="store_true",
                         help="filename of output JSON file")
@@ -28,6 +28,21 @@ if __name__ == '__main__':
         pipe_psr.set_defaults(val=val)
 
     args = parser.parse_args()
-    with dp.io.SyncDataHandler(args.filename, silent=args.silent) as dh:
-        arguments = [vars(args)[i] for i in args.val["args"]]
-        args.val["func"](dh.get(), *arguments)
+    arguments = [vars(args)[i] for i in args.val["args"]]
+    if not args.output:
+        with dp.io.SyncDataHandler(args.filename, silent=args.silent) as dh:
+            args.val["func"](dh.get(), *arguments)
+        return
+    else:
+        node_list = dp.io.load([], args.filename)
+        args.val["func"](node_list, *arguments)
+        dp.io.save(node_list, args.output)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except dp.exception.DataProcessorError as e:
+        print(traceback.format_exc())
+        print("ERROR in command-line arguments.")
+        print("Message: %s" % e.msg)
+        sys.exit(1)
