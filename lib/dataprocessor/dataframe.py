@@ -15,11 +15,7 @@ def get_projects(node_list):
     """
     df = DataFrame(node_list)
     projects = df[df["type"] == "project"]
-
-    def _conv(val):
-        val["children"] = Series(val["children"])
-        return val
-    return projects.apply(_conv, axis=1)
+    return projects.dropna(how='all', axis=1)
 
 
 def get_project(node_list, project_path, properties=["comment", "tags"],
@@ -52,18 +48,17 @@ def get_project(node_list, project_path, properties=["comment", "tags"],
     if len(runs_pre) == 0:
         raise DataProcessorError("There is no project of specified path :"
                                  + project_path)
-
-    def unique_add(item):
+    for item in ["name", "path"]:
         if item not in properties:
             properties.append(item)
-    map(unique_add, ["name", "path"])
 
     def _conv(val):
         sr = Series(val["configure"])
         for prop in properties:
             sr.set_value(prop, val[prop])
         return sr
-    runs = runs_pre.apply(_conv, axis=1).convert_objects(convert_numeric=True)
+    runs = runs_pre.apply(_conv, axis=1)
+    runs = runs.convert_objects(convert_numeric=True)
     if index:
         runs = runs.set_index(index)
-    return runs
+    return runs.dropna(how="all", axis=1)
