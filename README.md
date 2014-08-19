@@ -179,6 +179,7 @@ Requirements
 
 - python-daemon (>= 1.6) (for stand a HTTP server as a daemon)
 - jinja2 (for converting template)
+- pandas (to get data in pandas.DataFrame form)
 
 
 For Developer
