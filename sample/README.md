@@ -63,6 +63,23 @@ in manip3.json to add a comment to run01 of project1.
 
 In detail, how to write `manipulation.json` and pipe's list are written in [here](../doc/pipes.md).
 
+
+dpmanip
+=======
+
+The command `dpmanip` execute a pipe with loaded node_list.
+In order to execute `add_comment` pipe, execute the following command:
+
+    $ ../bin/dpmanip data_information.json add_comment "comment" /path/of/run
+
+You can see all pipes by `-h` or `--help` option:
+
+    $ ../bin/dpmanip -h
+
+You also can see help of each pipes:
+
+    $ ../bin/dpmanip data_information.json add_comment -h
+
 server.py (for webapp)
 ==========
 
