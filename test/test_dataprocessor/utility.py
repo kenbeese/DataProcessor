@@ -4,7 +4,14 @@
 import unittest
 import tempfile
 import os
+import sys
 import shutil
+
+sys.path = [sys.path[0]] \
+    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
+    + sys.path[1:]
+import dataprocessor.nodes as nodes
+sys.path = [sys.path[0]] + sys.path[2:]
 
 
 class TestNodeListAndDir(unittest.TestCase):
@@ -52,7 +59,7 @@ class TestNodeListAndDir(unittest.TestCase):
                     "name": os.path.basename(tempdir_path),
                     "children": [],
                     "parents": [], }
-            self.node_list.append(node)
+            nodes.add(self.node_list, node)
 
             for i in range(rundir_num):
                 path = os.path.join(tempdir_path, "run%02d" % i)
@@ -61,5 +68,5 @@ class TestNodeListAndDir(unittest.TestCase):
                         "type": "run",
                         "name": os.path.basename(path),
                         "children": [],
-                        "parents": [], }
-                self.node_list.append(node)
+                        "parents": [tempdir_path]}
+                nodes.add(self.node_list, node)
