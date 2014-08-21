@@ -2,7 +2,7 @@
 import sys
 import os
 import unittest
-from pandas import Series, DataFrame
+from pandas import DataFrame
 from pandas.util.testing import assert_frame_equal
 
 sys.path = [sys.path[0]] \
@@ -14,7 +14,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 class TestIo(unittest.TestCase):
 
-    """Unittest for dataprocessor.dataframe
+    """Unittest for dataprocessor.dataframe.
 
     Attributes
     ----------
@@ -37,7 +37,7 @@ class TestIo(unittest.TestCase):
             {"path": "/proj1/2", "parents": ["/proj1"],
              "children": [], "type": "run", "name": "2",
              "configure": {"A": 3.0, "D": u"私って本当バカ"}}
-            ]
+        ]
 
     def test_get_projects(self):
         projects = df.get_projects(self.node_list)
@@ -47,15 +47,18 @@ class TestIo(unittest.TestCase):
             "children": self.children,
             "type": "project",
             "parents": [],
-            }])
+        }])
         self.assertTrue(projects.equals(projects_m))
 
     def test_get_project(self):
-        proj = df.get_project(self.node_list, "/proj1", properties=[], index=None)
+        proj = df.get_project(
+            self.node_list, "/proj1", properties=[], index=None)
+
         def _cfg(node):
             cfg = node["configure"]
             cfg.update({"name": node["name"], "path": node["path"]})
             return cfg
         conf = [_cfg(node) for node in self.node_list[1:]]
-        proj_m = DataFrame(conf, index=[1,2,3]).convert_objects(convert_numeric=True)
+        proj_m = DataFrame(conf, index=[1, 2, 3]).convert_objects(
+            convert_numeric=True)
         assert_frame_equal(proj, proj_m)

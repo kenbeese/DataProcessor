@@ -6,7 +6,7 @@ from .exception import DataProcessorError
 
 
 def get_projects(node_list):
-    """Get projects in dataframe format
+    """Get projects in dataframe format.
 
     Return
     ------
@@ -20,7 +20,7 @@ def get_projects(node_list):
 
 def get_project(node_list, project_path, properties=["comment", "tags"],
                 index="path"):
-    """Get project in dataframe format
+    """Get project in dataframe format.
 
     If there are two or more project of specified name,
     the latter one is selected.
@@ -41,6 +41,7 @@ def get_project(node_list, project_path, properties=["comment", "tags"],
         index of project dataframe
         if it is `None`, the index of DataFrame(node_list) will be successed
         (Default="path")
+
     """
     project_path = utility.path_expand(project_path)
     df = DataFrame(node_list)
