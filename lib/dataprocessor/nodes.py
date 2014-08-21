@@ -2,6 +2,8 @@
 """Tools for manipulation of node_list."""
 from .exception import DataProcessorError
 
+node_types = ["run", "project", "figure"]
+
 
 def get(node_list, path):
     """Search node from node_list by its path.
