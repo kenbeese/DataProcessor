@@ -16,7 +16,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 def main(args):
     arguments = [vars(args)[i] for i in args.val["args"]]
     if "kwds" in args.val:
-        keywards = {i: vars(args)[i] for i in args.val["kwds"]}
+        keywards = {i: vars(args)[i] for i in args.val["kwds"] if vars(args)[i]}
     else:
         keywards = {}
     if not args.__output:
