@@ -1,7 +1,7 @@
 # coding=utf-8
 from ..nodes import get
 from ..utility import path_expand
-import os.path
+from ..exception import DataProcessorError
 
 
 def add(node_list, comment, node_path):
@@ -34,7 +34,8 @@ def add(node_list, comment, node_path):
     if node:
         node["comment"] = comment
     else:
-        raise Warning("There is no node with specified path. path = %s" % path)
+        raise DataProcessorError("There is no node with specified path: %s"
+                                 % path)
     return node_list
 
 
