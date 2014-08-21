@@ -31,6 +31,7 @@ doctest_modules = [dp.io,
 
 test_moudles = [tdp.test_pipes.test_configure,
                 tdp.test_pipes.test_scan,
+                tdp.test_pipes.test_add_node,
                 tdp.test_nodes,
                 tdp.test_dataframe,
                 tdp.test_utility,

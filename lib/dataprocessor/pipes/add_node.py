@@ -6,7 +6,7 @@ from .. import utility
 
 
 def add_node(node_list, path=".", node_type="run", children=[],
-             name=None, parents=[]):
+             name=None, parents=[".."]):
     """Add node.
 
     Parameters
@@ -19,15 +19,22 @@ def add_node(node_list, path=".", node_type="run", children=[],
     children : list, optional
     parents : list, optional
 
+    Return
+    ------
+    node_list
+
     """
     path = utility.path_expand(path)
-    if name is None:
-        name = os.path.basename(path)
+
+    if isinstance(children, str):
+        children = [children]
+    if isinstance(parents, str):
+        parents = [parents]
+    name = os.path.basename(path)
     node = {"path": path, "type": node_type,
             "children": [utility.path_expand(c_path) for c_path in children],
             "parents": [utility.path_expand(c_path) for c_path in parents],
             "name": name}
-    print (node)
     nodes.add(node_list, node)
     return node_list
 
