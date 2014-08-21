@@ -27,7 +27,7 @@ def add(node_list, comment, node_path):
     >>> add(node_list, "some comments aho", "/path/to/hogehom")
     Traceback (most recent call last):
         ...
-    Warning: There is no node with specified path. path = /path/to/hogehom
+    DataProcessorError: 'There is no node with specified path: /path/to/hogehom'
     """
     path = path_expand(node_path)
     node = get(node_list, path)
