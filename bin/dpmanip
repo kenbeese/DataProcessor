@@ -19,27 +19,27 @@ def main(args):
         keywards = {i: vars(args)[i] for i in args.val["kwds"]}
     else:
         keywards = {}
-    if not args.output:
-        with dp.io.SyncDataHandler(args.filename, silent=args.silent) as dh:
+    if not args.__output:
+        with dp.io.SyncDataHandler(args.json_file, silent=args.silent) as dh:
             args.val["func"](dh.get(), *arguments, **keywards)
     else:
-        node_list = dp.io.load([], args.filename)
+        node_list = dp.io.load([], args.json_file)
         args.val["func"](node_list, *arguments, **keywards)
-        dp.io.save(node_list, args.output)
+        dp.io.save(node_list, args.__output)
 
 
 def parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--output", action="store_true",
-                        help="filename of output JSON file")
     parser.add_argument("-s", "--silent", action="store_true",
                         help="Does not ask whether REPLACE JSON file")
     parser.add_argument("--debug", action="store_true",
                         help="output traceback")
-    parser.add_argument("filename")
-    sub_psr = parser.add_subparsers()
+    sub_psr = parser.add_subparsers(title="subcommands", metavar="pipes")
     for name, val in dp.pipes.pipes_dics.items():
         pipe_psr = sub_psr.add_parser(name, help=val["desc"])
+        pipe_psr.add_argument("json_file", help="filename of data JSON")
+        pipe_psr.add_argument("-o", dest="__output", action="store_true",
+                            help="filename of output JSON file")
         for arg in val["args"]:
             pipe_psr.add_argument(arg)
         if "kwds" in val:
