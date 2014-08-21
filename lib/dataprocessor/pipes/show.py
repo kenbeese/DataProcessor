@@ -8,6 +8,13 @@ default_format = "{path}"
 
 def show(node_list, show_format=default_format):
     """ Show node with specified format.
+
+    Parameters
+    ----------
+    show_format: str, optional
+        specify format you want to output.
+        You should use new `format` function format.
+        This string will be formatted by `show_format.format(**node)`.
     """
     for node in node_list:
         print(show_format.format(**node))
@@ -15,6 +22,15 @@ def show(node_list, show_format=default_format):
 
 def show_runs(node_list, project=None, show_format=default_format):
     """ Show run list.
+
+    Parameters
+    ----------
+    project: str, optional
+        the path of project, whose runs will be shown.
+    show_format: str, optional
+        specify format you want to output.
+        You should use new `format` function format.
+        This string will be formatted by `show_format.format(**node)`.
     """
     if project:
         project = utility.path_expand(project)
@@ -28,6 +44,13 @@ def show_runs(node_list, project=None, show_format=default_format):
 
 def show_projects(node_list, show_format=default_format):
     """ Show project list.
+
+    Parameters
+    ----------
+    show_format: str, optional
+        specify format you want to output.
+        You should use new `format` function format.
+        This string will be formatted by `show_format.format(**node)`.
     """
     projects = flt.node_type(node_list, "project")
     show(projects, show_format)
