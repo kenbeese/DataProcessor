@@ -10,11 +10,17 @@ def project(node_list, path):
 
     Parameters
     ----------
-    path: str
-        the path of project, whose children are left.
+    path: str or [str]
+        the path of project (or projects), whose children are left.
     """
-    path = utility.path_expand(path)
-    return [node for node in node_list if path in node["parents"]]
+    if isinstance(path, str):
+        paths = [utility.path_expand(path)]
+    elif isinstance(path, list):
+        paths = [utility.path_expand(p) for p in path]
+    else:
+        raise DataProcessorError("Arguemnt path must be str or [str]")
+    return [node for node in node_list
+            if not set(paths).isdisjoint(node["parents"])]
 
 
 def node_type(node_list, ntype):

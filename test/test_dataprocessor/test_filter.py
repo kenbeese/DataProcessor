@@ -52,6 +52,22 @@ class TestNodes(unittest.TestCase):
                  'type': 'run'}]
         self.assertEqual(result, runs)
 
+    def test_projects(self):
+        result = dp.filter.project(self.node_list, ["/path/1", "/path/4"])
+        runs = [{'path': '/path/0',
+                 'parents': ['/path/1'],
+                 'children': [],
+                 'type': 'run'},
+                {'path': '/path/2',
+                 'parents': ['/path/1'],
+                 'children': [],
+                 'type': 'run'},
+                {"path": "/path/3",
+                 "parents": ["/path/4"],
+                 "children": [],
+                 "type": "run"}]
+        self.assertEqual(result, runs)
+
     def test_node_type(self):
         result = dp.filter.node_type(self.node_list, "project")
         projects = [{'path': '/path/1',

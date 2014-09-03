@@ -25,7 +25,7 @@ def show_runs(node_list, project=None, show_format=default_format):
 
     Parameters
     ----------
-    project: str, optional
+    project: str or [str], optional
         the path of project, whose runs will be shown.
     show_format: str, optional
         specify format you want to output.
