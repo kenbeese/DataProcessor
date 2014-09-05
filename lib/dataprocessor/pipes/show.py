@@ -33,7 +33,6 @@ def show_runs(node_list, project=None, show_format=default_format):
         This string will be formatted by `show_format.format(**node)`.
     """
     if project:
-        project = utility.path_expand(project)
         runs = flt.project(node_list, project)
     else:
         runs = node_list
