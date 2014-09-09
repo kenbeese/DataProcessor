@@ -130,6 +130,19 @@ class DataHandler(object):
         """
         nodes.add(self.node_list, node, skip_validate_link)
 
+    def update(self, node_list, skip_validate_link=False):
+        """ Update node_list.
+
+        Parameters
+        ----------
+        skip_validate_link : bool, optional
+            skip link validation about all nodes in new `node_list`
+
+        """
+        for node in node_list:
+            nodes.add(self.node_list, node, skip_validate_link,
+                      strategy="update")
+
     def replace(self, node_list, skip_validate_link=True):
         """ Swap node_list.
 
