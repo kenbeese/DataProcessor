@@ -12,45 +12,6 @@ import ConfigParser
 default_rcpath = "~/.dataprocessor.ini"
 
 
-def get_run_dir(root_path):
-    """Get path of dir in which run dirs are placed.
-
-    Parameter
-    ---------
-    root_path: str
-        path of data root
-
-    """
-    path = os.path.join(root_path, "Runs")
-    return utility.get_directory(path)
-
-
-def get_project_dir(root_path):
-    """Get path of dir in which project dirs are placed.
-
-    Parameter
-    ---------
-    root_path: str
-        path of data root
-
-    """
-    path = os.path.join(root_path, "Projects")
-    return utility.get_directory(path)
-
-
-def get_figure_dir(root_path):
-    """Get path of dir in which figure dirs are placed.
-
-    Parameter
-    ---------
-    root_path: str
-        path of data root
-
-    """
-    path = os.path.join(root_path, "Figures")
-    return utility.get_directory(path)
-
-
 def ArgumentParser(rcpath=default_rcpath):
     """Argument parser for executables in this project.
 
