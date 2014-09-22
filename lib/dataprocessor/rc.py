@@ -3,6 +3,7 @@
 """
 
 from . import utility, io
+from .exception import DataProcessorError
 import os.path
 import argparse
 import ConfigParser
@@ -153,14 +154,15 @@ def load_configure_file(rcpath=default_rcpath):
     dict
         There are two keys: "root" and "json".
 
+    Exception
+    ---------
+    DataProcessorError
+        raised when configure file does not exist.
+
     """
     rcpath = utility.path_expand(rcpath)
     if not os.path.exists(rcpath):
-        print("Configure file: " + rcpath + " does not exists")
-        ans = raw_input("Create now? [Y/n]")
-        if ans in ["n", "N", "no", "No", "NO"]:
-            return {"json": "", "root": ""}
-        create_configure_file(rcpath)
+        raise DataProcessorError("Configure file does not exist")
 
     parser = ConfigParser.SafeConfigParser()
     parser.read(rcpath)
