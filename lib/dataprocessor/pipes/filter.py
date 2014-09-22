@@ -7,7 +7,7 @@ def register(pipes_dics):
     pipes_dics["filter_project"] = {
         "func": flt.project,
         "args": ["path"],
-        "desc": "filter by project name",
+        "desc": "filter by project path",
     }
     pipes_dics["filter_node_type"] = {
         "func": flt.node_type,
