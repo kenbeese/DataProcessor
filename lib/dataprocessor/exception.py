@@ -4,6 +4,7 @@ from contextlib import contextmanager
 
 
 class DataProcessorError(Exception):
+
     """A runtime error occurred in DataProcessor
 
     This exception is raised when invalid manipulation is done.
@@ -14,7 +15,9 @@ class DataProcessorError(Exception):
     ----------
     msg : str
         A message for the error
+
     """
+
     def __init__(self, msg):
         self.msg = msg
 
@@ -23,6 +26,7 @@ class DataProcessorError(Exception):
 
 
 class InvalidJSONError(Exception):
+
     """A runtime error occurred in processing manipulation
 
     Attributes
@@ -31,7 +35,9 @@ class InvalidJSONError(Exception):
         The name of pipe in which error occurred.
     msg : str
         A message for the error
+
     """
+
     def __init__(self, name, msg):
         self.name = name
         self.msg = msg

@@ -10,10 +10,10 @@ def add(node_list, comment, node_path):
 
     Parameters
     ----------
-    comment: str
-           comment.
+    comment : str
+        comment.
 
-    node_path: str
+    node_path : str
         This path specify the unique node.
 
     Examples

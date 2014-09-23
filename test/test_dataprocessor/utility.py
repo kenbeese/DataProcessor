@@ -18,6 +18,18 @@ class TestNodeListAndDir(unittest.TestCase):
 
     """Unittest for using node_list and directory.
 
+    create node_list including following nodes.
+
+
+    ============    =========  ========
+    path            node_type  name
+    ============    =========  ========
+    tmpdir          project    tmpdir
+    tmpdir/run01    run        run01
+    tmpdir/run02    run        run02
+    tmpdir/run03    run        run03
+    ============    =========  ========
+
     Attributes
     ----------
     tempdir_paths : list
