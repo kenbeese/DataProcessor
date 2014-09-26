@@ -10,8 +10,18 @@ def project(node_list, path):
 
     Parameters
     ----------
-    path: str or [str]
+    path : str or [str]
         the path of project (or projects), whose children are left.
+
+    Raises
+    ------
+    DataProcessorError
+        If path is not specified by str or [str].
+
+    Return
+    ------
+    node_list
+
     """
     if isinstance(path, str):
         paths = [utility.path_expand(path)]
@@ -28,8 +38,18 @@ def node_type(node_list, ntype):
 
     Parameters
     ----------
-    ntype: str
+    ntype : str
         nodes whose type is `ntype` are left in node_list.
+
+    Raises
+    ------
+    DataProcessorError
+        If specified ntype is not supported.
+
+    Return
+    ------
+    node_list
+
     """
     if ntype not in node_types:
         raise DataProcessorError("Please select node type from "
