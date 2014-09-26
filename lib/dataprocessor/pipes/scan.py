@@ -26,12 +26,16 @@ def directory(node_list, root, whitelist, followlinks=False):
         Whether scan in symbolic link.
         Be aware that setting this to True may lead to infinite recursion.
 
+    Returns
+    -------
+    node_list
+
     Examples
     --------
-    Initialize node_list.
+    >>> # Initialize node_list.
     >>> node_list = directory([], "scandir_path", ["data/hoge*", "*foo*"])
 
-    Rescan node_list.
+    >>> # Rescan node_list.
     >>> node_list = [
     ...     {'path': '/tmp/scan_dir/run0',
     ...      'parents': [],   # empty
@@ -51,7 +55,7 @@ def directory(node_list, root, whitelist, followlinks=False):
         parents = []
         children = []
         if not get(node_list, path) is None:
-                continue
+            continue
         for child in dirs:
             for white in whitelist:
                 if glob(os.path.join(path, child, white)):

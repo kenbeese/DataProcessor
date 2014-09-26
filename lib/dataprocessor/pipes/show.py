@@ -16,8 +16,8 @@ def show(node_list, show_format=default_format):
         You should use new `format` function format.
         This string will be formatted by `show_format.format(**node)`.
 
-    Return
-    ------
+    Returns
+    -------
     node_list
 
     """
@@ -38,8 +38,8 @@ def show_runs(node_list, project=None, show_format=default_format):
         You should use new `format` function format.
         This string will be formatted by `show_format.format(**node)`.
 
-    Return
-    ------
+    Returns
+    -------
     node_list
 
     """
@@ -62,8 +62,8 @@ def show_projects(node_list, show_format=default_format):
         You should use new `format` function format.
         This string will be formatted by `show_format.format(**node)`.
 
-    Return
-    ------
+    Returns
+    -------
     node_list
 
     """

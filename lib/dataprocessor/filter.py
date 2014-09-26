@@ -18,8 +18,8 @@ def project(node_list, path):
     DataProcessorError
         If path is not specified by str or [str].
 
-    Return
-    ------
+    Returns
+    -------
     node_list
 
     """
@@ -46,8 +46,8 @@ def node_type(node_list, ntype):
     DataProcessorError
         If specified ntype is not supported.
 
-    Return
-    ------
+    Returns
+    -------
     node_list
 
     """

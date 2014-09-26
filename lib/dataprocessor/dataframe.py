@@ -8,8 +8,8 @@ from .exception import DataProcessorError
 def get_projects(node_list):
     """Get projects in dataframe format.
 
-    Return
-    ------
+    Returns
+    -------
     projects_dataframe : pandas.DataFrame
 
     """
@@ -25,10 +25,6 @@ def get_project(node_list, project_path, properties=["comment", "tags"],
     If there are two or more project of specified name,
     the latter one is selected.
 
-    Return
-    ------
-    project : pandas.DataFrame
-
     Parameters
     ----------
     project_path : str
@@ -41,6 +37,10 @@ def get_project(node_list, project_path, properties=["comment", "tags"],
         index of project dataframe
         if it is `None`, the index of DataFrame(node_list) will be successed
         (Default="path")
+
+    Returns
+    -------
+    project : pandas.DataFrame
 
     """
     project_path = utility.path_expand(project_path)
