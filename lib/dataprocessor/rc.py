@@ -15,13 +15,13 @@ default_rcpath = "~/.dataprocessor.ini"
 def ArgumentParser(rcpath=default_rcpath):
     """Argument parser for executables in this project.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
-    Return
-    ------
+    Returns
+    -------
     argparse.ArgumentParser instance
 
     """
@@ -38,13 +38,13 @@ def ArgumentParser(rcpath=default_rcpath):
 def load(rcpath=default_rcpath):
     """Load node_list from default data.json.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
-    Return
-    ------
+    Returns
+    -------
     node_list
 
     """
@@ -55,8 +55,8 @@ def load(rcpath=default_rcpath):
 def update(node_list, rcpath=default_rcpath):
     """Save node_list into default data.json with update strategy.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
@@ -69,8 +69,8 @@ def update(node_list, rcpath=default_rcpath):
 def create_configure_file(rcpath=default_rcpath):
     """Create configure file.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
@@ -105,18 +105,18 @@ def load_configure_file(rcpath=default_rcpath):
     If the configure file does not exist, it will be created.
     (see `create_configure_file(rcpath)`)
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
-    Return
-    ------
+    Returns
+    -------
     dict
         There are two keys: "root" and "json".
 
-    Raise
-    -----
+    Raises
+    ------
     DataProcessorError
         raised when configure file does not exist.
 
