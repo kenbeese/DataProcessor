@@ -17,7 +17,7 @@ def ArgumentParser(rcpath=default_rcpath):
 
     Parameter
     ---------
-    rcpath: str, optional
+    rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
     Return
@@ -40,7 +40,7 @@ def load(rcpath=default_rcpath):
 
     Parameter
     ---------
-    rcpath: str, optional
+    rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
     Return
@@ -57,7 +57,7 @@ def update(node_list, rcpath=default_rcpath):
 
     Parameter
     ---------
-    rcpath: str, optional
+    rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
     """
@@ -71,7 +71,7 @@ def create_configure_file(rcpath=default_rcpath):
 
     Parameter
     ---------
-    rcpath: str, optional
+    rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
     """
@@ -107,7 +107,7 @@ def load_configure_file(rcpath=default_rcpath):
 
     Parameter
     ---------
-    rcpath: str, optional
+    rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
     Return
@@ -115,8 +115,8 @@ def load_configure_file(rcpath=default_rcpath):
     dict
         There are two keys: "root" and "json".
 
-    Exception
-    ---------
+    Raise
+    -----
     DataProcessorError
         raised when configure file does not exist.
 

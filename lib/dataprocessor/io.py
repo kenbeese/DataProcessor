@@ -131,7 +131,9 @@ class DataHandler(object):
         nodes.add(self.node_list, node, skip_validate_link)
 
     def update(self, node_list, skip_validate_link=False):
-        """ Update node_list.
+        """ Update node_list (use dict.update).
+
+        See also the help of nodes.add.
 
         Parameters
         ----------
