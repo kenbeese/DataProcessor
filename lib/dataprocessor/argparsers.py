@@ -32,6 +32,9 @@ def dpmanip():
         if "kwds" in val:
             for kwd in val["kwds"]:
                 pipe_psr.add_argument("--" + kwd)
+        if "spec" in val:
+            for sname, sdict in val["spec"]:
+                pipe_psr.add_argument("--" + sname, **sdict)
         pipe_psr.set_defaults(val=val)
     return parser
 

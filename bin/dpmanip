@@ -20,6 +20,9 @@ def main(args):
                     if vars(args)[i]}
     else:
         keywards = {}
+    if "spec" in args.val:
+        keywards.update({i: vars(args)[i] for i,d in args.val["spec"]
+                         if vars(args)[i]})
 
     if not args.input and not args.output:
         with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
