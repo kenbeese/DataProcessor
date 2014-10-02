@@ -9,12 +9,14 @@ def add_node(node_list, path=".", node_type="run", children=[],
              name=None, parents=[".."]):
     """Add node.
 
+    A node is added to the node_list according to dict.update.
+
     Parameters
     ----------
     path : str, optional
-        default is set to ".".
-    node_type : str, optional
-        default is set to "run"
+        path of node (default=".")
+    node_type : str, optional {"run", "project"}
+        type of node (default="run")
     name : str, optional
     children : list, optional
     parents : list, optional
@@ -30,7 +32,9 @@ def add_node(node_list, path=".", node_type="run", children=[],
         children = [children]
     if isinstance(parents, str):
         parents = [parents]
-    name = os.path.basename(path)
+    if not name:
+        name = os.path.basename(path)
+
     node = {"path": path, "type": node_type,
             "children": [utility.path_expand(c_path) for c_path in children],
             "parents": [utility.path_expand(c_path) for c_path in parents],
