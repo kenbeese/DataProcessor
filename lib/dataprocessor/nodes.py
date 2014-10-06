@@ -25,6 +25,7 @@ def get(node_list, path):
     None
 
     """
+    path = utility.path_expand(path)
     for node in node_list:
         if path == node["path"]:
             return node
@@ -276,7 +277,7 @@ def validate_link(node_list, node, silent=False):
             else:
                 if silent:
                     continue
-                if ask_remove(path):
+                if not ask_remove(link_path):
                     link_path_list.append(link_path)
         node[check_key] = link_path_list
 
