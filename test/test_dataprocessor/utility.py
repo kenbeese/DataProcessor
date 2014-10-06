@@ -47,8 +47,8 @@ class TestNodeListAndDir(unittest.TestCase):
         self.tempdir_path = tempfile.mkdtemp()
         self.project_paths = []
         self.node_list = []
-        self._create_dir_and_run("p1", rundir_num=3)
-        self._create_dir_and_run("p2", rundir_num=2)
+        self._create_project_and_run("p1", rundir_num=3)
+        self._create_project_and_run("p2", rundir_num=2)
 
     def tearDown(self):
         shutil.rmtree(self.tempdir_path)

@@ -47,8 +47,8 @@ class TestScan(TestNodeListAndDir):
 
         """
         import tempfile
-        self.tempdir_paths = [tempfile.mkdtemp(), ]
-        root = self.tempdir_paths[0]
+        self.tempdir_path = tempfile.mkdtemp()
+        root = self.tempdir_path
         for i in range(3):
             os.mkdir(os.path.join(root, "run" + str(i)))
         for i in range(2):
@@ -68,7 +68,7 @@ class TestScan(TestNodeListAndDir):
     def test_directory_for_first_scan1(self):
         """Test for initial scan."""
         node_list = []
-        root_dir = self.tempdir_paths[0]
+        root_dir = self.tempdir_path
         # whitelist specifies directory.
         node_list = directory(node_list, root_dir, ["data"])
         compare_node_list = [
@@ -97,7 +97,7 @@ class TestScan(TestNodeListAndDir):
     def test_directory_for_first_scan2(self):
         """Test for initial scan."""
         node_list = []
-        root_dir = self.tempdir_paths[0]
+        root_dir = self.tempdir_path
         # whitelist have two elements.
         node_list = directory(node_list, root_dir,
                               ["data/hoge*", "data/test*"])
@@ -127,7 +127,7 @@ class TestScan(TestNodeListAndDir):
     def test_directory_for_first_scan3(self):
         """Test for initial scan."""
         node_list = []
-        root_dir = self.tempdir_paths[0]
+        root_dir = self.tempdir_path
         # whitelist has `..`.
         node_list = directory(node_list, root_dir,
                               ["../data"])
@@ -164,7 +164,7 @@ class TestScan(TestNodeListAndDir):
     def test_directory_for_first_scan4(self):
         """Test for initial scan with symbolic link."""
         node_list = []
-        root_dir = self.tempdir_paths[0]
+        root_dir = self.tempdir_path
         # followlinks is `True`.
         node_list = directory(node_list, root_dir,
                               ["data/test.conf"], followlinks=True)
@@ -190,7 +190,7 @@ class TestScan(TestNodeListAndDir):
 
     def test_directory_for_rescan(self):
         """Test for rescan."""
-        root_dir = self.tempdir_paths[0]
+        root_dir = self.tempdir_path
         node_list = [{'path': os.path.join(root_dir, "run0"),
                       'parents': [],   # empty
                       'children': [],  # empty
@@ -242,7 +242,7 @@ class TestScan(TestNodeListAndDir):
         self.assertEqual(node_list, compare_node_list)
 
     def test_rescan_failed(self):
-        root_dir = self.tempdir_paths[0]
+        root_dir = self.tempdir_path
         node_list = [{'path': os.path.join(root_dir, "run0"),
                       'children': [],  # empty and no parents key.
                       'name': 'run0',
