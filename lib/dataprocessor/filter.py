@@ -60,12 +60,13 @@ def node_type(node_list, ntype):
 def prefix_path(node_list, pre_path):
     """Filter by prefix path.
 
-    This is including following paths when `pre_path` is "/foo/bar".
+    In the case when pre_path is "/foo/bar",
+    following paths remain (not filtered):
 
     - /foo/bar
     - /foo/bar/foo
 
-    This is **not** including following paths when `pre_path` is "/foo/bar"
+    , and following do not remain (filtered out):
 
     - /foo/barfoo/hoge
     - /bar/foo/bar/FOO

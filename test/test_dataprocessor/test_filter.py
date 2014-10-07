@@ -122,10 +122,10 @@ class TestPrefixPath(unittest.TestCase):
         result = dp.filter.prefix_path(self.node_list, "/foo/bar/")
         self.assertEqual(len(result), 2)
 
-    def test2(self):
+    def test3(self):
         result = dp.filter.prefix_path(self.node_list, "/foo/")
         self.assertEqual(len(result), 3)
 
-    def test2(self):
+    def test4(self):
         result = dp.filter.prefix_path(self.node_list, "foo")
         self.assertEqual(len(result), 0)

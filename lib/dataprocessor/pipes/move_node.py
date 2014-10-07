@@ -10,15 +10,15 @@ from ..filter import prefix_path
 
 def move_node(node_list, from_path, dest):
     """
-    Move node like as UNIX.
+    Move node like as UNIX mv.
 
-    Change path of a node and related nodes
-    Those directories are also moved or renamed.
+    Change path of a node and related nodes.
+    Coresponding directories are also moved or renamed.
 
     Parameters
     ----------
     from_path : str
-        path of node
+        path of node.
     dest : str
         path of destination.
 
@@ -57,7 +57,7 @@ def move_node(node_list, from_path, dest):
         target_nodes = prefix_path(work_nl, from_path)
         for node in target_nodes:
             to_p = node["path"].replace(from_path, to_path, 1)
-            node_list = change_path(work_nl, node["path"], to_p, silent=True)
+            work_nl = change_path(work_nl, node["path"], to_p, silent=True)
         shutil.move(from_path, dest)
 
     node_list = work_nl
