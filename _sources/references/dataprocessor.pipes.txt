@@ -1,0 +1,78 @@
+dataprocessor.pipes package
+===========================
+
+Submodules
+----------
+
+dataprocessor.pipes.add_node module
+-----------------------------------
+
+.. automodule:: dataprocessor.pipes.add_node
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.addcomment module
+-------------------------------------
+
+.. automodule:: dataprocessor.pipes.addcomment
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.configure module
+------------------------------------
+
+.. automodule:: dataprocessor.pipes.configure
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.figure module
+---------------------------------
+
+.. automodule:: dataprocessor.pipes.figure
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.filter module
+---------------------------------
+
+.. automodule:: dataprocessor.pipes.filter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.jsonio module
+---------------------------------
+
+.. automodule:: dataprocessor.pipes.jsonio
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.scan module
+-------------------------------
+
+.. automodule:: dataprocessor.pipes.scan
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.show module
+-------------------------------
+
+.. automodule:: dataprocessor.pipes.show
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: dataprocessor.pipes
+    :members:
+    :undoc-members:
+    :show-inheritance:

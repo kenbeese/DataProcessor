@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dataprocessor.utility &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for dataprocessor.utility</h1><div class="highlight"><pre>
+<span class="c"># coding=utf-8</span>
+<span class="sd">&quot;&quot;&quot;Utility of dataprocessor.</span>
+
+<span class="sd">Some useful tools for dataprocessor are included.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+
+<div class="viewcode-block" id="path_expand"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.utility.path_expand">[docs]</a><span class="k">def</span> <span class="nf">path_expand</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get absolute path.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Absolute path of the argument</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorError</span>
+<span class="sd">        path is not readable</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;path should be str or unicode: </span><span class="si">%s</span><span class="s">&quot;</span>
+                                 <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="check_file"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.utility.check_file">[docs]</a><span class="k">def</span> <span class="nf">check_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether file exists.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Absolute path of the argument</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorError</span>
+<span class="sd">        occurs in two cases:</span>
+
+<span class="sd">        + when the file does not exist</span>
+<span class="sd">        + file exist but it is a directory</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;File &#39;</span><span class="si">%s</span><span class="s">&#39; does not exist&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> is not a file but a directory&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">path</span>
+
+</div>
+<div class="viewcode-block" id="check_directory"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.utility.check_directory">[docs]</a><span class="k">def</span> <span class="nf">check_directory</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether directory exists.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Absolute path of the argument</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorError</span>
+<span class="sd">        occurs when the file does not exist or the file is not directory.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Directory &#39;</span><span class="si">%s</span><span class="s">&#39; does not exist&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> is not a directory&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">path</span>
+
+</div>
+<div class="viewcode-block" id="get_directory"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.utility.get_directory">[docs]</a><span class="k">def</span> <span class="nf">get_directory</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get absolute path of the directory.</span>
+
+<span class="sd">    If it does not exist, it will be created.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    silent : bool, optional</span>
+<span class="sd">        does not ask whether create directory (default=True)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Absolute path of the directory</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorError</span>
+<span class="sd">        occurs in two cases</span>
+
+<span class="sd">        + another file (does not directory) exist</span>
+<span class="sd">        + refused by user to create directory</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dir_path</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Another file already exists in </span><span class="si">%s</span><span class="s">&quot;</span>
+                                     <span class="o">%</span> <span class="n">dir_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Create directory(</span><span class="si">%s</span><span class="s">)? [y/N]&quot;</span> <span class="o">%</span> <span class="n">dir_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ans</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;yes&quot;</span><span class="p">,</span> <span class="s">&quot;y&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Directory cannot be created.&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dir_path</span>
+
+</div>
+<div class="viewcode-block" id="copy_file"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.utility.copy_file">[docs]</a><span class="k">def</span> <span class="nf">copy_file</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;interactive&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Copy a file.</span>
+
+<span class="sd">    If `to_path` already exist, check whether it is same file.</span>
+<span class="sd">    When there are same file, skip.</span>
+<span class="sd">    When there are different, replace the file or change file name.</span>
+
+<span class="sd">    Moreover, when destination directory does not exist, create the direcotry.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    from_path : str</span>
+<span class="sd">    to_path : str</span>
+<span class="sd">    strategy : str, optional, {&quot;interactive&quot;, &quot;replace&quot;, &quot;skip&quot;, &quot;error&quot;}</span>
+<span class="sd">        This specify the action when `to_path` already exists.</span>
+<span class="sd">          + &quot;interactive&quot; : ask on the prompt.</span>
+<span class="sd">          + &quot;replace&quot; : `to_path` file will be replaced.</span>
+<span class="sd">          + &quot;skip&quot; : do nothing.</span>
+<span class="sd">          + &quot;error&quot; : raise DataProcessorError.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorError</span>
+<span class="sd">        Occur in two cases</span>
+<span class="sd">            + Invalid `strategy` keyword is specified.</span>
+<span class="sd">            + `to_path` already exists and the `strategy` is &quot;error&quot;.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">from_path</span> <span class="o">=</span> <span class="n">check_file</span><span class="p">(</span><span class="n">from_path</span><span class="p">)</span>
+    <span class="n">to_path</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">to_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">to_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">to_path</span><span class="p">):</span>
+        <span class="n">to_dir</span> <span class="o">=</span> <span class="n">to_path</span>
+        <span class="n">to_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">from_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">to_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">to_path</span><span class="p">)</span>
+        <span class="n">to_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">to_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">to_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">to_dir</span><span class="p">)</span>
+    <span class="n">dest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">to_dir</span><span class="p">,</span> <span class="n">to_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_path</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;A file already exists in </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">dest_path</span><span class="p">)</span>
+        <span class="n">from_con</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">dest_con</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">from_con</span> <span class="o">==</span> <span class="n">dest_con</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;They are same contents. Skip copy.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;interactive&quot;</span><span class="p">:</span>
+                <span class="k">while</span><span class="p">(</span><span class="bp">True</span><span class="p">):</span>
+                    <span class="n">ans</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Replace </span><span class="si">%s</span><span class="s">? [y/N]:&quot;</span> <span class="o">%</span> <span class="n">dest_path</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">ans</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;Y&quot;</span><span class="p">,</span> <span class="s">&quot;YES&quot;</span><span class="p">]:</span>
+                        <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">)</span>
+                        <span class="k">return</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Enter new name:&quot;</span><span class="p">)</span>
+                        <span class="n">new_dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">to_dir</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_dest</span><span class="p">):</span>
+                            <span class="k">print</span><span class="p">(</span><span class="s">&quot;It also exits&quot;</span><span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">new_dest</span><span class="p">)</span>
+                            <span class="k">return</span>
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;replace&quot;</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;skip&quot;</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> already exist. Skip copy.&quot;</span> <span class="o">%</span> <span class="n">dest_path</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;error&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> already exist.&quot;</span> <span class="o">%</span> <span class="n">dest_path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Invalid strategy: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">strategy</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="read_configure"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.utility.read_configure">[docs]</a><span class="k">def</span> <span class="nf">read_configure</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">split_char</span><span class="o">=</span><span class="s">&quot;=&quot;</span><span class="p">,</span> <span class="n">comment_char</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;#&quot;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot; Read configure file without sections.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The file name of the configure file</span>
+<span class="sd">    split_char : str, optional</span>
+<span class="sd">        The lines in configure file are splited by this char (default &quot;=&quot;).</span>
+<span class="sd">        If your configure has line s.t. `a : 1.2`,</span>
+<span class="sd">        then you should set `split_char=&quot;:&quot;`.</span>
+<span class="sd">    comment_char : list of str, optional</span>
+<span class="sd">        The line starting with chars in this list will be skipped.</span>
+<span class="sd">        (default=[&quot;#&quot;])</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        {parameter-name: value} dictionary.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">comment_char</span> <span class="ow">or</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">split_char</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;invalid line : &quot;</span><span class="o">+</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">config</span><span class="p">[</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">config</span>
+
+</div>
+<div class="viewcode-block" id="boolenize"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.utility.boolenize">[docs]</a><span class="k">def</span> <span class="nf">boolenize</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make arg boolen value.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    arg : bool, str, int, float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(True)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(False)</span>
+<span class="sd">    False</span>
+
+<span class="sd">    &gt;&gt;&gt; boolenize(1)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(0)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(0.0)</span>
+<span class="sd">    False</span>
+
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;True&quot;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;other words&quot;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;False&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;falSE&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;false&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;F&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;f&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;No&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;NO&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;no&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;N&quot;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; boolenize(&quot;n&quot;)</span>
+<span class="sd">    False</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;false&quot;</span><span class="p">,</span> <span class="s">&quot;f&quot;</span><span class="p">,</span> <span class="s">&quot;no&quot;</span><span class="p">,</span> <span class="s">&quot;n&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

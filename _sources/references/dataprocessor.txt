@@ -1,0 +1,101 @@
+dataprocessor package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    dataprocessor.pipes
+
+Submodules
+----------
+
+dataprocessor.dataframe module
+------------------------------
+
+.. automodule:: dataprocessor.dataframe
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.exception module
+------------------------------
+
+.. automodule:: dataprocessor.exception
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.execute module
+----------------------------
+
+.. automodule:: dataprocessor.execute
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.figure module
+---------------------------
+
+.. automodule:: dataprocessor.figure
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.filter module
+---------------------------
+
+.. automodule:: dataprocessor.filter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.io module
+-----------------------
+
+.. automodule:: dataprocessor.io
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.nodes module
+--------------------------
+
+.. automodule:: dataprocessor.nodes
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.rc module
+-----------------------
+
+.. automodule:: dataprocessor.rc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.table module
+--------------------------
+
+.. automodule:: dataprocessor.table
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.utility module
+----------------------------
+
+.. automodule:: dataprocessor.utility
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: dataprocessor
+    :members:
+    :undoc-members:
+    :show-inheritance:

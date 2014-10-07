@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dataprocessor.execute &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for dataprocessor.execute</h1><div class="highlight"><pre>
+<span class="c"># coding=utf-8</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span><span class="p">,</span> <span class="n">InvalidJSONError</span><span class="p">,</span> <span class="n">pipe_execute</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pipes</span>
+
+
+<div class="viewcode-block" id="check_manip"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.execute.check_manip">[docs]</a><span class="k">def</span> <span class="nf">check_manip</span><span class="p">(</span><span class="n">manip</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; check whether maniplation is valid</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    manip : list</span>
+<span class="sd">        A list defining manipulation</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    InvalidJSONError</span>
+<span class="sd">        It is raised if manipulation is invalid.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; def do_check_manip(manip):</span>
+<span class="sd">    ...     try:</span>
+<span class="sd">    ...         check_manip(manip)</span>
+<span class="sd">    ...     except InvalidJSONError as e:</span>
+<span class="sd">    ...         print(&quot;[%s] %s&quot; % (e.name, e.msg))</span>
+<span class="sd">    &gt;&gt;&gt; do_check_manip([{&quot;nae&quot;: &quot;save_json&quot;, # typo: &quot;nae&quot;</span>
+<span class="sd">    ...                  &quot;args&quot;: [&quot;out.json&quot;],</span>
+<span class="sd">    ...                  &quot;kwds&quot;: {&quot;silent&quot; : &quot;True&quot;}}])</span>
+<span class="sd">    [] pipe name is not defined</span>
+<span class="sd">    &gt;&gt;&gt; do_check_manip([{&quot;name&quot;: &quot;save_json&quot;,</span>
+<span class="sd">    ...                  &quot;arg&quot;: [&quot;out.json&quot;], # typo: &quot;arg&quot;</span>
+<span class="sd">    ...                  &quot;kwds&quot;: {&quot;silent&quot; : &quot;True&quot;}}])</span>
+<span class="sd">    [save_json] attributes of pipes must be in &#39;name&#39;, &#39;args&#39;, &#39;kwds&#39;</span>
+<span class="sd">    &gt;&gt;&gt; do_check_manip([{&quot;name&quot;: &quot;save_json&quot;,</span>
+<span class="sd">    ...                  &quot;args&quot;: [&quot;out.json&quot;],</span>
+<span class="sd">    ...                  &quot;kwd&quot;: {&quot;silent&quot; : &quot;True&quot;}}]) # typo: &quot;kwd&quot;</span>
+<span class="sd">    [save_json] attributes of pipes must be in &#39;name&#39;, &#39;args&#39;, &#39;kwds&#39;</span>
+<span class="sd">    &gt;&gt;&gt; do_check_manip([{&quot;name&quot;: &quot;sav_json&quot;, # typo: &quot;sav_json&quot;</span>
+<span class="sd">    ...                  &quot;args&quot;: [&quot;out.json&quot;],</span>
+<span class="sd">    ...                  &quot;kwds&quot;: {&quot;silent&quot; : &quot;True&quot;}}])</span>
+<span class="sd">    [sav_json] invalid pipe name</span>
+<span class="sd">    &gt;&gt;&gt; do_check_manip([{&quot;name&quot;: &quot;save_json&quot;,</span>
+<span class="sd">    ...                  &quot;args&quot;: [], # argument mismatch</span>
+<span class="sd">    ...                  &quot;kwds&quot;: {&quot;silent&quot; : &quot;True&quot;}}])</span>
+<span class="sd">    [save_json] the number of arguments mismatches</span>
+<span class="sd">    &gt;&gt;&gt; do_check_manip([{&quot;name&quot;: &quot;load_json&quot;,</span>
+<span class="sd">    ...                  &quot;args&quot;: [&quot;in.json&quot;],</span>
+<span class="sd">    ...                  &quot;kwds&quot;: {&quot;silent&quot;: &quot;True&quot;}}])</span>
+<span class="sd">    ...                  # `load_json` does not have &quot;kwds&quot;</span>
+<span class="sd">    [load_json] pipe does not have &#39;kwds&#39;</span>
+<span class="sd">    &gt;&gt;&gt; do_check_manip([{&quot;name&quot;: &quot;save_json&quot;,</span>
+<span class="sd">    ...                  &quot;args&quot;: [&quot;out.json&quot;],</span>
+<span class="sd">    ...                  &quot;kwds&quot;: {&quot;silnt&quot; : &quot;True&quot;}}])</span>
+<span class="sd">    ...                  # typo in keywords: &quot;silnt&quot;</span>
+<span class="sd">    [save_json] keyword argument &#39;silnt&#39; does not exist</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">mn</span> <span class="ow">in</span> <span class="n">manip</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&quot;name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mn</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidJSONError</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;pipe name is not defined&quot;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">mn</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mn</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;args&quot;</span><span class="p">,</span> <span class="s">&quot;kwds&quot;</span><span class="p">]:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;attributes of pipes must be in &#39;name&#39;, &#39;args&#39;, &#39;kwds&#39;&quot;</span>
+                <span class="k">raise</span> <span class="n">InvalidJSONError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pipes</span><span class="o">.</span><span class="n">pipes_dics</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidJSONError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;invalid pipe name&quot;</span><span class="p">)</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="n">pipes</span><span class="o">.</span><span class="n">pipes_dics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mn</span><span class="p">[</span><span class="s">&quot;args&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s">&quot;args&quot;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="n">InvalidJSONError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;the number of arguments mismatches&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&quot;kwds&quot;</span> <span class="ow">in</span> <span class="n">mn</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s">&quot;kwds&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InvalidJSONError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;pipe does not have &#39;kwds&#39;&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">kwd</span> <span class="ow">in</span> <span class="n">mn</span><span class="p">[</span><span class="s">&quot;kwds&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">kwd</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">[</span><span class="s">&quot;kwds&quot;</span><span class="p">]:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;keyword argument &#39;</span><span class="si">%s</span><span class="s">&#39; does not exist&quot;</span>
+                    <span class="k">raise</span> <span class="n">InvalidJSONError</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">msg</span> <span class="o">%</span> <span class="n">kwd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mn</span><span class="p">[</span><span class="s">&quot;kwds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+</div>
+<div class="viewcode-block" id="execute"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.execute.execute">[docs]</a><span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">manip</span><span class="p">,</span> <span class="n">node_list</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;execute pipeline defined in `manip`</span>
+
+<span class="sd">    This function does not check whether `manip` is valid.</span>
+<span class="sd">    Please check by `.check_manip`</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    manip : list</span>
+<span class="sd">        A list defining manipulation</span>
+<span class="sd">    node_list : list, optional</span>
+<span class="sd">        initial node_list (default=[])</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">mn</span> <span class="ow">in</span> <span class="n">manip</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">mn</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="n">pipes</span><span class="o">.</span><span class="n">pipes_dics</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">mn</span><span class="p">[</span><span class="s">&quot;args&quot;</span><span class="p">]</span>
+        <span class="n">kwds</span> <span class="o">=</span> <span class="n">mn</span><span class="p">[</span><span class="s">&quot;kwds&quot;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">pipe_execute</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">node_list</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s">&quot;func&quot;</span><span class="p">](</span><span class="n">node_list</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node_list</span>
+
+</div>
+<div class="viewcode-block" id="execute_from_json_str"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.execute.execute_from_json_str">[docs]</a><span class="k">def</span> <span class="nf">execute_from_json_str</span><span class="p">(</span><span class="n">manip_json_str</span><span class="p">,</span> <span class="n">node_list</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;execute pipeline from JSON string</span>
+
+<span class="sd">    This do `check_manip` and `execute`.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    InvalidJSONError</span>
+<span class="sd">        It is raised if manipulation is invalid.</span>
+<span class="sd">        See also `.check_manip`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">manip</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">manip_json_str</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Cannot decode JSON file.&quot;</span><span class="p">)</span>
+    <span class="n">check_manip</span><span class="p">(</span><span class="n">manip</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">execute</span><span class="p">(</span><span class="n">manip</span><span class="p">,</span> <span class="n">node_list</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

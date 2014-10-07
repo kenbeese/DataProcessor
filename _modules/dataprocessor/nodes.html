@@ -1,0 +1,383 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dataprocessor.nodes &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for dataprocessor.nodes</h1><div class="highlight"><pre>
+<span class="c"># coding=utf-8</span>
+<span class="sd">&quot;&quot;&quot;Tools for manipulation of node_list.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
+
+<span class="n">node_types</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;run&quot;</span><span class="p">,</span> <span class="s">&quot;project&quot;</span><span class="p">,</span> <span class="s">&quot;figure&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Search node from node_list by its path.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    node or None</span>
+<span class="sd">        the node is returned if exists,</span>
+<span class="sd">        and `None` is returned if not.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; node_list = [{&quot;path&quot;: &quot;/path/1&quot;}, {&quot;path&quot;: &quot;/path/2&quot;},</span>
+<span class="sd">    ...              {&quot;path&quot;: &quot;/path/3&quot;}, {&quot;path&quot;: &quot;/path/4&quot;}]</span>
+<span class="sd">    &gt;&gt;&gt; get(node_list, &quot;/path/3&quot;)</span>
+<span class="sd">    {&#39;path&#39;: &#39;/path/3&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; node = get(node_list, &quot;/path/5&quot;) # no node exists</span>
+<span class="sd">    &gt;&gt;&gt; print(node)</span>
+<span class="sd">    None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">node</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+</div>
+<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.add">[docs]</a><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add a node into node_list.</span>
+
+<span class="sd">    This adds a node into node_list,</span>
+<span class="sd">    and validate links in node[&quot;children&quot;] and node[&quot;parents&quot;].</span>
+<span class="sd">    In detail of validate link, see `validate_link`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">        the list of nodes</span>
+<span class="sd">    node : dict</span>
+<span class="sd">        The node will be added into node_list</span>
+<span class="sd">    skip_validate_link : bool, optional</span>
+<span class="sd">        skip link validation (default False)</span>
+<span class="sd">    strategy : str, optional {&quot;update&quot;, &quot;replace&quot;}</span>
+<span class="sd">        The strategy for the case</span>
+<span class="sd">        where there exists a node whose &quot;path&quot; is same as new one</span>
+
+<span class="sd">        - &quot;update&quot; : use dict.update to update existing node</span>
+<span class="sd">        - &quot;replace&quot; : replace existing node with new node</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; node_list = [{&quot;path&quot;: &quot;/some/path&quot;, &quot;children&quot;: [], &quot;parents&quot;: []}]</span>
+<span class="sd">    &gt;&gt;&gt; added_node = {&quot;path&quot;: &quot;/added/path&quot;, &quot;children&quot;: [&quot;/some/path&quot;],</span>
+<span class="sd">    ...               &quot;parents&quot;: []}</span>
+<span class="sd">    &gt;&gt;&gt; add(node_list, added_node)</span>
+
+<span class="sd">    If skip_validate_link=True, snode_list[0][&quot;parents&quot;] is not filled.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node0</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">node0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;update&quot;</span><span class="p">:</span>
+            <span class="n">node0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node0</span>
+        <span class="k">elif</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;replace&quot;</span><span class="p">:</span>
+            <span class="n">node_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node0</span><span class="p">)</span>
+            <span class="n">node_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Invalid strategy: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">strategy</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">node_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_validate_link</span><span class="p">:</span>
+        <span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="check_duplicate"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.check_duplicate">[docs]</a><span class="k">def</span> <span class="nf">check_duplicate</span><span class="p">(</span><span class="n">node_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Check if duplicated nodes exist.</span>
+
+<span class="sd">    only check their paths</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">        the list of nodes (not modified)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of str</span>
+<span class="sd">        return the list of duplicated nodes&#39; paths</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; node_list = [</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/0&quot;, &quot;parents&quot;: [&quot;/path/1&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: [&quot;/path/2&quot;, &quot;/path/3&quot;]},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/1&quot;, &quot;parents&quot;: [],</span>
+<span class="sd">    ...      &quot;children&quot;: [&quot;/path/0&quot;]},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/2&quot;, &quot;parents&quot;: [&quot;/path/0&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: []},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/2&quot;, &quot;parents&quot;: [&quot;/path/0&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: []},  # duplicated</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/3&quot;, &quot;parents&quot;: [&quot;/path/0&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: [], &quot;attr1&quot;: &quot;value1&quot;},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/3&quot;, &quot;parents&quot;: [&quot;/path/0&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: [], &quot;attr1&quot;: &quot;value2&quot;}  # duplicated</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &gt;&gt;&gt; check_duplicate(node_list)</span>
+<span class="sd">    [&#39;/path/2&#39;, &#39;/path/3&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dup_paths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+            <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dup_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dup_paths</span>
+
+</div>
+<div class="viewcode-block" id="merge_duplicate"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.merge_duplicate">[docs]</a><span class="k">def</span> <span class="nf">merge_duplicate</span><span class="p">(</span><span class="n">node_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Merge duplicate node.</span>
+
+<span class="sd">    If duplicated nodes are found, they will be merged.</span>
+<span class="sd">    The latter node has priority in merging (see Examples)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">        the list of nodes</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    node_list : list</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; node_list = [</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/1&quot;, &quot;attr1&quot;: &quot;value1&quot;},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/1&quot;, &quot;attr1&quot;: &quot;value2&quot;},</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &gt;&gt;&gt; merge_duplicate(node_list)</span>
+<span class="sd">    [{&#39;path&#39;: &#39;/path/1&#39;, &#39;attr1&#39;: &#39;value2&#39;}]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_node_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+        <span class="n">node0</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">new_node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">node0</span><span class="p">:</span>
+            <span class="n">new_node_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">node0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_node_list</span>
+
+</div>
+<div class="viewcode-block" id="remove"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.remove">[docs]</a><span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove node from node_list.</span>
+
+<span class="sd">    In detail of validate link, see `validate_link`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">        the list of nodes</span>
+<span class="sd">    path : str</span>
+<span class="sd">        The path of the node to be removed</span>
+<span class="sd">    skip_validate_link : bool, optional</span>
+<span class="sd">        skip link validation (default False)</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorError</span>
+<span class="sd">        occurs when specified `path` does not exist in node_list</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; node_list = [{&quot;path&quot;: &quot;/remove/path&quot;, &quot;children&quot;: [],</span>
+<span class="sd">    ...               &quot;parents&quot;: [&quot;/some/path&quot;]},</span>
+<span class="sd">    ...              {&quot;path&quot;: &quot;/some/path&quot;, &quot;children&quot;: [&quot;/remove/path&quot;],</span>
+<span class="sd">    ...               &quot;parents&quot;: []}]</span>
+<span class="sd">    &gt;&gt;&gt; remove(node_list, &quot;/remove/path&quot;)</span>
+
+<span class="sd">    If skip_validate_link=True, node_list[1][&quot;chilrdren&quot;] is not removed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Removing non-existing node.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_validate_link</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">p_path</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;parents&quot;</span><span class="p">]:</span>
+            <span class="n">p_node</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">p_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">p_node</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">p_node</span><span class="p">[</span><span class="s">&quot;children&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c_path</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;children&quot;</span><span class="p">]:</span>
+            <span class="n">c_node</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">c_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">c_node</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">c_node</span><span class="p">[</span><span class="s">&quot;parents&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">node_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="validate_link"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.validate_link">[docs]</a><span class="k">def</span> <span class="nf">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Validate the link of the node.</span>
+
+<span class="sd">    Check node[&quot;children&quot;] and node[&quot;parents&quot;] is correct.</span>
+<span class="sd">    If a link is incomplete, it will fixed (see the following example).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">        the list of nodes</span>
+<span class="sd">    node : dict</span>
+<span class="sd">        a node will be checked.</span>
+<span class="sd">        This must belong to the `node_list`</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Fill node_list[0]&#39;s parents and node_list[1]&#39;s children</span>
+
+<span class="sd">    &gt;&gt;&gt; node_list = [</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/0&quot;, &quot;parents&quot;: [], &quot;children&quot;: []},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/1&quot;, &quot;parents&quot;: [], &quot;children&quot;: []},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/2&quot;, &quot;parents&quot;: [&quot;/path/1&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: [&quot;/path/0&quot;]}]</span>
+<span class="sd">    &gt;&gt;&gt; validate_link(node_list, node_list[2])</span>
+<span class="sd">    &gt;&gt;&gt; node_list == [</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/0&quot;, &quot;parents&quot;: [&quot;/path/2&quot;], &quot;children&quot;: []},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/1&quot;, &quot;parents&quot;: [], &quot;children&quot;: [&quot;/path/2&quot;]},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/2&quot;, &quot;parents&quot;: [&quot;/path/1&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: [&quot;/path/0&quot;]}]</span>
+<span class="sd">    True</span>
+
+<span class="sd">    Remove node_list[1]&#39;s children.</span>
+
+<span class="sd">    &gt;&gt;&gt; node_list = [</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/0&quot;, &quot;parents&quot;: [], &quot;children&quot;: [&quot;/path/1&quot;]},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/1&quot;, &quot;parents&quot;: [&quot;/path/0&quot;],</span>
+<span class="sd">    ...      &quot;children&quot;: [&quot;/not/exist&quot;]}]</span>
+<span class="sd">    &gt;&gt;&gt; validate_link(node_list, node_list[1], silent=True)</span>
+<span class="sd">    &gt;&gt;&gt; node_list == [</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/0&quot;, &quot;parents&quot;: [], &quot;children&quot;: [&quot;/path/1&quot;]},</span>
+<span class="sd">    ...     {&quot;path&quot;: &quot;/path/1&quot;, &quot;parents&quot;: [&quot;/path/0&quot;], &quot;children&quot;: []}]</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">ask_remove</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;No nodes whose path is </span><span class="si">%s</span><span class="s"> does not exists.&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Remove this link? [Y/n]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ans</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;n&quot;</span><span class="p">,</span> <span class="s">&quot;N&quot;</span><span class="p">,</span> <span class="s">&quot;no&quot;</span><span class="p">,</span> <span class="s">&quot;No&quot;</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;Path </span><span class="si">%s</span><span class="s"> is kept. Please fix manually.&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;Removed.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">check_key</span><span class="p">):</span>
+        <span class="n">against_key</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="s">&quot;children&quot;</span><span class="p">,</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="s">&quot;parents&quot;</span><span class="p">}[</span><span class="n">check_key</span><span class="p">]</span>
+        <span class="n">link_path_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">link_path</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="n">check_key</span><span class="p">]:</span>
+            <span class="n">link_node</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">link_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">link_node</span><span class="p">:</span>
+                <span class="n">link_path_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">link_node</span><span class="p">[</span><span class="n">against_key</span><span class="p">]:</span>
+                    <span class="n">link_node</span><span class="p">[</span><span class="n">against_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">silent</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ask_remove</span><span class="p">(</span><span class="n">link_path</span><span class="p">):</span>
+                    <span class="n">link_path_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link_path</span><span class="p">)</span>
+        <span class="n">node</span><span class="p">[</span><span class="n">check_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">link_path_list</span>
+
+    <span class="n">validate</span><span class="p">(</span><span class="s">&quot;parents&quot;</span><span class="p">)</span>
+    <span class="n">validate</span><span class="p">(</span><span class="s">&quot;children&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
