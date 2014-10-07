@@ -307,17 +307,21 @@ def change_path(node_list, from_path, to_path, silent=False):
     Raises
     ------
     DataProcessorError
-        If to_path is already registered.
+        If node 'to_path' is already registered
+        or node with 'from_path' is not registered.
 
     """
 
     frm_p = utility.path_expand(from_path)
     target_node = get(node_list, frm_p)
+    if not target_node:
+        raise DataProcessorError(
+            "There is no node with the from_path %s." % frm_p)
     to_p = utility.path_expand(to_path)
-
     if get(node_list, to_p):
         raise DataProcessorError(
             "The distination path %s is already registered." % to_p)
+
     target_node["path"] = to_p
     validate_link(node_list, target_node)
     for check_path in target_node["children"]:
