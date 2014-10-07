@@ -5,6 +5,7 @@ import sys
 import unittest
 import copy
 
+from .utility import TestNodeListAndDir
 sys.path = [sys.path[0]] \
     + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
     + sys.path[1:]
@@ -138,7 +139,7 @@ class TestNodes(unittest.TestCase):
              "children": []},
             {"path": "/path/0", "parents": ["/path/1"],
              "children": ["/path/2", "/path/3"]},
-            ]
+        ]
         self.assertEqual(node_list, compare_node_list)
 
     def test_remove_skip_validate_link(self):
@@ -235,3 +236,38 @@ class TestNodes(unittest.TestCase):
 
         node_list = nodes.merge_duplicate(node_list)
         self.assertEqual(node_list, node_list_ans)
+
+
+class TestChangePath(TestNodeListAndDir):
+
+    def test_change_path_having_children(self):
+        after_path = os.path.join(self.project_paths[0], "moved_dir")
+        before_path = self.project_paths[0]
+        os.mkdir(after_path)
+        nodes.change_path(
+            self.node_list, before_path, after_path, silent=True)
+
+        changed_node = nodes.get(self.node_list, after_path)
+        # check target node path
+        self.assertIsNotNone(changed_node)
+
+        # check children node path
+        for p in changed_node["children"]:
+            child_node = nodes.get(self.node_list, p)
+            self.assertIn(after_path, child_node["parents"])
+            self.assertNotIn(before_path, child_node["parents"])
+
+    def test_change_path_having_parents(self):
+        after_path = os.path.join(self.project_paths[0], "moved_dir")
+        before_path = os.path.join(self.project_paths[0], "run01")
+        os.mkdir(after_path)
+        nodes.change_path(
+            self.node_list, before_path, after_path, silent=True)
+
+        # check path
+        self.assertIsNotNone(nodes.get(self.node_list, after_path))
+
+        # check parents path
+        project_node = nodes.get(self.node_list, self.project_paths[0])
+        self.assertIn(after_path, project_node["children"])
+        self.assertNotIn(before_path, project_node["children"])
