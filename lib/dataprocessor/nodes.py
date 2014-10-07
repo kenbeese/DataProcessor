@@ -1,7 +1,7 @@
 # coding=utf-8
 """Tools for manipulation of node_list."""
 from .exception import DataProcessorError
-
+from . import utility
 node_types = ["run", "project", "figure"]
 
 
