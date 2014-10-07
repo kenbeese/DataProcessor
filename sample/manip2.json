@@ -1,6 +1,0 @@
-[
-    {"name": "load_json", "args": ["data_information.json"]},
-    {"name": "configure",  "args": ["parameters.conf"], "kwds": {}},
-    {"name": "configure",  "args": ["parameters.ini"], "kwds": {}},
-    {"name": "save_json", "args": ["newdata.json"],  "kwds": {}}
-]

@@ -1,5 +1,0 @@
-[
-    {"name": "load_json", "args": ["data_information.json"]},
-    {"name": "add_comment", "args": ["comment comment", "/path/to/node"]},
-    {"name": "save_json", "args": ["newdata.json"],  "kwds": {}}
-]
