@@ -49,16 +49,16 @@ Exit the environment.
 
 API reference
 -------------
-You can build dataprocessor API HTML reference.
+You can read API reference at <http://kenbeese.github.io/DataProcessor>.
 
-### Build
+
+### build
 
 After preparation of the above development environment,
-you can make api reference of this library with following command.
+you can update api reference of this library with following command.
 
-    $ make -C doc html
-
-The file `doc/_build/html/index.html` is top page.
+    $ make -C doc gh-pages-clone
+    $ make -C doc gh-pages-all
 
 
 server API reference
