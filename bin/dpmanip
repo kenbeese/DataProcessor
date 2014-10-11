@@ -3,7 +3,7 @@
 
 import os.path
 import sys
-import argparse
+import json
 import traceback
 
 sys.path = ([sys.path[0]]
@@ -16,30 +16,40 @@ sys.path = [sys.path[0]] + sys.path[2:]
 def main(args):
     arguments = [vars(args)[i] for i in args.val["args"]]
     if "kwds" in args.val:
-        keywards = {i: vars(args)[i] for i in args.val["kwds"] if vars(args)[i]}
+        keywards = {i: vars(args)[i] for i in args.val["kwds"]
+                    if vars(args)[i]}
     else:
         keywards = {}
-    if not args.__output:
-        with dp.io.SyncDataHandler(args.json_file, silent=args.silent) as dh:
-            args.val["func"](dh.get(), *arguments, **keywards)
+
+    if not args.input and not args.output:
+        with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
+            node_list = args.val["func"](dh.get(), *arguments, **keywards)
+            dh.update(node_list)
+        return
+
+    if args.input:
+        node_list = json.load(sys.stdin)
     else:
-        node_list = dp.io.load([], args.json_file)
-        args.val["func"](node_list, *arguments, **keywards)
-        dp.io.save(node_list, args.__output)
+        node_list = dp.io.load([], args.json)
+    node_list = args.val["func"](node_list, *arguments, **keywards)
+    if args.output:
+        json.dump(node_list, sys.stdout)
+    else:
+        with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
+            dh.update(node_list)
 
 
 def parse():
-    parser = argparse.ArgumentParser()
+    parser = dp.rc.ArgumentParser()
     parser.add_argument("-s", "--silent", action="store_true",
                         help="Does not ask whether REPLACE JSON file")
-    parser.add_argument("--debug", action="store_true",
-                        help="output traceback")
+    parser.add_argument("-i", "--input", action="store_true",
+                        help="Use stdin as data JSON")
+    parser.add_argument("-o", "--output", action="store_true",
+                        help="Output result node_list")
     sub_psr = parser.add_subparsers(title="subcommands", metavar="pipes")
     for name, val in dp.pipes.pipes_dics.items():
         pipe_psr = sub_psr.add_parser(name, help=val["desc"])
-        pipe_psr.add_argument("json_file", help="filename of data JSON")
-        pipe_psr.add_argument("-o", dest="__output", action="store_true",
-                            help="filename of output JSON file")
         for arg in val["args"]:
             pipe_psr.add_argument(arg)
         if "kwds" in val:
