@@ -33,16 +33,14 @@ def move_node(node_list, from_path, dest):
 
     """
     def resolve_destination(dest):
-        if os.path.exists(dest) and os.path.isfile(dest):
-            raise DataProcessorError(
-                "The destinaition %s already exists." % dest)
-        # move to directory.
-        elif os.path.exists(dest) and os.path.isdir(dest):
-            to_path = os.path.join(dest, os.path.basename(from_path))
-        # rename and move.
-        else:
-            to_path = dest
-        return to_path
+        # move and rename
+        if not os.path.exists(dest):
+            return dest
+        # move to directory
+        if os.path.isdir(dest):
+            return os.path.join(dest, os.path.basename(from_path))
+        raise DataProcessorError(
+            "The destinaition %s already exists." % dest)
 
     from_path = path_expand(from_path)
     dest = path_expand(dest)  # for move function
