@@ -27,7 +27,11 @@ def ArgumentParser(rcpath=default_rcpath, options={}):
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
-    options : [str], optional
+    options : dict, optional
+        This option enables you to add another options
+        in addition to "json". Additional option behaves as
+        "json" option. See the usage of `dpmanip`.
+        You should read the code to use this option.
 
     Returns
     -------
