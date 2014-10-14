@@ -41,7 +41,7 @@ def ArgumentParser(rcpath=default_rcpath, options={}):
     parser = argparse.ArgumentParser()
     options["json"] = {"help": "path of JSON file"}
     try:
-        cfg = get_parser(rcpath)
+        cfg = get_configparser(rcpath)
         for name, opt in options.items():
             if cfg.has_option(rc_section, name):
                 val = cfg.get(rc_section, name)
@@ -68,8 +68,16 @@ def load(rcpath=default_rcpath):
     -------
     node_list
 
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain JSON path
+
     """
-    parser = get_parser(rcpath)
+    parser = get_configparser(rcpath)
     if parser.has_option(rc_section, "json"):
         raise DataProcessorRcError("Configure does not contains JSON path.")
     return io.load([], parser.get(rc_section, "json"))
@@ -83,15 +91,23 @@ def update(node_list, rcpath=default_rcpath):
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain JSON path
+
     """
-    parser = get_parser(rcpath)
+    parser = get_configparser(rcpath)
     if parser.has_option(rc_section, "json"):
         raise DataProcessorRcError("Configure does not contains JSON path.")
     with io.SyncDataHandler(parser.get(rc_section, "json"), silent=True) as dh:
         dh.update(node_list)
 
 
-def get_parser(rcpath=default_rcpath):
+def get_configparser(rcpath=default_rcpath):
     """ Get configure parser
 
     Parameters
