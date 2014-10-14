@@ -21,8 +21,8 @@ def add_node(node_list, path=".", node_type="run", children=[],
     children : list, optional
     parents : list, optional
 
-    Return
-    ------
+    Returns
+    -------
     node_list
 
     """
