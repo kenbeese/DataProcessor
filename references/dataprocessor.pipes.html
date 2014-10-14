@@ -25,7 +25,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="dataprocessor  documentation" href="../index.html" />
     <link rel="up" title="dataprocessor package" href="dataprocessor.html" />
-    <link rel="next" title="handler module" href="handler.html" />
     <link rel="prev" title="dataprocessor package" href="dataprocessor.html" /> 
   </head>
   <body>
@@ -39,8 +38,8 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="handler.html" title="handler module"
-             accesskey="N">next</a> |</li>
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="dataprocessor.html" title="dataprocessor package"
              accesskey="P">previous</a> |</li>
@@ -60,32 +59,333 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="dataprocessor-pipes-add-node-module">
-<h2>dataprocessor.pipes.add_node module<a class="headerlink" href="#dataprocessor-pipes-add-node-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-dataprocessor.pipes.add_node">
+<span id="dataprocessor-pipes-add-node-module"></span><h2>dataprocessor.pipes.add_node module<a class="headerlink" href="#module-dataprocessor.pipes.add_node" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.add_node.add_node">
+<tt class="descclassname">dataprocessor.pipes.add_node.</tt><tt class="descname">add_node</tt><big>(</big><em>node_list, path='.', node_type='run', children=[], name=None, parents=['..']</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/add_node.html#add_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.add_node.add_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add node.</p>
+<p>A node is added to the node_list according to dict.update.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path</strong> : str, optional</p>
+<blockquote>
+<div><p>path of node (default=&#8221;.&#8221;)</p>
+</div></blockquote>
+<p><strong>node_type</strong> : str, optional {&#8220;run&#8221;, &#8220;project&#8221;}</p>
+<blockquote>
+<div><p>type of node (default=&#8221;run&#8221;)</p>
+</div></blockquote>
+<p><strong>name</strong> : str, optional</p>
+<p><strong>children</strong> : list, optional</p>
+<p class="last"><strong>parents</strong> : list, optional</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.add_node.register">
+<tt class="descclassname">dataprocessor.pipes.add_node.</tt><tt class="descname">register</tt><big>(</big><em>pipes_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/add_node.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.add_node.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="dataprocessor-pipes-addcomment-module">
-<h2>dataprocessor.pipes.addcomment module<a class="headerlink" href="#dataprocessor-pipes-addcomment-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-dataprocessor.pipes.addcomment">
+<span id="dataprocessor-pipes-addcomment-module"></span><h2>dataprocessor.pipes.addcomment module<a class="headerlink" href="#module-dataprocessor.pipes.addcomment" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.addcomment.add">
+<tt class="descclassname">dataprocessor.pipes.addcomment.</tt><tt class="descname">add</tt><big>(</big><em>node_list</em>, <em>comment</em>, <em>node_path</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/addcomment.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.addcomment.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add comment to node spedcified path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>comment</strong> : str</p>
+<blockquote>
+<div><p>comment.</p>
+</div></blockquote>
+<p><strong>node_path</strong> : str</p>
+<blockquote class="last">
+<div><p>This path specify the unique node.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">node_list</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/to/hoge&quot;</span><span class="p">},</span>
+<span class="gp">... </span>             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/to/hogehoge&quot;</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;some comments&quot;</span><span class="p">,</span> <span class="s">&quot;/path/to/hoge&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/to/hoge&quot;</span><span class="p">,</span> <span class="s">&quot;comment&quot;</span><span class="p">:</span> <span class="s">&quot;some comments&quot;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/to/hogehoge&quot;</span><span class="p">}]</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;some comments aho&quot;</span><span class="p">,</span> <span class="s">&quot;/path/to/hogehom&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="gr">DataProcessorError</span>: <span class="n">&#39;There is no node with specified path: /path/to/hogehom&#39;</span>
+</pre></div>
 </div>
-<div class="section" id="dataprocessor-pipes-configure-module">
-<h2>dataprocessor.pipes.configure module<a class="headerlink" href="#dataprocessor-pipes-configure-module" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.addcomment.register">
+<tt class="descclassname">dataprocessor.pipes.addcomment.</tt><tt class="descname">register</tt><big>(</big><em>pipe_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/addcomment.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.addcomment.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="dataprocessor-pipes-figure-module">
-<h2>dataprocessor.pipes.figure module<a class="headerlink" href="#dataprocessor-pipes-figure-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-dataprocessor.pipes.configure">
+<span id="dataprocessor-pipes-configure-module"></span><h2>dataprocessor.pipes.configure module<a class="headerlink" href="#module-dataprocessor.pipes.configure" title="Permalink to this headline">¶</a></h2>
+<p>Pipes of configure.</p>
+<dl class="function">
+<dt id="dataprocessor.pipes.configure.add">
+<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">add</tt><big>(</big><em>node_list</em>, <em>filename</em>, <em>section='parameters'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add configure to node_list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>filename of parameter configure file
+If file is not exists, add null list.</p>
+</div></blockquote>
+<p><strong>section</strong> : str</p>
+<blockquote>
+<div><p>Specify section name in configure file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list</strong> :</p>
+<blockquote class="last">
+<div><p>node_list which is a list of dict.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;configure.conf&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Change load section.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;configure.conf&quot;</span><span class="p">,</span> <span class="s">&quot;defaults&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="dataprocessor-pipes-filter-module">
-<h2>dataprocessor.pipes.filter module<a class="headerlink" href="#dataprocessor-pipes-filter-module" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.configure.no_section">
+<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">no_section</tt><big>(</big><em>node_list, filename, split_char='=', comment_char=['#']</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#no_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.no_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add configure to node_list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>filename of parameter configure file
+If file is not exists, add null list.</p>
+</div></blockquote>
+<p><strong>split_char</strong> : str</p>
+<blockquote>
+<div><p>Specify the deliminator char.</p>
+</div></blockquote>
+<p><strong>comment_char</strong> : str</p>
+<blockquote>
+<div><p>Specify the comment line signal char.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list</strong> :</p>
+<blockquote class="last">
+<div><p>node_list which is a list of dict.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">no_section</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;foo.conf&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Change deliminator and comment line signal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">no_section</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;foo.conf&quot;</span><span class="p">,</span> <span class="n">split_char</span><span class="o">=</span><span class="s">&quot;:&quot;</span><span class="p">,</span> <span class="n">comment_char</span><span class="o">=</span><span class="s">&quot;!&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="dataprocessor-pipes-jsonio-module">
-<h2>dataprocessor.pipes.jsonio module<a class="headerlink" href="#dataprocessor-pipes-jsonio-module" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.configure.register">
+<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">register</tt><big>(</big><em>pipes_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="dataprocessor-pipes-scan-module">
-<h2>dataprocessor.pipes.scan module<a class="headerlink" href="#dataprocessor-pipes-scan-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-dataprocessor.pipes.figure">
+<span id="dataprocessor-pipes-figure-module"></span><h2>dataprocessor.pipes.figure module<a class="headerlink" href="#module-dataprocessor.pipes.figure" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.figure.register">
+<tt class="descclassname">dataprocessor.pipes.figure.</tt><tt class="descname">register</tt><big>(</big><em>pipe_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/figure.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.figure.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="dataprocessor-pipes-show-module">
-<h2>dataprocessor.pipes.show module<a class="headerlink" href="#dataprocessor-pipes-show-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-dataprocessor.pipes.filter">
+<span id="dataprocessor-pipes-filter-module"></span><h2>dataprocessor.pipes.filter module<a class="headerlink" href="#module-dataprocessor.pipes.filter" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.filter.register">
+<tt class="descclassname">dataprocessor.pipes.filter.</tt><tt class="descname">register</tt><big>(</big><em>pipes_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/filter.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.filter.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-dataprocessor.pipes.jsonio">
+<span id="dataprocessor-pipes-jsonio-module"></span><h2>dataprocessor.pipes.jsonio module<a class="headerlink" href="#module-dataprocessor.pipes.jsonio" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.jsonio.register">
+<tt class="descclassname">dataprocessor.pipes.jsonio.</tt><tt class="descname">register</tt><big>(</big><em>pipes_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/jsonio.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.jsonio.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipes.scan">
+<span id="dataprocessor-pipes-scan-module"></span><h2>dataprocessor.pipes.scan module<a class="headerlink" href="#module-dataprocessor.pipes.scan" title="Permalink to this headline">¶</a></h2>
+<p>Scan directories as nodes.</p>
+<dl class="function">
+<dt id="dataprocessor.pipes.scan.directory">
+<tt class="descclassname">dataprocessor.pipes.scan.</tt><tt class="descname">directory</tt><big>(</big><em>node_list</em>, <em>root</em>, <em>whitelist</em>, <em>followlinks=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/scan.html#directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.scan.directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scan nodes from all directories under the directory &#8216;root&#8217;.</p>
+<p>If one directory has properties of both of &#8216;run&#8217; and &#8216;project&#8217;,
+type of the directory is set to &#8216;run&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>root</strong> : str</p>
+<blockquote>
+<div><p>Scan directories recursively under the directory <cite>root</cite>.</p>
+</div></blockquote>
+<p><strong>whitelist</strong> : list of str</p>
+<blockquote>
+<div><p>Run node has one or more file or directory
+which satisfies run_node_dir/<cite>whitelist</cite>.
+And project nodes satisfy project_dir/run_node_dir/<cite>whitelist</cite>.
+str can be specified by wildcard.</p>
+</div></blockquote>
+<p><strong>followlinks</strong> : {&#8216;False&#8217;, &#8216;True&#8217;}, optional</p>
+<blockquote>
+<div><p>Whether scan in symbolic link.
+Be aware that setting this to True may lead to infinite recursion.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Initialize node_list.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">([],</span> <span class="s">&quot;scandir_path&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;data/hoge*&quot;</span><span class="p">,</span> <span class="s">&quot;*foo*&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Rescan node_list.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node_list</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/tmp/scan_dir/run0&#39;</span><span class="p">,</span>
+<span class="gp">... </span>     <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[],</span>   <span class="c"># empty</span>
+<span class="gp">... </span>     <span class="s">&#39;children&#39;</span><span class="p">:</span> <span class="p">[],</span>  <span class="c"># empty</span>
+<span class="gp">... </span>     <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;run0&#39;</span><span class="p">,</span>
+<span class="gp">... </span>     <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">([],</span> <span class="s">&quot;scandir_path&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;*.conf&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.scan.register">
+<tt class="descclassname">dataprocessor.pipes.scan.</tt><tt class="descname">register</tt><big>(</big><em>pipe_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/scan.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.scan.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipes.show">
+<span id="dataprocessor-pipes-show-module"></span><h2>dataprocessor.pipes.show module<a class="headerlink" href="#module-dataprocessor.pipes.show" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.show.register">
+<tt class="descclassname">dataprocessor.pipes.show.</tt><tt class="descname">register</tt><big>(</big><em>pipe_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/show.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.show.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.show.show">
+<tt class="descclassname">dataprocessor.pipes.show.</tt><tt class="descname">show</tt><big>(</big><em>node_list</em>, <em>show_format='{path}'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/show.html#show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.show.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show node with specified format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>show_format</strong> : str, optional</p>
+<blockquote>
+<div><p>specify format you want to output.
+You should use new <cite>format</cite> function format.
+This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.show.show_projects">
+<tt class="descclassname">dataprocessor.pipes.show.</tt><tt class="descname">show_projects</tt><big>(</big><em>node_list</em>, <em>show_format='{path}'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/show.html#show_projects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.show.show_projects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show project list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>show_format</strong> : str, optional</p>
+<blockquote>
+<div><p>specify format you want to output.
+You should use new <cite>format</cite> function format.
+This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.show.show_runs">
+<tt class="descclassname">dataprocessor.pipes.show.</tt><tt class="descname">show_runs</tt><big>(</big><em>node_list</em>, <em>project=None</em>, <em>show_format='{path}'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/show.html#show_runs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.show.show_runs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show run list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>project</strong> : str or [str], optional</p>
+<blockquote>
+<div><p>the path of project, whose runs will be shown.</p>
+</div></blockquote>
+<p><strong>show_format: str, optional</strong> :</p>
+<blockquote>
+<div><p>specify format you want to output.
+You should use new <cite>format</cite> function format.
+This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipes">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dataprocessor.pipes" title="Permalink to this headline">¶</a></h2>
+<p>&#64;pipes</p>
 </div>
 </div>
 
@@ -99,15 +399,15 @@
   <ul>
 <li><a class="reference internal" href="#">dataprocessor.pipes package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-add-node-module">dataprocessor.pipes.add_node module</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-addcomment-module">dataprocessor.pipes.addcomment module</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-configure-module">dataprocessor.pipes.configure module</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-figure-module">dataprocessor.pipes.figure module</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-filter-module">dataprocessor.pipes.filter module</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-jsonio-module">dataprocessor.pipes.jsonio module</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-scan-module">dataprocessor.pipes.scan module</a></li>
-<li><a class="reference internal" href="#dataprocessor-pipes-show-module">dataprocessor.pipes.show module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.add_node">dataprocessor.pipes.add_node module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.addcomment">dataprocessor.pipes.addcomment module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.configure">dataprocessor.pipes.configure module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.figure">dataprocessor.pipes.figure module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.filter">dataprocessor.pipes.filter module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.jsonio">dataprocessor.pipes.jsonio module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.scan">dataprocessor.pipes.scan module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.show">dataprocessor.pipes.show module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -115,9 +415,6 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="dataprocessor.html"
                         title="previous chapter">dataprocessor package</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="handler.html"
-                        title="next chapter">handler module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/references/dataprocessor.pipes.txt"
@@ -150,8 +447,8 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="handler.html" title="handler module"
-             >next</a> |</li>
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="dataprocessor.html" title="dataprocessor package"
              >previous</a> |</li>
@@ -162,7 +459,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

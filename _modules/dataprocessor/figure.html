@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dataprocessor.figure &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for dataprocessor.figure</h1><div class="highlight"><pre>
+<span class="c"># coding=utf-8</span>
+<span class="sd">&quot;&quot;&quot;Handling node for figures.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">nodes</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
+
+
+<div class="viewcode-block" id="DataProcessorFigureError"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.figure.DataProcessorFigureError">[docs]</a><span class="k">class</span> <span class="nc">DataProcessorFigureError</span><span class="p">(</span><span class="n">DataProcessorError</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Exception about figure.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="n">DataProcessorError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="zero_hash"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.figure.zero_hash">[docs]</a><span class="k">def</span> <span class="nf">zero_hash</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Return a SHA-1 hash of empty figure. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="calc_hash"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.figure.calc_hash">[docs]</a><span class="k">def</span> <span class="nf">calc_hash</span><span class="p">(</span><span class="n">figure_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return a SHA-1 hash of the figure. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">figure_path</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="destination_path"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.figure.destination_path">[docs]</a><span class="k">def</span> <span class="nf">destination_path</span><span class="p">(</span><span class="n">figure_path</span><span class="p">,</span> <span class="n">figure_directory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return the path of a directory where the figure will be copied.</span>
+
+<span class="sd">    This is also an ID of the figure in DataProcessor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    figure_path : str</span>
+<span class="sd">        The present path of figure</span>
+<span class="sd">    figure_directory : str</span>
+<span class="sd">        The path to `figure_directory`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">figure_directory</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">check_directory</span><span class="p">(</span><span class="n">figure_directory</span><span class="p">)</span>
+    <span class="n">hash_str</span> <span class="o">=</span> <span class="n">calc_hash</span><span class="p">(</span><span class="n">figure_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figure_directory</span><span class="p">,</span> <span class="n">hash_str</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="new_node"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.figure.new_node">[docs]</a><span class="k">def</span> <span class="nf">new_node</span><span class="p">(</span><span class="n">figure_path</span><span class="p">,</span> <span class="n">generators</span><span class="p">,</span> <span class="n">figure_directory</span><span class="p">,</span>
+             <span class="n">parents</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot; Copy figure and incidentals and return corresponding node.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    figure_path : str</span>
+<span class="sd">        the present path of the figure</span>
+<span class="sd">    generators : list</span>
+<span class="sd">        the paths of files which should be managed with the figure</span>
+<span class="sd">        s.t. gunplot file, python script, etc...</span>
+<span class="sd">    figure_directory : str</span>
+<span class="sd">        the base directory where figures are saved</span>
+<span class="sd">    parents : list</span>
+<span class="sd">        will be copied into node[&quot;parents&quot;]</span>
+<span class="sd">    children : list, optional</span>
+<span class="sd">        will be copied into node[&quot;children&quot;]</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorFigureError</span>
+<span class="sd">        raised when the figure is empty</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hash_str</span> <span class="o">=</span> <span class="n">calc_hash</span><span class="p">(</span><span class="n">figure_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hash_str</span> <span class="o">==</span> <span class="n">zero_hash</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">DataProcessorFigureError</span><span class="p">(</span><span class="s">&quot;Figure is empty&quot;</span><span class="p">)</span>
+    <span class="n">dest_path</span> <span class="o">=</span> <span class="n">destination_path</span><span class="p">(</span><span class="n">figure_path</span><span class="p">,</span> <span class="n">figure_directory</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dest_path</span><span class="p">)</span>
+    <span class="n">utility</span><span class="o">.</span><span class="n">copy_file</span><span class="p">(</span><span class="n">figure_path</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="n">generators</span><span class="p">:</span>
+        <span class="n">gen_path</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">check_file</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
+        <span class="n">utility</span><span class="o">.</span><span class="n">copy_file</span><span class="p">(</span><span class="n">gen_path</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">dest_path</span><span class="p">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;figure&quot;</span><span class="p">,</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">figure_path</span><span class="p">),</span>
+        <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="n">parents</span><span class="p">,</span>
+        <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="n">children</span><span class="p">,</span>
+    <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.figure.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">figures</span><span class="p">,</span> <span class="n">figure_directory</span><span class="p">,</span> <span class="n">runs</span><span class="o">=</span><span class="p">[],</span> <span class="n">generators</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot; Register figure into `node_list`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">        node_list</span>
+<span class="sd">    figures : list</span>
+<span class="sd">        the present paths of figures</span>
+<span class="sd">    figure_directory : str</span>
+<span class="sd">        the base directory where figures are saved</span>
+<span class="sd">    runs : list</span>
+<span class="sd">        The paths of runs related to these figures.</span>
+<span class="sd">        They will be saved into node[&quot;parents&quot;]</span>
+<span class="sd">    generators : list</span>
+<span class="sd">        the paths of files which should be managed with the figure;</span>
+<span class="sd">        s.t. gunplot file, python script, etc...</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">figs</span> <span class="o">=</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">check_file</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span> <span class="k">for</span> <span class="n">fig</span> <span class="ow">in</span> <span class="n">figures</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">runs</span><span class="p">:</span>
+        <span class="n">runs</span> <span class="o">=</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">check_directory</span><span class="p">(</span><span class="n">run</span><span class="p">)</span> <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">runs</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span> <span class="k">for</span> <span class="n">fig</span> <span class="ow">in</span> <span class="n">figs</span><span class="p">]</span>
+    <span class="n">runs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">runs</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">fig</span> <span class="ow">in</span> <span class="n">figs</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">new_node</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">generators</span><span class="p">,</span> <span class="n">figure_directory</span><span class="p">,</span> <span class="n">runs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">DataProcessorFigureError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;Skip </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">fig</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
