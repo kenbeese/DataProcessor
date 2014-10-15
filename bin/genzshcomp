@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import os.path
+import sys
+
+sys.path = ([sys.path[0]]
+            + [os.path.join(os.path.dirname(__file__), "../lib")]
+            + sys.path[1:])
+import dataprocessor as dp
+sys.path = [sys.path[0]] + sys.path[2:]
+
+
+def main():
+    parser = dp.dp_arg_parsers.genzshcomp_arg_parser()
+    args = parser.parse_args()
+    func = getattr(dp.dp_arg_parsers, "%s_arg_parser" % args.EXECUTABLE)
+    generator = dp.gencompletion.CompletionGenerator(
+        args.EXECUTABLE, func())
+    filename = dp.utility.path_expand(
+        os.path.join(os.path.dirname(__file__),
+                     "../zsh_completion", "_%s" % args.EXECUTABLE))
+    with open(filename, "w") as f:
+        f.write(generator.get())
+    return
+
+
+if __name__ == "__main__":
+    main()
