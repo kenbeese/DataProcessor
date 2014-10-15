@@ -1,0 +1,16 @@
+#compdef register_figure
+function _register_figure (){
+    typeset -A opt_args
+    local context state line
+
+    integer int=1
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(-R --runs)'{-R,--runs}'[Paths of runs related to figures]:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '(-g --generators)'{-g,--generators}'[Paths of generator files (s.t. fig.gp, fig.py)]:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '*::arguments:_files'
+    ret=0
+    return ret
+}
+_register_figure
