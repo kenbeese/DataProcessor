@@ -13,10 +13,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main():
-    parser = argparse.ArgumentParser(description="""
-                command line interface for DataProcessor pipeline""")
-    parser.add_argument('manip_json')
-    parser.add_argument('-d', "--data", help="The path of data JSON")
+    parser = dp.dp_arg_parsers.dataprocessor_arg_parser()
     args = parser.parse_args()
 
     json_fn = dp.utility.check_file(args.manip_json)
