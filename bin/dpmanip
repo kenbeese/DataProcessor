@@ -40,7 +40,12 @@ def main(args):
 
 
 def parse():
-    parser = dp.rc.ArgumentParser()
+    try:
+        parser = dp.rc.ArgumentParser()
+    except dp.rc.DataProcessorRcError:
+        print("Please create configure file by dpinit")
+        sys.exit(1)
+
     parser.add_argument("-s", "--silent", action="store_true",
                         help="Does not ask whether REPLACE JSON file")
     parser.add_argument("-i", "--input", action="store_true",
