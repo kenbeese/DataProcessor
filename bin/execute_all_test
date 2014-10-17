@@ -18,26 +18,31 @@ import test_dataprocessor as tdp
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
-doctest_modules = [dp.io,
-                   dp.utility,
-                   dp.execute,
-                   dp.nodes,
-                   dp.dataframe,
-                   dp.table,
-                   dp.figure,
-                   dp.filter,
-                   dp.pipes.addcomment,
-                   dp.pipes.scan,
-                   handler]
+doctest_modules = [
+    dp.io,
+    dp.utility,
+    dp.execute,
+    dp.nodes,
+    dp.dataframe,
+    dp.table,
+    dp.figure,
+    dp.filter,
+    dp.pipes.addcomment,
+    dp.pipes.scan,
+    handler
+]
 
-test_moudles = [tdp.test_pipes.test_configure,
-                tdp.test_pipes.test_scan,
-                tdp.test_pipes.test_add_node,
-                tdp.test_nodes,
-                tdp.test_filter,
-                tdp.test_dataframe,
-                tdp.test_utility,
-                tdp.test_io, ]
+test_moudles = [
+    tdp.test_pipes.test_configure,
+    tdp.test_pipes.test_scan,
+    tdp.test_pipes.test_add_node,
+    tdp.test_pipes.test_move_node,
+    tdp.test_nodes,
+    tdp.test_filter,
+    tdp.test_dataframe,
+    tdp.test_utility,
+    tdp.test_io,
+]
 
 
 def create_doctest_suite(test_suite):

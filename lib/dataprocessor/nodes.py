@@ -2,6 +2,7 @@
 """Tools for manipulation of node_list."""
 from .exception import DataProcessorError
 from . import utility
+
 node_types = ["run", "project", "figure"]
 
 
@@ -283,3 +284,53 @@ def validate_link(node_list, node, silent=False):
 
     validate("parents")
     validate("children")
+
+
+def change_path(node_list, from_path, to_path, silent=False):
+    """
+    Change node path.
+
+    Parameters
+    ----------
+    from_path : str
+        The path of node.
+    to_path : str
+        The destination path of node.
+    silent : bool or { 'False', 'True' }, optional
+        Does not ask whether delete nonexist-path in parents or children.
+        (default='False')
+
+    Returns
+    -------
+    node_list
+
+    Raises
+    ------
+    DataProcessorError
+        If node 'to_path' is already registered
+        or node with 'from_path' is not registered.
+
+    """
+
+    frm_p = utility.path_expand(from_path)
+    target_node = get(node_list, frm_p)
+    if not target_node:
+        raise DataProcessorError(
+            "There is no node with the from_path %s." % frm_p)
+    to_p = utility.path_expand(to_path)
+    if get(node_list, to_p):
+        raise DataProcessorError(
+            "The distination path %s is already registered." % to_p)
+
+    target_node["path"] = to_p
+    validate_link(node_list, target_node)
+    for check_path in target_node["children"]:
+        validate_link(
+            node_list, get(node_list, check_path),
+            silent=utility.boolenize(silent))
+    for check_path in target_node["parents"]:
+        validate_link(
+            node_list, get(node_list, check_path),
+            silent=utility.boolenize(silent))
+
+    return node_list

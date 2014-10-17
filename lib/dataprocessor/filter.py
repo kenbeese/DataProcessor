@@ -55,3 +55,33 @@ def node_type(node_list, ntype):
         raise DataProcessorError("Please select node type from "
                                  + str(node_types))
     return [node for node in node_list if node["type"] == ntype]
+
+
+def prefix_path(node_list, pre_path):
+    """Filter by prefix path.
+
+    In the case when pre_path is "/foo/bar",
+    following paths remain (not filtered):
+
+    - /foo/bar
+    - /foo/bar/foo
+
+    , and following do not remain (filtered out):
+
+    - /foo/barfoo/hoge
+    - /bar/foo/bar/FOO
+
+    Parameters
+    ----------
+    pre_path : str
+        prefix path for filtering.
+
+    Returns
+    -------
+    node_list
+
+    """
+    p = utility.path_expand(pre_path)
+    length = len(p)
+    return [node for node in node_list
+            if node["path"] == p or node["path"][0:length + 1] == p + "/"]

@@ -94,3 +94,38 @@ class TestNodes(unittest.TestCase):
                  'children': [],
                  'type': 'run'}]
         self.assertEqual(result, runs)
+
+
+class TestPrefixPath(unittest.TestCase):
+
+    def setUp(self):
+        self.node_list = [
+            {"path": "/foo/bar", "parents": [],
+             "children": [],
+             "type": "run"},
+            {"path": "/foo/bar/foo", "parents": [],
+             "children": [],
+             "type": "project"},
+            {"path": "/foo/barfoo/FOO", "parents": [],
+             "children": [],
+             "type": "run"},
+            {"path": "/bar/foo/bar/FOO", "parents": [],
+             "children": [],
+             "type": "run"},
+        ]
+
+    def test1(self):
+        result = dp.filter.prefix_path(self.node_list, "/foo/bar")
+        self.assertEqual(len(result), 2)
+
+    def test2(self):
+        result = dp.filter.prefix_path(self.node_list, "/foo/bar/")
+        self.assertEqual(len(result), 2)
+
+    def test3(self):
+        result = dp.filter.prefix_path(self.node_list, "/foo/")
+        self.assertEqual(len(result), 3)
+
+    def test4(self):
+        result = dp.filter.prefix_path(self.node_list, "foo")
+        self.assertEqual(len(result), 0)
