@@ -27,30 +27,31 @@ def ArgumentParser(rcpath=default_rcpath, options={}):
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
-    options : dict, optional
-        This option enables you to add another options
-        in addition to "json". Additional option behaves as
-        "json" option. See the usage of `dpmanip`.
-        You should read the code to use this option.
+    options : [{str: dict}], optional
+        options which you want to read from [data] section
+        of the configure file.
+        `[{"opt1": argparse_opt}]` will converted into
+        `parser.add_argument("--" + "opt1", **argparse_opt)`.
 
     Returns
     -------
     argparse.ArgumentParser
 
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain specified values
+
     """
     parser = argparse.ArgumentParser()
-    options["json"] = {"help": "path of JSON file"}
-    try:
-        cfg = get_configparser(rcpath)
-        for name, opt in options.items():
-            if cfg.has_option(rc_section, name):
-                val = cfg.get(rc_section, name)
-                parser.add_argument("--" + name, default=val, **opt)
-            else:
-                parser.add_argument(name, **opt)
-    except DataProcessorRcError:
-        for name, opt in options.items():
-            parser.add_argument(name, **opt)
+    if "json" not in options:
+        options["json"] = {"help": "path of JSON file"}
+    for name, opt in options.items():
+        val = get_configure(rc_section, name, rcpath)
+        parser.add_argument("--" + name, default=val, **opt)
     parser.add_argument("--debug", action="store_true",
                         help="output traceback")
     return parser
@@ -133,3 +134,35 @@ def get_configparser(rcpath=default_rcpath):
     parser = ConfigParser.SafeConfigParser()
     parser.read(rcpath)
     return parser
+
+
+def get_configure(section, key, rcpath=default_rcpath):
+    """ Get configure value
+
+    Parameters
+    ----------
+    section : str
+        section name of configure file
+
+    key : str
+        key of configure
+
+    Returns
+    -------
+    str
+        configure value
+
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain specified values
+
+    """
+    cfg = get_configparser(rcpath)
+    if not cfg.has_option(section, key):
+        raise DataProcessorRcError("Configure not found (section:{}, key:{}))"
+                                   .format((section, key)))
+    return cfg.get(section, key)
