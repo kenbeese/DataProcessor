@@ -6,7 +6,6 @@ import os
 import os.path
 import sys
 import json
-import argparse
 import urllib2
 import BaseHTTPServer
 import CGIHTTPServer
@@ -26,7 +25,7 @@ def start(args):
     log_path = os.path.join(root_dir, args.logfile)
     lock_path = args.lockfile
 
-    data_path = dp.utility.check_file(args.data_json)
+    data_path = dp.utility.check_file(args.json)
     cfg = {"data_path": data_path}
     with open(os.path.join(root_dir, "cfg.json"), 'w') as f:
         json.dump(cfg, f)
@@ -73,49 +72,60 @@ def install(args):
         f.write(urllib2.urlopen(jquery_cookie_url).read())
 
 
-def main():
-    parser = argparse.ArgumentParser()
+def get_parser():
+    parser = dp.rc.ArgumentParser()
     sub_psr = parser.add_subparsers()
 
+    port_cfg = {
+        "default": 8080,
+        "help": "Port for the server"
+    }
+    root_cfg = {
+        "default": os.path.join(os.path.dirname(__file__), "../server"),
+        "help": "The root dir where the server stands"
+    }
+    logfile_cfg = {
+        "default": "server.log",
+        "help": "The name of the log file",
+    }
+    lockfile_cfg = {
+        "default": "/tmp/DataProcessorServer.pid",
+        "help": "Lock filename",
+    }
+
     # start
-    start_psr = sub_psr.add_parser("start", help="start articles daemon")
+    start_psr = sub_psr.add_parser("start",
+                                   help="start DataProcessor server daemon")
     start_psr.set_defaults(func=start)
-    start_psr.add_argument("data_json",
-                           help="A path to JSON file in which data is saved.")
-    start_psr.add_argument("-p", "--port", default=8080,
-                           help="Port for the server (default=8080)")
-    start_psr.add_argument("--root",
-                           default=os.path.join(os.path.dirname(__file__),
-                                                "../server"),
-                           help="""The root dir where the server stands
-                                   (default=${PROJECT_HOME}/server)""")
-    start_psr.add_argument("--logfile", default="server.log",
-                           help="The name of the log file")
-    start_psr.add_argument("--lockfile", default="/tmp/DataProcessorServer.pid",
-                           help="Lock filename")
+    dp.rc.load_into_argparse(start_psr, "dpserver", {
+        "port": port_cfg,
+        "root": root_cfg,
+        "logfile": logfile_cfg,
+        "lockfile": lockfile_cfg,
+    }, allow_empty=True)
 
     # stop
     stop_psr = sub_psr.add_parser("stop", help="kill articles server")
-    stop_psr.add_argument("--lockfile", default="/tmp/DataProcessorServer.pid",
-                           help="Lock filename")
     stop_psr.set_defaults(func=stop)
+    dp.rc.load_into_argparse(stop_psr, "dpserver", {
+        "lockfile": lockfile_cfg,
+    }, allow_empty=True)
 
     # install
     install_psr = sub_psr.add_parser("install", help="install jQuery")
     install_psr.set_defaults(func=install)
-    install_psr.add_argument("--root",
-                             default=os.path.join(os.path.dirname(__file__),
-                                                  "../server"),
-                             help="""The root dir where the server stands
-                                   (default=${PROJECT_HOME}/server)""")
+    dp.rc.load_into_argparse(install_psr, "dpserver", {
+        "root": root_cfg,
+    }, allow_empty=True)
 
-    # call
-    args = parser.parse_args()
-    args.func(args)
+    return parser
+
 
 if __name__ == "__main__":
     try:
-        main()
+        parser = get_parser()
+        args = parser.parse_args()
+        args.func(args)
     except dp.exception.DataProcessorError as e:
         print("ERROR: %s" % e.msg)
         sys.exit(1)
