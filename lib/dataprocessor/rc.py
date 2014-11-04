@@ -10,9 +10,16 @@ import ConfigParser
 
 
 default_rcpath = "~/.dataprocessor.ini"
+rc_section = "data"
 
 
-def ArgumentParser(rcpath=default_rcpath):
+class DataProcessorRcError(DataProcessorError):
+    """Exception about configure file."""
+    def __init__(self, msg):
+        DataProcessorError.__init__(self, msg)
+
+
+def ArgumentParser(rcpath=default_rcpath, options={}):
     """Argument parser for executables in this project.
 
     Parameters
@@ -20,18 +27,33 @@ def ArgumentParser(rcpath=default_rcpath):
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
+    options : [{str: dict}], optional
+        options which you want to read from [data] section
+        of the configure file.
+        `[{"opt1": argparse_opt}]` will converted into
+        `parser.add_argument("--" + "opt1", **argparse_opt)`.
+
     Returns
     -------
-    argparse.ArgumentParser instance
+    argparse.ArgumentParser
+
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain specified values
 
     """
-    cfg = load_configure_file(rcpath)
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root", default=cfg["root"],
-                        help="data root")
-    parser.add_argument("--json", default=cfg["json"],
-                        help="path of data JSON")
-    parser.add_argument("--debug", help="output traceback")
+    if "json" not in options:
+        options["json"] = {"help": "path of JSON file"}
+    for name, opt in options.items():
+        val = get_configure(rc_section, name, rcpath)
+        parser.add_argument("--" + name, default=val, **opt)
+    parser.add_argument("--debug", action="store_true",
+                        help="output traceback")
     return parser
 
 
@@ -47,9 +69,19 @@ def load(rcpath=default_rcpath):
     -------
     node_list
 
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain JSON path
+
     """
-    cfg = load_configure_file(rcpath)
-    return io.load([], cfg["json"])
+    parser = get_configparser(rcpath)
+    if parser.has_option(rc_section, "json"):
+        raise DataProcessorRcError("Configure does not contains JSON path.")
+    return io.load([], parser.get(rc_section, "json"))
 
 
 def update(node_list, rcpath=default_rcpath):
@@ -60,50 +92,24 @@ def update(node_list, rcpath=default_rcpath):
     rcpath : str, optional
         path of configure file (default=~/.dataprocessor.ini)
 
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain JSON path
+
     """
-    cfg = load_configure_file(rcpath)
-    with io.SyncDataHandler(cfg["json"], silent=True) as dh:
+    parser = get_configparser(rcpath)
+    if parser.has_option(rc_section, "json"):
+        raise DataProcessorRcError("Configure does not contains JSON path.")
+    with io.SyncDataHandler(parser.get(rc_section, "json"), silent=True) as dh:
         dh.update(node_list)
 
 
-def create_configure_file(rcpath=default_rcpath):
-    """Create configure file.
-
-    Parameters
-    ----------
-    rcpath : str, optional
-        path of configure file (default=~/.dataprocessor.ini)
-
-    """
-    print("Creating " + rcpath)
-    root = raw_input("Enter your Root direcotry: ")
-    root_dir = utility.get_directory(root)
-    default_path = os.path.join(root_dir, "data.json")
-    json_path = raw_input("Enter path of your data json (default:{}): "
-                          .format(default_path))
-    if not json_path:
-        json_path = default_path
-    json_path = utility.path_expand(json_path)
-    if not os.path.exists(json_path):
-        print("Creating " + json_path)
-        with open(json_path, "w") as f:
-            f.write("[]")
-
-    cfg = ConfigParser.RawConfigParser()
-    cfg.add_section("data")
-    cfg.set("data", "root", root_dir)
-    cfg.set("data", "json", json_path)
-
-    with open(rcpath, 'wb') as f:
-        cfg.write(f)
-    print("Your configure file: " + rcpath + " is successfully created")
-
-
-def load_configure_file(rcpath=default_rcpath):
-    """Load default configure.
-
-    If the configure file does not exist, it will be created.
-    (see `create_configure_file(rcpath)`)
+def get_configparser(rcpath=default_rcpath):
+    """ Get configure parser
 
     Parameters
     ----------
@@ -112,22 +118,51 @@ def load_configure_file(rcpath=default_rcpath):
 
     Returns
     -------
-    dict
-        There are two keys: "root" and "json".
+    ConfigParser.SafeConfigParser
+        configure file has been loaded.
 
     Raises
     ------
-    DataProcessorError
+    DataProcessorRcError
         raised when configure file does not exist.
 
     """
     rcpath = utility.path_expand(rcpath)
     if not os.path.exists(rcpath):
-        raise DataProcessorError("Configure file does not exist")
+        raise DataProcessorRcError("Configure file does not exist")
 
     parser = ConfigParser.SafeConfigParser()
     parser.read(rcpath)
-    return {
-        "root": parser.get("data", "root"),
-        "json": parser.get("data", "json"),
-    }
+    return parser
+
+
+def get_configure(section, key, rcpath=default_rcpath):
+    """ Get configure value
+
+    Parameters
+    ----------
+    section : str
+        section name of configure file
+
+    key : str
+        key of configure
+
+    Returns
+    -------
+    str
+        configure value
+
+    Raises
+    ------
+    DataProcessorRcError
+        raised when
+
+        - configure file does not exist.
+        - configure file does not contain specified values
+
+    """
+    cfg = get_configparser(rcpath)
+    if not cfg.has_option(section, key):
+        raise DataProcessorRcError("Configure not found (section:{}, key:{}))"
+                                   .format((section, key)))
+    return cfg.get(section, key)
