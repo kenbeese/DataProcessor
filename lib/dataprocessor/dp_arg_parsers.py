@@ -1,12 +1,14 @@
 # coding=utf-8
 import argparse
-from . import pipes
+import sys
 
+from . import pipes
+from . import rc
 
 def dpmanip_arg_parser():
     try:
-        parser = dp.rc.ArgumentParser()
-    except dp.rc.DataProcessorRcError:
+        parser = rc.ArgumentParser()
+    except rc.DataProcessorRcError:
         print("Please create configure file by dpinit")
         sys.exit(1)
 
@@ -17,7 +19,7 @@ def dpmanip_arg_parser():
     parser.add_argument("-o", "--output", action="store_true",
                         help="Output result node_list")
     sub_psr = parser.add_subparsers(title="subcommands", metavar="pipes")
-    for name, val in dp.pipes.pipes_dics.items():
+    for name, val in pipes.pipes_dics.items():
         pipe_psr = sub_psr.add_parser(name, help=val["desc"])
         for arg in val["args"]:
             pipe_psr.add_argument(arg)
