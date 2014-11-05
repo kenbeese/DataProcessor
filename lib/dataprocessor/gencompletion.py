@@ -151,6 +151,8 @@ function _subcmd_list() {
         if action.nargs == "+" or action.nargs == '*':
             # 10 is hard coding.
             argfmt = ":: :_files" * 10
+        if action.choices:
+            argfmt = self._get_choice_string(action)
         # for existing both long and short option
         if len(action.option_strings) == 2:
             short_opt = action.option_strings[0]
@@ -172,7 +174,9 @@ function _subcmd_list() {
         return "': :(%s)' \\" % (" ".join(action.choices))
 
     def _get_option_or_choice_string(self, action):
-        if len(action.option_strings) == 0 and action.choices:
+        if len(action.option_strings) == 0 and \
+           action.choices and \
+           not isinstance(action, argparse._SubParsersAction):
             return self._get_choice_string(action)
         else:
             return self._get_option_string(action)
