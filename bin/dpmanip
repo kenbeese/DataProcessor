@@ -40,33 +40,9 @@ def main(args):
             dh.update(node_list)
 
 
-def parse():
-    try:
-        parser = dp.rc.ArgumentParser()
-    except dp.rc.DataProcessorRcError:
-        print("Please create configure file by dpinit")
-        sys.exit(1)
-
-    parser.add_argument("-s", "--silent", action="store_true",
-                        help="Does not ask whether REPLACE JSON file")
-    parser.add_argument("-i", "--input", action="store_true",
-                        help="Use stdin as data JSON")
-    parser.add_argument("-o", "--output", action="store_true",
-                        help="Output result node_list")
-    sub_psr = parser.add_subparsers(title="subcommands", metavar="pipes")
-    for name, val in dp.pipes.pipes_dics.items():
-        pipe_psr = sub_psr.add_parser(name, help=val["desc"])
-        for arg in val["args"]:
-            pipe_psr.add_argument(arg)
-        if "kwds" in val:
-            for kwd in val["kwds"]:
-                pipe_psr.add_argument("--" + kwd)
-        pipe_psr.set_defaults(val=val)
-    return parser.parse_args()
-
-
 if __name__ == '__main__':
-    args = parse()
+    parser = dp.argparsers.dpmanip()
+    args = parser.parse_args()
     try:
         main(args)
     except dp.exception.DataProcessorError as e:

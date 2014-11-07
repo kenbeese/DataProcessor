@@ -1,0 +1,15 @@
+#compdef dataprocessor
+function _dataprocessor (){
+    typeset -A opt_args
+    local context state line
+
+    integer int=1
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(-d --data)'{-d,--data}'[The path of data JSON]:: :_files' \
+        '*::arguments:_files'
+    ret=0
+    return ret
+}
+_dataprocessor
