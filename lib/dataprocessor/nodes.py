@@ -6,6 +6,35 @@ from . import utility
 node_types = ["run", "project", "figure"]
 
 
+def normalize(node):
+    """ Normalize node (i.e. fill necessary field).
+
+    Parameters
+    ----------
+    node: dict
+        node that you want to normalize
+
+    Returns
+    -------
+    dict
+        normalized node
+
+    """
+    if "path" not in node:
+        raise DataProcessorError("cannot normalize: Path must be needed")
+    new_node = {
+        "path": node["path"],
+        "name": "",
+        "configure": {},
+        "comment": "",
+        "tags": [],
+        "parents": [],
+        "children": [],
+    }
+    new_node.update(node)
+    return new_node
+
+
 def get(node_list, path):
     """Search node from node_list by its path.
 
