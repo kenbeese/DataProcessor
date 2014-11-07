@@ -10,13 +10,13 @@ import sys
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
             + sys.path[1:])
-from dataprocessor import figure, io, utility, dp_arg_parsers
+from dataprocessor import figure, io, utility, argparsers
 from dataprocessor.exception import DataProcessorError
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main():
-    parser = dp_arg_parsers.register_figure_arg_parser()
+    parser = argparsers.register_figure()
     args = parser.parse_args()
     figure_directory = utility.check_directory(args.figure_directory)
     json_file = utility.check_file(args.json_file)

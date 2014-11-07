@@ -41,7 +41,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = dp.dp_arg_parsers.dpmanip_arg_parser()
+    parser = dp.argparsers.dpmanip()
     args = parser.parse_args()
     try:
         main(args)

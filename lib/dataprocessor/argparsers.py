@@ -5,7 +5,8 @@ import sys
 from . import pipes
 from . import rc
 
-def dpmanip_arg_parser():
+
+def dpmanip():
     try:
         parser = rc.ArgumentParser()
     except rc.DataProcessorRcError:
@@ -30,7 +31,7 @@ def dpmanip_arg_parser():
     return parser
 
 
-def genzshcomp_arg_parser():
+def genzshcomp():
     parser = argparse.ArgumentParser()
     executable_names = [
         "dpmanip", "genzshcomp", "dataprocessor", "register_figure"]
@@ -38,7 +39,7 @@ def genzshcomp_arg_parser():
     return parser
 
 
-def dataprocessor_arg_parser():
+def dataprocessor():
     parser = argparse.ArgumentParser(description="""
                 command line interface for DataProcessor pipeline""")
     parser.add_argument('manip_json')
@@ -47,7 +48,7 @@ def dataprocessor_arg_parser():
     return parser
 
 
-def register_figure_arg_parser():
+def register_figure():
     parser = argparse.ArgumentParser(description="""
                 Register generated figures into DataProcessor.
                 The options -R and -g must be specified after ususal arguments.

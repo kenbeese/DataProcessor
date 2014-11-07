@@ -33,11 +33,15 @@ class CompletionGenerator(object):
 
     """Generator of Zsh Completion Function.
 
+    Since this class uses some inner function of argparse,
+    this does not work well in some version of argparse.
+    This is tested only on argparse of python 2.7.5.
+
     Attributes
     ----------
     command_name : str
         command name of completion
-    parser : ArgumentParser parser
+    parser : argparse.ArgumentParser
         parser of command
 
     Methods
