@@ -1,0 +1,77 @@
+#compdef dpserver
+function _dpserver-start (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--logfile)--logfile[The name of the log file (default=server.log)]' \
+        '(--root)--root[The root dir where the server stands (default=/home/teramura/nora/DataProcessor/server)]' \
+        '(--port)--port[Port for the server (default=8080)]' \
+        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]' \
+        '*::arguments:_files'
+}
+
+
+function _dpserver-stop (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]' \
+        '*::arguments:_files'
+}
+
+
+function _dpserver-install (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--root)--root[The root dir where the server stands (default=/home/teramura/nora/DataProcessor/server)]' \
+        '*::arguments:_files'
+}
+
+function _subcmd_list() {
+    local -a subcmd_list
+    subcmd_list=(
+        start:'start DataProcessor server daemon'
+        stop:'kill articles server'
+        install:'install jQuery'
+    )
+    _describe -t subcmd 'subcommand list' subcmd_list && return
+}
+
+function _dpserver (){
+    typeset -A opt_args
+    local context state line
+
+    integer int=1
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--json)--json[path of JSON file]' \
+        '(--debug)--debug[output traceback]' \
+        ':subcmd:->subcmd' \
+        '*::subcmd-options-or-args:->subcmd-options-or-args'
+
+    case $state in
+        subcmd)
+            _subcmd_list && ret=0
+            ;;
+        subcmd-options-or-args)
+            local curcontext=$curcontext
+            curcontext=${curcontext%:*:*}:dpserver-$words[1]:
+            if (( $+functions[_dpserver-$words[1]] )); then
+                _call_function ret _dpserver-$words[1]
+            else
+                _files && ret=0
+            fi
+            ;;
+    esac
+
+    return ret
+}
+_dpserver
