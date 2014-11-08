@@ -19,6 +19,8 @@ def dpmanip():
                         help="Use stdin as data JSON")
     parser.add_argument("-o", "--output", action="store_true",
                         help="Output result node_list")
+    parser.add_argument("-r", "--replace", action="store_true",
+                        help="Use replace strategy for saving JSON")
     sub_psr = parser.add_subparsers(title="subcommands", metavar="pipes")
     for name, val in pipes.pipes_dics.items():
         pipe_psr = sub_psr.add_parser(name, help=val["desc"])

@@ -1,14 +1,4 @@
 #compdef dpmanip
-function _dpmanip-filter_node_type (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
 function _dpmanip-add_comment (){
     typeset -A opt_args
     local context state line
@@ -19,14 +9,12 @@ function _dpmanip-add_comment (){
 }
 
 
-function _dpmanip-register_figure (){
+function _dpmanip-filter_node_type (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--runs)--runs' \
-        '(--generators)--generators' \
         '*::arguments:_files'
 }
 
@@ -68,6 +56,17 @@ function _dpmanip-change_path (){
 }
 
 
+function _dpmanip-scan_directory (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--followlinks)--followlinks' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-configure_no_section (){
     typeset -A opt_args
     local context state line
@@ -100,13 +99,14 @@ function _dpmanip-load_json (){
 }
 
 
-function _dpmanip-scan_directory (){
+function _dpmanip-register_figure (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--followlinks)--followlinks' \
+        '(--runs)--runs' \
+        '(--generators)--generators' \
         '*::arguments:_files'
 }
 
@@ -157,20 +157,20 @@ function _dpmanip-move_node (){
 function _subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
-        filter_node_type:'filter by node type'
         add_comment:'add comment to node with path'
+        filter_node_type:'filter by node type'
         configure:'Read parameter file (use ConfigParser)'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
         configure_no_section:'Read parameter file (without section)'
         filter_project:'filter by project path'
         load_json:'load node_list from a JSON file'
-        register_figure:'add figure node into node_list'
+        scan_directory:'Scan nodes from all directories under the directory 'root'.'
         show_runs:'output runs path'
         save_json:'save node_list in a JSON file'
         move_node:'move node whose directory is also moved like as UNIX mv'
         show_projects:'output project name'
-        scan_directory:'Scan nodes from all directories under the directory 'root'.'
+        register_figure:'add figure node into node_list'
     )
     _describe -t subcmd 'subcommand list' subcmd_list && return
 }
@@ -188,6 +188,7 @@ function _dpmanip (){
         '(-s --silent)'{-s,--silent}'[Does not ask whether REPLACE JSON file]' \
         '(-i --input)'{-i,--input}'[Use stdin as data JSON]' \
         '(-o --output)'{-o,--output}'[Output result node_list]' \
+        '(-r --replace)'{-r,--replace}'[Use replace strategy for saving JSON]' \
         ':subcmd:->subcmd' \
         '*::subcmd-options-or-args:->subcmd-options-or-args'
 
