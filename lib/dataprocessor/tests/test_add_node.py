@@ -23,5 +23,8 @@ class TestAddNode(TestNodeListAndDir):
             nodes.validate_link(self.node_list, n)
         node = {"path": os.path.join(self.project_paths[0], "run02"),
                 "parents": [self.project_paths[0]]}
-        nodes.add(compare_list, node)
+        try:
+            nodes.add(compare_list, node)
+        except nodes.DataProcessorNodesError:
+            nodes.update(compare_list, node)
         return compare_list
