@@ -19,6 +19,24 @@ def normalize(node):
     dict
         normalized node
 
+    Examples
+    >>> node = {
+    ...     "path": "/path/0",
+    ...     "unknown": ["homhom"]
+    ... }
+    >>> node = normalize(node)
+    >>> node == {
+    ...     "path": "/path/0",
+    ...     "name": "",
+    ...     "configure": {},
+    ...     "comment": "",
+    ...     "tags": [],
+    ...     "parents": [],
+    ...     "children": [],
+    ...     "unknown": ["homhom"]
+    ... }
+    True
+
     """
     if "path" not in node:
         raise DataProcessorError("cannot normalize: Path must be needed")
