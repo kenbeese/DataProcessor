@@ -85,7 +85,7 @@ class TestNodes(unittest.TestCase):
             "parents": ["/path/2"],
             "children": ["/path/1", "/path/3"]
         }
-        nodes.add(node_list, new_node, skip_validate_link=True)
+        nodes.add(node_list, new_node, strategy="update", skip_validate_link=True)
 
         compare_node_list = [
             {"path": "/path/0", "parents": ["/path/2"],
@@ -105,7 +105,7 @@ class TestNodes(unittest.TestCase):
             "parents": ["/path/0"],
             "children": []
         }
-        nodes.add(node_list, new_node)
+        nodes.add(node_list, new_node, strategy="update")
 
         compare_node_list = [
             {"path": "/path/0", "parents": ["/path/1"],

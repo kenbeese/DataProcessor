@@ -150,7 +150,7 @@ def update(node_list, node, skip_validate_link=False):
         validate_link(node_list, node0)
 
 
-def add(node_list, node, skip_validate_link=False, strategy="update"):
+def add(node_list, node, skip_validate_link=False, strategy="raise"):
     """Add a node into node_list.
 
     This adds a node into node_list,
@@ -165,12 +165,20 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
         The node will be added into node_list
     skip_validate_link : bool, optional
         skip link validation (default False)
-    strategy : str, optional {"update", "replace"}
+    strategy : str, optional {"raise", "update", "replace"}
         The strategy for the case
         where there exists a node whose "path" is same as new one
 
+        - "raise" : raise DataProcessorNodesError (default)
         - "update" : use dict.update to update existing node
         - "replace" : replace existing node with new node
+
+    Raises
+    ------
+    DataProcessorNodesError:
+        there is already exist node whose path is `node["path"]`
+    DataProcessorError:
+        strategy is invalid string
 
     Examples
     --------
@@ -184,7 +192,9 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
     """
     node0 = get(node_list, node["path"])
     if node0:
-        if strategy is "update":
+        if strategy is "raise":
+            raise DataProcessorNodesError("node already exists")
+        elif strategy is "update":
             node0.update(node)
             node = node0
         elif strategy is "replace":
