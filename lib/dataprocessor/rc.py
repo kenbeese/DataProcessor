@@ -79,7 +79,7 @@ def load(rcpath=default_rcpath):
 
     """
     parser = get_configparser(rcpath)
-    if parser.has_option(rc_section, "json"):
+    if not parser.has_option(rc_section, "json"):
         raise DataProcessorRcError("Configure does not contains JSON path.")
     return io.load([], parser.get(rc_section, "json"))
 
