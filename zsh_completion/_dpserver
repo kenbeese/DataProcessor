@@ -5,10 +5,10 @@ function _dpserver-start (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--logfile)--logfile[The name of the log file (default=server.log)]' \
-        '(--root)--root[The root dir where the server stands (default=/home/teramura/nora/DataProcessor/server)]' \
-        '(--port)--port[Port for the server (default=8080)]' \
-        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]' \
+        '(--logfile)--logfile[The name of the log file]' \
+        '(--root)--root[The root dir where the server stands]' \
+        '(--port)--port[Port for the server]' \
+        '(--lockfile)--lockfile[Lock filename]' \
         '*::arguments:_files'
 }
 
@@ -19,7 +19,7 @@ function _dpserver-stop (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]' \
+        '(--lockfile)--lockfile[Lock filename]' \
         '*::arguments:_files'
 }
 
@@ -30,7 +30,7 @@ function _dpserver-install (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--root)--root[The root dir where the server stands (default=/home/teramura/nora/DataProcessor/server)]' \
+        '(--root)--root[The root dir where the server stands]' \
         '*::arguments:_files'
 }
 
