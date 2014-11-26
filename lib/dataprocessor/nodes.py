@@ -6,6 +6,14 @@ from . import utility
 node_types = ["run", "project", "figure"]
 
 
+class DataProcessorNodesError(DataProcessorError):
+
+    """Exception about Nodes processings."""
+
+    def __init__(self, msg):
+        DataProcessorError.__init__(self, msg)
+
+
 def normalize(node):
     """ Normalize node (i.e. fill necessary field).
 
@@ -82,6 +90,64 @@ def get(node_list, path):
         if path == node["path"]:
             return node
     return None
+
+
+def update(node_list, node, skip_validate_link=False):
+    """ Update node properties
+
+    This keeps values as possible,
+    besides the "update" strategy of `add(...)` simply uses `dict.update()`.
+    If `node` in the arguments has empty value
+    e.g. `node = {"path": "/path/0", "comment" : ""}`,
+    this function does not overwrite existing comment of
+    the node in `node_list`.
+
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes
+    node : dict
+        The node will be added into node_list
+    skip_validate_link : bool, optional
+        skip link validation (default False)
+
+    Raises
+    ------
+    DataProcessorNodesError
+        there is no node whose "path" is `node["path"]`
+
+    Examples
+    --------
+    >>> node_list = [{
+    ...   "path": "/path/0",
+    ...   "comment": "some comment",
+    ...   "children": [],
+    ...   "parents": [],
+    ... }]
+    >>> node = {
+    ...   "path":"/path/0",
+    ...   "configure": {"A": 1.0},
+    ...   "comment": "",
+    ... }
+    >>> update(node_list, node)
+    >>> node_list == [{
+    ...   'comment': 'some comment',
+    ...   'path': '/path/0',
+    ...   'parents': [],
+    ...   'children': [],
+    ...   'configure': {'A': 1.0}
+    ... }]
+    True
+    """
+    node0 = get(node_list, node["path"])
+    if not node0:
+        raise DataProcessorNodesError("There is no node [path={}]".format(
+                                      node["path"]))
+    for key, val in node.items():
+        if val:
+            node0[key] = val
+    if validate_link:
+        validate_link(node_list, node0)
 
 
 def add(node_list, node, skip_validate_link=False, strategy="update"):
