@@ -5,6 +5,7 @@
 from . import utility, io
 from .exception import DataProcessorError
 import os.path
+import copy
 import argparse
 import ConfigParser
 
@@ -55,6 +56,43 @@ def ArgumentParser(rcpath=default_rcpath, options={}):
     parser.add_argument("--debug", action="store_true",
                         help="output traceback")
     return parser
+
+
+def load_into_argparse(parser, section_name, options, allow_empty=False,
+                       rcpath=default_rcpath):
+    """ Load configure into argparse.
+
+    Parameters
+    ----------
+    parser : argparse.ArgumentParser
+        main parser or subparser
+
+    section_name : str
+        name of section
+
+    options : {str: {str: str}}
+        Options which you want to read from section
+        whose name is `section_name`.
+        `[{"opt1": argparse_opt}]` will converted into
+        `parser.add_argument("--" + "opt1", **argparse_opt)`.
+
+    """
+    for name, opt in options.items():
+        opt = copy.deepcopy(opt)
+        try:
+            val = get_configure(section_name, name, rcpath)
+            opt["default"] = val
+        except DataProcessorRcError:
+            if not allow_empty:
+                raise
+            if "default" not in opt:
+                parser.add_argument(name, **opt)
+                continue
+        if "help" in opt:
+            opt["help"] += " (default={})".format(str(opt["default"]))
+        else:
+            opt["help"] = "(default={})".format(str(opt["default"]))
+        parser.add_argument("--" + name, **opt)
 
 
 def load(rcpath=default_rcpath):
@@ -164,5 +202,5 @@ def get_configure(section, key, rcpath=default_rcpath):
     cfg = get_configparser(rcpath)
     if not cfg.has_option(section, key):
         raise DataProcessorRcError("Configure not found (section:{}, key:{}))"
-                                   .format((section, key)))
+                                   .format(section, key))
     return cfg.get(section, key)
