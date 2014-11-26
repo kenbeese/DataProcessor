@@ -148,6 +148,8 @@ function _subcmd_list() {
 
     def _get_option_string(self, action):
         argfmt = ""
+        if not action.nargs:
+            argfmt = ": :_files"
         if isinstance(action.nargs, int) and action.nargs > 0:
             argfmt = ": :_files" * action.nargs
         if action.nargs == '?':
