@@ -238,4 +238,7 @@ def get_project_dir(name, root=None, basket_name="Projects",
         from the setting file.
 
     """
-    return _get_dir(name, root, basket_name, rcpath)
+    if os.path.basename(name) == name:
+        return _get_dir(name, root, basket_name, rcpath)
+    else:
+        return utility.get_directory(name)
