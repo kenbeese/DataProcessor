@@ -204,3 +204,38 @@ def get_configure(section, key, rcpath=default_rcpath):
         raise DataProcessorRcError("Configure not found (section:{}, key:{}))"
                                    .format(section, key))
     return cfg.get(section, key)
+
+
+def _get_dir(name, root, basket_name, rcpath):
+    if not root:
+        root = get_configure(rc_section, "root", rcpath=rcpath)
+    root = utility.check_directory(root)
+    basket = utility.get_directory(os.path.join(root, basket_name))
+    return utility.get_directory(os.path.join(basket, name))
+
+
+def get_project_dir(name, root=None, basket_name="Projects",
+                    rcpath=default_rcpath):
+    """ Generate project directory, if it exists, returns its abspath.
+
+    Parameters
+    ----------
+    name : str
+        project name (not path)
+    root : str, optional
+        new run directory is made in `${root}/${basket_name}/`.
+        If not specified, "root" value of the setting file is used.
+    basket_name : str, optional
+        new run directory is made in `${root}/${basket_name}/`.
+        (default="Projects")
+    rcpath : str, optional
+        path of the setting file
+
+    Raises
+    ------
+    DataProcessorRcError
+        occurs when `root` is not specified and it cannot be loaded
+        from the setting file.
+
+    """
+    return _get_dir(name, root, basket_name, rcpath)
