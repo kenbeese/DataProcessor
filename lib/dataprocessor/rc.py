@@ -206,6 +206,29 @@ def get_configure(section, key, rcpath=default_rcpath):
     return cfg.get(section, key)
 
 
+def get_configure_safe(section, key, default, rcpath=default_rcpath):
+    """ Get configure value safely.
+
+    Parameters
+    ----------
+    section : str
+        section name of configure file
+    key : str
+        key of configure
+    default : any
+        This is returned in the case where configure cannot be obtained.
+
+    Returns
+    -------
+    str
+        configure value
+    """
+    try:
+        return get_configure(section, key, rcpath)
+    except DataProcessorRcError:
+        return default
+
+
 def _get_dir(name, root, basket_name, rcpath):
     if not root:
         root = get_configure(rc_section, "root", rcpath=rcpath)
