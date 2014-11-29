@@ -229,7 +229,7 @@ def get_configure_safe(section, key, default, rcpath=default_rcpath):
         return default
 
 
-def _get_dir(name, root, basket_name, rcpath):
+def _resolve_path(name, root, basket_name, rcpath):
     if not root:
         root = get_configure(rc_section, "root", rcpath=rcpath)
     root = utility.check_directory(root)
@@ -237,22 +237,34 @@ def _get_dir(name, root, basket_name, rcpath):
     return utility.get_directory(os.path.join(basket, name))
 
 
-def get_project_dir(name, root=None, basket_name="Projects",
-                    rcpath=default_rcpath):
-    """ Generate project directory, if it exists, returns its abspath.
+def resolve_project_path(name_or_path, root=None,
+                         basket_name=get_configure_safe(rc_section,
+                                                        "project_basket",
+                                                        "Projects"),
+                         rcpath=default_rcpath):
+    """ Resolve project path from its path or name.
 
     Parameters
     ----------
-    name : str
-        project name (not path)
+    name_or_path : str
+        Project identifier.
+        If name (i.e. basename(name_or_path) == name_or_path),
+        abspath of `root/basket_name/name` is returned.
+        If path (otherwise case), returns its abspath.
     root : str, optional
-        new run directory is made in `${root}/${basket_name}/`.
-        If not specified, "root" value of the setting file is used.
+        The root path of baskets. (default=None)
+        If None, the path is read from the configure file.
     basket_name : str, optional
-        new run directory is made in `${root}/${basket_name}/`.
-        (default="Projects")
+        The name of the project basket.
+        If "project_basket" is specified in the configure file,
+        default value is it. Otherwise, default is "Projects".
     rcpath : str, optional
         path of the setting file
+
+    Returns
+    -------
+    path : str
+        existing project path
 
     Raises
     ------
@@ -261,7 +273,7 @@ def get_project_dir(name, root=None, basket_name="Projects",
         from the setting file.
 
     """
-    if os.path.basename(name) == name:
-        return _get_dir(name, root, basket_name, rcpath)
+    if os.path.basename(name_or_path) == name_or_path:
+        return _resolve_path(name_or_path, root, basket_name, rcpath)
     else:
-        return utility.get_directory(name)
+        return utility.get_directory(name_or_path)
