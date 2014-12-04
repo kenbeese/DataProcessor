@@ -1,5 +1,5 @@
 #compdef dpmanip
-function _dpmanip-add_comment (){
+function _dpmanip-filter_node_type (){
     typeset -A opt_args
     local context state line
 
@@ -9,12 +9,24 @@ function _dpmanip-add_comment (){
 }
 
 
-function _dpmanip-filter_node_type (){
+function _dpmanip-normalize (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-register_figure (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--runs)--runs' \
+        '(--generators)--generators' \
         '*::arguments:_files'
 }
 
@@ -56,13 +68,12 @@ function _dpmanip-change_path (){
 }
 
 
-function _dpmanip-scan_directory (){
+function _dpmanip-add_tag (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--followlinks)--followlinks' \
         '*::arguments:_files'
 }
 
@@ -89,6 +100,16 @@ function _dpmanip-filter_project (){
 }
 
 
+function _dpmanip-add_comment (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-load_json (){
     typeset -A opt_args
     local context state line
@@ -99,14 +120,13 @@ function _dpmanip-load_json (){
 }
 
 
-function _dpmanip-register_figure (){
+function _dpmanip-scan_directory (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--runs)--runs' \
-        '(--generators)--generators' \
+        '(--followlinks)--followlinks' \
         '*::arguments:_files'
 }
 
@@ -157,20 +177,22 @@ function _dpmanip-move_node (){
 function _subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
-        add_comment:'add comment to node with path'
         filter_node_type:'filter by node type'
+        normalize:'normalize nodes (i.e. fill necessary field)'
         configure:'Read parameter file (use ConfigParser)'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
         configure_no_section:'Read parameter file (without section)'
         filter_project:'filter by project path'
+        add_tag:'Add a tag into the node'
         load_json:'load node_list from a JSON file'
-        scan_directory:'Scan nodes from all directories under the directory 'root'.'
+        register_figure:'add figure node into node_list'
         show_runs:'output runs path'
+        add_comment:'add comment to node with path'
         save_json:'save node_list in a JSON file'
         move_node:'move node whose directory is also moved like as UNIX mv'
         show_projects:'output project name'
-        register_figure:'add figure node into node_list'
+        scan_directory:'Scan nodes from all directories under the directory 'root'.'
     )
     _describe -t subcmd 'subcommand list' subcmd_list && return
 }
