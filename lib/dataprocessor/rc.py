@@ -204,3 +204,76 @@ def get_configure(section, key, rcpath=default_rcpath):
         raise DataProcessorRcError("Configure not found (section:{}, key:{}))"
                                    .format(section, key))
     return cfg.get(section, key)
+
+
+def get_configure_safe(section, key, default, rcpath=default_rcpath):
+    """ Get configure value safely.
+
+    Parameters
+    ----------
+    section : str
+        section name of configure file
+    key : str
+        key of configure
+    default : any
+        This is returned in the case where configure cannot be obtained.
+
+    Returns
+    -------
+    str
+        configure value
+    """
+    try:
+        return get_configure(section, key, rcpath)
+    except DataProcessorRcError:
+        return default
+
+
+def _resolve_path(name, root, basket_name, rcpath):
+    if not root:
+        root = get_configure(rc_section, "root", rcpath=rcpath)
+    root = utility.check_directory(root)
+    basket = utility.get_directory(os.path.join(root, basket_name))
+    return utility.get_directory(os.path.join(basket, name))
+
+
+def resolve_project_path(name_or_path, root=None,
+                         basket_name=get_configure_safe(rc_section,
+                                                        "project_basket",
+                                                        "Projects"),
+                         rcpath=default_rcpath):
+    """ Resolve project path from its path or name.
+
+    Parameters
+    ----------
+    name_or_path : str
+        Project identifier.
+        If name (i.e. basename(name_or_path) == name_or_path),
+        abspath of `root/basket_name/name` is returned.
+        If path (otherwise case), returns its abspath.
+    root : str, optional
+        The root path of baskets. (default=None)
+        If None, the path is read from the configure file.
+    basket_name : str, optional
+        The name of the project basket.
+        If "project_basket" is specified in the configure file,
+        default value is it. Otherwise, default is "Projects".
+    rcpath : str, optional
+        path of the setting file
+
+    Returns
+    -------
+    path : str
+        existing project path
+
+    Raises
+    ------
+    DataProcessorRcError
+        occurs when `root` is not specified and it cannot be loaded
+        from the setting file.
+
+    """
+    if os.path.basename(name_or_path) == name_or_path:
+        return _resolve_path(name_or_path, root, basket_name, rcpath)
+    else:
+        return utility.get_directory(name_or_path)
