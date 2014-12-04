@@ -12,6 +12,14 @@ dataprocessor.pipes.add_node module
     :undoc-members:
     :show-inheritance:
 
+dataprocessor.pipes.add_tag module
+----------------------------------
+
+.. automodule:: dataprocessor.pipes.add_tag
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.pipes.addcomment module
 -------------------------------------
 
@@ -48,6 +56,22 @@ dataprocessor.pipes.jsonio module
 ---------------------------------
 
 .. automodule:: dataprocessor.pipes.jsonio
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.move_node module
+------------------------------------
+
+.. automodule:: dataprocessor.pipes.move_node
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.normalize module
+------------------------------------
+
+.. automodule:: dataprocessor.pipes.normalize
     :members:
     :undoc-members:
     :show-inheritance:

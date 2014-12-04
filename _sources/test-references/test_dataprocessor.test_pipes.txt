@@ -20,6 +20,14 @@ test_dataprocessor.test_pipes.test_configure module
     :undoc-members:
     :show-inheritance:
 
+test_dataprocessor.test_pipes.test_move_node module
+---------------------------------------------------
+
+.. automodule:: test_dataprocessor.test_pipes.test_move_node
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 test_dataprocessor.test_pipes.test_scan module
 ----------------------------------------------
 

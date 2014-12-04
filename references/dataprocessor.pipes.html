@@ -38,9 +38,6 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="dataprocessor.html" title="dataprocessor package"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">dataprocessor  documentation</a> &raquo;</li>
@@ -83,7 +80,7 @@
 <p><strong>parents</strong> : list, optional</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">node_list</p>
 </td>
 </tr>
 </tbody>
@@ -93,6 +90,38 @@
 <dl class="function">
 <dt id="dataprocessor.pipes.add_node.register">
 <tt class="descclassname">dataprocessor.pipes.add_node.</tt><tt class="descname">register</tt><big>(</big><em>pipes_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/add_node.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.add_node.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipes.add_tag">
+<span id="dataprocessor-pipes-add-tag-module"></span><h2>dataprocessor.pipes.add_tag module<a class="headerlink" href="#module-dataprocessor.pipes.add_tag" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.add_tag.add_tag">
+<tt class="descclassname">dataprocessor.pipes.add_tag.</tt><tt class="descname">add_tag</tt><big>(</big><em>node_list</em>, <em>node_path</em>, <em>project_id</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/add_tag.html#add_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.add_tag.add_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the node belong to the project specified by project id.</p>
+<p>We realize &#8220;tagging&#8221; feature by project nodes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>node_path</strong> : str</p>
+<blockquote>
+<div><p>This path specify the unique node.</p>
+</div></blockquote>
+<p><strong>project_id: str</strong></p>
+<blockquote class="last">
+<div><p>the name or path of project.
+The path is resolved by resolve_project_path.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.add_tag.register">
+<tt class="descclassname">dataprocessor.pipes.add_tag.</tt><tt class="descname">register</tt><big>(</big><em>pipe_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/add_tag.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.add_tag.register" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -161,7 +190,7 @@ If file is not exists, add null list.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
 <blockquote class="last">
 <div><p>node_list which is a list of dict.</p>
 </div></blockquote>
@@ -200,7 +229,7 @@ If file is not exists, add null list.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
 <blockquote class="last">
 <div><p>node_list which is a list of dict.</p>
 </div></blockquote>
@@ -246,6 +275,57 @@ If file is not exists, add null list.</p>
 <dd></dd></dl>
 
 </div>
+<div class="section" id="module-dataprocessor.pipes.move_node">
+<span id="dataprocessor-pipes-move-node-module"></span><h2>dataprocessor.pipes.move_node module<a class="headerlink" href="#module-dataprocessor.pipes.move_node" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.move_node.move_node">
+<tt class="descclassname">dataprocessor.pipes.move_node.</tt><tt class="descname">move_node</tt><big>(</big><em>node_list</em>, <em>from_path</em>, <em>dest</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/move_node.html#move_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.move_node.move_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move node like as UNIX mv.</p>
+<p>Change path of a node and related nodes.
+Coresponding directories are also moved or renamed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>from_path</strong> : str</p>
+<blockquote>
+<div><p>path of node.</p>
+</div></blockquote>
+<p><strong>dest</strong> : str</p>
+<blockquote>
+<div><p>path of destination.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
+<blockquote class="last">
+<div><p>raised when path of &#8216;dest&#8217; already exists and the path is a file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.move_node.register">
+<tt class="descclassname">dataprocessor.pipes.move_node.</tt><tt class="descname">register</tt><big>(</big><em>pipe_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/move_node.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.move_node.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipes.normalize">
+<span id="dataprocessor-pipes-normalize-module"></span><h2>dataprocessor.pipes.normalize module<a class="headerlink" href="#module-dataprocessor.pipes.normalize" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.normalize.normalize">
+<tt class="descclassname">dataprocessor.pipes.normalize.</tt><tt class="descname">normalize</tt><big>(</big><em>node_list</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/normalize.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.normalize.normalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.normalize.register">
+<tt class="descclassname">dataprocessor.pipes.normalize.</tt><tt class="descname">register</tt><big>(</big><em>pipe_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/normalize.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.normalize.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-dataprocessor.pipes.scan">
 <span id="dataprocessor-pipes-scan-module"></span><h2>dataprocessor.pipes.scan module<a class="headerlink" href="#module-dataprocessor.pipes.scan" title="Permalink to this headline">¶</a></h2>
 <p>Scan directories as nodes.</p>
@@ -277,7 +357,7 @@ Be aware that setting this to True may lead to infinite recursion.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">node_list</p>
 </td>
 </tr>
 </tbody>
@@ -328,7 +408,7 @@ This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">node_list</p>
 </td>
 </tr>
 </tbody>
@@ -351,7 +431,7 @@ This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">node_list</p>
 </td>
 </tr>
 </tbody>
@@ -370,7 +450,7 @@ This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
 <blockquote>
 <div><p>the path of project, whose runs will be shown.</p>
 </div></blockquote>
-<p><strong>show_format: str, optional</strong> :</p>
+<p><strong>show_format: str, optional</strong></p>
 <blockquote>
 <div><p>specify format you want to output.
 You should use new <cite>format</cite> function format.
@@ -378,7 +458,7 @@ This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">node_list</p>
 </td>
 </tr>
 </tbody>
@@ -403,11 +483,14 @@ This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
 <li><a class="reference internal" href="#">dataprocessor.pipes package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.add_node">dataprocessor.pipes.add_node module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.add_tag">dataprocessor.pipes.add_tag module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.addcomment">dataprocessor.pipes.addcomment module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.configure">dataprocessor.pipes.configure module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.figure">dataprocessor.pipes.figure module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.filter">dataprocessor.pipes.filter module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.jsonio">dataprocessor.pipes.jsonio module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.move_node">dataprocessor.pipes.move_node module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.normalize">dataprocessor.pipes.normalize module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.scan">dataprocessor.pipes.scan module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.show">dataprocessor.pipes.show module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes">Module contents</a></li>
@@ -450,9 +533,6 @@ This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="dataprocessor.html" title="dataprocessor package"
              >previous</a> |</li>
         <li><a href="../index.html">dataprocessor  documentation</a> &raquo;</li>
@@ -462,7 +542,7 @@ This string will be formatted by <cite>show_format.format(**node)</cite>.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

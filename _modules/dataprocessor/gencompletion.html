@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dataprocessor.gencompletion &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for dataprocessor.gencompletion</h1><div class="highlight"><pre>
+<span class="c"># coding=utf-8</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
+
+
+<span class="k">def</span> <span class="nf">_escape_strings</span><span class="p">(</span><span class="n">strings</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;escape to squarebracket and doublequote.</span>
+
+<span class="sd">    &gt;&gt;&gt; print(_escape_strings(&quot;hoge&quot;))</span>
+<span class="sd">    hoge</span>
+<span class="sd">    &gt;&gt;&gt; print(_escape_strings(&quot;[hoge&quot;))</span>
+<span class="sd">    \[hoge</span>
+<span class="sd">    &gt;&gt;&gt; print(_escape_strings(&quot;hoge]&quot;))</span>
+<span class="sd">    hoge\]</span>
+<span class="sd">    &gt;&gt;&gt; print(_escape_strings(&quot;[hoge]&quot;))</span>
+<span class="sd">    \[hoge\]</span>
+<span class="sd">    &gt;&gt;&gt; print(_escape_strings(&#39;[ho&quot;ge]&#39;))</span>
+<span class="sd">    \[ho\&quot;ge\]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">target_chars</span> <span class="o">=</span> <span class="s">&quot;[]</span><span class="se">\&quot;</span><span class="s">`&quot;</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">strings</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">target_chars</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">string</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CompletionGenerator"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.gencompletion.CompletionGenerator">[docs]</a><span class="k">class</span> <span class="nc">CompletionGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Generator of Zsh Completion Function.</span>
+
+<span class="sd">    Since this class uses some inner function of argparse,</span>
+<span class="sd">    this does not work well in some version of argparse.</span>
+<span class="sd">    This is tested only on argparse of python 2.7.5.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    command_name : str</span>
+<span class="sd">        command name of completion</span>
+<span class="sd">    parser : argparse.ArgumentParser</span>
+<span class="sd">        parser of command</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get()</span>
+<span class="sd">        returns string of Zsh completion function</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandname</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commandname</span> <span class="o">=</span> <span class="n">commandname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">parser</span>
+
+    <span class="k">def</span> <span class="nf">_main_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;function _</span><span class="si">%s</span><span class="s"> (){&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">commandname</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    typeset -A opt_args&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    local context state line</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    integer int=1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    _arguments -w -s -S </span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">_actions</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+            <span class="n">opt_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_option_or_choice_string</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">opt_str</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;        &quot;</span> <span class="o">+</span> <span class="n">opt_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subparser</span><span class="p">():</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;        &#39;:subcmd:-&gt;subcmd&#39; </span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s">&quot;        &#39;*::subcmd-options-or-args:-&gt;subcmd-options-or-args&#39;&quot;</span><span class="p">)</span>
+            <span class="n">casestring</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    case $state in</span>
+<span class="s">        subcmd)</span>
+<span class="s">            _subcmd_list &amp;&amp; ret=0</span>
+<span class="s">            ;;</span>
+<span class="s">        subcmd-options-or-args)</span>
+<span class="s">            local curcontext=$curcontext</span>
+<span class="s">            curcontext=${curcontext</span><span class="si">%%</span><span class="s">:*:*}:</span><span class="si">%s</span><span class="s">-$words[1]:</span>
+<span class="s">            if (( $+functions[_</span><span class="si">%s</span><span class="s">-$words[1]] )); then</span>
+<span class="s">                _call_function ret _</span><span class="si">%s</span><span class="s">-$words[1]</span>
+<span class="s">            else</span>
+<span class="s">                _files &amp;&amp; ret=0</span>
+<span class="s">            fi</span>
+<span class="s">            ;;</span>
+<span class="s">    esac</span>
+<span class="s">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">commandname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">commandname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">commandname</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">casestring</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;        &#39;*::arguments:_files&#39;&quot;</span><span class="p">)</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    ret=0&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    return ret&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_subcmd_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subcmd_name</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;function _</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s"> (){&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">commandname</span><span class="p">,</span> <span class="n">subcmd_name</span><span class="p">))</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    typeset -A opt_args&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    local context state line</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;    _arguments -w -s -S </span><span class="se">\\</span><span class="s">&quot;</span><span class="p">)</span>
+
+        <span class="n">subparser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subparser</span><span class="p">()</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">subparser</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="n">subcmd_name</span><span class="p">]</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_actions</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+            <span class="n">opt_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_option_or_choice_string</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">opt_str</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;        &quot;</span> <span class="o">+</span> <span class="n">opt_str</span><span class="p">)</span>
+
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="s">&quot;        &#39;*::arguments:_files&#39;&quot;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_subcmd_list_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">prefmt</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">function _subcmd_list() {</span>
+<span class="s">    local -a subcmd_list</span>
+<span class="s">    subcmd_list=(</span>
+<span class="s">        &quot;&quot;&quot;</span>
+        <span class="n">aftfmt</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    )</span>
+<span class="s">    _describe -t subcmd &#39;subcommand list&#39; subcmd_list &amp;&amp; return</span>
+<span class="s">}</span>
+<span class="s">&quot;&quot;&quot;</span>
+        <span class="c"># extract subcmd name and the help</span>
+        <span class="n">subcmds_with_help</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">subparser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subparser</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">subparser</span><span class="o">.</span><span class="n">_choices_actions</span><span class="p">:</span>
+            <span class="n">subcmds_with_help</span><span class="p">[</span><span class="n">action</span><span class="o">.</span><span class="n">dest</span><span class="p">]</span> <span class="o">=</span> <span class="n">_escape_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+
+        <span class="c"># for subcmd without help</span>
+        <span class="k">for</span> <span class="n">subcmdname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subcmd_list</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">subcmdname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">subcmds_with_help</span><span class="p">:</span>
+                <span class="n">subcmds_with_help</span><span class="p">[</span><span class="n">subcmdname</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">help</span> <span class="ow">in</span> <span class="n">subcmds_with_help</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">:&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">help</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">prefmt</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">        &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">body</span><span class="p">)</span> <span class="o">+</span> <span class="n">aftfmt</span>
+
+    <span class="k">def</span> <span class="nf">_get_subcmd_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subparser</span><span class="p">()</span><span class="o">.</span><span class="n">choices</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_option_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">nargs</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;: :_files&quot;</span> <span class="o">*</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&#39;?&#39;</span><span class="p">:</span>
+            <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;:: :_files&quot;</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&quot;+&quot;</span> <span class="ow">or</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&#39;*&#39;</span><span class="p">:</span>
+            <span class="c"># 10 is hard coding.</span>
+            <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;:: :_files&quot;</span> <span class="o">*</span> <span class="mi">10</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">choices</span><span class="p">:</span>
+            <span class="n">argfmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_choice_string</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="c"># for existing both long and short option</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">short_opt</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">long_opt</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">help</span> <span class="o">=</span> <span class="n">_escape_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">help</span><span class="p">:</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;[&quot;</span> <span class="o">+</span> <span class="n">help</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span>
+            <span class="k">return</span> <span class="s">&quot;&#39;(</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">)&#39;{</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">}&#39;</span><span class="si">%s%s</span><span class="s">&#39; </span><span class="se">\\</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">short_opt</span><span class="p">,</span> <span class="n">long_opt</span><span class="p">,</span> <span class="n">short_opt</span><span class="p">,</span> <span class="n">long_opt</span><span class="p">,</span> <span class="n">help</span><span class="p">,</span> <span class="n">argfmt</span><span class="p">)</span>
+        <span class="c"># for one option</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">help</span> <span class="o">=</span> <span class="n">_escape_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">help</span><span class="p">:</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;[&quot;</span> <span class="o">+</span> <span class="n">help</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span>
+            <span class="k">return</span> <span class="s">&quot;&#39;(</span><span class="si">%s</span><span class="s">)</span><span class="si">%s%s%s</span><span class="s">&#39; </span><span class="se">\\</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                        <span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">help</span><span class="p">,</span> <span class="n">argfmt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_choice_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;&#39;: :(</span><span class="si">%s</span><span class="s">)&#39; </span><span class="se">\\</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">choices</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_option_or_choice_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> \
+           <span class="n">action</span><span class="o">.</span><span class="n">choices</span> <span class="ow">and</span> \
+           <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">argparse</span><span class="o">.</span><span class="n">_SubParsersAction</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_choice_string</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_option_string</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+        <span class="c"># for choice argument</span>
+
+    <span class="k">def</span> <span class="nf">_get_subparser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">_actions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">argparse</span><span class="o">.</span><span class="n">_SubParsersAction</span><span class="p">):</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span>
+                <span class="s">&quot;Does not support two or more subparsers&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="CompletionGenerator.get"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.gencompletion.CompletionGenerator.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get zsh completion function string.&quot;&quot;&quot;</span>
+        <span class="c"># func = getattr(self, &quot;_get_%s_format&quot; % self.output_format)</span>
+        <span class="c"># return func()</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s">&quot;#compdef </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">commandname</span>
+        <span class="n">footer</span> <span class="o">=</span> <span class="s">&quot;_</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">commandname</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main_function</span><span class="p">()</span>
+        <span class="n">subcmd_functions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subparser</span><span class="p">():</span>
+            <span class="n">subcmd_functions</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_subcmd_function</span><span class="p">(</span><span class="n">subcmdname</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">subcmdname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subcmd_list</span><span class="p">()]</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subcmd_functions</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">_subcmd_list_function</span><span class="p">()</span> <span class="o">+</span> <span class="n">body</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="n">footer</span>
+        <span class="k">return</span> <span class="n">body</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

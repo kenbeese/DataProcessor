@@ -36,9 +36,6 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -54,7 +51,7 @@
 
 <span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
 <span class="kn">from</span> <span class="nn">.nodes</span> <span class="kn">import</span> <span class="n">node_types</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utility</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">rc</span>
 
 
 <div class="viewcode-block" id="project"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.filter.project">[docs]</a><span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
@@ -76,9 +73,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">rc</span><span class="o">.</span><span class="n">resolve_project_path</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path</span><span class="p">]</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">rc</span><span class="o">.</span><span class="n">resolve_project_path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Arguemnt path must be str or [str]&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span>
@@ -106,7 +103,37 @@
     <span class="k">if</span> <span class="n">ntype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_types</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Please select node type from &quot;</span>
                                  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">node_types</span><span class="p">))</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span> <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ntype</span><span class="p">]</span></div>
+    <span class="k">return</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span> <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ntype</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="prefix_path"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.filter.prefix_path">[docs]</a><span class="k">def</span> <span class="nf">prefix_path</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">pre_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Filter by prefix path.</span>
+
+<span class="sd">    In the case when pre_path is &quot;/foo/bar&quot;,</span>
+<span class="sd">    following paths remain (not filtered):</span>
+
+<span class="sd">    - /foo/bar</span>
+<span class="sd">    - /foo/bar/foo</span>
+
+<span class="sd">    , and following do not remain (filtered out):</span>
+
+<span class="sd">    - /foo/barfoo/hoge</span>
+<span class="sd">    - /bar/foo/bar/FOO</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pre_path : str</span>
+<span class="sd">        prefix path for filtering.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    node_list</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">pre_path</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span> <span class="ow">or</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span><span class="p">]</span></div>
 </pre></div>
 
           </div>
@@ -140,16 +167,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

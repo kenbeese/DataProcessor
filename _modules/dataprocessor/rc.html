@@ -36,9 +36,6 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -57,14 +54,22 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">io</span>
 <span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
 
 
 <span class="n">default_rcpath</span> <span class="o">=</span> <span class="s">&quot;~/.dataprocessor.ini&quot;</span>
+<span class="n">rc_section</span> <span class="o">=</span> <span class="s">&quot;data&quot;</span>
 
 
-<div class="viewcode-block" id="ArgumentParser"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.ArgumentParser">[docs]</a><span class="k">def</span> <span class="nf">ArgumentParser</span><span class="p">(</span><span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
+<div class="viewcode-block" id="DataProcessorRcError"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.DataProcessorRcError">[docs]</a><span class="k">class</span> <span class="nc">DataProcessorRcError</span><span class="p">(</span><span class="n">DataProcessorError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception about configure file.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="n">DataProcessorError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="ArgumentParser"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.ArgumentParser">[docs]</a><span class="k">def</span> <span class="nf">ArgumentParser</span><span class="p">(</span><span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
     <span class="sd">&quot;&quot;&quot;Argument parser for executables in this project.</span>
 
 <span class="sd">    Parameters</span>
@@ -72,19 +77,71 @@
 <span class="sd">    rcpath : str, optional</span>
 <span class="sd">        path of configure file (default=~/.dataprocessor.ini)</span>
 
+<span class="sd">    options : [{str: dict}], optional</span>
+<span class="sd">        options which you want to read from [data] section</span>
+<span class="sd">        of the configure file.</span>
+<span class="sd">        `[{&quot;opt1&quot;: argparse_opt}]` will converted into</span>
+<span class="sd">        `parser.add_argument(&quot;--&quot; + &quot;opt1&quot;, **argparse_opt)`.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    argparse.ArgumentParser instance</span>
+<span class="sd">    argparse.ArgumentParser</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorRcError</span>
+<span class="sd">        raised when</span>
+
+<span class="sd">        - configure file does not exist.</span>
+<span class="sd">        - configure file does not contain specified values</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cfg</span> <span class="o">=</span> <span class="n">load_configure_file</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--root&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s">&quot;root&quot;</span><span class="p">],</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s">&quot;data root&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--json&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">cfg</span><span class="p">[</span><span class="s">&quot;json&quot;</span><span class="p">],</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s">&quot;path of data JSON&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--debug&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;output traceback&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&quot;json&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="n">options</span><span class="p">[</span><span class="s">&quot;json&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;path of JSON file&quot;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">get_configure</span><span class="p">(</span><span class="n">rc_section</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">rcpath</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">opt</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--debug&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&quot;output traceback&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parser</span>
+
+</div>
+<div class="viewcode-block" id="load_into_argparse"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.load_into_argparse">[docs]</a><span class="k">def</span> <span class="nf">load_into_argparse</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">allow_empty</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                       <span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Load configure into argparse.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parser : argparse.ArgumentParser</span>
+<span class="sd">        main parser or subparser</span>
+
+<span class="sd">    section_name : str</span>
+<span class="sd">        name of section</span>
+
+<span class="sd">    options : {str: {str: str}}</span>
+<span class="sd">        Options which you want to read from section</span>
+<span class="sd">        whose name is `section_name`.</span>
+<span class="sd">        `[{&quot;opt1&quot;: argparse_opt}]` will converted into</span>
+<span class="sd">        `parser.add_argument(&quot;--&quot; + &quot;opt1&quot;, **argparse_opt)`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">get_configure</span><span class="p">(</span><span class="n">section_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">rcpath</span><span class="p">)</span>
+            <span class="n">opt</span><span class="p">[</span><span class="s">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="k">except</span> <span class="n">DataProcessorRcError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_empty</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">if</span> <span class="s">&quot;default&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opt</span><span class="p">:</span>
+                <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">opt</span><span class="p">)</span>
+                <span class="k">continue</span>
+        <span class="k">if</span> <span class="s">&quot;help&quot;</span> <span class="ow">in</span> <span class="n">opt</span><span class="p">:</span>
+            <span class="n">opt</span><span class="p">[</span><span class="s">&quot;help&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&quot; (default={})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="p">[</span><span class="s">&quot;default&quot;</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">opt</span><span class="p">[</span><span class="s">&quot;help&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;(default={})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="p">[</span><span class="s">&quot;default&quot;</span><span class="p">]))</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">opt</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="load"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
@@ -99,9 +156,19 @@
 <span class="sd">    -------</span>
 <span class="sd">    node_list</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorRcError</span>
+<span class="sd">        raised when</span>
+
+<span class="sd">        - configure file does not exist.</span>
+<span class="sd">        - configure file does not contain JSON path</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cfg</span> <span class="o">=</span> <span class="n">load_configure_file</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">io</span><span class="o">.</span><span class="n">load</span><span class="p">([],</span> <span class="n">cfg</span><span class="p">[</span><span class="s">&quot;json&quot;</span><span class="p">])</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">get_configparser</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parser</span><span class="o">.</span><span class="n">has_option</span><span class="p">(</span><span class="n">rc_section</span><span class="p">,</span> <span class="s">&quot;json&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">DataProcessorRcError</span><span class="p">(</span><span class="s">&quot;Configure does not contains JSON path.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">io</span><span class="o">.</span><span class="n">load</span><span class="p">([],</span> <span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rc_section</span><span class="p">,</span> <span class="s">&quot;json&quot;</span><span class="p">))</span>
 
 </div>
 <div class="viewcode-block" id="update"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.update">[docs]</a><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
@@ -112,50 +179,24 @@
 <span class="sd">    rcpath : str, optional</span>
 <span class="sd">        path of configure file (default=~/.dataprocessor.ini)</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorRcError</span>
+<span class="sd">        raised when</span>
+
+<span class="sd">        - configure file does not exist.</span>
+<span class="sd">        - configure file does not contain JSON path</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cfg</span> <span class="o">=</span> <span class="n">load_configure_file</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">SyncDataHandler</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s">&quot;json&quot;</span><span class="p">],</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">dh</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">get_configparser</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parser</span><span class="o">.</span><span class="n">has_option</span><span class="p">(</span><span class="n">rc_section</span><span class="p">,</span> <span class="s">&quot;json&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">DataProcessorRcError</span><span class="p">(</span><span class="s">&quot;Configure does not contains JSON path.&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">SyncDataHandler</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rc_section</span><span class="p">,</span> <span class="s">&quot;json&quot;</span><span class="p">),</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">dh</span><span class="p">:</span>
         <span class="n">dh</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node_list</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="create_configure_file"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.create_configure_file">[docs]</a><span class="k">def</span> <span class="nf">create_configure_file</span><span class="p">(</span><span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create configure file.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    rcpath : str, optional</span>
-<span class="sd">        path of configure file (default=~/.dataprocessor.ini)</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Creating &quot;</span> <span class="o">+</span> <span class="n">rcpath</span><span class="p">)</span>
-    <span class="n">root</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Enter your Root direcotry: &quot;</span><span class="p">)</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_directory</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-    <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s">&quot;data.json&quot;</span><span class="p">)</span>
-    <span class="n">json_path</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Enter path of your data json (default:{}): &quot;</span>
-                          <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">default_path</span><span class="p">))</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">json_path</span><span class="p">:</span>
-        <span class="n">json_path</span> <span class="o">=</span> <span class="n">default_path</span>
-    <span class="n">json_path</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">json_path</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&quot;Creating &quot;</span> <span class="o">+</span> <span class="n">json_path</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_path</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;[]&quot;</span><span class="p">)</span>
-
-    <span class="n">cfg</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
-    <span class="n">cfg</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">)</span>
-    <span class="n">cfg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">)</span>
-    <span class="n">cfg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;json&quot;</span><span class="p">,</span> <span class="n">json_path</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rcpath</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">cfg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Your configure file: &quot;</span> <span class="o">+</span> <span class="n">rcpath</span> <span class="o">+</span> <span class="s">&quot; is successfully created&quot;</span><span class="p">)</span>
-
-</div>
-<div class="viewcode-block" id="load_configure_file"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.load_configure_file">[docs]</a><span class="k">def</span> <span class="nf">load_configure_file</span><span class="p">(</span><span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Load default configure.</span>
-
-<span class="sd">    If the configure file does not exist, it will be created.</span>
-<span class="sd">    (see `create_configure_file(rcpath)`)</span>
+<div class="viewcode-block" id="get_configparser"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.get_configparser">[docs]</a><span class="k">def</span> <span class="nf">get_configparser</span><span class="p">(</span><span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get configure parser</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -164,25 +205,127 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    dict</span>
-<span class="sd">        There are two keys: &quot;root&quot; and &quot;json&quot;.</span>
+<span class="sd">    ConfigParser.SafeConfigParser</span>
+<span class="sd">        configure file has been loaded.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
-<span class="sd">    DataProcessorError</span>
+<span class="sd">    DataProcessorRcError</span>
 <span class="sd">        raised when configure file does not exist.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rcpath</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">rcpath</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Configure file does not exist&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">DataProcessorRcError</span><span class="p">(</span><span class="s">&quot;Configure file does not exist&quot;</span><span class="p">)</span>
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">SafeConfigParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s">&quot;root&quot;</span><span class="p">:</span> <span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">),</span>
-        <span class="s">&quot;json&quot;</span><span class="p">:</span> <span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;json&quot;</span><span class="p">),</span>
-    <span class="p">}</span></div>
+    <span class="k">return</span> <span class="n">parser</span>
+
+</div>
+<div class="viewcode-block" id="get_configure"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.get_configure">[docs]</a><span class="k">def</span> <span class="nf">get_configure</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get configure value</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    section : str</span>
+<span class="sd">        section name of configure file</span>
+
+<span class="sd">    key : str</span>
+<span class="sd">        key of configure</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        configure value</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorRcError</span>
+<span class="sd">        raised when</span>
+
+<span class="sd">        - configure file does not exist.</span>
+<span class="sd">        - configure file does not contain specified values</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">get_configparser</span><span class="p">(</span><span class="n">rcpath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg</span><span class="o">.</span><span class="n">has_option</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">DataProcessorRcError</span><span class="p">(</span><span class="s">&quot;Configure not found (section:{}, key:{}))&quot;</span>
+                                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="get_configure_safe"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.get_configure_safe">[docs]</a><span class="k">def</span> <span class="nf">get_configure_safe</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get configure value safely.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    section : str</span>
+<span class="sd">        section name of configure file</span>
+<span class="sd">    key : str</span>
+<span class="sd">        key of configure</span>
+<span class="sd">    default : any</span>
+<span class="sd">        This is returned in the case where configure cannot be obtained.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        configure value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">get_configure</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">rcpath</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">DataProcessorRcError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_resolve_path</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">basket_name</span><span class="p">,</span> <span class="n">rcpath</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">get_configure</span><span class="p">(</span><span class="n">rc_section</span><span class="p">,</span> <span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="n">rcpath</span><span class="o">=</span><span class="n">rcpath</span><span class="p">)</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">check_directory</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">basket</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_directory</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">basket_name</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_directory</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basket</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="resolve_project_path"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.resolve_project_path">[docs]</a><span class="k">def</span> <span class="nf">resolve_project_path</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                         <span class="n">basket_name</span><span class="o">=</span><span class="n">get_configure_safe</span><span class="p">(</span><span class="n">rc_section</span><span class="p">,</span>
+                                                        <span class="s">&quot;project_basket&quot;</span><span class="p">,</span>
+                                                        <span class="s">&quot;Projects&quot;</span><span class="p">),</span>
+                         <span class="n">rcpath</span><span class="o">=</span><span class="n">default_rcpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Resolve project path from its path or name.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name_or_path : str</span>
+<span class="sd">        Project identifier.</span>
+<span class="sd">        If name (i.e. basename(name_or_path) == name_or_path),</span>
+<span class="sd">        abspath of `root/basket_name/name` is returned.</span>
+<span class="sd">        If path (otherwise case), returns its abspath.</span>
+<span class="sd">    root : str, optional</span>
+<span class="sd">        The root path of baskets. (default=None)</span>
+<span class="sd">        If None, the path is read from the configure file.</span>
+<span class="sd">    basket_name : str, optional</span>
+<span class="sd">        The name of the project basket.</span>
+<span class="sd">        If &quot;project_basket&quot; is specified in the configure file,</span>
+<span class="sd">        default value is it. Otherwise, default is &quot;Projects&quot;.</span>
+<span class="sd">    rcpath : str, optional</span>
+<span class="sd">        path of the setting file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        existing project path</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorRcError</span>
+<span class="sd">        occurs when `root` is not specified and it cannot be loaded</span>
+<span class="sd">        from the setting file.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">)</span> <span class="o">==</span> <span class="n">name_or_path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_resolve_path</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">basket_name</span><span class="p">,</span> <span class="n">rcpath</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_directory</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -216,16 +359,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

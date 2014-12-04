@@ -39,9 +39,6 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="dataprocessor.pipes.html" title="dataprocessor.pipes package"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -66,11 +63,14 @@
 <li class="toctree-l1"><a class="reference internal" href="dataprocessor.pipes.html">dataprocessor.pipes package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.add_node">dataprocessor.pipes.add_node module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.add_tag">dataprocessor.pipes.add_tag module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.addcomment">dataprocessor.pipes.addcomment module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.configure">dataprocessor.pipes.configure module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.figure">dataprocessor.pipes.figure module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.filter">dataprocessor.pipes.filter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.jsonio">dataprocessor.pipes.jsonio module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.move_node">dataprocessor.pipes.move_node module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.normalize">dataprocessor.pipes.normalize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.scan">dataprocessor.pipes.scan module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.show">dataprocessor.pipes.show module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes">Module contents</a></li>
@@ -81,6 +81,34 @@
 </div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-dataprocessor.argparsers">
+<span id="dataprocessor-argparsers-module"></span><h2>dataprocessor.argparsers module<a class="headerlink" href="#module-dataprocessor.argparsers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.argparsers.dataprocessor">
+<tt class="descclassname">dataprocessor.argparsers.</tt><tt class="descname">dataprocessor</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/argparsers.html#dataprocessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.argparsers.dataprocessor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.argparsers.dpmanip">
+<tt class="descclassname">dataprocessor.argparsers.</tt><tt class="descname">dpmanip</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/argparsers.html#dpmanip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.argparsers.dpmanip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.argparsers.dpserver">
+<tt class="descclassname">dataprocessor.argparsers.</tt><tt class="descname">dpserver</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/argparsers.html#dpserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.argparsers.dpserver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.argparsers.genzshcomp">
+<tt class="descclassname">dataprocessor.argparsers.</tt><tt class="descname">genzshcomp</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/argparsers.html#genzshcomp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.argparsers.genzshcomp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.argparsers.register_figure">
+<tt class="descclassname">dataprocessor.argparsers.</tt><tt class="descname">register_figure</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/argparsers.html#register_figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.argparsers.register_figure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="module-dataprocessor.dataframe">
 <span id="dataprocessor-dataframe-module"></span><h2>dataprocessor.dataframe module<a class="headerlink" href="#module-dataprocessor.dataframe" title="Permalink to this headline">¶</a></h2>
@@ -147,14 +175,12 @@ and converted into InvalidJSONError.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="10%" />
-<col width="10%" />
-<col width="79%" />
+<col width="9%" />
+<col width="91%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>msg</td>
-<td>str</td>
-<td>A message for the error</td>
+<td>(str) A message for the error</td>
 </tr>
 </tbody>
 </table>
@@ -169,17 +195,14 @@ and converted into InvalidJSONError.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="8%" />
-<col width="6%" />
-<col width="85%" />
+<col width="92%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>name</td>
-<td>str</td>
-<td>The name of pipe in which error occurred.</td>
+<td>(str) The name of pipe in which error occurred.</td>
 </tr>
 <tr class="row-even"><td>msg</td>
-<td>str</td>
-<td>A message for the error</td>
+<td>(str) A message for the error</td>
 </tr>
 </tbody>
 </table>
@@ -207,7 +230,7 @@ and converted into InvalidJSONError.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>InvalidJSONError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>InvalidJSONError</strong></p>
 <blockquote class="last">
 <div><p>It is raised if manipulation is invalid.</p>
 </div></blockquote>
@@ -257,7 +280,7 @@ and converted into InvalidJSONError.</p>
 
 <dl class="function">
 <dt id="dataprocessor.execute.execute">
-<tt class="descclassname">dataprocessor.execute.</tt><tt class="descname">execute</tt><big>(</big><em>manip</em>, <em>node_list=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/dataprocessor/execute.html#execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.execute.execute" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.execute.</tt><tt class="descname">execute</tt><big>(</big><em>manip</em>, <em>node_list=[]</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/execute.html#execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.execute.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>execute pipeline defined in <cite>manip</cite></p>
 <p>This function does not check whether <cite>manip</cite> is valid.
 Please check by <cite>.check_manip</cite></p>
@@ -284,7 +307,7 @@ Please check by <cite>.check_manip</cite></p>
 
 <dl class="function">
 <dt id="dataprocessor.execute.execute_from_json_str">
-<tt class="descclassname">dataprocessor.execute.</tt><tt class="descname">execute_from_json_str</tt><big>(</big><em>manip_json_str</em>, <em>node_list=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/dataprocessor/execute.html#execute_from_json_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.execute.execute_from_json_str" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.execute.</tt><tt class="descname">execute_from_json_str</tt><big>(</big><em>manip_json_str</em>, <em>node_list=[]</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/execute.html#execute_from_json_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.execute.execute_from_json_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>execute pipeline from JSON string</p>
 <p>This do <cite>check_manip</cite> and <cite>execute</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -294,7 +317,7 @@ Please check by <cite>.check_manip</cite></p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>node_list</strong> : list</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>InvalidJSONError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>InvalidJSONError</strong></p>
 <blockquote class="last">
 <div><p>It is raised if manipulation is invalid.
 See also <cite>.check_manip</cite></p>
@@ -347,7 +370,7 @@ See also <cite>.check_manip</cite></p>
 
 <dl class="function">
 <dt id="dataprocessor.figure.new_node">
-<tt class="descclassname">dataprocessor.figure.</tt><tt class="descname">new_node</tt><big>(</big><em>figure_path</em>, <em>generators</em>, <em>figure_directory</em>, <em>parents</em>, <em>children=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/dataprocessor/figure.html#new_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.figure.new_node" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.figure.</tt><tt class="descname">new_node</tt><big>(</big><em>figure_path</em>, <em>generators</em>, <em>figure_directory</em>, <em>parents</em>, <em>children=[]</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/figure.html#new_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.figure.new_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy figure and incidentals and return corresponding node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -376,7 +399,7 @@ s.t. gunplot file, python script, etc...</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorFigureError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorFigureError</strong></p>
 <blockquote class="last">
 <div><p>raised when the figure is empty</p>
 </div></blockquote>
@@ -388,7 +411,7 @@ s.t. gunplot file, python script, etc...</p>
 
 <dl class="function">
 <dt id="dataprocessor.figure.register">
-<tt class="descclassname">dataprocessor.figure.</tt><tt class="descname">register</tt><big>(</big><em>node_list</em>, <em>figures</em>, <em>figure_directory</em>, <em>runs=</em>, <span class="optional">[</span><span class="optional">]</span><em>generators=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/dataprocessor/figure.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.figure.register" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.figure.</tt><tt class="descname">register</tt><big>(</big><em>node_list</em>, <em>figures</em>, <em>figure_directory</em>, <em>runs=[]</em>, <em>generators=[]</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/figure.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.figure.register" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register figure into <cite>node_list</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -445,13 +468,45 @@ s.t. gunplot file, python script, etc...</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">node_list</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>If specified ntype is not supported.</p>
 </div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.filter.prefix_path">
+<tt class="descclassname">dataprocessor.filter.</tt><tt class="descname">prefix_path</tt><big>(</big><em>node_list</em>, <em>pre_path</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/filter.html#prefix_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.filter.prefix_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter by prefix path.</p>
+<p>In the case when pre_path is &#8220;/foo/bar&#8221;,
+following paths remain (not filtered):</p>
+<ul class="simple">
+<li>/foo/bar</li>
+<li>/foo/bar/foo</li>
+</ul>
+<p>, and following do not remain (filtered out):</p>
+<ul class="simple">
+<li>/foo/barfoo/hoge</li>
+<li>/bar/foo/bar/FOO</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pre_path</strong> : str</p>
+<blockquote>
+<div><p>prefix path for filtering.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">node_list</p>
 </td>
 </tr>
 </tbody>
@@ -472,10 +527,10 @@ s.t. gunplot file, python script, etc...</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">node_list</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>If path is not specified by str or [str].</p>
 </div></blockquote>
@@ -483,6 +538,52 @@ s.t. gunplot file, python script, etc...</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.gencompletion">
+<span id="dataprocessor-gencompletion-module"></span><h2>dataprocessor.gencompletion module<a class="headerlink" href="#module-dataprocessor.gencompletion" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dataprocessor.gencompletion.CompletionGenerator">
+<em class="property">class </em><tt class="descclassname">dataprocessor.gencompletion.</tt><tt class="descname">CompletionGenerator</tt><big>(</big><em>commandname</em>, <em>parser</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/gencompletion.html#CompletionGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.gencompletion.CompletionGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Generator of Zsh Completion Function.</p>
+<p>Since this class uses some inner function of argparse,
+this does not work well in some version of argparse.
+This is tested only on argparse of python 2.7.5.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>command_name</td>
+<td>(str) command name of completion</td>
+</tr>
+<tr class="row-even"><td>parser</td>
+<td>(argparse.ArgumentParser) parser of command</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>get()</td>
+<td>returns string of Zsh completion function</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="dataprocessor.gencompletion.CompletionGenerator.get">
+<tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/gencompletion.html#CompletionGenerator.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.gencompletion.CompletionGenerator.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get zsh completion function string.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -505,22 +606,20 @@ This class use JSON format for serializing.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="25%" />
-<col width="11%" />
-<col width="64%" />
+<col width="23%" />
+<col width="77%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>node_list</td>
-<td>list</td>
-<td>the managed <cite>node_list</cite></td>
+<td>(list) the managed <cite>node_list</cite></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="41%" />
-<col width="59%" />
+<col width="31%" />
+<col width="69%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>get()</td>
@@ -533,8 +632,7 @@ This class use JSON format for serializing.</p>
 <td>swap managed node_list and node_list in the argument</td>
 </tr>
 <tr class="row-even"><td>serialize()</td>
-<td>serialize node_list into file.
-If you use <cite>with</cite> statement, you need not to call this.</td>
+<td>serialize node_list into file. If you use <cite>with</cite> statement, you need not to call this.</td>
 </tr>
 </tbody>
 </table>
@@ -659,13 +757,13 @@ If you use <cite>with</cite> statement, you need not to call this.</td>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
 <blockquote>
 <div><p>node_list(arg1) + [new node list]</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>occurs when JSON file does not exist.</p>
 </div></blockquote>
@@ -751,6 +849,43 @@ where there exists a node whose &#8220;path&#8221; is same as new one</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="dataprocessor.nodes.change_path">
+<tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">change_path</tt><big>(</big><em>node_list</em>, <em>from_path</em>, <em>to_path</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#change_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.change_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change node path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>from_path</strong> : str</p>
+<blockquote>
+<div><p>The path of node.</p>
+</div></blockquote>
+<p><strong>to_path</strong> : str</p>
+<blockquote>
+<div><p>The destination path of node.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool or { &#8216;False&#8217;, &#8216;True&#8217; }, optional</p>
+<blockquote>
+<div><p>Does not ask whether delete nonexist-path in parents or children.
+(default=&#8217;False&#8217;)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">node_list</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
+<blockquote class="last">
+<div><p>If node &#8216;to_path&#8217; is already registered
+or node with &#8216;from_path&#8217; is not registered.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="dataprocessor.nodes.check_duplicate">
 <tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">check_duplicate</tt><big>(</big><em>node_list</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#check_duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.check_duplicate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if duplicated nodes exist.</p>
@@ -765,7 +900,7 @@ where there exists a node whose &#8220;path&#8221; is same as new one</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list of str</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of str</p>
 <blockquote class="last">
 <div><p>return the list of duplicated nodes&#8217; paths</p>
 </div></blockquote>
@@ -802,7 +937,7 @@ where there exists a node whose &#8220;path&#8221; is same as new one</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>node or None</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">node or None</p>
 <blockquote class="last">
 <div><p>the node is returned if exists,
 and <cite>None</cite> is returned if not.</p>
@@ -856,6 +991,53 @@ The latter node has priority in merging (see Examples)</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="dataprocessor.nodes.normalize">
+<tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">normalize</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize node (i.e. fill necessary field).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>node: dict</strong></p>
+<blockquote>
+<div><p>node that you want to normalize</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict</p>
+<blockquote>
+<div><p>normalized node</p>
+</div></blockquote>
+<p>Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="p">{</span>
+</pre></div>
+</div>
+<p>...     &#8220;path&#8221;: &#8220;/path/0&#8221;,</p>
+<p>...     &#8220;unknown&#8221;: [&#8220;homhom&#8221;]</p>
+<p>... }</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">==</span> <span class="p">{</span>
+</pre></div>
+</div>
+<p>...     &#8220;path&#8221;: &#8220;/path/0&#8221;,</p>
+<p>...     &#8220;name&#8221;: &#8220;&#8221;,</p>
+<p>...     &#8220;configure&#8221;: {},</p>
+<p>...     &#8220;comment&#8221;: &#8220;&#8221;,</p>
+<p>...     &#8220;tags&#8221;: [],</p>
+<p>...     &#8220;parents&#8221;: [],</p>
+<p>...     &#8220;children&#8221;: [],</p>
+<p>...     &#8220;unknown&#8221;: [&#8220;homhom&#8221;]</p>
+<p>... }</p>
+<p class="last">True</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="dataprocessor.nodes.remove">
 <tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">remove</tt><big>(</big><em>node_list</em>, <em>path</em>, <em>skip_validate_link=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove node from node_list.</p>
@@ -878,7 +1060,7 @@ The latter node has priority in merging (see Examples)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>occurs when specified <cite>path</cite> does not exist in node_list</p>
 </div></blockquote>
@@ -956,8 +1138,53 @@ This must belong to the <cite>node_list</cite></p>
 <p>Configure manager of dataprocessor</p>
 <dl class="function">
 <dt id="dataprocessor.rc.ArgumentParser">
-<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">ArgumentParser</tt><big>(</big><em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#ArgumentParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.ArgumentParser" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">ArgumentParser</tt><big>(</big><em>rcpath='~/.dataprocessor.ini'</em>, <em>options={}</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#ArgumentParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.ArgumentParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Argument parser for executables in this project.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rcpath</strong> : str, optional</p>
+<blockquote>
+<div><p>path of configure file (default=~/.dataprocessor.ini)</p>
+</div></blockquote>
+<p><strong>options</strong> : [{str: dict}], optional</p>
+<blockquote>
+<div><p>options which you want to read from [data] section
+of the configure file.
+<cite>[{&#8220;opt1&#8221;: argparse_opt}]</cite> will converted into
+<cite>parser.add_argument(&#8220;&#8211;&#8221; + &#8220;opt1&#8221;, **argparse_opt)</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">argparse.ArgumentParser</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorRcError</strong></p>
+<blockquote class="last">
+<div><p>raised when</p>
+<ul class="simple">
+<li>configure file does not exist.</li>
+<li>configure file does not contain specified values</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="exception">
+<dt id="dataprocessor.rc.DataProcessorRcError">
+<em class="property">exception </em><tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">DataProcessorRcError</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#DataProcessorRcError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.DataProcessorRcError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dataprocessor.exception.DataProcessorError" title="dataprocessor.exception.DataProcessorError"><tt class="xref py py-class docutils literal"><span class="pre">dataprocessor.exception.DataProcessorError</span></tt></a></p>
+<p>Exception about configure file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.rc.get_configparser">
+<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">get_configparser</tt><big>(</big><em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configparser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configparser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get configure parser</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -968,7 +1195,16 @@ This must belong to the <cite>node_list</cite></p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>argparse.ArgumentParser instance</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ConfigParser.SafeConfigParser</p>
+<blockquote>
+<div><p>configure file has been loaded.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorRcError</strong></p>
+<blockquote class="last">
+<div><p>raised when configure file does not exist.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -976,16 +1212,68 @@ This must belong to the <cite>node_list</cite></p>
 </dd></dl>
 
 <dl class="function">
-<dt id="dataprocessor.rc.create_configure_file">
-<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">create_configure_file</tt><big>(</big><em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#create_configure_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.create_configure_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create configure file.</p>
+<dt id="dataprocessor.rc.get_configure">
+<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">get_configure</tt><big>(</big><em>section</em>, <em>key</em>, <em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get configure value</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rcpath</strong> : str, optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>section</strong> : str</p>
+<blockquote>
+<div><p>section name of configure file</p>
+</div></blockquote>
+<p><strong>key</strong> : str</p>
+<blockquote>
+<div><p>key of configure</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
+<blockquote>
+<div><p>configure value</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorRcError</strong></p>
 <blockquote class="last">
-<div><p>path of configure file (default=~/.dataprocessor.ini)</p>
+<div><p>raised when</p>
+<ul class="simple">
+<li>configure file does not exist.</li>
+<li>configure file does not contain specified values</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.rc.get_configure_safe">
+<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">get_configure_safe</tt><big>(</big><em>section</em>, <em>key</em>, <em>default</em>, <em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configure_safe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configure_safe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get configure value safely.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>section</strong> : str</p>
+<blockquote>
+<div><p>section name of configure file</p>
+</div></blockquote>
+<p><strong>key</strong> : str</p>
+<blockquote>
+<div><p>key of configure</p>
+</div></blockquote>
+<p><strong>default</strong> : any</p>
+<blockquote>
+<div><p>This is returned in the case where configure cannot be obtained.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
+<blockquote class="last">
+<div><p>configure value</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1007,7 +1295,17 @@ This must belong to the <cite>node_list</cite></p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>node_list</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">node_list</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorRcError</strong></p>
+<blockquote class="last">
+<div><p>raised when</p>
+<ul class="simple">
+<li>configure file does not exist.</li>
+<li>configure file does not contain JSON path</li>
+</ul>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -1015,30 +1313,76 @@ This must belong to the <cite>node_list</cite></p>
 </dd></dl>
 
 <dl class="function">
-<dt id="dataprocessor.rc.load_configure_file">
-<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">load_configure_file</tt><big>(</big><em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#load_configure_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.load_configure_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load default configure.</p>
-<p>If the configure file does not exist, it will be created.
-(see <cite>create_configure_file(rcpath)</cite>)</p>
+<dt id="dataprocessor.rc.load_into_argparse">
+<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">load_into_argparse</tt><big>(</big><em>parser</em>, <em>section_name</em>, <em>options</em>, <em>allow_empty=False</em>, <em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#load_into_argparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.load_into_argparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load configure into argparse.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rcpath</strong> : str, optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parser</strong> : argparse.ArgumentParser</p>
 <blockquote>
-<div><p>path of configure file (default=~/.dataprocessor.ini)</p>
+<div><p>main parser or subparser</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dict</strong> :</p>
+<p><strong>section_name</strong> : str</p>
 <blockquote>
-<div><p>There are two keys: &#8220;root&#8221; and &#8220;json&#8221;.</p>
+<div><p>name of section</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<p><strong>options</strong> : {str: {str: str}}</p>
 <blockquote class="last">
-<div><p>raised when configure file does not exist.</p>
+<div><p>Options which you want to read from section
+whose name is <cite>section_name</cite>.
+<cite>[{&#8220;opt1&#8221;: argparse_opt}]</cite> will converted into
+<cite>parser.add_argument(&#8220;&#8211;&#8221; + &#8220;opt1&#8221;, **argparse_opt)</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.rc.resolve_project_path">
+<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">resolve_project_path</tt><big>(</big><em>name_or_path</em>, <em>root=None</em>, <em>basket_name='Projects'</em>, <em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#resolve_project_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.resolve_project_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve project path from its path or name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name_or_path</strong> : str</p>
+<blockquote>
+<div><p>Project identifier.
+If name (i.e. basename(name_or_path) == name_or_path),
+abspath of <cite>root/basket_name/name</cite> is returned.
+If path (otherwise case), returns its abspath.</p>
+</div></blockquote>
+<p><strong>root</strong> : str, optional</p>
+<blockquote>
+<div><p>The root path of baskets. (default=None)
+If None, the path is read from the configure file.</p>
+</div></blockquote>
+<p><strong>basket_name</strong> : str, optional</p>
+<blockquote>
+<div><p>The name of the project basket.
+If &#8220;project_basket&#8221; is specified in the configure file,
+default value is it. Otherwise, default is &#8220;Projects&#8221;.</p>
+</div></blockquote>
+<p><strong>rcpath</strong> : str, optional</p>
+<blockquote>
+<div><p>path of the setting file</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>path</strong> : str</p>
+<blockquote>
+<div><p>existing project path</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorRcError</strong></p>
+<blockquote class="last">
+<div><p>occurs when <cite>root</cite> is not specified and it cannot be loaded
+from the setting file.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1055,14 +1399,43 @@ This must belong to the <cite>node_list</cite></p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rcpath</strong> : str, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>path of configure file (default=~/.dataprocessor.ini)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorRcError</strong></p>
+<blockquote class="last">
+<div><p>raised when</p>
+<ul class="simple">
+<li>configure file does not exist.</li>
+<li>configure file does not contain JSON path</li>
+</ul>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.server">
+<span id="dataprocessor-server-module"></span><h2>dataprocessor.server module<a class="headerlink" href="#module-dataprocessor.server" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.server.install">
+<tt class="descclassname">dataprocessor.server.</tt><tt class="descname">install</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/server.html#install"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.server.install" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install jQuery.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.server.start">
+<tt class="descclassname">dataprocessor.server.</tt><tt class="descname">start</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/server.html#start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.server.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.server.stop">
+<tt class="descclassname">dataprocessor.server.</tt><tt class="descname">stop</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/server.html#stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.server.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-dataprocessor.table">
@@ -1114,7 +1487,7 @@ Table has only items in <cite>items</cite>.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>Occurs in three cases:</p>
 <ul class="simple">
@@ -1242,7 +1615,7 @@ Table has only items in <cite>items</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>str</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
 <blockquote class="last">
 <div><p>A piece of html composed of the parameters in constructor.</p>
 </div></blockquote>
@@ -1269,7 +1642,7 @@ Table has only items in <cite>items</cite>.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arg</strong> : bool, str, int, float</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>bool</strong> :</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
@@ -1324,13 +1697,13 @@ Table has only items in <cite>items</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>str</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
 <blockquote>
 <div><p>Absolute path of the argument</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>occurs when the file does not exist or the file is not directory.</p>
 </div></blockquote>
@@ -1348,13 +1721,13 @@ Table has only items in <cite>items</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>str</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
 <blockquote>
 <div><p>Absolute path of the argument</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>occurs in two cases:</p>
 <ul class="simple">
@@ -1397,7 +1770,7 @@ When there are different, replace the file or change file name.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><dl class="docutils">
 <dt>Occur in two cases</dt>
@@ -1429,13 +1802,13 @@ When there are different, replace the file or change file name.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>str</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
 <blockquote>
 <div><p>Absolute path of the directory</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>occurs in two cases</p>
 <ul class="simple">
@@ -1457,13 +1830,13 @@ When there are different, replace the file or change file name.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>str</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
 <blockquote>
 <div><p>Absolute path of the argument</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong> :</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
 <blockquote class="last">
 <div><p>path is not readable</p>
 </div></blockquote>
@@ -1498,7 +1871,7 @@ then you should set <cite>split_char=&#8221;:&#8221;</cite>.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dict</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict</p>
 <blockquote class="last">
 <div><p>{parameter-name: value} dictionary.</p>
 </div></blockquote>
@@ -1526,14 +1899,17 @@ then you should set <cite>split_char=&#8221;:&#8221;</cite>.</p>
 <li><a class="reference internal" href="#">dataprocessor package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.argparsers">dataprocessor.argparsers module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.dataframe">dataprocessor.dataframe module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.exception">dataprocessor.exception module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.execute">dataprocessor.execute module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.figure">dataprocessor.figure module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.filter">dataprocessor.filter module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.gencompletion">dataprocessor.gencompletion module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.io">dataprocessor.io module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.nodes">dataprocessor.nodes module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.rc">dataprocessor.rc module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.server">dataprocessor.server module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.table">dataprocessor.table module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.utility">dataprocessor.utility module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor">Module contents</a></li>
@@ -1579,9 +1955,6 @@ then you should set <cite>split_char=&#8221;:&#8221;</cite>.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="dataprocessor.pipes.html" title="dataprocessor.pipes package"
              >next</a> |</li>
         <li class="right" >
@@ -1593,7 +1966,7 @@ then you should set <cite>split_char=&#8221;:&#8221;</cite>.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

@@ -36,9 +36,6 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -57,6 +54,7 @@
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
+<span class="kn">from</span> <span class="nn">.utility</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> \
     <span class="o">+</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;../../../lib&quot;</span><span class="p">)]</span> \
     <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
@@ -190,7 +188,7 @@
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]},</span>
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">],</span>
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">,</span> <span class="s">&quot;/path/3&quot;</span><span class="p">]},</span>
-            <span class="p">]</span>
+        <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="TestNodes.test_remove_skip_validate_link"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_remove_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -286,7 +284,42 @@
         <span class="p">]</span>
 
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">merge_duplicate</span><span class="p">(</span><span class="n">node_list</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node_list_ans</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node_list_ans</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="TestChangePath"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestChangePath">[docs]</a><span class="k">class</span> <span class="nc">TestChangePath</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestChangePath.test_change_path_having_children"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestChangePath.test_change_path_having_children">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_path_having_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">after_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;moved_dir&quot;</span><span class="p">)</span>
+        <span class="n">before_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">after_path</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="n">change_path</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">before_path</span><span class="p">,</span> <span class="n">after_path</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">changed_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">after_path</span><span class="p">)</span>
+        <span class="c"># check target node path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">changed_node</span><span class="p">)</span>
+
+        <span class="c"># check children node path</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">changed_node</span><span class="p">[</span><span class="s">&quot;children&quot;</span><span class="p">]:</span>
+            <span class="n">child_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">after_path</span><span class="p">,</span> <span class="n">child_node</span><span class="p">[</span><span class="s">&quot;parents&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="n">before_path</span><span class="p">,</span> <span class="n">child_node</span><span class="p">[</span><span class="s">&quot;parents&quot;</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="TestChangePath.test_change_path_having_parents"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestChangePath.test_change_path_having_parents">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_path_having_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">after_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;moved_dir&quot;</span><span class="p">)</span>
+        <span class="n">before_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;run01&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">after_path</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="n">change_path</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">before_path</span><span class="p">,</span> <span class="n">after_path</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c"># check path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">after_path</span><span class="p">))</span>
+
+        <span class="c"># check parents path</span>
+        <span class="n">project_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">after_path</span><span class="p">,</span> <span class="n">project_node</span><span class="p">[</span><span class="s">&quot;children&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="n">before_path</span><span class="p">,</span> <span class="n">project_node</span><span class="p">[</span><span class="s">&quot;children&quot;</span><span class="p">])</span></div></div>
 </pre></div>
 
           </div>
@@ -320,16 +353,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

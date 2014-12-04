@@ -11,6 +11,14 @@ Subpackages
 Submodules
 ----------
 
+dataprocessor.argparsers module
+-------------------------------
+
+.. automodule:: dataprocessor.argparsers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.dataframe module
 ------------------------------
 
@@ -51,6 +59,14 @@ dataprocessor.filter module
     :undoc-members:
     :show-inheritance:
 
+dataprocessor.gencompletion module
+----------------------------------
+
+.. automodule:: dataprocessor.gencompletion
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.io module
 -----------------------
 
@@ -71,6 +87,14 @@ dataprocessor.rc module
 -----------------------
 
 .. automodule:: dataprocessor.rc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.server module
+---------------------------
+
+.. automodule:: dataprocessor.server
     :members:
     :undoc-members:
     :show-inheritance:

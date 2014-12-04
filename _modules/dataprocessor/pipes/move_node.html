@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dataprocessor.pipes.move_node &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for dataprocessor.pipes.move_node</h1><div class="highlight"><pre>
+<span class="c"># coding=utf-8</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
+<span class="kn">from</span> <span class="nn">..nodes</span> <span class="kn">import</span> <span class="n">change_path</span>
+<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">path_expand</span>
+<span class="kn">from</span> <span class="nn">..filter</span> <span class="kn">import</span> <span class="n">prefix_path</span>
+
+
+<div class="viewcode-block" id="move_node"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.move_node.move_node">[docs]</a><span class="k">def</span> <span class="nf">move_node</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Move node like as UNIX mv.</span>
+
+<span class="sd">    Change path of a node and related nodes.</span>
+<span class="sd">    Coresponding directories are also moved or renamed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    from_path : str</span>
+<span class="sd">        path of node.</span>
+<span class="sd">    dest : str</span>
+<span class="sd">        path of destination.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ------</span>
+<span class="sd">    node_list</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorError</span>
+<span class="sd">        raised when path of &#39;dest&#39; already exists and the path is a file.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">resolve_destination</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
+        <span class="c"># move and rename</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">dest</span>
+        <span class="c"># move to directory</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">from_path</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span>
+            <span class="s">&quot;The destinaition </span><span class="si">%s</span><span class="s"> already exists.&quot;</span> <span class="o">%</span> <span class="n">dest</span><span class="p">)</span>
+
+    <span class="n">from_path</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">from_path</span><span class="p">)</span>
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>  <span class="c"># for move function</span>
+    <span class="n">to_path</span> <span class="o">=</span> <span class="n">resolve_destination</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>  <span class="c"># for node_list</span>
+    <span class="n">work_nl</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">node_list</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">from_path</span><span class="p">):</span>
+        <span class="n">work_nl</span> <span class="o">=</span> <span class="n">change_path</span><span class="p">(</span><span class="n">work_nl</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">from_path</span><span class="p">):</span>
+        <span class="n">target_nodes</span> <span class="o">=</span> <span class="n">prefix_path</span><span class="p">(</span><span class="n">work_nl</span><span class="p">,</span> <span class="n">from_path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">target_nodes</span><span class="p">:</span>
+            <span class="n">to_p</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">to_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">work_nl</span> <span class="o">=</span> <span class="n">change_path</span><span class="p">(</span><span class="n">work_nl</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span> <span class="n">to_p</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">from_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+
+    <span class="n">node_list</span> <span class="o">=</span> <span class="n">work_nl</span>
+    <span class="k">return</span> <span class="n">node_list</span>
+
+</div>
+<div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.move_node.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">pipe_dics</span><span class="p">):</span>
+    <span class="n">pipe_dics</span><span class="p">[</span><span class="s">&quot;move_node&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">move_node</span><span class="p">,</span>
+        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;from_path&quot;</span><span class="p">,</span> <span class="s">&quot;dest&quot;</span><span class="p">],</span>
+        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;move node whose directory is also moved like as UNIX mv&quot;</span>
+    <span class="p">}</span>
+    <span class="n">pipe_dics</span><span class="p">[</span><span class="s">&quot;change_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">change_path</span><span class="p">,</span>
+        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;from_path&quot;</span><span class="p">,</span> <span class="s">&quot;to_path&quot;</span><span class="p">],</span>
+        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;silent&quot;</span><span class="p">],</span>
+        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;change path of node&quot;</span><span class="p">,</span>
+    <span class="p">}</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
