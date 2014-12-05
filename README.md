@@ -1,192 +1,275 @@
-DataProcessor
-=============
-[![Build Status](https://travis-ci.org/kenbeese/DataProcessor.png)](https://travis-ci.org/kenbeese/DataProcessor)
+        ___      _          ___
+       /   \__ _| |_ __ _  / _ \_ __ ___   ___ ___  ___ ___  ___  _ __
+      / /\ / _` | __/ _` |/ /_)/ '__/ _ \ / __/ _ \/ __/ __|/ _ \| '__|
+     / /_// (_| | || (_| / ___/| | | (_) | (_|  __/\__ \__ \ (_) | |
+    /___,' \__,_|\__\__,_\/    |_|  \___/ \___\___||___/___/\___/|_|
 
-A data processing library.
+Make your data analysis easy.
 
-Data Processing
----------------
-DataProcessor is a framework for managing meta data of numerical analysis.
-This allows you to gather meta data of your data,
-to write command to process your data, and to browse your data.
+数値計算では多くの計算を実行するため、
+どのような環境でどの計算を行なったか分からなくなります。
+このプロジェクトは膨大な計算の管理を補助するためのものです。
 
-In order to read the following explaination and to use this framework,
-you should be familiar with JSON format.
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc/generate-toc again -->
+**Table of Contents**
 
-If you only want to use browsing feature,
-you can skip to [WebApp](#WebApp).
+- [何ができるの？](#何ができるの？)
+- [Tutorial (Linux/OS X)](#tutorial-linux/os-x)
+    - [インストール](#インストール)
+        - [既存の計算のスキャン](#既存の計算のスキャン)
+            - [`scan_directory`を使用する場合](#scan_directoryを使用する場合)
+            - [`add_run`を使用する場合](#add_runを使用する場合)
+        - [計算のパラメータの読み込む](#計算のパラメータの読み込む)
+            - [方法1](#方法1)
+            - [方法2](#方法2)
+    - [使い方](#使い方)
+        - [一覧の表示(webapp)](#一覧の表示webapp)
+        - [新しい計算の追加](#新しい計算の追加)
+        - [コメント追加](#コメント追加)
+        - [タグの追加と取り外し](#タグの追加と取り外し)
+        - [Pythonから使う](#pythonから使う)
+    - [Lisence](#lisence)
 
-This introduces three basic concepts:
+<!-- markdown-toc end -->
 
-- [node](#node)
-- [pipe](#pipe)
-- [manipulations](#manipulations)
 
-### node
-Numerical analysis often yields huge data
-which are almost same but slightly different.
-We call each of these data as *run*, and series of them as *project*.
-Since these runs and projects will be related each others,
-we can consider a network of them.
-Thus we call each of runs and projects as **node**.
-We assume that each of runs and projects has a corresponding directory,
-and that these directories are not duplicated.
-So the identifier of node is the path of its directory.
+何ができるの？
+==============
 
-### pipe
-This framework introduces a concept **pipe**
-corresponding to a single process for nodes.
-Since nodes are managed with a list of node (called `node_list`),
-pipe can be regarded as a single process for `node_list`.
-In other words, pipes are implemented as a function
-which receives `node_list` as an argument and returns processed `node_list`.
-For example, 
+- 個々の数値計算の設定、結果の一覧
+- コメント、タグによる計算の整理
+- 計算の開始(実験中)
 
-- `save_json` pipe saves `node_list` into a JSON file.
-- `load_json` pipe loads `node_list` from a JSON file.
-- `scan_directory` pipe gathers runs or projects and appends it into `node_list`.
-- `add_comment` pipe add comments to a specified node.
-- `configure` pipe collects meta data of each run.
+もしあなたがpythonを使用してデータを解析しているならばさらに以下の機能が使えます。
+- 計算の設定によるフィルタリング
 
-You can combine them to satisfy your purpose.
-If you want to scan your data and save meta data into a JSON file,
-the combined pipes can be written as follows:
+Tutorial (Linux/OS X)
+====================
 
-                           +----------------+    +-----------+    +-----------+
-    [node_list (empty)] => | scan_directory | => | configure | => | save_json |
-                           +----------------+    +-----------+    +-----------+
+インストール
+------------
 
-As `node_list` pass through pipes, it will be modified:
+ダウンロードしてパスを通します。
+以下ではホーム(`$HOME`)にインストールしますが、
+環境に応じて変更してください。
 
-1. `node_list` is empty at first
-```
-node_list = []
+```command
+cd ~
+git clone https://github.com/kenbeese/DataProcessor.git
 ```
 
-1. `scan_directory` gathers meta data and `node_list` becomes
-```
-node_list = [
-    {"path": "/path/to/data1", "name": "data1", ...}, 
-    {"path": "/path/to/data2", "name": "data2", ...}, 
-    ...
-]
-```
+`~/.bashrc`の最後に以下の行を追加してパスを通します。
+zsh等を使用している場合は`~/.zshrc`等に読みかえて下さい。
 
-1. `configure` appends an attribute "configure"
-```
-node_list = [
-    {
-        "path": "/path/to/data1", "name": "data1",
-        "configure": {
-            "N": 128,
-            ...
-        },
-        ...
-    }, 
-    ...
-]
+```bash
+export PATH=$PATH:$HOME/DataProcessor/bin
+export PYTHONPATH=$PYTHONPATH:$HOME/DataProcessor/lib
 ```
 
-1. `save` does not change `node_list` but saves it into a JSON file.
+zshを使用している場合は各種コマンドの補完を有効にするため以下を設定します。
 
-We call a series of pipes as **manipulations**.
-The detail of pipes is documented in [pipes](doc/pipes.md).
-
-### manipulations
-You can execute **manipulations** with an executable script [bin/dataprocessor](sample/README.md#dataprocessor).
-You must specify manipulations by a JSON file.
-For example, the above example corresponds to the following JSON format:
-
-```json
-[
-    {"name": "scan_directory", "args": ["./datadir", ["*.conf", "*.ini"]]},
-    {"name": "configure", "args": ["parameters.conf"], "kwds": {}},
-    {"name": "save_json", "args": ["data.json"],  "kwds": {}}
-]
+```zsh
+export FPATH=$FPATH:$HOME/DataProcessor/zsh_completion
 ```
 
-If you save this into `manip.json`,
-you can do manipulations by the following command:
+さらにDataProcessorの設定ファイル`~/.dataprocessor.ini`を生成します。
 
-    $ bin/dataprocessor manip.json
-
-Another sample is here:
-
-    +-----------+    +-------------+    +-----------+
-    | load_json | => | add_comment | => | save_json |
-    +-----------+    +-------------+    +-----------+
-
-1. load `node_list` from a JSON file `data.json`
-1. write a comment in `node_list`
-1. save `node_list` into the same JSON file
-
-Corresponding JSON is following:
-
-```json
-[
-    {"name": "load_json", "args": ["data.json"]},
-    {"name": "add_comment", "args": ["comment comment", "/path/to/node"]},
-    {"name": "save_json", "args": ["data.json"],  "kwds": {}}
-]
+```command
+dpinit
 ```
 
-Saving this JSON into `manip.json`,
-this manipulations is executed by the following command:
+を起動すると、
+DataProcessorのホームディレクトリと、計算の情報を保持するJSONファイルのパスを聞かれます。
+これに答えればインストールは完了です。
 
-    $ bin/dataprocessor manip.json
+### 既存の計算のスキャン
 
-Most part of manipulations will be in such form;
-load data, do a pipe, and save data.
+おそらくあなたは既に多くの計算を実行し、
+独自の方法でその管理を行なっているでしょう。
+ここではそれらの計算をDataProcessorで管理する準備をします。
 
-However, if two `dataprocessor` run simultaneously,
-there data I/O conflict:
+以下で2通りの方法を説明します。
 
-1. process1 loads
-1. process2 loads
-1. process1 saves
-1. process2 saves < conflict:
-the JSON file is different from that when process2 read it.
+#### `scan_directory`を使用する場合
+この作業は以下の事を仮定します。
+- 計算とディレクトリが一対一対応している
+- そのディレクトリに特定の名前のファイルがある
 
-In order to avoid this, synchronized I/O are provided.
-Save the following JSON into a `manip_sync.json`.
+この条件を満している場合は`scan_directory`を使用する事ができます。
 
-```json
-[
-    {"name": "add_comment", "args": ["comment comment", "/path/to/node"]},
-]
+```command
+dpmanip -s scan_directory /path/of/root/directory "*.ini"
 ```
-And then 
 
-    $ bin/dataprocessor --data=data.json manip_sync.json
+`/path/of/root/directory`は計算に対応するディレクトリの親ディレクトリを指定します。
+このディレクトリ以下を再帰的にスキャンして管理下に置きます。
+もし複数に分れている時は複数回呼びます。
+
+```command
+dpmanip -s scan_directory /main/path/of/root/directory "*.ini"
+dpmanip -s scan_directory /another/path/of/directory "*.ini"
+```
+
+最後の引数`"*.ini"`は見つけたディレクトリが計算と
+対応しているディレクトリがどうかを判定するために使います。
+もし`"*.ini"`に一致するファイルがある場合はそのディレクトリを
+計算に対応しているディレクトリとして扱います。
+
+(設定のよみこみについて)
+
+#### `add_run`を使用する場合
+
+上記の条件を満たしていない場合、各ランのディレクトリを個別に登録します。
+
+```command
+dpmanip -s add_run /path/to/run
+```
+
+で登録できます。
+
+同時にtag、commentや別名を残したい場合は
+
+```command
+dpmanip -s add_run /path/to/run --tag tagname_or_projectpath --name run_run_run --comment "The best run."
+```
+
+で出来ます。tagやcommentは後からでも下に記述してあるように、
+`add_tag`, `add_comment`で追加できます。
+
+
+### 計算のパラメータの読み込む
+上述の作業ではまだ計算とディレクトリを対応させただけです。
+次に個々の計算のパラメータを登録します。
+
+
+#### 方法1
+
+もし計算のディレクトリに設定ファイルがINI形式で保存されていれば
+```command
+dpmanip -s configure conf.ini
+```
+
+`conf.ini`はINIファイルの名前に変更してください。
+セクションのないINIファイル
+
+```
+A = 1
+B = 1.0
+C = 2.0
+```
+
+のような場合には
+
+```command
+dpmanip -s configure_no_section conf.ini
+```
+
+で可能です。
+
+#### 方法2
+設定ファイルが独自形式の場合、各ランのパラメータを
+
+```command
+dpmanip -s add_conf /path/to/run a 1
+dpmanip -s add_conf /path/to/run b 1.0
+dpmanip -s add_conf /path/to/run c 2.0
+```
+
+で登録可能です。
+
+使い方
+------
+
+### 一覧の表示(webapp)
+
+計算の設定の一覧を表示するには`dpserver`によってサーバープロセスを起動する必要があります。
+初回の起動の前に以下のコマンドを実行する必要があります：
+
+```command
+dpserver install
+```
+
+サーバープロセスは以下のコマンドで起動します：
+
+```command
+dpserver start
+```
+
+特に指定しない場合、8080番のportを使用します。
+[http://localhost:8080/](http://localhost:8080/)を開けばプロジェクトの一覧が表示され、
+その名前をクリックすると計算の一覧が表示されます。
+
+サーバーを終了するには
+
+```command
+dpserver stop
+```
+
+とします。
+
+### 新しい計算の追加
+[`add_run`を使用する場合](#add_runを使用する場合)に書いてある通り、
+
+```command
+dpmanip -s add_run /path/to/run --tag tagname --comment "comment comment"
+```
+
+で追加できます。
+
+### コメント追加
+
+計算にコメントを追加するには[webapp](http://localhost:8080/)を使用する方法と
+`dpmanip`を使用する方法があります。
+webappではコメント覧をクリックするとコメントが入力できます。
+フォーカスが外れると変更が保存されます。
+
+`dpmanip`は以下の様にして使います：
+
+```command
+dpmanip -s add_comment "comment" /path/of/run
+```
+
+`"comment"`にはコメントしたい文字列を、
+`/path/of/run`にはコメントしたい計算のpathを入力します。
+現在のディレクトリの計算にコメントを付けるには
+
+```command
+dpmanip -s add_comment "comment" .
+```
+
+とします。
+
+### タグの追加と取り外し
+
+計算にタグを付ける事ができます。
+タグは内部的にはプロジェクトと同じなので、
+webappのプロジェクトのリストにタグも一緒に一覧されます。
+
+```command
+dpmanip -s add_tag /path/of/run "tagname"
+```
+
+`"tagname"`の替りに存在しているプロジェクトのパスを書く事もできます。
+
+```command
+dpmanip -s add_tag /path/of/run /path/of/project
+```
+
+tagは以下のコマンドで外せます。
+
+```command
+dpmanip -s untag /path/of/run tagname
+```
 
 or
 
-    $ bin/dataprocessor -d data.json manip_sync.json
+```command
+dpmanip -s untag /path/of/run /path/of/project
+```
 
-The option `--data` or `-d` enable you to strip `load_json` and `save_json`.
-In addition, the JSON file is locked:
-the process started latter will wait unless the former finish.
-
-WebApp
-======
-You can browse your data managed with DataProcessor by a DataProcessor webapp.
-In order to edit data through this webapp, a HTTP server is necessary.
-This project contains a script `bin/server.py` which start/stop a simple HTTP server.
-The usage of this script is also written in [sample](sample/README.md "Sample Usage for WebApp").
-
-Requirements
-------------
-
-- python-daemon (>= 1.6) (for stand a HTTP server as a daemon)
-- jinja2 (for converting template)
-- pandas (to get data in pandas.DataFrame form)
-
-
-For Developer
-=============
-
-If you want to develop this tools, please read [Developer Guide](doc/developer.md "Developer Guide").
+### Pythonから使う
+(かきかけ)
 
 Lisence
-==========
+-------
 GPLv3
