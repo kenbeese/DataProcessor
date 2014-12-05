@@ -1,8 +1,7 @@
-lib
-===
+dataprocessor
+=============
 
 .. toctree::
    :maxdepth: 4
 
    dataprocessor
-   handler
