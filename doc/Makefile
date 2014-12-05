@@ -8,10 +8,10 @@ SPHINXAPIDOC  = sphinx-apidoc
 PAPER         =
 BUILDDIR      = _build
 REFERENCEDIR  = references
-LIBDIR        = ../lib
+LIBDIR        = ../lib/dataprocessor
 
 TESTREFERENCEDIR  = test-references
-TESTLIBDIR        = ../test
+TESTLIBDIR        = ../test/test_dataprocessor
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
