@@ -22,11 +22,13 @@ def normalize(node):
     Examples
     >>> node = {
     ...     "path": "/path/0",
+    ...     "type": "run",
     ...     "unknown": ["homhom"]
     ... }
     >>> node = normalize(node)
     >>> node == {
     ...     "path": "/path/0",
+    ...     "type": "run",
     ...     "name": "",
     ...     "configure": {},
     ...     "comment": "",
@@ -38,17 +40,20 @@ def normalize(node):
     True
 
     """
-    if "path" not in node:
-        raise DataProcessorError("cannot normalize: Path must be needed")
+    if "path" not in node or "type" not in node:
+        raise DataProcessorError(
+            "cannot normalize: Path and type must be needed")
     new_node = {
         "path": node["path"],
+        "type": node["type"],
         "name": "",
-        "configure": {},
         "comment": "",
         "tags": [],
         "parents": [],
         "children": [],
     }
+    if node["type"] == "run":
+        new_node["configure"] = {}
     new_node.update(node)
     return new_node
 
