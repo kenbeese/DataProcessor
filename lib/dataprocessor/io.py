@@ -130,7 +130,7 @@ class DataHandler(object):
         """
         nodes.add(self.node_list, node, skip_validate_link)
 
-    def update(self, node_list, skip_validate_link=False):
+    def update(self, node_list, silent=False):
         """ Update node_list (use dict.update).
 
         See also the help of nodes.add.
@@ -142,10 +142,12 @@ class DataHandler(object):
 
         """
         for node in node_list:
-            nodes.add(self.node_list, node, skip_validate_link,
+            nodes.add(self.node_list, node, skip_validate_link=True,
                       strategy="update")
+        for node in node_list:
+            nodes.validate_link(node_list, node, silent)
 
-    def replace(self, node_list, skip_validate_link=True):
+    def replace(self, node_list, skip_validate_link=True, silent=False):
         """ Swap node_list.
 
         Parameters
@@ -157,7 +159,7 @@ class DataHandler(object):
         self.node_list = node_list
         if not skip_validate_link:
             for node in self.node_list:
-                nodes.validate_link(self.node_list, node)
+                nodes.validate_link(self.node_list, node, silent=silent)
 
     def serialize(self):
         save(self.node_list, self.data_path, self.silent)

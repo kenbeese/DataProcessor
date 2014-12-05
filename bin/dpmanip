@@ -25,9 +25,9 @@ def main(args):
         with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
             node_list = args.val["func"](dh.get(), *arguments, **keywards)
             if args.replace:
-                dh.replace(node_list)
+                dh.replace(node_list, silent=args.silent)
             else:
-                dh.update(node_list)
+                dh.update(node_list, silent=args.silent)
         return
 
     if args.input:
@@ -41,9 +41,9 @@ def main(args):
     else:
         with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
             if args.replace:
-                dh.replace(node_list)
+                dh.replace(node_list, silent=args.silent)
             else:
-                dh.update(node_list)
+                dh.update(node_list, silent=args.silent)
 
 
 if __name__ == '__main__':
