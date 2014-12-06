@@ -42,6 +42,9 @@ test_moudles = [
     tdp.test_dataframe,
     tdp.test_utility,
     tdp.test_io,
+    tdp.test_pipes.test_add_conf,
+    tdp.test_pipes.test_add_run,
+    tdp.test_pipes.test_untag,
 ]
 
 
