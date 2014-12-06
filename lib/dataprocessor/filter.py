@@ -24,9 +24,9 @@ def project(node_list, path):
 
     """
     if isinstance(path, str):
-        paths = [rc.resolve_project_path(path)]
+        paths = [rc.resolve_project_path(path, False)]
     elif isinstance(path, list):
-        paths = [rc.resolve_project_path(p) for p in path]
+        paths = [rc.resolve_project_path(p, False) for p in path]
     else:
         raise DataProcessorError("Arguemnt path must be str or [str]")
     return [node for node in node_list
