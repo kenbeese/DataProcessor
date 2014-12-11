@@ -32,7 +32,6 @@ def normalize(node):
     ...     "name": "",
     ...     "configure": {},
     ...     "comment": "",
-    ...     "tags": [],
     ...     "parents": [],
     ...     "children": [],
     ...     "unknown": ["homhom"]
@@ -48,7 +47,6 @@ def normalize(node):
         "type": node["type"],
         "name": "",
         "comment": "",
-        "tags": [],
         "parents": [],
         "children": [],
     }
