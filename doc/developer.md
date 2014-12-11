@@ -47,6 +47,14 @@ Exit the environment.
 
     $ deactivate
 
+TEST
+----
+You can run the test of this library by following command.
+
+```sh
+nosetests -v --with-doctest
+```
+
 API reference
 -------------
 You can read API reference at <http://kenbeese.github.io/DataProcessor>.
