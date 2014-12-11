@@ -7,7 +7,7 @@ from .. import exception
 
 def add_conf(node_list, path, key, value):
     """
-    Add key and value to configure of node specified by path.
+    Add a new configure to the specified node.
 
     Parameters
     ----------
@@ -37,5 +37,5 @@ def register(pipes_dics):
     pipes_dics["add_conf"] = {
         "func": add_conf,
         "args": ["path", "key", "value"],
-        "desc": "Add value and key to the configure of path.",
+        "desc": "Add a new configure to the path.",
     }

@@ -256,10 +256,10 @@ def resolve_project_path(name_or_path, create_dir, root=None,
         abspath of `root/basket_name/name` is returned.
         If path (otherwise case), returns its abspath.
     create_dir : boolean
-        In the case of True, the directory of return path is created
-        if the path does not exist.
-        In the case of False, the directory is not created
-        if the path does not exist.
+        This flag determine the behavior occured when there is no directory at
+        the resolved path as follows:
+        - if create_dir is True: create new directory
+        - if create_dir is False: raise DataProcessorError
     root : str, optional
         The root path of baskets. (default=None)
         If None, the path is read from the configure file.
