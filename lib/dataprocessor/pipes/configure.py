@@ -26,12 +26,11 @@ def add(node_list, filename, section="parameters"):
 
     Examples
     --------
-    >>> add(node_list, "configure.conf")
+    >>> add(node_list, "configure.conf") # doctest:+SKIP
     >>> # Change load section.
-    >>> add(node_list, "configure.conf", "defaults")
+    >>> add(node_list, "configure.conf", "defaults") # doctest:+SKIP
 
     """
-
     node_key = "configure"
     for node in node_list:
         confpath = os.path.join(node["path"], filename)
@@ -76,12 +75,12 @@ def no_section(node_list, filename, split_char="=", comment_char=["#"]):
 
     Examples
     --------
-    >>> no_section(node_list, "foo.conf")
+    >>> no_section(node_list, "foo.conf") # doctest:+SKIP
     >>> # Change deliminator and comment line signal
     >>> no_section(node_list, "foo.conf", split_char=":", comment_char="!")
+    ... # doctest:+SKIP
 
     """
-
     for node in node_list:
         path = node["path"]
         cfg_path = os.path.join(path, filename)
