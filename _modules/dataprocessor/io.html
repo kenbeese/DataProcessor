@@ -179,7 +179,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DataHandler.update"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DataHandler.update"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update node_list (use dict.update).</span>
 
 <span class="sd">        See also the help of nodes.add.</span>
@@ -191,10 +191,12 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
-            <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="p">,</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                       <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DataHandler.replace"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.replace">[docs]</a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="DataHandler.replace"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.replace">[docs]</a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Swap node_list.</span>
 
 <span class="sd">        Parameters</span>
@@ -206,7 +208,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="n">node_list</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_validate_link</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">:</span>
-                <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="DataHandler.serialize"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span>

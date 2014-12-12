@@ -62,7 +62,13 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="test_dataprocessor.test_pipes.html">test_dataprocessor.test_pipes package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#module-test_dataprocessor.test_pipes.test_add_conf">test_dataprocessor.test_pipes.test_add_conf module</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#module-test_dataprocessor.test_pipes.test_add_node">test_dataprocessor.test_pipes.test_add_node module</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#module-test_dataprocessor.test_pipes.test_add_run">test_dataprocessor.test_pipes.test_add_run module</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#module-test_dataprocessor.test_pipes.test_configure">test_dataprocessor.test_pipes.test_configure module</a><ul class="simple">
@@ -72,6 +78,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#module-test_dataprocessor.test_pipes.test_scan">test_dataprocessor.test_pipes.test_scan module</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#module-test_dataprocessor.test_pipes.test_untag">test_dataprocessor.test_pipes.test_untag module</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="test_dataprocessor.test_pipes.html#module-test_dataprocessor.test_pipes">Module contents</a></li>
@@ -315,22 +324,9 @@
 <div class="section" id="module-test_dataprocessor.test_filter">
 <span id="test-dataprocessor-test-filter-module"></span><h2>test_dataprocessor.test_filter module<a class="headerlink" href="#module-test_dataprocessor.test_filter" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="test_dataprocessor.test_filter.TestNodes">
-<em class="property">class </em><tt class="descclassname">test_dataprocessor.test_filter.</tt><tt class="descname">TestNodes</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestNodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></tt></p>
-<p>Unittest for dataprocessor.filter.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="20%" />
-<col width="80%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>node_list</td>
-<td>(list) list of project root dir path</td>
-</tr>
-</tbody>
-</table>
+<dt id="test_dataprocessor.test_filter.TestFilter">
+<em class="property">class </em><tt class="descclassname">test_dataprocessor.test_filter.</tt><tt class="descname">TestFilter</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test_dataprocessor.utility.TestNodeListAndDir" title="test_dataprocessor.utility.TestNodeListAndDir"><tt class="xref py py-class docutils literal"><span class="pre">test_dataprocessor.utility.TestNodeListAndDir</span></tt></a></p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -497,7 +493,7 @@
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>([result])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestNodes.setUp" title="test_dataprocessor.test_filter.TestNodes.setUp"><tt class="xref py py-obj docutils literal"><span class="pre">setUp</span></tt></a>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUp</span></tt>()</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUpClass</span></tt>()</td>
@@ -510,40 +506,43 @@
 <td>Skip this test.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDown</span></tt>()</td>
-<td>Hook method for deconstructing the test fixture after testing it.</td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDownClass</span></tt>()</td>
 <td>Hook method for deconstructing the class fixture after running all tests in the class.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestNodes.test_node_type" title="test_dataprocessor.test_filter.TestNodes.test_node_type"><tt class="xref py py-obj docutils literal"><span class="pre">test_node_type</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestFilter.test_node_type_project" title="test_dataprocessor.test_filter.TestFilter.test_node_type_project"><tt class="xref py py-obj docutils literal"><span class="pre">test_node_type_project</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestNodes.test_project" title="test_dataprocessor.test_filter.TestNodes.test_project"><tt class="xref py py-obj docutils literal"><span class="pre">test_project</span></tt></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestFilter.test_node_type_run" title="test_dataprocessor.test_filter.TestFilter.test_node_type_run"><tt class="xref py py-obj docutils literal"><span class="pre">test_node_type_run</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestNodes.test_projects" title="test_dataprocessor.test_filter.TestNodes.test_projects"><tt class="xref py py-obj docutils literal"><span class="pre">test_projects</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestFilter.test_project" title="test_dataprocessor.test_filter.TestFilter.test_project"><tt class="xref py py-obj docutils literal"><span class="pre">test_project</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#test_dataprocessor.test_filter.TestFilter.test_projects" title="test_dataprocessor.test_filter.TestFilter.test_projects"><tt class="xref py py-obj docutils literal"><span class="pre">test_projects</span></tt></a>()</td>
 <td></td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
-<dt id="test_dataprocessor.test_filter.TestNodes.setUp">
-<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestNodes.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestNodes.setUp" title="Permalink to this definition">¶</a></dt>
+<dt id="test_dataprocessor.test_filter.TestFilter.test_node_type_project">
+<tt class="descname">test_node_type_project</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestFilter.test_node_type_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestFilter.test_node_type_project" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="test_dataprocessor.test_filter.TestNodes.test_node_type">
-<tt class="descname">test_node_type</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestNodes.test_node_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestNodes.test_node_type" title="Permalink to this definition">¶</a></dt>
+<dt id="test_dataprocessor.test_filter.TestFilter.test_node_type_run">
+<tt class="descname">test_node_type_run</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestFilter.test_node_type_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestFilter.test_node_type_run" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="test_dataprocessor.test_filter.TestNodes.test_project">
-<tt class="descname">test_project</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestNodes.test_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestNodes.test_project" title="Permalink to this definition">¶</a></dt>
+<dt id="test_dataprocessor.test_filter.TestFilter.test_project">
+<tt class="descname">test_project</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestFilter.test_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestFilter.test_project" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="test_dataprocessor.test_filter.TestNodes.test_projects">
-<tt class="descname">test_projects</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestNodes.test_projects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestNodes.test_projects" title="Permalink to this definition">¶</a></dt>
+<dt id="test_dataprocessor.test_filter.TestFilter.test_projects">
+<tt class="descname">test_projects</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/test_dataprocessor/test_filter.html#TestFilter.test_projects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_dataprocessor.test_filter.TestFilter.test_projects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

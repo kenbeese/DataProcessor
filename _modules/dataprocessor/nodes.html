@@ -71,15 +71,16 @@
 <span class="sd">    Examples</span>
 <span class="sd">    &gt;&gt;&gt; node = {</span>
 <span class="sd">    ...     &quot;path&quot;: &quot;/path/0&quot;,</span>
+<span class="sd">    ...     &quot;type&quot;: &quot;run&quot;,</span>
 <span class="sd">    ...     &quot;unknown&quot;: [&quot;homhom&quot;]</span>
 <span class="sd">    ... }</span>
 <span class="sd">    &gt;&gt;&gt; node = normalize(node)</span>
 <span class="sd">    &gt;&gt;&gt; node == {</span>
 <span class="sd">    ...     &quot;path&quot;: &quot;/path/0&quot;,</span>
+<span class="sd">    ...     &quot;type&quot;: &quot;run&quot;,</span>
 <span class="sd">    ...     &quot;name&quot;: &quot;&quot;,</span>
 <span class="sd">    ...     &quot;configure&quot;: {},</span>
 <span class="sd">    ...     &quot;comment&quot;: &quot;&quot;,</span>
-<span class="sd">    ...     &quot;tags&quot;: [],</span>
 <span class="sd">    ...     &quot;parents&quot;: [],</span>
 <span class="sd">    ...     &quot;children&quot;: [],</span>
 <span class="sd">    ...     &quot;unknown&quot;: [&quot;homhom&quot;]</span>
@@ -87,17 +88,19 @@
 <span class="sd">    True</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s">&quot;path&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;cannot normalize: Path must be needed&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&quot;path&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">or</span> <span class="s">&quot;type&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span>
+            <span class="s">&quot;cannot normalize: Path and type must be needed&quot;</span><span class="p">)</span>
     <span class="n">new_node</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">],</span>
         <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
-        <span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{},</span>
         <span class="s">&quot;comment&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
-        <span class="s">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span>
         <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
     <span class="p">}</span>
+    <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;run&quot;</span><span class="p">:</span>
+        <span class="n">new_node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">new_node</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">new_node</span>
 

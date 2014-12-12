@@ -4,10 +4,26 @@ dataprocessor.pipes package
 Submodules
 ----------
 
+dataprocessor.pipes.add_conf module
+-----------------------------------
+
+.. automodule:: dataprocessor.pipes.add_conf
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.pipes.add_node module
 -----------------------------------
 
 .. automodule:: dataprocessor.pipes.add_node
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.add_run module
+----------------------------------
+
+.. automodule:: dataprocessor.pipes.add_run
     :members:
     :undoc-members:
     :show-inheritance:
@@ -88,6 +104,14 @@ dataprocessor.pipes.show module
 -------------------------------
 
 .. automodule:: dataprocessor.pipes.show
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dataprocessor.pipes.untag module
+--------------------------------
+
+.. automodule:: dataprocessor.pipes.untag
     :members:
     :undoc-members:
     :show-inheritance:

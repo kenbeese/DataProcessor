@@ -62,7 +62,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessor.pipes.html">dataprocessor.pipes package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.add_conf">dataprocessor.pipes.add_conf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.add_node">dataprocessor.pipes.add_node module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.add_run">dataprocessor.pipes.add_run module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.add_tag">dataprocessor.pipes.add_tag module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.addcomment">dataprocessor.pipes.addcomment module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.configure">dataprocessor.pipes.configure module</a></li>
@@ -73,6 +75,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.normalize">dataprocessor.pipes.normalize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.scan">dataprocessor.pipes.scan module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.show">dataprocessor.pipes.show module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.untag">dataprocessor.pipes.untag module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes">Module contents</a></li>
 </ul>
 </li>
@@ -666,7 +669,7 @@ This class use JSON format for serializing.</p>
 
 <dl class="method">
 <dt id="dataprocessor.io.DataHandler.replace">
-<tt class="descname">replace</tt><big>(</big><em>node_list</em>, <em>skip_validate_link=True</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.replace" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">replace</tt><big>(</big><em>node_list</em>, <em>skip_validate_link=True</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Swap node_list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -689,7 +692,7 @@ This class use JSON format for serializing.</p>
 
 <dl class="method">
 <dt id="dataprocessor.io.DataHandler.update">
-<tt class="descname">update</tt><big>(</big><em>node_list</em>, <em>skip_validate_link=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.update" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">update</tt><big>(</big><em>node_list</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update node_list (use dict.update).</p>
 <p>See also the help of nodes.add.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -730,13 +733,13 @@ This class use JSON format for serializing.</p>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">replace</span></tt>(node_list[,&nbsp;skip_validate_link])</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">replace</span></tt>(node_list[,&nbsp;skip_validate_link,&nbsp;silent])</td>
 <td>Swap node_list.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">serialize</span></tt>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>(node_list[,&nbsp;skip_validate_link])</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>(node_list[,&nbsp;silent])</td>
 <td>Update node_list (use dict.update).</td>
 </tr>
 </tbody>
@@ -1013,6 +1016,7 @@ The latter node has priority in merging (see Examples)</p>
 </pre></div>
 </div>
 <p>...     &#8220;path&#8221;: &#8220;/path/0&#8221;,</p>
+<p>...     &#8220;type&#8221;: &#8220;run&#8221;,</p>
 <p>...     &#8220;unknown&#8221;: [&#8220;homhom&#8221;]</p>
 <p>... }</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
@@ -1022,10 +1026,10 @@ The latter node has priority in merging (see Examples)</p>
 </pre></div>
 </div>
 <p>...     &#8220;path&#8221;: &#8220;/path/0&#8221;,</p>
+<p>...     &#8220;type&#8221;: &#8220;run&#8221;,</p>
 <p>...     &#8220;name&#8221;: &#8220;&#8221;,</p>
 <p>...     &#8220;configure&#8221;: {},</p>
 <p>...     &#8220;comment&#8221;: &#8220;&#8221;,</p>
-<p>...     &#8220;tags&#8221;: [],</p>
 <p>...     &#8220;parents&#8221;: [],</p>
 <p>...     &#8220;children&#8221;: [],</p>
 <p>...     &#8220;unknown&#8221;: [&#8220;homhom&#8221;]</p>
@@ -1343,7 +1347,7 @@ whose name is <cite>section_name</cite>.
 
 <dl class="function">
 <dt id="dataprocessor.rc.resolve_project_path">
-<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">resolve_project_path</tt><big>(</big><em>name_or_path</em>, <em>root=None</em>, <em>basket_name='Projects'</em>, <em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#resolve_project_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.resolve_project_path" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.rc.</tt><tt class="descname">resolve_project_path</tt><big>(</big><em>name_or_path</em>, <em>create_dir</em>, <em>root=None</em>, <em>basket_name='Projects'</em>, <em>rcpath='~/.dataprocessor.ini'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/rc.html#resolve_project_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.resolve_project_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolve project path from its path or name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1355,6 +1359,13 @@ whose name is <cite>section_name</cite>.
 If name (i.e. basename(name_or_path) == name_or_path),
 abspath of <cite>root/basket_name/name</cite> is returned.
 If path (otherwise case), returns its abspath.</p>
+</div></blockquote>
+<p><strong>create_dir</strong> : boolean</p>
+<blockquote>
+<div><p>This flag determine the behavior occured when there is no directory at
+the resolved path as follows:
+- if create_dir is True: create new directory
+- if create_dir is False: raise DataProcessorError</p>
 </div></blockquote>
 <p><strong>root</strong> : str, optional</p>
 <blockquote>
@@ -1380,9 +1391,13 @@ default value is it. Otherwise, default is &#8220;Projects&#8221;.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorRcError</strong></p>
-<blockquote class="last">
+<blockquote>
 <div><p>occurs when <cite>root</cite> is not specified and it cannot be loaded
 from the setting file.</p>
+</div></blockquote>
+<p><strong>DataProcessorError</strong></p>
+<blockquote class="last">
+<div><p>occurs when create_dir is False and a path is not resolved.</p>
 </div></blockquote>
 </td>
 </tr>
