@@ -4,96 +4,56 @@ import os
 import sys
 import unittest
 
+from .utility import TestNodeListAndDir
+
 sys.path = [sys.path[0]] \
     + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
     + sys.path[1:]
 import dataprocessor as dp
+from dataprocessor.nodes import get
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
-class TestNodes(unittest.TestCase):
-
-    """Unittest for dataprocessor.filter.
-
-    Attributes
-    ----------
-    node_list : list
-        list of project root dir path
-
-    """
-
-    def setUp(self):
-        self.node_list = [
-            {"path": "/path/0", "parents": ["/path/1"],
-             "children": [],
-             "type": "run"},
-            {"path": "/path/1", "parents": [],
-             "children": ["/path/0", "/path/2"],
-             "type":"project"},
-            {"path": "/path/2", "parents": ["/path/1"],
-             "children": [],
-             "type": "run"},
-            {"path": "/path/3", "parents": ["/path/4"],
-             "children": [],
-             "type": "run"},
-            {"path": "/path/4", "parents": [],
-             "children": ["/path/3"],
-             "type":"project"}, ]
+class TestFilter(TestNodeListAndDir):
 
     def test_project(self):
-        result = dp.filter.project(self.node_list, "/path/1")
-        runs = [{'path': '/path/0',
-                 'parents': ['/path/1'],
-                 'children': [],
-                 'type': 'run'},
-                {'path': '/path/2',
-                 'parents': ['/path/1'],
-                 'children': [],
-                 'type': 'run'}]
-        self.assertEqual(result, runs)
+        p_path = self.project_paths[0]
+        run_num = len(get(self.node_list, p_path)["children"])
+        results = dp.filter.project(self.node_list, p_path)
+        for i in xrange(run_num):
+            path = os.path.join(p_path, "run%02d" % i)
+            self.assertIsNotNone(get(results, path))
 
     def test_projects(self):
-        result = dp.filter.project(self.node_list, ["/path/1", "/path/4"])
-        runs = [{'path': '/path/0',
-                 'parents': ['/path/1'],
-                 'children': [],
-                 'type': 'run'},
-                {'path': '/path/2',
-                 'parents': ['/path/1'],
-                 'children': [],
-                 'type': 'run'},
-                {"path": "/path/3",
-                 "parents": ["/path/4"],
-                 "children": [],
-                 "type": "run"}]
-        self.assertEqual(result, runs)
+        results = dp.filter.project(self.node_list, self.project_paths)
 
-    def test_node_type(self):
-        result = dp.filter.node_type(self.node_list, "project")
-        projects = [{'path': '/path/1',
-                     'parents': [],
-                     'children': ['/path/0', '/path/2'],
-                     'type': 'project'},
-                    {'path': '/path/4',
-                     'parents': [],
-                     'children': ['/path/3'],
-                     'type': 'project'}]
-        self.assertEqual(result, projects)
+        run_paths = []
+        for p_path in self.project_paths:
+            run_paths = run_paths + get(self.node_list, p_path)["children"]
 
-        result = dp.filter.node_type(self.node_list, "run")
-        runs = [{'path': '/path/0',
-                 'parents': ['/path/1'],
-                 'children': [],
-                 'type': 'run'},
-                {'path': '/path/2',
-                 'parents': ['/path/1'],
-                 'children': [],
-                 'type': 'run'},
-                {'path': '/path/3',
-                 'parents': ['/path/4'],
-                 'children': [],
-                 'type': 'run'}]
-        self.assertEqual(result, runs)
+        for run_path in run_paths:
+            self.assertIsNotNone(get(results, run_path))
+
+        self.assertEqual(len(results), len(run_paths))
+
+    def test_node_type_project(self):
+        results = dp.filter.node_type(self.node_list, "project")
+        for path in self.project_paths:
+            self.assertIsNotNone(get(results, path))
+
+        self.assertEqual(len(results), len(self.project_paths))
+
+    def test_node_type_run(self):
+        results = dp.filter.node_type(self.node_list, "run")
+
+        run_paths = []
+        for p_path in self.project_paths:
+            run_paths = run_paths + get(self.node_list, p_path)["children"]
+
+        for run_path in run_paths:
+            self.assertIsNotNone(get(results, run_path))
+
+        self.assertEqual(len(results), len(run_paths))
 
 
 class TestPrefixPath(unittest.TestCase):
