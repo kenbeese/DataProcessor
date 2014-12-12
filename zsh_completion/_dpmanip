@@ -78,14 +78,36 @@ function _dpmanip-add_tag (){
 }
 
 
-function _dpmanip-configure_no_section (){
+function _dpmanip-scan_directory (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--split_char)--split_char' \
-        '(--comment_char)--comment_char' \
+        '(--followlinks)--followlinks' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-add_run (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--tag)--tag' \
+        '(--name)--name' \
+        '(--comment)--comment' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-add_conf (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '*::arguments:_files'
 }
 
@@ -120,13 +142,14 @@ function _dpmanip-load_json (){
 }
 
 
-function _dpmanip-scan_directory (){
+function _dpmanip-configure_no_section (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--followlinks)--followlinks' \
+        '(--split_char)--split_char' \
+        '(--comment_char)--comment_char' \
         '*::arguments:_files'
 }
 
@@ -165,6 +188,16 @@ function _dpmanip-show_projects (){
 }
 
 
+function _dpmanip-untag (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-move_node (){
     typeset -A opt_args
     local context state line
@@ -179,10 +212,12 @@ function _subcmd_list() {
     subcmd_list=(
         filter_node_type:'filter by node type'
         normalize:'normalize nodes (i.e. fill necessary field)'
+        configure_no_section:'Read parameter file (without section)'
         configure:'Read parameter file (use ConfigParser)'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
-        configure_no_section:'Read parameter file (without section)'
+        add_run:'Add run.'
+        add_conf:'Add value and key to the configure of path.'
         filter_project:'filter by project path'
         add_tag:'Add a tag into the node'
         load_json:'load node_list from a JSON file'
@@ -192,6 +227,7 @@ function _subcmd_list() {
         save_json:'save node_list in a JSON file'
         move_node:'move node whose directory is also moved like as UNIX mv'
         show_projects:'output project name'
+        untag:'remove a tag from specified path'
         scan_directory:'Scan nodes from all directories under the directory 'root'.'
     )
     _describe -t subcmd 'subcommand list' subcmd_list && return

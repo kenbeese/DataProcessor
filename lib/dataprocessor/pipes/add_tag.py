@@ -22,7 +22,7 @@ def add_tag(node_list, node_path, project_id):
 
     """
     path = path_expand(node_path)
-    project_path = resolve_project_path(project_id)
+    project_path = resolve_project_path(project_id, True)
     project_node = get(node_list, project_path)
     if not project_node:
         add(node_list, {

@@ -229,15 +229,19 @@ def get_configure_safe(section, key, default, rcpath=default_rcpath):
         return default
 
 
-def _resolve_path(name, root, basket_name, rcpath):
+def _resolve_path(name, create_dir, root, basket_name, rcpath):
     if not root:
         root = get_configure(rc_section, "root", rcpath=rcpath)
     root = utility.check_directory(root)
-    basket = utility.get_directory(os.path.join(root, basket_name))
-    return utility.get_directory(os.path.join(basket, name))
+    if create_dir:
+        basket = utility.get_directory(os.path.join(root, basket_name))
+        return utility.get_directory(os.path.join(basket, name))
+    else:
+        basket = utility.check_directory(os.path.join(root, basket_name))
+        return utility.ceck_directory(os.path.join(basket, name))
 
 
-def resolve_project_path(name_or_path, root=None,
+def resolve_project_path(name_or_path, create_dir, root=None,
                          basket_name=get_configure_safe(rc_section,
                                                         "project_basket",
                                                         "Projects"),
@@ -251,6 +255,11 @@ def resolve_project_path(name_or_path, root=None,
         If name (i.e. basename(name_or_path) == name_or_path),
         abspath of `root/basket_name/name` is returned.
         If path (otherwise case), returns its abspath.
+    create_dir : boolean
+        This flag determine the behavior occured when there is no directory at
+        the resolved path as follows:
+        - if create_dir is True: create new directory
+        - if create_dir is False: raise DataProcessorError
     root : str, optional
         The root path of baskets. (default=None)
         If None, the path is read from the configure file.
@@ -272,8 +281,14 @@ def resolve_project_path(name_or_path, root=None,
         occurs when `root` is not specified and it cannot be loaded
         from the setting file.
 
+    DataProcessorError
+        occurs when create_dir is False and a path is not resolved.
+
     """
     if os.path.basename(name_or_path) == name_or_path:
-        return _resolve_path(name_or_path, root, basket_name, rcpath)
+        return _resolve_path(name_or_path, create_dir, root, basket_name, rcpath)
     else:
-        return utility.get_directory(name_or_path)
+        if create_dir:
+            return utility.get_directory(name_or_path)
+        else:
+            return utility.check_directory(name_or_path)
