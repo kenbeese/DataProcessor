@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kenbeese/DataProcessor.png)](https://travis-ci.org/kenbeese/DataProcessor)
+
         ___      _          ___
        /   \__ _| |_ __ _  / _ \_ __ ___   ___ ___  ___ ___  ___  _ __
       / /\ / _` | __/ _` |/ /_)/ '__/ _ \ / __/ _ \/ __/ __|/ _ \| '__|
@@ -269,6 +271,7 @@ dpmanip -s untag /path/of/run /path/of/project
 
 ### Pythonから使う
 (かきかけ)
+[API reference](http://kenbeese.github.io/DataProcessor/index.html)
 
 Lisence
 -------
