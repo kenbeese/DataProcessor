@@ -1,16 +1,11 @@
 # coding=utf-8
 """Test for nodes."""
 import os
-import sys
 import unittest
 import copy
 
-from .utility import TestNodeListAndDir
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-import dataprocessor.nodes as nodes
-sys.path = [sys.path[0]] + sys.path[2:]
+from .utils import TestNodeListAndDir
+from .. import nodes
 
 
 class TestNodes(unittest.TestCase):

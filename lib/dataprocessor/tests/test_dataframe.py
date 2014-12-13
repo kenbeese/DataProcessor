@@ -1,15 +1,9 @@
 # coding=utf-8
-import sys
-import os
 import unittest
 from pandas import DataFrame
 from pandas.util.testing import assert_frame_equal
 
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-import dataprocessor.dataframe as df
-sys.path = [sys.path[0]] + sys.path[2:]
+from .. import dataframe as df
 
 
 class TestIo(unittest.TestCase):

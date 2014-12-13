@@ -2,16 +2,11 @@
 
 
 import os.path
-import sys
 
-from ..utility import TestNodeListAndDir
+from .utils import TestNodeListAndDir
 
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-from dataprocessor.pipes.add_conf import add_conf
-import dataprocessor.nodes as nodes
-sys.path = [sys.path[0]] + sys.path[2:]
+from ..pipes.add_conf import add_conf
+from .. import nodes
 
 
 class TestAddConf(TestNodeListAndDir):

@@ -4,14 +4,8 @@
 import unittest
 import tempfile
 import os
-import sys
 import shutil
-
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-import dataprocessor.nodes as nodes
-sys.path = [sys.path[0]] + sys.path[2:]
+from .. import nodes
 
 
 class TestNodeListAndDir(unittest.TestCase):
