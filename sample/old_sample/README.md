@@ -165,4 +165,3 @@ Then the register command becomes as follows:
 
     $ mkdir figures
     $ ../bin/register_figure ./figures ./data_information.json datadir/project1/run01/fig1.png -g datadir/project1/run01/fig1.gp
-

@@ -30,6 +30,7 @@ Make your data analysis easy.
         - [コメント追加](#コメント追加)
         - [タグの追加と取り外し](#タグの追加と取り外し)
         - [Pythonから使う](#pythonから使う)
+        - [お試し](#お試し)
     - [Lisence](#lisence)
 
 <!-- markdown-toc end -->
@@ -181,7 +182,6 @@ dpmanip -s add_conf /path/to/run c 2.0
 
 使い方
 ------
-
 ### 一覧の表示(webapp)
 
 計算の設定の一覧を表示するには`dpserver`によってサーバープロセスを起動する必要があります。
@@ -272,6 +272,10 @@ dpmanip -s untag /path/of/run /path/of/project
 ### Pythonから使う
 (かきかけ)
 [API reference](http://kenbeese.github.io/DataProcessor/index.html)
+
+### お試し
+いきなり使うのは怖い場合はお試し用のデータディレクトリが`sample`にあります。
+詳しい使い方は[ここ](sample/sample_usage.md)。
 
 Lisence
 -------
