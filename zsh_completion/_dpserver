@@ -34,7 +34,7 @@ function _dpserver-install (){
         '*::arguments:_files'
 }
 
-function _subcmd_list() {
+function _dpserver_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
         start:'start DataProcessor server daemon'
@@ -59,7 +59,7 @@ function _dpserver (){
 
     case $state in
         subcmd)
-            _subcmd_list && ret=0
+            _dpserver_subcmd_list && ret=0
             ;;
         subcmd-options-or-args)
             local curcontext=$curcontext
