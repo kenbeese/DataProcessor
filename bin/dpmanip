@@ -37,7 +37,7 @@ def main(args):
         node_list = dp.io.load([], args.json)
     node_list = args.val["func"](node_list, *arguments, **keywords)
     if args.output:
-        json.dump(node_list, sys.stdout)
+        json.dump(node_list, sys.stdout, indent=4)
     else:
         with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
             if args.replace:
