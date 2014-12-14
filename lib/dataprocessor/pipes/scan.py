@@ -3,7 +3,7 @@
 import os
 from glob import glob
 
-from ..nodes import get, validate_link
+from ..nodes import get, validate_link, normalize
 from ..utility import path_expand, boolenize
 
 
@@ -69,12 +69,12 @@ def directory(node_list, root, whitelist, followlinks=False):
                 break
         if not node_type:
             continue
-        scan_nodelist.append({"path": path,
-                              "parents": parents,
-                              "children": children,
-                              "type": node_type,
-                              "name": os.path.basename(path),
-                              })
+        scan_nodelist.append(normalize({"path": path,
+                                        "parents": parents,
+                                        "children": children,
+                                        "type": node_type,
+                                        "name": os.path.basename(path),
+                                        }))
     origin_len = len(node_list)
     node_list = node_list + scan_nodelist
     for node in node_list[origin_len:]:
