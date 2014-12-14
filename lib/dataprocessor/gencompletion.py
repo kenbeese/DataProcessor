@@ -75,7 +75,7 @@ class CompletionGenerator(object):
             casestring = """
     case $state in
         subcmd)
-            _subcmd_list && ret=0
+            _%s_subcmd_list && ret=0
             ;;
         subcmd-options-or-args)
             local curcontext=$curcontext
@@ -87,7 +87,7 @@ class CompletionGenerator(object):
             fi
             ;;
     esac
-""" % (self.commandname, self.commandname, self.commandname)
+""" % (self.commandname, self.commandname, self.commandname, self.commandname)
             ret.append(casestring)
         else:
             ret.append("        '*::arguments:_files'")
@@ -119,10 +119,10 @@ class CompletionGenerator(object):
 
     def _subcmd_list_function(self):
         prefmt = """
-function _subcmd_list() {
+function _%s_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
-        """
+        """ % self.commandname
         aftfmt = """
     )
     _describe -t subcmd 'subcommand list' subcmd_list && return
