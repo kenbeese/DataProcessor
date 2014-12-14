@@ -71,10 +71,13 @@ def register(pipe_dics):
     pipe_dics["show_runs"] = {
         "func": show_runs,
         "args": [],
-        "kwds": ["project", "show_format"],
+        "kwds": [("project", {"help": "project name"}),
+                 ("show_format", {"help": "format"}),
+                 ("parameters", {
+                     "nargs": "+",
+                     "help": "parameters to be displayed"
+                 })],
         "desc": "output runs path",
-        "spec": [("parameters", {"nargs": "+",
-                                 "help": "parameters to be displayed"})]
     }
     pipe_dics["show_projects"] = {
         "func": show_projects,
