@@ -86,7 +86,11 @@ def directory(node_list, root, whitelist, followlinks=False):
 def register(pipe_dics):
     pipe_dics["scan_directory"] = {
         "func": directory,
-        "args": ["root", "whitelist"],
-        "kwds": ["followlinks"],
+        "args": [("root", {"help": "path of root directory"}),
+                 ("whitelist",
+                  {"help": "whitelist of file which exists in run directory",
+                   "nargs": "+", }),
+                 ],
+        "kwds": [("followlinks", {"help": "whether scan in symbolic link"})],
         "desc": "Scan nodes from all directories under the directory 'root'.",
     }
