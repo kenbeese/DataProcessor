@@ -15,7 +15,11 @@ dpinit
 
 rootdirにはこのサンプルディレクトリの"datadir"を指定します。
 json fileの場所は適当に設定してください。
+
+
 既に設定ファイルを作成していた場合はちゃんとバックアップを取ってね。
+この場合、バックアップしてた`.dataprocessor.ini`をHOMEに置けば、
+元のデータベースが使えます。
 
 ### データのスキャン
 
@@ -32,6 +36,13 @@ datadir以下にあるファイルは以下の通りです。
 ```sh
 dpmanip scan_directory /path/to/datadir "*.ini"  # 拡張子.iniのファイルがあるディレクトリをランとして認識してscan
 dpmanip scan_directory /path/to/datadir "*.conf" # 拡張子.confのファイルがあるディレクトリをランとして認識してscan
+```
+
+### 設定ファイルのスキャン
+
+```sh
+dpmanip configure parameters.conf # parameters.confがあるrunで、このファイルを読み込む
+dpmanip configure parameters.ini  # parameters.iniがあるrunで、このファイルを読み込む
 ```
 
 遊んでみよう
