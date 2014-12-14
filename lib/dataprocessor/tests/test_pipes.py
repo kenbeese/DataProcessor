@@ -56,3 +56,21 @@ class TestPipes(unittest.TestCase):
 
         pipes._convert_old_pipes_dics(self.pipes_dics)
         self.assertEqual(self.pipes_dics["bar"], valid_dic)
+
+    def test_convert_old_pipes_dics_fail(self):
+        self.pipes_dics["bar"] = {
+            "func": "bar",
+            "args": ["ffff", ("fooo", {"help": "FOOO"})],
+            "kwds": ["bar"],
+            "desc": "bbbbbarrr"
+        }
+        valid_dic = {
+            "func": "bar",
+            "args": [("ffff", {"help": "ffff"}),
+                     ("fooo", {"help": "FOOO"})],
+            "kwds": [("bar", {"help": "bar"})],
+            "desc": "bbbbbarrr"
+        }
+
+        pipes._convert_old_pipes_dics(self.pipes_dics)
+        self.assertNotEqual(self.pipes_dics["bar"], valid_dic)
