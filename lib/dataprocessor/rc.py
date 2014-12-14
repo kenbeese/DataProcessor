@@ -6,14 +6,13 @@ from . import utility, io
 from .exception import DataProcessorError
 import os.path
 import os
-import utility
 import copy
 import argparse
 import ConfigParser
 
 
-if "DP_DEBUG_INI" in os.environ and os.environ["DP_DEBUG_INI"]:
-    default_rcpath = utility.path_expand(os.environ["DP_DEBUG_INI"])
+if "DP_DEBUG_RCPATH" in os.environ and os.environ["DP_DEBUG_RCPATH"]:
+    default_rcpath = utility.path_expand(os.environ["DP_DEBUG_RCPATH"])
 else:
     default_rcpath = "~/.dataprocessor.ini"
 rc_section = "data"
