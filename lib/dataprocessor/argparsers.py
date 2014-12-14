@@ -35,11 +35,11 @@ def dpmanip():
     return parser
 
 
-def genzshcomp():
+def dpgenzshcomp():
     parser = argparse.ArgumentParser()
     executable_names = [
         "dpmanip",
-        "genzshcomp",
+        "dpgenzshcomp",
         "dataprocessor",
         "register_figure",
         "dpserver"
@@ -67,7 +67,7 @@ def dpserver():
     }
     root_cfg = {
         "default": os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                   "../../server")),
+                                                "../../server")),
         "help": "The root dir where the server stands"
     }
     logfile_cfg = {
