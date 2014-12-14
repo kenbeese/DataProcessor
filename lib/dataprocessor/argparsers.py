@@ -8,7 +8,6 @@ from . import rc
 from . import server
 
 
-
 def dpmanip():
     try:
         parser = rc.ArgumentParser()
@@ -27,11 +26,11 @@ def dpmanip():
     sub_psr = parser.add_subparsers(title="subcommands", metavar="pipes")
     for name, val in pipes.pipes_dics.items():
         pipe_psr = sub_psr.add_parser(name, help=val["desc"])
-        for arg in val["args"]:
-            pipe_psr.add_argument(arg)
+        for name, attr in val["args"]:
+            pipe_psr.add_argument(name, **attr)
         if "kwds" in val:
-            for kwd in val["kwds"]:
-                pipe_psr.add_argument("--" + kwd)
+            for kwd, attr in val["kwds"]:
+                pipe_psr.add_argument("--" + kwd, **attr)
         pipe_psr.set_defaults(val=val)
     return parser
 

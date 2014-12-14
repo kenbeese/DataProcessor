@@ -16,14 +16,14 @@ sys.path = [sys.path[0]] + sys.path[2:]
 def main(args):
     arguments = [vars(args)[i] for i in args.val["args"]]
     if "kwds" in args.val:
-        keywards = {i: vars(args)[i] for i in args.val["kwds"]
+        keywords = {i: vars(args)[i] for i, _ in args.val["kwds"]
                     if vars(args)[i]}
     else:
-        keywards = {}
+        keywords = {}
 
     if not args.input and not args.output:
         with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
-            node_list = args.val["func"](dh.get(), *arguments, **keywards)
+            node_list = args.val["func"](dh.get(), *arguments, **keywords)
             if args.replace:
                 dh.replace(node_list, silent=args.silent)
             else:
@@ -35,7 +35,7 @@ def main(args):
             node_list = dh.get()
     else:
         node_list = dp.io.load([], args.json)
-    node_list = args.val["func"](node_list, *arguments, **keywards)
+    node_list = args.val["func"](node_list, *arguments, **keywords)
     if args.output:
         json.dump(node_list, sys.stdout)
     else:
