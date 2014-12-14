@@ -3,3 +3,4 @@ python-daemon>=0.6
 Sphinx>=1.2
 numpydoc>=0.4
 pandas>=0.14
+nose>=1.3

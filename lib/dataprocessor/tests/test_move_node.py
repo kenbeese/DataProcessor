@@ -1,17 +1,12 @@
 # coding=utf-8
 
 import os
-import sys
 import copy
 
-from ..utility import TestNodeListAndDir
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-from dataprocessor.pipes.move_node import move_node
-from dataprocessor.nodes import get
-from dataprocessor.exception import DataProcessorError
-sys.path = [sys.path[0]] + sys.path[2:]
+from .utils import TestNodeListAndDir
+from ..pipes.move_node import move_node
+from ..nodes import get
+from ..exception import DataProcessorError
 
 
 class TestMoveNode(TestNodeListAndDir):
@@ -26,7 +21,6 @@ class TestMoveNode(TestNodeListAndDir):
         mv tmpdir/p1/run02 tmpdir/p2/
 
         """
-
         from_path = os.path.join(self.tempdir_path, "p1/run02")
         dest = os.path.join(self.tempdir_path, "p2")
         changed_path = os.path.join(self.tempdir_path, "p2", "run02")

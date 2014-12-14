@@ -2,16 +2,10 @@
 """Test for dataprocessor.pipes.configure."""
 
 import os
-import sys
-import unittest
 import copy
 
-from ..utility import TestNodeListAndDir
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-from dataprocessor.pipes.configure import add, no_section
-sys.path = [sys.path[0]] + sys.path[2:]
+from .utils import TestNodeListAndDir
+from ..pipes.configure import add, no_section
 
 
 class TestConfigure(TestNodeListAndDir):
@@ -38,7 +32,6 @@ class TestConfigure(TestNodeListAndDir):
             If True, only create configure file on node with type run.
 
         """
-
         def create_conf(conf_path, filestring):
             f = open(conf_path, "w")
             f.write(filestring)
@@ -48,8 +41,8 @@ class TestConfigure(TestNodeListAndDir):
             if check_type and not (node["type"] is "run"):
                 continue
             for file_dict in list_file_dict:
-                    path = os.path.join(node["path"], file_dict["name"])
-                    create_conf(path, file_dict["contents"])
+                path = os.path.join(node["path"], file_dict["name"])
+                create_conf(path, file_dict["contents"])
 
     def _check_node_list(self, original_node_list, added_dict):
         compare_node_list = copy.deepcopy(original_node_list)

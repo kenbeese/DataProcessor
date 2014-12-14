@@ -5,4 +5,4 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python bin/execute_all_test
+  - nosetests -v --with-doctest

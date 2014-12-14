@@ -1,14 +1,9 @@
 import os
-import sys
 import unittest
 import tempfile
 
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-import dataprocessor.utility as utility
-from dataprocessor.exception import DataProcessorError
-sys.path = [sys.path[0]] + sys.path[2:]
+from .. import utility
+from ..exception import DataProcessorError
 
 
 class TestUtility(unittest.TestCase):
@@ -125,7 +120,6 @@ class TestUtility(unittest.TestCase):
         self.assertTrue(os.path.exists(to_path))
         utility.copy_file(from_path, to_path, "replace")
         self.assertTrue(os.path.exists(to_path))
-
 
     def test_read_configure1(self):
         configure_path = os.path.join(self.tempdir, "conf")

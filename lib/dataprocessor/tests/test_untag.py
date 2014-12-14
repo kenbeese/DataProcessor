@@ -1,17 +1,12 @@
 # coding: utf-8
 
 import os
-import sys
 
-from ..utility import TestNodeListAndDir
+from .utils import TestNodeListAndDir
 
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-from dataprocessor.pipes.untag import untag
-from dataprocessor.exception import DataProcessorError
-import dataprocessor.nodes as nodes
-sys.path = [sys.path[0]] + sys.path[2:]
+from ..pipes.untag import untag
+from ..exception import DataProcessorError
+from .. import nodes
 
 
 class TestUntag(TestNodeListAndDir):

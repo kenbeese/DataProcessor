@@ -1,14 +1,9 @@
 # coding=utf-8
 """Test for scan."""
-import sys
 import os
 
-from ..utility import TestNodeListAndDir
-sys.path = [sys.path[0]] \
-    + [os.path.join(os.path.dirname(__file__), "../../../lib")] \
-    + sys.path[1:]
-from dataprocessor.pipes.scan import directory
-sys.path = [sys.path[0]] + sys.path[2:]
+from .utils import TestNodeListAndDir
+from ..pipes.scan import directory
 
 
 class TestScan(TestNodeListAndDir):
