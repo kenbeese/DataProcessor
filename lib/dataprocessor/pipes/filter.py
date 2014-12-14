@@ -8,20 +8,25 @@ def register(pipes_dics):
         "func": flt.project,
         "args": ["path"],
         "desc": """filter by project path.
-        This pipe reduce database. In `dpmanip`, std output option '-o' should be used.
+        This pipe filters out database.
+        In `dpmanip`, std output option '-o' should be used.
         """,
     }
     pipes_dics["filter_node_type"] = {
         "func": flt.node_type,
         "args": ["node_type"],
         "desc": """filter by node type.
-        This pipe reduce database. In `dpmanip`, std output option '-o' should be used.
+        This pipe filters out database.
+        In `dpmanip`, std output option '-o' should be used.
         """,
     }
-    pipes_dics["filter_path"] = {
+    pipes_dics["filter_prefix"] = {
         "func": flt.prefix_path,
-        "args": ["pre_path"],
+        "args": [("prefix_path",
+                  {"help": """Absolute path or relative path.
+                   The relative path will be expanded to absolute path."""})],
         "desc": """filter by prefix_path.
-        This pipe reduce database. In `dpmanip`, std output option '-o' should be used.
+        This pipe filters out database.
+        In `dpmanip`, std output option '-o' should be used.
         """
     }
