@@ -25,6 +25,19 @@ for mod in mod_list:
         continue
     register(pipes_dics)
 
+# add empty dict into old style pipe definition
+for name, attr in pipes_dics.items():
+    def _add_dict(key):
+        args = attr[key]
+        if len(args) == 0:
+            return
+        if isinstance(args[0], str):
+            attr[key] = [(name, {}) for name in args]
+
+    _add_dict("args")
+    if "kwds" in attr:
+        _add_dict("kwds")
+
 # validate pipes
 for name, attr in pipes_dics.items():
     msg0 = "(pipe={}) ".format(name)
