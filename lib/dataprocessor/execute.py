@@ -72,8 +72,9 @@ def check_manip(manip):
         if "kwds" in mn:
             if "kwds" not in dic:
                 raise InvalidJSONError(name, "pipe does not have 'kwds'")
+            kwd_names = [kwd for kwd, _ in dic["kwds"]]
             for kwd in mn["kwds"]:
-                if kwd not in dic["kwds"]:
+                if kwd not in kwd_names:
                     msg = "keyword argument '%s' does not exist"
                     raise InvalidJSONError(name, msg % kwd)
         else:
