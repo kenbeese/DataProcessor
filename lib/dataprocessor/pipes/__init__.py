@@ -32,7 +32,7 @@ for name, attr in pipes_dics.items():
         if len(args) == 0:
             return
         if isinstance(args[0], str):
-            attr[key] = [(name, {}) for name in args]
+            attr[key] = [(name, {"help": name}) for name in args]
 
     _add_dict("args")
     if "kwds" in attr:
