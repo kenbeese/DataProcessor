@@ -5,17 +5,24 @@
 from . import utility, io
 from .exception import DataProcessorError
 import os.path
+import os
+import utility
 import copy
 import argparse
 import ConfigParser
 
 
-default_rcpath = "~/.dataprocessor.ini"
+if "DP_DEBUG_INI" in os.environ and os.environ["DP_DEBUG_INI"]:
+    default_rcpath = utility.path_expand(os.environ["DP_DEBUG_INI"])
+else:
+    default_rcpath = "~/.dataprocessor.ini"
 rc_section = "data"
 
 
 class DataProcessorRcError(DataProcessorError):
+
     """Exception about configure file."""
+
     def __init__(self, msg):
         DataProcessorError.__init__(self, msg)
 
