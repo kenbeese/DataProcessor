@@ -65,7 +65,7 @@ class TestScan(TestNodeListAndDir):
         node_list = []
         root_dir = self.tempdir_path
         # whitelist specifies directory.
-        node_list = directory(node_list, root_dir, ["data"])
+        node_list = directory(node_list, root_dir, "data")
         compare_node_list = [
             {'path': root_dir,
              'parents': [],
@@ -125,7 +125,7 @@ class TestScan(TestNodeListAndDir):
         root_dir = self.tempdir_path
         # whitelist has `..`.
         node_list = directory(node_list, root_dir,
-                              ["../data"])
+                              "../data")
         compare_node_list = [
             {'path': os.path.join(root_dir, "run0", "run0"),
              'parents': [],
@@ -162,7 +162,7 @@ class TestScan(TestNodeListAndDir):
         root_dir = self.tempdir_path
         # followlinks is `True`.
         node_list = directory(node_list, root_dir,
-                              ["data/test.conf"], followlinks=True)
+                              "data/test.conf", followlinks=True)
         compare_node_list = [
             {'path': root_dir,
              'parents': [],
@@ -191,7 +191,7 @@ class TestScan(TestNodeListAndDir):
                       'children': [],  # empty
                       'name': 'run0',
                       'type': 'run'}]
-        node_list = directory(node_list, root_dir, ["*.conf"])
+        node_list = directory(node_list, root_dir, "*.conf")
         compare_node_list = [
             {'path': os.path.join(root_dir, 'run0'),
              'parents': [root_dir],             # fill

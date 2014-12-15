@@ -17,7 +17,7 @@ def directory(node_list, root, whitelist, followlinks=False):
     ----------
     root : str
         Scan directories recursively under the directory `root`.
-    whitelist : list of str
+    whitelist : list of str or str
         Run node has one or more file or directory
         which satisfies run_node_dir/`whitelist`.
         And project nodes satisfy project_dir/run_node_dir/`whitelist`.
@@ -45,9 +45,10 @@ def directory(node_list, root, whitelist, followlinks=False):
     >>> node_list = directory([], "scandir_path", ["*.conf"])
 
     """
-
     root = path_expand(root)
     followlinks = boolenize(followlinks)
+    if isinstance(whitelist, str):
+        whitelist = [whitelist]
     scan_nodelist = []
     for path, dirs, files in os.walk(root, followlinks=followlinks):
         dirs.sort()
@@ -85,7 +86,11 @@ def directory(node_list, root, whitelist, followlinks=False):
 def register(pipe_dics):
     pipe_dics["scan_directory"] = {
         "func": directory,
-        "args": ["root", "whitelist"],
-        "kwds": ["followlinks"],
+        "args": [("root", {"help": "path of root directory"}),
+                 ("whitelist",
+                  {"help": "whitelist of file which exists in run directory",
+                   "nargs": "+", }),
+                 ],
+        "kwds": [("followlinks", {"help": "whether scan in symbolic link"})],
         "desc": "Scan nodes from all directories under the directory 'root'.",
     }
