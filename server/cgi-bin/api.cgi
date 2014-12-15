@@ -6,6 +6,8 @@ import os.path
 import sys
 import json
 import traceback
+from io import BytesIO as StringIO
+from contextlib import contextmanager
 import cgitb
 cgitb.enable()
 
@@ -21,7 +23,23 @@ sys.path = [sys.path[0]] + sys.path[2:]
 def manip(req):
     """ Do a full manipulation. """
     manip = json.loads(req.get("manip"))
-    do_manip(manip)
+    dp.execute.check_manip(manip)
+    with open("cfg.json") as f:
+        cfg = json.load(f)
+    data_path = cfg["data_path"]
+    with dp.io.SyncDataHandler(data_path, duration=1, silent=True) as dh:
+        dp.execute.execute(manip, dh.get())
+    handler.operation_success()
+
+
+@contextmanager
+def print_capture():
+    ss = StringIO()
+    sys.stdout, ss = ss, sys.stdout
+    try:
+        yield sys.stdout
+    finally:
+        sys.stdout, ss = ss, sys.stdout
 
 
 def pipe(req):
@@ -31,30 +49,26 @@ def pipe(req):
     specified when the server stand.
 
     """
-    if req.has("kwds"):
-        pipe = {
-            "name": req.get("name"),
-            "args": json.loads(req.get("args")),
-            "kwds": json.loads(req.get("kwds"))
-        }
-    else:
-        pipe = {
-            "name": req.get("name"),
-            "args": json.loads(req.get("args")),
-        }
-    manip = [pipe]
-    do_manip(manip)
-
-
-def do_manip(manip):
-    dp.execute.check_manip(manip)
-
     with open("cfg.json") as f:
         cfg = json.load(f)
     data_path = cfg["data_path"]
 
-    with dp.io.SyncDataHandler(data_path, duration=1, silent=True) as dh:
-        dp.execute.execute(manip, dh.get())
+    p = dp.pipes.pipes_dics[req.get("name")]
+
+    with dp.io.SyncDataHandler(data_path, silent=True) as dh, print_capture() as ss:
+        node_list = dh.get()
+        args = json.loads(req.get("args"))
+        kwds = req.get("kwds") if req.has("kwds") else {}
+        node_list = p["func"](node_list, *args, **kwds)
+        dh.update(node_list, silent=True)
+        output_str = ss.getvalue()
+
+    if "output" in p and p["output"] in ["json", "xml", "html"]:
+        res = handler.Response(p["output"])
+        res.set_body(output_str)
+        print(res)
+    else:
+        handler.operation_success()
 
 
 def switch():
@@ -71,7 +85,6 @@ def switch():
 if __name__ == "__main__":
     try:
         switch()
-        handler.operation_success()
     except KeyError as key:
         handler.operation_fail("Request must include '%s'" % key)
     except ValueError:
