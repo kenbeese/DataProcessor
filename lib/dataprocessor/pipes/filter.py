@@ -8,7 +8,7 @@ def register(pipes_dics):
         "func": flt.project,
         "args": ["path"],
         "desc": """filter by project path.
-        This pipe removes runs which don't belong to the project
+        This pipe filters out runs which don't belong to the project,
         and should be used with '-o' in dpmanip.
         """,
     }
@@ -16,7 +16,7 @@ def register(pipes_dics):
         "func": flt.node_type,
         "args": ["node_type"],
         "desc": """filter by node type.
-        This pipe removes some nodes of the other type from the database.
+        This pipe filters out nodes which has different type attribute,
         and should be used with '-o' option in dpmanip.
         """,
     }
@@ -26,7 +26,8 @@ def register(pipes_dics):
                   {"help": """Absolute path or relative path.
                    The relative path will be expanded to absolute path."""})],
         "desc": """filter by prefix_path.
-        This pipe removes some runs, projects or figures from the database
+        This pipe filters out runs, projects and figures
+        whose path does not start with the prefix,
         and should be used with '-o' option in dpmanip.
         """
     }
