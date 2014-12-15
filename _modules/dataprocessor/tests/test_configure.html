@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>test_dataprocessor.test_pipes.test_configure &mdash; dataprocessor  documentation</title>
+    <title>dataprocessor.tests.test_configure &mdash; dataprocessor  documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,26 +44,20 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <h1>Source code for test_dataprocessor.test_pipes.test_configure</h1><div class="highlight"><pre>
+  <h1>Source code for dataprocessor.tests.test_configure</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
 <span class="sd">&quot;&quot;&quot;Test for dataprocessor.pipes.configure.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> \
-    <span class="o">+</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;../../../lib&quot;</span><span class="p">)]</span> \
-    <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-<span class="kn">from</span> <span class="nn">dataprocessor.pipes.configure</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">no_section</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
+<span class="kn">from</span> <span class="nn">..pipes.configure</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">no_section</span>
 
 
-<div class="viewcode-block" id="TestConfigure"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_configure.TestConfigure">[docs]</a><span class="k">class</span> <span class="nc">TestConfigure</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
+<div class="viewcode-block" id="TestConfigure"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure">[docs]</a><span class="k">class</span> <span class="nc">TestConfigure</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;Unittest for dataprocessor.pipes.configure.</span>
 
@@ -87,7 +81,6 @@
 <span class="sd">            If True, only create configure file on node with type run.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">def</span> <span class="nf">create_conf</span><span class="p">(</span><span class="n">conf_path</span><span class="p">,</span> <span class="n">filestring</span><span class="p">):</span>
             <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">conf_path</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">filestring</span><span class="p">)</span>
@@ -97,8 +90,8 @@
             <span class="k">if</span> <span class="n">check_type</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="s">&quot;run&quot;</span><span class="p">):</span>
                 <span class="k">continue</span>
             <span class="k">for</span> <span class="n">file_dict</span> <span class="ow">in</span> <span class="n">list_file_dict</span><span class="p">:</span>
-                    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span> <span class="n">file_dict</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">])</span>
-                    <span class="n">create_conf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">file_dict</span><span class="p">[</span><span class="s">&quot;contents&quot;</span><span class="p">])</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span> <span class="n">file_dict</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">])</span>
+                <span class="n">create_conf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">file_dict</span><span class="p">[</span><span class="s">&quot;contents&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_check_node_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">):</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">)</span>
@@ -106,7 +99,7 @@
             <span class="n">node</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">added_dict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TestConfigure.test_add"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_configure.TestConfigure.test_add">[docs]</a>    <span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestConfigure.test_add"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure.test_add">[docs]</a>    <span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">copy</span>
         <span class="n">original_node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">list_file_dict</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter1.conf&quot;</span><span class="p">,</span>
@@ -135,7 +128,7 @@
                                     <span class="s">&quot;hogehoge&quot;</span><span class="p">:</span> <span class="s">&quot;2&quot;</span><span class="p">}}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestConfigure.test_no_section"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_configure.TestConfigure.test_no_section">[docs]</a>    <span class="k">def</span> <span class="nf">test_no_section</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestConfigure.test_no_section"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure.test_no_section">[docs]</a>    <span class="k">def</span> <span class="nf">test_no_section</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">original_node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">list_file_dict</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter1.conf&quot;</span><span class="p">,</span>
                            <span class="s">&quot;contents&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;</span>
@@ -169,9 +162,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -188,7 +181,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -201,9 +194,9 @@
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

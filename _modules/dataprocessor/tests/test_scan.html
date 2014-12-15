@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>test_dataprocessor.test_pipes.test_scan &mdash; dataprocessor  documentation</title>
+    <title>dataprocessor.tests.test_scan &mdash; dataprocessor  documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,23 +44,18 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <h1>Source code for test_dataprocessor.test_pipes.test_scan</h1><div class="highlight"><pre>
+  <h1>Source code for dataprocessor.tests.test_scan</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
 <span class="sd">&quot;&quot;&quot;Test for scan.&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> \
-    <span class="o">+</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;../../../lib&quot;</span><span class="p">)]</span> \
-    <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-<span class="kn">from</span> <span class="nn">dataprocessor.pipes.scan</span> <span class="kn">import</span> <span class="n">directory</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
+<span class="kn">from</span> <span class="nn">..pipes.scan</span> <span class="kn">import</span> <span class="n">directory</span>
 
 
-<div class="viewcode-block" id="TestScan"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan">[docs]</a><span class="k">class</span> <span class="nc">TestScan</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan">[docs]</a><span class="k">class</span> <span class="nc">TestScan</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;Unittest for dataprocessor.pipes.scan.</span>
 
@@ -72,7 +67,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TestScan.setUp"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan.setUp"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Prepare test environment.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generate_test_directories</span><span class="p">()</span>
 </div>
@@ -114,12 +109,12 @@
              <span class="s">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;run2&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;run3&quot;</span><span class="p">))</span>
 
-<div class="viewcode-block" id="TestScan.test_directory_for_first_scan1"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan.test_directory_for_first_scan1">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan.test_directory_for_first_scan1"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan.test_directory_for_first_scan1">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Test for initial scan.&quot;&quot;&quot;</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span>
         <span class="c"># whitelist specifies directory.</span>
-        <span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">])</span>
+        <span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">root_dir</span><span class="p">,</span>
              <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[],</span>
@@ -143,7 +138,7 @@
              <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestScan.test_directory_for_first_scan2"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan.test_directory_for_first_scan2">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan.test_directory_for_first_scan2"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan.test_directory_for_first_scan2">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Test for initial scan.&quot;&quot;&quot;</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span>
@@ -173,13 +168,13 @@
              <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestScan.test_directory_for_first_scan3"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan.test_directory_for_first_scan3">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan.test_directory_for_first_scan3"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan.test_directory_for_first_scan3">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Test for initial scan.&quot;&quot;&quot;</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span>
         <span class="c"># whitelist has `..`.</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span>
-                              <span class="p">[</span><span class="s">&quot;../data&quot;</span><span class="p">])</span>
+                              <span class="s">&quot;../data&quot;</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s">&quot;run0&quot;</span><span class="p">,</span> <span class="s">&quot;run0&quot;</span><span class="p">),</span>
              <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[],</span>
@@ -210,13 +205,13 @@
              <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestScan.test_directory_for_first_scan4"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan.test_directory_for_first_scan4">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan.test_directory_for_first_scan4"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan.test_directory_for_first_scan4">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_first_scan4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Test for initial scan with symbolic link.&quot;&quot;&quot;</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span>
         <span class="c"># followlinks is `True`.</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span>
-                              <span class="p">[</span><span class="s">&quot;data/test.conf&quot;</span><span class="p">],</span> <span class="n">followlinks</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                              <span class="s">&quot;data/test.conf&quot;</span><span class="p">,</span> <span class="n">followlinks</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">root_dir</span><span class="p">,</span>
              <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[],</span>
@@ -237,7 +232,7 @@
              <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestScan.test_directory_for_rescan"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan.test_directory_for_rescan">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_rescan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan.test_directory_for_rescan"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan.test_directory_for_rescan">[docs]</a>    <span class="k">def</span> <span class="nf">test_directory_for_rescan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Test for rescan.&quot;&quot;&quot;</span>
         <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s">&quot;run0&quot;</span><span class="p">),</span>
@@ -245,7 +240,7 @@
                       <span class="s">&#39;children&#39;</span><span class="p">:</span> <span class="p">[],</span>  <span class="c"># empty</span>
                       <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;run0&#39;</span><span class="p">,</span>
                       <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">}]</span>
-        <span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;*.conf&quot;</span><span class="p">])</span>
+        <span class="n">node_list</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span> <span class="s">&quot;*.conf&quot;</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s">&#39;run0&#39;</span><span class="p">),</span>
              <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">root_dir</span><span class="p">],</span>             <span class="c"># fill</span>
@@ -290,7 +285,7 @@
              <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestScan.test_rescan_failed"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_scan.TestScan.test_rescan_failed">[docs]</a>    <span class="k">def</span> <span class="nf">test_rescan_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestScan.test_rescan_failed"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_scan.TestScan.test_rescan_failed">[docs]</a>    <span class="k">def</span> <span class="nf">test_rescan_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">root_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s">&quot;run0&quot;</span><span class="p">),</span>
                       <span class="s">&#39;children&#39;</span><span class="p">:</span> <span class="p">[],</span>  <span class="c"># empty and no parents key.</span>
@@ -303,9 +298,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -322,7 +317,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -335,9 +330,9 @@
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>test_dataprocessor.test_pipes.test_move_node &mdash; dataprocessor  documentation</title>
+    <title>dataprocessor.tests.test_move_node &mdash; dataprocessor  documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,30 +44,25 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <h1>Source code for test_dataprocessor.test_pipes.test_move_node</h1><div class="highlight"><pre>
+  <h1>Source code for dataprocessor.tests.test_move_node</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> \
-    <span class="o">+</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;../../../lib&quot;</span><span class="p">)]</span> \
-    <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-<span class="kn">from</span> <span class="nn">dataprocessor.pipes.move_node</span> <span class="kn">import</span> <span class="n">move_node</span>
-<span class="kn">from</span> <span class="nn">dataprocessor.nodes</span> <span class="kn">import</span> <span class="n">get</span>
-<span class="kn">from</span> <span class="nn">dataprocessor.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
+<span class="kn">from</span> <span class="nn">..pipes.move_node</span> <span class="kn">import</span> <span class="n">move_node</span>
+<span class="kn">from</span> <span class="nn">..nodes</span> <span class="kn">import</span> <span class="n">get</span>
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
 
 
-<div class="viewcode-block" id="TestMoveNode"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_move_node.TestMoveNode">[docs]</a><span class="k">class</span> <span class="nc">TestMoveNode</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMoveNode"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_move_node.TestMoveNode">[docs]</a><span class="k">class</span> <span class="nc">TestMoveNode</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TestMoveNode.test_move_dir2dir"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_move_node.TestMoveNode.test_move_dir2dir">[docs]</a>    <span class="k">def</span> <span class="nf">test_move_dir2dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMoveNode.test_move_dir2dir"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_move_node.TestMoveNode.test_move_dir2dir">[docs]</a>    <span class="k">def</span> <span class="nf">test_move_dir2dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        move dir to dir</span>
 
@@ -75,7 +70,6 @@
 <span class="sd">        mv tmpdir/p1/run02 tmpdir/p2/</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">from_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span><span class="p">,</span> <span class="s">&quot;p1/run02&quot;</span><span class="p">)</span>
         <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span><span class="p">,</span> <span class="s">&quot;p2&quot;</span><span class="p">)</span>
         <span class="n">changed_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span><span class="p">,</span> <span class="s">&quot;p2&quot;</span><span class="p">,</span> <span class="s">&quot;run02&quot;</span><span class="p">)</span>
@@ -84,7 +78,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="n">move_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">changed_path</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="TestMoveNode.test_move_and_rename"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_move_node.TestMoveNode.test_move_and_rename">[docs]</a>    <span class="k">def</span> <span class="nf">test_move_and_rename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMoveNode.test_move_and_rename"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_move_node.TestMoveNode.test_move_and_rename">[docs]</a>    <span class="k">def</span> <span class="nf">test_move_and_rename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        move dir and rename it.</span>
 
@@ -101,7 +95,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="n">move_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">changed_path</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="TestMoveNode.test_fail1"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_move_node.TestMoveNode.test_fail1">[docs]</a>    <span class="k">def</span> <span class="nf">test_fail1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMoveNode.test_fail1"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_move_node.TestMoveNode.test_fail1">[docs]</a>    <span class="k">def</span> <span class="nf">test_fail1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        fail to move dir because the destination path is already existing file.</span>
 
@@ -117,7 +111,7 @@
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">DataProcessorError</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="n">move_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">from_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestMoveNode.test_fail2"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_move_node.TestMoveNode.test_fail2">[docs]</a>    <span class="k">def</span> <span class="nf">test_fail2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMoveNode.test_fail2"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_move_node.TestMoveNode.test_fail2">[docs]</a>    <span class="k">def</span> <span class="nf">test_fail2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        fail to node dir because the authority of the destination is invalid.</span>
 
@@ -135,7 +129,7 @@
         <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="mo">0600</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">o_nl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestMoveNode.test_move_tree"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_move_node.TestMoveNode.test_move_tree">[docs]</a>    <span class="k">def</span> <span class="nf">test_move_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMoveNode.test_move_tree"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_move_node.TestMoveNode.test_move_tree">[docs]</a>    <span class="k">def</span> <span class="nf">test_move_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        move dir tree.</span>
 
@@ -153,7 +147,7 @@
                 <span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir_path</span><span class="p">,</span> <span class="n">p</span><span class="p">)))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">p</span><span class="p">)))</span>
 </div>
-<div class="viewcode-block" id="TestMoveNode.test_rename_tree"><a class="viewcode-back" href="../../../test-references/test_dataprocessor.test_pipes.html#test_dataprocessor.test_pipes.test_move_node.TestMoveNode.test_rename_tree">[docs]</a>    <span class="k">def</span> <span class="nf">test_rename_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMoveNode.test_rename_tree"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_move_node.TestMoveNode.test_rename_tree">[docs]</a>    <span class="k">def</span> <span class="nf">test_rename_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        rename dir tree.</span>
 
@@ -175,9 +169,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -194,7 +188,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -207,9 +201,9 @@
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

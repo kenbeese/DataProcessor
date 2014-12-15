@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,7 +44,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for dataprocessor.pipes.scan</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
@@ -66,7 +66,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    root : str</span>
 <span class="sd">        Scan directories recursively under the directory `root`.</span>
-<span class="sd">    whitelist : list of str</span>
+<span class="sd">    whitelist : list of str or str</span>
 <span class="sd">        Run node has one or more file or directory</span>
 <span class="sd">        which satisfies run_node_dir/`whitelist`.</span>
 <span class="sd">        And project nodes satisfy project_dir/run_node_dir/`whitelist`.</span>
@@ -94,9 +94,10 @@
 <span class="sd">    &gt;&gt;&gt; node_list = directory([], &quot;scandir_path&quot;, [&quot;*.conf&quot;])</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">root</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
     <span class="n">followlinks</span> <span class="o">=</span> <span class="n">boolenize</span><span class="p">(</span><span class="n">followlinks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">whitelist</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">whitelist</span> <span class="o">=</span> <span class="p">[</span><span class="n">whitelist</span><span class="p">]</span>
     <span class="n">scan_nodelist</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">followlinks</span><span class="o">=</span><span class="n">followlinks</span><span class="p">):</span>
         <span class="n">dirs</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
@@ -134,8 +135,12 @@
 <div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.scan.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">pipe_dics</span><span class="p">):</span>
     <span class="n">pipe_dics</span><span class="p">[</span><span class="s">&quot;scan_directory&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">directory</span><span class="p">,</span>
-        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="s">&quot;whitelist&quot;</span><span class="p">],</span>
-        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;followlinks&quot;</span><span class="p">],</span>
+        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s">&quot;root&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;path of root directory&quot;</span><span class="p">}),</span>
+                 <span class="p">(</span><span class="s">&quot;whitelist&quot;</span><span class="p">,</span>
+                  <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;whitelist of file which exists in run directory&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;nargs&quot;</span><span class="p">:</span> <span class="s">&quot;+&quot;</span><span class="p">,</span> <span class="p">}),</span>
+                 <span class="p">],</span>
+        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s">&quot;followlinks&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;whether scan in symbolic link&quot;</span><span class="p">})],</span>
         <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;Scan nodes from all directories under the directory &#39;root&#39;.&quot;</span><span class="p">,</span>
     <span class="p">}</span></div>
 </pre></div>
@@ -143,9 +148,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -162,7 +167,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -175,9 +180,9 @@
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

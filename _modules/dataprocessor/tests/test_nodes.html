@@ -6,63 +6,58 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>test_dataprocessor.test_nodes &mdash; dataprocessor  documentation</title>
+    <title>dataprocessor.tests.test_nodes &mdash; dataprocessor  documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '../../../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <h1>Source code for test_dataprocessor.test_nodes</h1><div class="highlight"><pre>
+  <h1>Source code for dataprocessor.tests.test_nodes</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
 <span class="sd">&quot;&quot;&quot;Test for nodes.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">from</span> <span class="nn">.utility</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> \
-    <span class="o">+</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;../../../lib&quot;</span><span class="p">)]</span> \
-    <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-<span class="kn">import</span> <span class="nn">dataprocessor.nodes</span> <span class="kn">as</span> <span class="nn">nodes</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">nodes</span>
 
 
-<div class="viewcode-block" id="TestNodes"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes">[docs]</a><span class="k">class</span> <span class="nc">TestNodes</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes">[docs]</a><span class="k">class</span> <span class="nc">TestNodes</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;Unittest for dataprocessor.nodes.</span>
 
@@ -73,7 +68,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TestNodes.setUp"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.setUp"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">],</span>
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">,</span> <span class="s">&quot;/path/3&quot;</span><span class="p">]},</span>
@@ -84,7 +79,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/3&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/0&quot;</span><span class="p">],</span>
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_add_skip_validate_link"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_add_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_add_skip_validate_link"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_add_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">added_node</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/added/path&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span>
                       <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}</span>
@@ -99,7 +94,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/added/path&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_add_validate_link1"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_add_validate_link1">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_validate_link1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_add_validate_link1"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_add_validate_link1">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_validate_link1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">added_node</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/added/path&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span>
                       <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}</span>
@@ -115,7 +110,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/added/path&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_add_validate_link2"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_add_validate_link2">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_validate_link2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_add_validate_link2"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_add_validate_link2">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_validate_link2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">added_node</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/added/path&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span>
                       <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/3&quot;</span><span class="p">]}</span>
@@ -132,7 +127,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/added/path&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/3&quot;</span><span class="p">]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_add_update_skip_validate_link"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_add_update_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_update_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_add_update_skip_validate_link"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_add_update_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_update_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">new_node</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span>
@@ -152,7 +147,7 @@
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_add_update_validate_link"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_add_update_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_update_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_add_update_validate_link"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_add_update_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_update_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">new_node</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/1&quot;</span><span class="p">,</span>
@@ -172,7 +167,7 @@
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_add_replace_skip_validate_link"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_add_replace_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_replace_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_add_replace_skip_validate_link"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_add_replace_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_replace_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">node_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;madoka&quot;</span>
         <span class="n">new_node</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -191,7 +186,7 @@
         <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_remove_skip_validate_link"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_remove_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_remove_skip_validate_link"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_remove_skip_validate_link">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_skip_validate_link</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
@@ -200,7 +195,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/3&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/0&quot;</span><span class="p">],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_remove_validate_link1"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_remove_validate_link1">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_validate_link1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_remove_validate_link1"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_remove_validate_link1">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_validate_link1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;/path/0&quot;</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
@@ -209,7 +204,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/3&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_remove_validate_link2"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_remove_validate_link2">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_validate_link2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_remove_validate_link2"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_remove_validate_link2">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_validate_link2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;/path/1&quot;</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
@@ -219,7 +214,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/3&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/0&quot;</span><span class="p">],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_remove_validate_link3"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_remove_validate_link3">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_validate_link3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_remove_validate_link3"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_remove_validate_link3">[docs]</a>    <span class="k">def</span> <span class="nf">test_remove_validate_link3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
         <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;/path/3&quot;</span><span class="p">)</span>
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
@@ -229,7 +224,7 @@
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/2&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/0&quot;</span><span class="p">],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_validate_link_complete"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_validate_link_complete">[docs]</a>    <span class="k">def</span> <span class="nf">test_validate_link_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_validate_link_complete"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_validate_link_complete">[docs]</a>    <span class="k">def</span> <span class="nf">test_validate_link_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">],</span>
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">]},</span>                      <span class="c"># incomplete</span>
@@ -243,7 +238,7 @@
         <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node_list</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_validate_link_remove"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_validate_link_remove">[docs]</a>    <span class="k">def</span> <span class="nf">test_validate_link_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_validate_link_remove"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_validate_link_remove">[docs]</a>    <span class="k">def</span> <span class="nf">test_validate_link_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span>
              <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">,</span> <span class="s">&quot;/not/exists2&quot;</span><span class="p">],</span>  <span class="c"># does not exist</span>
@@ -259,7 +254,7 @@
         <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node_list</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="bp">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TestNodes.test_merge_duplicate"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestNodes.test_merge_duplicate">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge_duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestNodes.test_merge_duplicate"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestNodes.test_merge_duplicate">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge_duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">],</span>
              <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">,</span> <span class="s">&quot;/path/3&quot;</span><span class="p">]},</span>
@@ -287,9 +282,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node_list_ans</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="TestChangePath"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestChangePath">[docs]</a><span class="k">class</span> <span class="nc">TestChangePath</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
+<div class="viewcode-block" id="TestChangePath"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestChangePath">[docs]</a><span class="k">class</span> <span class="nc">TestChangePath</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
 
-<div class="viewcode-block" id="TestChangePath.test_change_path_having_children"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestChangePath.test_change_path_having_children">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_path_having_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestChangePath.test_change_path_having_children"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestChangePath.test_change_path_having_children">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_path_having_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">after_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;moved_dir&quot;</span><span class="p">)</span>
         <span class="n">before_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">after_path</span><span class="p">)</span>
@@ -306,7 +301,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">after_path</span><span class="p">,</span> <span class="n">child_node</span><span class="p">[</span><span class="s">&quot;parents&quot;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="n">before_path</span><span class="p">,</span> <span class="n">child_node</span><span class="p">[</span><span class="s">&quot;parents&quot;</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="TestChangePath.test_change_path_having_parents"><a class="viewcode-back" href="../../test-references/test_dataprocessor.html#test_dataprocessor.test_nodes.TestChangePath.test_change_path_having_parents">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_path_having_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestChangePath.test_change_path_having_parents"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_nodes.TestChangePath.test_change_path_having_parents">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_path_having_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">after_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;moved_dir&quot;</span><span class="p">)</span>
         <span class="n">before_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;run01&quot;</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">after_path</span><span class="p">)</span>
@@ -325,11 +320,11 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -344,22 +339,22 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

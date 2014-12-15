@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,7 +44,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for dataprocessor.rc</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
@@ -54,17 +54,23 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">io</span>
 <span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
 
 
-<span class="n">default_rcpath</span> <span class="o">=</span> <span class="s">&quot;~/.dataprocessor.ini&quot;</span>
+<span class="k">if</span> <span class="s">&quot;DP_DEBUG_RCPATH&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&quot;DP_DEBUG_RCPATH&quot;</span><span class="p">]:</span>
+    <span class="n">default_rcpath</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&quot;DP_DEBUG_RCPATH&quot;</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">default_rcpath</span> <span class="o">=</span> <span class="s">&quot;~/.dataprocessor.ini&quot;</span>
 <span class="n">rc_section</span> <span class="o">=</span> <span class="s">&quot;data&quot;</span>
 
 
 <div class="viewcode-block" id="DataProcessorRcError"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.DataProcessorRcError">[docs]</a><span class="k">class</span> <span class="nc">DataProcessorRcError</span><span class="p">(</span><span class="n">DataProcessorError</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Exception about configure file.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
         <span class="n">DataProcessorError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
 
@@ -346,9 +352,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -365,7 +371,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -378,9 +384,9 @@
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

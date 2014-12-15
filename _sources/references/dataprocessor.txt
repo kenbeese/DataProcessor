@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     dataprocessor.pipes
+    dataprocessor.tests
 
 Submodules
 ----------

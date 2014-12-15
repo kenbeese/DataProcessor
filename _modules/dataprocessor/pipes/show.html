@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,38 +44,18 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for dataprocessor.pipes.show</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utility</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="nb">filter</span> <span class="k">as</span> <span class="n">flt</span>
 
 <span class="n">default_format</span> <span class="o">=</span> <span class="s">&quot;{path}&quot;</span>
 
 
-<div class="viewcode-block" id="show"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.show.show">[docs]</a><span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">show_format</span><span class="o">=</span><span class="n">default_format</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Show node with specified format.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    show_format : str, optional</span>
-<span class="sd">        specify format you want to output.</span>
-<span class="sd">        You should use new `format` function format.</span>
-<span class="sd">        This string will be formatted by `show_format.format(**node)`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    node_list</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">show_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">node</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">node_list</span>
-
-</div>
-<div class="viewcode-block" id="show_runs"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.show.show_runs">[docs]</a><span class="k">def</span> <span class="nf">show_runs</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">show_format</span><span class="o">=</span><span class="n">default_format</span><span class="p">):</span>
+<div class="viewcode-block" id="show_runs"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.show.show_runs">[docs]</a><span class="k">def</span> <span class="nf">show_runs</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">show_format</span><span class="o">=</span><span class="n">default_format</span><span class="p">,</span>
+              <span class="n">parameters</span><span class="o">=</span><span class="p">[]):</span>
     <span class="sd">&quot;&quot;&quot; Show run list.</span>
 
 <span class="sd">    Parameters</span>
@@ -86,6 +66,8 @@
 <span class="sd">        specify format you want to output.</span>
 <span class="sd">        You should use new `format` function format.</span>
 <span class="sd">        This string will be formatted by `show_format.format(**node)`.</span>
+<span class="sd">    parameters: [str], optional</span>
+<span class="sd">        parameters to be displayed.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -97,7 +79,16 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">runs</span> <span class="o">=</span> <span class="n">node_list</span>
     <span class="n">runs</span> <span class="o">=</span> <span class="n">flt</span><span class="o">.</span><span class="n">node_type</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="s">&quot;run&quot;</span><span class="p">)</span>
-    <span class="n">show</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">show_format</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
+        <span class="n">cfg_str</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="s">&quot;configure&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]:</span>
+                    <span class="n">cfg_str</span> <span class="o">+=</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">p</span> <span class="o">+</span> <span class="s">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">][</span><span class="n">p</span><span class="p">])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">show_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">node</span><span class="p">)</span> <span class="o">+</span> <span class="n">cfg_str</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">default_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">node</span><span class="p">)</span> <span class="o">+</span> <span class="n">cfg_str</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">node_list</span>
 
 </div>
@@ -117,7 +108,11 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">projects</span> <span class="o">=</span> <span class="n">flt</span><span class="o">.</span><span class="n">node_type</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;project&quot;</span><span class="p">)</span>
-    <span class="n">show</span><span class="p">(</span><span class="n">projects</span><span class="p">,</span> <span class="n">show_format</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">projects</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">show_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">node</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">default_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">node</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">node_list</span>
 
 </div>
@@ -125,7 +120,12 @@
     <span class="n">pipe_dics</span><span class="p">[</span><span class="s">&quot;show_runs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">show_runs</span><span class="p">,</span>
         <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;project&quot;</span><span class="p">,</span> <span class="s">&quot;show_format&quot;</span><span class="p">],</span>
+        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s">&quot;project&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;project name&quot;</span><span class="p">}),</span>
+                 <span class="p">(</span><span class="s">&quot;show_format&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;format&quot;</span><span class="p">}),</span>
+                 <span class="p">(</span><span class="s">&quot;parameters&quot;</span><span class="p">,</span> <span class="p">{</span>
+                     <span class="s">&quot;nargs&quot;</span><span class="p">:</span> <span class="s">&quot;+&quot;</span><span class="p">,</span>
+                     <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;parameters to be displayed&quot;</span>
+                 <span class="p">})],</span>
         <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;output runs path&quot;</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">pipe_dics</span><span class="p">[</span><span class="s">&quot;show_projects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
@@ -139,9 +139,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -158,7 +158,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -171,9 +171,9 @@
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

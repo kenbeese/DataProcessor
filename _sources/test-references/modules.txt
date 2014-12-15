@@ -4,4 +4,3 @@ test_dataprocessor
 .. toctree::
    :maxdepth: 4
 
-   test_dataprocessor

@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="dataprocessor  documentation" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -42,15 +42,15 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-handler">
 <span id="handler-module"></span><h1>handler module<a class="headerlink" href="#module-handler" title="Permalink to this headline">¶</a></h1>
 <p>Handler of HTTP requasts and responses.</p>
 <dl class="class">
 <dt id="handler.Request">
-<em class="property">class </em><tt class="descclassname">handler.</tt><tt class="descname">Request</tt><big>(</big><em>environ={}</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">handler.</code><code class="descname">Request</code><span class="sig-paren">(</span><em>environ={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>A class handling HTTP requests.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -59,17 +59,17 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#handler.Request.get" title="handler.Request.get"><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt></a>(name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#handler.Request.get" title="handler.Request.get"><code class="xref py py-obj docutils literal"><span class="pre">get</span></code></a>(name)</td>
 <td>Get value of request.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#handler.Request.has" title="handler.Request.has"><tt class="xref py py-obj docutils literal"><span class="pre">has</span></tt></a>(name)</td>
+<tr class="row-even"><td><a class="reference internal" href="#handler.Request.has" title="handler.Request.has"><code class="xref py py-obj docutils literal"><span class="pre">has</span></code></a>(name)</td>
 <td>Ask whether request has <cite>name</cite>.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="handler.Request.get">
-<tt class="descname">get</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Request.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Request.get" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Request.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Request.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get value of request.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -99,7 +99,7 @@
 
 <dl class="method">
 <dt id="handler.Request.has">
-<tt class="descname">has</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Request.has"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Request.has" title="Permalink to this definition">¶</a></dt>
+<code class="descname">has</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Request.has"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Request.has" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ask whether request has <cite>name</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -122,8 +122,8 @@
 
 <dl class="class">
 <dt id="handler.Response">
-<em class="property">class </em><tt class="descclassname">handler.</tt><tt class="descname">Response</tt><big>(</big><em>content_type='html'</em>, <em>charset='utf-8'</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">handler.</code><code class="descname">Response</code><span class="sig-paren">(</span><em>content_type='html'</em>, <em>charset='utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The class handring Response of HTTP.</p>
 <p>You can use this class by making instance of this class
 before sending Response.</p>
@@ -158,42 +158,42 @@ before sending Response.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#handler.Response.get_header" title="handler.Response.get_header"><tt class="xref py py-obj docutils literal"><span class="pre">get_header</span></tt></a>(name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#handler.Response.get_header" title="handler.Response.get_header"><code class="xref py py-obj docutils literal"><span class="pre">get_header</span></code></a>(name)</td>
 <td>Get the header which already set and return object.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#handler.Response.make_output" title="handler.Response.make_output"><tt class="xref py py-obj docutils literal"><span class="pre">make_output</span></tt></a>([timestamp])</td>
+<tr class="row-even"><td><a class="reference internal" href="#handler.Response.make_output" title="handler.Response.make_output"><code class="xref py py-obj docutils literal"><span class="pre">make_output</span></code></a>([timestamp])</td>
 <td>Make Response text including header and text and return str.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#handler.Response.set_body" title="handler.Response.set_body"><tt class="xref py py-obj docutils literal"><span class="pre">set_body</span></tt></a>(bodystr)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#handler.Response.set_body" title="handler.Response.set_body"><code class="xref py py-obj docutils literal"><span class="pre">set_body</span></code></a>(bodystr)</td>
 <td>Set the body of response.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#handler.Response.set_header" title="handler.Response.set_header"><tt class="xref py py-obj docutils literal"><span class="pre">set_header</span></tt></a>(name,&nbsp;value)</td>
+<tr class="row-even"><td><a class="reference internal" href="#handler.Response.set_header" title="handler.Response.set_header"><code class="xref py py-obj docutils literal"><span class="pre">set_header</span></code></a>(name,&nbsp;value)</td>
 <td>Set header of Response.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="handler.Response.get_header">
-<tt class="descname">get_header</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Response.get_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.get_header" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_header</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Response.get_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.get_header" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the header which already set and return object.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="handler.Response.make_output">
-<tt class="descname">make_output</tt><big>(</big><em>timestamp=None</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Response.make_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.make_output" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_output</code><span class="sig-paren">(</span><em>timestamp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Response.make_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.make_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make Response text including header and text and return str.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="handler.Response.set_body">
-<tt class="descname">set_body</tt><big>(</big><em>bodystr</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Response.set_body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.set_body" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_body</code><span class="sig-paren">(</span><em>bodystr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Response.set_body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.set_body" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the body of response.</p>
 <p>See Examples of this class.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="handler.Response.set_header">
-<tt class="descname">set_header</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="../_modules/handler.html#Response.set_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.set_header" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_header</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#Response.set_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.Response.set_header" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set header of Response.</p>
 </dd></dl>
 
@@ -201,12 +201,12 @@ before sending Response.</p>
 
 <dl class="function">
 <dt id="handler.operation_fail">
-<tt class="descclassname">handler.</tt><tt class="descname">operation_fail</tt><big>(</big><em>msg=''</em>, <em>code=1</em><big>)</big><a class="reference internal" href="../_modules/handler.html#operation_fail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.operation_fail" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">handler.</code><code class="descname">operation_fail</code><span class="sig-paren">(</span><em>msg=''</em>, <em>code=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#operation_fail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.operation_fail" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="handler.operation_success">
-<tt class="descclassname">handler.</tt><tt class="descname">operation_success</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/handler.html#operation_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.operation_success" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">handler.</code><code class="descname">operation_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/handler.html#operation_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#handler.operation_success" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -215,14 +215,16 @@ before sending Response.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/references/handler.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/references/handler.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -239,7 +241,7 @@ before sending Response.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -251,9 +253,9 @@ before sending Response.</p>
         <li><a href="../index.html">dataprocessor  documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

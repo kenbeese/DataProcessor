@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,7 +44,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for dataprocessor.pipes.filter</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
@@ -56,21 +56,38 @@
     <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;filter_project&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">flt</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
         <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span>
-        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;filter by project path&quot;</span><span class="p">,</span>
+        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;filter by project path.</span>
+<span class="s">        This pipe filters out runs which don&#39;t belong to the project,</span>
+<span class="s">        and should be used with &#39;-o&#39; in dpmanip.</span>
+<span class="s">        &quot;&quot;&quot;</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;filter_node_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">flt</span><span class="o">.</span><span class="n">node_type</span><span class="p">,</span>
         <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;node_type&quot;</span><span class="p">],</span>
-        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;filter by node type&quot;</span><span class="p">,</span>
+        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;filter by node type.</span>
+<span class="s">        This pipe filters out nodes which has different type attribute,</span>
+<span class="s">        and should be used with &#39;-o&#39; option in dpmanip.</span>
+<span class="s">        &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;filter_prefix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">flt</span><span class="o">.</span><span class="n">prefix_path</span><span class="p">,</span>
+        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s">&quot;prefix_path&quot;</span><span class="p">,</span>
+                  <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;Absolute path or relative path.</span>
+<span class="s">                   The relative path will be expanded to absolute path.&quot;&quot;&quot;</span><span class="p">})],</span>
+        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;filter by prefix_path.</span>
+<span class="s">        This pipe filters out runs, projects and figures</span>
+<span class="s">        whose path does not start with the prefix,</span>
+<span class="s">        and should be used with &#39;-o&#39; option in dpmanip.</span>
+<span class="s">        &quot;&quot;&quot;</span>
     <span class="p">}</span></div>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -87,7 +104,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -100,9 +117,9 @@
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>

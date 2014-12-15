@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,7 +44,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for dataprocessor.argparsers</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
@@ -55,7 +55,6 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pipes</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">rc</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">server</span>
-
 
 
 <div class="viewcode-block" id="dpmanip"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.argparsers.dpmanip">[docs]</a><span class="k">def</span> <span class="nf">dpmanip</span><span class="p">():</span>
@@ -76,20 +75,20 @@
     <span class="n">sub_psr</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;subcommands&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s">&quot;pipes&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">pipes</span><span class="o">.</span><span class="n">pipes_dics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">pipe_psr</span> <span class="o">=</span> <span class="n">sub_psr</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">val</span><span class="p">[</span><span class="s">&quot;desc&quot;</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">val</span><span class="p">[</span><span class="s">&quot;args&quot;</span><span class="p">]:</span>
-            <span class="n">pipe_psr</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">val</span><span class="p">[</span><span class="s">&quot;args&quot;</span><span class="p">]:</span>
+            <span class="n">pipe_psr</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">attr</span><span class="p">)</span>
         <span class="k">if</span> <span class="s">&quot;kwds&quot;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">kwd</span> <span class="ow">in</span> <span class="n">val</span><span class="p">[</span><span class="s">&quot;kwds&quot;</span><span class="p">]:</span>
-                <span class="n">pipe_psr</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--&quot;</span> <span class="o">+</span> <span class="n">kwd</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">kwd</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">val</span><span class="p">[</span><span class="s">&quot;kwds&quot;</span><span class="p">]:</span>
+                <span class="n">pipe_psr</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--&quot;</span> <span class="o">+</span> <span class="n">kwd</span><span class="p">,</span> <span class="o">**</span><span class="n">attr</span><span class="p">)</span>
         <span class="n">pipe_psr</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">val</span><span class="o">=</span><span class="n">val</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parser</span>
 
 </div>
-<div class="viewcode-block" id="genzshcomp"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.argparsers.genzshcomp">[docs]</a><span class="k">def</span> <span class="nf">genzshcomp</span><span class="p">():</span>
+<div class="viewcode-block" id="dpgenzshcomp"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.argparsers.dpgenzshcomp">[docs]</a><span class="k">def</span> <span class="nf">dpgenzshcomp</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
     <span class="n">executable_names</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s">&quot;dpmanip&quot;</span><span class="p">,</span>
-        <span class="s">&quot;genzshcomp&quot;</span><span class="p">,</span>
+        <span class="s">&quot;dpgenzshcomp&quot;</span><span class="p">,</span>
         <span class="s">&quot;dataprocessor&quot;</span><span class="p">,</span>
         <span class="s">&quot;register_figure&quot;</span><span class="p">,</span>
         <span class="s">&quot;dpserver&quot;</span>
@@ -117,7 +116,7 @@
     <span class="p">}</span>
     <span class="n">root_cfg</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span>
-                                   <span class="s">&quot;../../server&quot;</span><span class="p">)),</span>
+                                                <span class="s">&quot;../../server&quot;</span><span class="p">)),</span>
         <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;The root dir where the server stands&quot;</span>
     <span class="p">}</span>
     <span class="n">logfile_cfg</span> <span class="o">=</span> <span class="p">{</span>
@@ -178,9 +177,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -197,7 +196,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -210,9 +209,9 @@
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>
