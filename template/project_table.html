@@ -1,3 +1,4 @@
+<h2>Project List</h2>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -9,7 +10,7 @@
   <tbody>
     <tr>
       {%- for p in projects %}
-      <td>{{p.name}}</td>
+      <td><a href="#{{p.path}}">{{p.name}}</a></td>
       <td>{{p.comment}}</td>
       <td>{{p.path}}</td>
       {%- endfor %}
