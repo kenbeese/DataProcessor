@@ -6,7 +6,7 @@ import os.path
 import sys
 import json
 import traceback
-from io import BytesIO as StringIO
+from StringIO import StringIO
 from contextlib import contextmanager
 import cgitb
 cgitb.enable()

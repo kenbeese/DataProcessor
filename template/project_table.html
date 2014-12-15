@@ -1,0 +1,18 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>name</td>
+      <td>comment</td>
+      <td>path</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {%- for p in projects %}
+      <td>{{p.name}}</td>
+      <td>{{p.comment}}</td>
+      <td>{{p.path}}</td>
+      {%- endfor %}
+    </tr>
+  </tbody>
+</table>
