@@ -4,10 +4,26 @@ test_dataprocessor.test_pipes package
 Submodules
 ----------
 
+test_dataprocessor.test_pipes.test_add_conf module
+--------------------------------------------------
+
+.. automodule:: test_dataprocessor.test_pipes.test_add_conf
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 test_dataprocessor.test_pipes.test_add_node module
 --------------------------------------------------
 
 .. automodule:: test_dataprocessor.test_pipes.test_add_node
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test_dataprocessor.test_pipes.test_add_run module
+-------------------------------------------------
+
+.. automodule:: test_dataprocessor.test_pipes.test_add_run
     :members:
     :undoc-members:
     :show-inheritance:
@@ -20,10 +36,26 @@ test_dataprocessor.test_pipes.test_configure module
     :undoc-members:
     :show-inheritance:
 
+test_dataprocessor.test_pipes.test_move_node module
+---------------------------------------------------
+
+.. automodule:: test_dataprocessor.test_pipes.test_move_node
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 test_dataprocessor.test_pipes.test_scan module
 ----------------------------------------------
 
 .. automodule:: test_dataprocessor.test_pipes.test_scan
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test_dataprocessor.test_pipes.test_untag module
+-----------------------------------------------
+
+.. automodule:: test_dataprocessor.test_pipes.test_untag
     :members:
     :undoc-members:
     :show-inheritance:

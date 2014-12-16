@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,7 +44,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <h1>Source code for dataprocessor.gencompletion</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
@@ -65,6 +65,8 @@
 <span class="sd">    \[hoge\]</span>
 <span class="sd">    &gt;&gt;&gt; print(_escape_strings(&#39;[ho&quot;ge]&#39;))</span>
 <span class="sd">    \[ho\&quot;ge\]</span>
+<span class="sd">    &gt;&gt;&gt; print(_escape_strings(&quot;ho&#39;ge&quot;))</span>
+<span class="sd">    ho&#39;\&#39;&#39;ge</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">target_chars</span> <span class="o">=</span> <span class="s">&quot;[]</span><span class="se">\&quot;</span><span class="s">`&quot;</span>
@@ -74,8 +76,14 @@
     <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">target_chars</span><span class="p">:</span>
             <span class="n">string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">string</span>
+        <span class="k">if</span> <span class="n">string</span> <span class="ow">is</span> <span class="s">&quot;&#39;&quot;</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="s">&quot;&#39;</span><span class="se">\\</span><span class="s">&#39;&#39;&quot;</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
     <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_normalize_strings</span><span class="p">(</span><span class="n">strings</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_escape_strings</span><span class="p">(</span><span class="n">strings</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
 
 
 <div class="viewcode-block" id="CompletionGenerator"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.gencompletion.CompletionGenerator">[docs]</a><span class="k">class</span> <span class="nc">CompletionGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -181,7 +189,7 @@
         <span class="n">subcmds_with_help</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">subparser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subparser</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">subparser</span><span class="o">.</span><span class="n">_choices_actions</span><span class="p">:</span>
-            <span class="n">subcmds_with_help</span><span class="p">[</span><span class="n">action</span><span class="o">.</span><span class="n">dest</span><span class="p">]</span> <span class="o">=</span> <span class="n">_escape_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+            <span class="n">subcmds_with_help</span><span class="p">[</span><span class="n">action</span><span class="o">.</span><span class="n">dest</span><span class="p">]</span> <span class="o">=</span> <span class="n">_normalize_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
 
         <span class="c"># for subcmd without help</span>
         <span class="k">for</span> <span class="n">subcmdname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_subcmd_list</span><span class="p">():</span>
@@ -197,11 +205,18 @@
 
     <span class="k">def</span> <span class="nf">_get_option_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">argparse</span><span class="o">.</span><span class="n">_StoreAction</span><span class="p">)</span> <span class="ow">or</span> \
+               <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">argparse</span><span class="o">.</span><span class="n">_StoreConstAction</span><span class="p">):</span>
+                <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;: :_files&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">nargs</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;: :_files&quot;</span> <span class="o">*</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span>
         <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&#39;?&#39;</span><span class="p">:</span>
             <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;:: :_files&quot;</span>
-        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&quot;+&quot;</span> <span class="ow">or</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&#39;*&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&quot;+&quot;</span><span class="p">:</span>
+            <span class="c"># 10 is hard coding.</span>
+            <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;: :_files&quot;</span> <span class="o">+</span> <span class="s">&quot;:: :_files&quot;</span> <span class="o">*</span> <span class="mi">10</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">nargs</span> <span class="o">==</span> <span class="s">&#39;*&#39;</span><span class="p">:</span>
             <span class="c"># 10 is hard coding.</span>
             <span class="n">argfmt</span> <span class="o">=</span> <span class="s">&quot;:: :_files&quot;</span> <span class="o">*</span> <span class="mi">10</span>
         <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">choices</span><span class="p">:</span>
@@ -210,14 +225,14 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">short_opt</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">long_opt</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">help</span> <span class="o">=</span> <span class="n">_escape_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+            <span class="n">help</span> <span class="o">=</span> <span class="n">_normalize_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">help</span><span class="p">:</span>
                 <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;[&quot;</span> <span class="o">+</span> <span class="n">help</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span>
             <span class="k">return</span> <span class="s">&quot;&#39;(</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">)&#39;{</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">}&#39;</span><span class="si">%s%s</span><span class="s">&#39; </span><span class="se">\\</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="n">short_opt</span><span class="p">,</span> <span class="n">long_opt</span><span class="p">,</span> <span class="n">short_opt</span><span class="p">,</span> <span class="n">long_opt</span><span class="p">,</span> <span class="n">help</span><span class="p">,</span> <span class="n">argfmt</span><span class="p">)</span>
         <span class="c"># for one option</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">help</span> <span class="o">=</span> <span class="n">_escape_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
+            <span class="n">help</span> <span class="o">=</span> <span class="n">_normalize_strings</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">help</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">help</span><span class="p">:</span>
                 <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;[&quot;</span> <span class="o">+</span> <span class="n">help</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span>
             <span class="k">return</span> <span class="s">&quot;&#39;(</span><span class="si">%s</span><span class="s">)</span><span class="si">%s%s%s</span><span class="s">&#39; </span><span class="se">\\</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">option_strings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -270,9 +285,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -289,7 +304,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -302,9 +317,9 @@
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
