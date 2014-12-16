@@ -1,4 +1,4 @@
-<h2>Project List</h2>
+<h3>Project List</h3>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -8,12 +8,14 @@
     </tr>
   </thead>
   <tbody>
+    {%- for p in projects %}
     <tr>
-      {%- for p in projects %}
-      <td><a href="#{{p.path}}">{{p.name}}</a></td>
+      <td>
+        <a href="#{{p.path}}">{{p.name}}</a>
+      </td>
       <td>{{p.comment}}</td>
       <td>{{p.path}}</td>
-      {%- endfor %}
     </tr>
+    {%- endfor %}
   </tbody>
 </table>
