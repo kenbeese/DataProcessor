@@ -1,0 +1,15 @@
+#compdef dpgenzshcomp
+function _dpgenzshcomp (){
+    typeset -A opt_args
+    local context state line
+
+    integer int=1
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        ': :(dpmanip dpgenzshcomp dataprocessor register_figure dpserver)' \
+        '*::arguments:_files'
+    ret=0
+    return ret
+}
+_dpgenzshcomp
