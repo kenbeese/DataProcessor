@@ -12,7 +12,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main():
-    parser = dp.argparsers.genzshcomp()
+    parser = dp.argparsers.dpgenzshcomp()
     args = parser.parse_args()
     func = getattr(dp.argparsers, "%s" % args.EXECUTABLE)
     generator = dp.gencompletion.CompletionGenerator(
