@@ -16,6 +16,8 @@ def _escape_strings(strings):
     \[hoge\]
     >>> print(_escape_strings('[ho"ge]'))
     \[ho\"ge\]
+    >>> print(_escape_strings("ho'ge"))
+    ho'\''ge
 
     """
     target_chars = "[]\"`"
@@ -25,8 +27,14 @@ def _escape_strings(strings):
     for string in strings:
         if string in target_chars:
             string = '\\' + string
+        if string is "'":
+            string = "'\\''"
         ret.append(string)
     return "".join(ret)
+
+
+def _normalize_strings(strings):
+    return ' '.join(_escape_strings(strings).split())
 
 
 class CompletionGenerator(object):
@@ -132,7 +140,7 @@ function _%s_subcmd_list() {
         subcmds_with_help = {}
         subparser = self._get_subparser()
         for action in subparser._choices_actions:
-            subcmds_with_help[action.dest] = _escape_strings(action.help)
+            subcmds_with_help[action.dest] = _normalize_strings(action.help)
 
         # for subcmd without help
         for subcmdname in self._get_subcmd_list():
@@ -161,14 +169,14 @@ function _%s_subcmd_list() {
         if len(action.option_strings) == 2:
             short_opt = action.option_strings[0]
             long_opt = action.option_strings[1]
-            help = _escape_strings(action.help)
+            help = _normalize_strings(action.help)
             if help:
                 help = "[" + help + "]"
             return "'(%s %s)'{%s,%s}'%s%s' \\" % (
                 short_opt, long_opt, short_opt, long_opt, help, argfmt)
         # for one option
         if len(action.option_strings) == 1:
-            help = _escape_strings(action.help)
+            help = _normalize_strings(action.help)
             if help:
                 help = "[" + help + "]"
             return "'(%s)%s%s%s' \\" % (action.option_strings[0],
