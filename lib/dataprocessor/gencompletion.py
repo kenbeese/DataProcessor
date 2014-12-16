@@ -156,11 +156,18 @@ function _%s_subcmd_list() {
 
     def _get_option_string(self, action):
         argfmt = ""
+        if not action.nargs:
+            if isinstance(action, argparse._StoreAction) or \
+               isinstance(action, argparse._StoreConstAction):
+                argfmt = ": :_files"
         if isinstance(action.nargs, int) and action.nargs > 0:
             argfmt = ": :_files" * action.nargs
         if action.nargs == '?':
             argfmt = ":: :_files"
-        if action.nargs == "+" or action.nargs == '*':
+        if action.nargs == "+":
+            # 10 is hard coding.
+            argfmt = ": :_files" + ":: :_files" * 10
+        if action.nargs == '*':
             # 10 is hard coding.
             argfmt = ":: :_files" * 10
         if action.choices:
