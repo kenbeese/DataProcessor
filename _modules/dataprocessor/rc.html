@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,7 +44,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for dataprocessor.rc</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
@@ -293,7 +293,7 @@
         <span class="k">return</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_directory</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basket</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">basket</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">check_directory</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">basket_name</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">utility</span><span class="o">.</span><span class="n">ceck_directory</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basket</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">utility</span><span class="o">.</span><span class="n">check_directory</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basket</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="resolve_project_path"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.rc.resolve_project_path">[docs]</a><span class="k">def</span> <span class="nf">resolve_project_path</span><span class="p">(</span><span class="n">name_or_path</span><span class="p">,</span> <span class="n">create_dir</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
@@ -352,9 +352,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -371,7 +371,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -384,9 +384,9 @@
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
     </div>
   </body>
 </html>
