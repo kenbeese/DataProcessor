@@ -34,15 +34,34 @@ datadir以下にあるファイルは以下の通りです。
 これらのrunをScanしましょう
 
 ```sh
-dpmanip scan_directory /path/to/datadir "*.ini"  # 拡張子.iniのファイルがあるディレクトリをランとして認識してscan
-dpmanip scan_directory /path/to/datadir "*.conf" # 拡張子.confのファイルがあるディレクトリをランとして認識してscan
+dpmanip -s scan_directory /path/to/datadir "parameters.ini"  # parameters.iniのファイルがあるディレクトリをランとして認識してscan
+dpmanip -s scan_directory /path/to/datadir "*.conf" # 拡張子.confのファイルがあるディレクトリをランとして認識してscan
+```
+
+or
+
+```sh
+dpmanip -s scan_directory /path/to/datadir "*.ini" "parameters.conf" # 拡張子.ini or parameters.confのファイルがあるディレクトリをランとして認識してscan
+```
+
+スキャンした結果を表示してみる
+
+```sh
+dpmanip -s show_runs
+dpmanip -s show_projects
 ```
 
 ### 設定ファイルのスキャン
 
 ```sh
-dpmanip configure parameters.conf # parameters.confがあるrunで、このファイルを読み込む
-dpmanip configure parameters.ini  # parameters.iniがあるrunで、このファイルを読み込む
+dpmanip -s configure parameters.conf # parameters.confがあるrunで、このファイルを読み込む
+dpmanip -s configure parameters.ini  # parameters.iniがあるrunで、このファイルを読み込む
+```
+
+スキャンした結果を表示してみる
+
+```sh
+dpmanip -s show_runs --parameters nx
 ```
 
 遊んでみよう

@@ -271,6 +271,35 @@ dpmanip -s untag /path/of/run /path/of/project
 (かきかけ)
 [API reference](http://kenbeese.github.io/DataProcessor/index.html)
 
+#### `dataprocessor.gencompletion`の使い方
+
+自作スクリプトの引数やオプションのパーサーに
+python標準ライブラリーにある`argparse`を使えば、
+zshの補完定義が簡単に作れます。
+
+
+使い方は簡単。
+設定し終わった`argparse.ArgumentParser`のインスタンスを
+`dataprocessor.gencompletion.CompletionGenerator`に渡すだけ。
+
+
+以下はpypiにあるautopep8の補完を作成する場合
+
+```python
+#! /usr/bin/env python
+
+import dataprocessor as dp
+import autopep8
+
+def main():
+    parser = autopep8.create_parser() # argument parserのスクリプト作成
+    comp = dp.gencompletion.CompletionGenerator("autopep8", parser)
+    print comp.get()
+
+if __name__ == "__main__":
+    main()
+```
+
 ### お試し
 いきなり使うのは怖い場合はお試し用のデータディレクトリが`sample`にあります。
 詳しい使い方は[ここ](sample/sample_usage.md)。
