@@ -152,6 +152,19 @@ function _dpmanip-configure_no_section (){
 }
 
 
+function _dpmanip-show_runs (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--project)--project[project name]: :_files' \
+        '(--show_format)--show_format[format]: :_files' \
+        '(--parameters)--parameters[parameters to be displayed]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-save_json (){
     typeset -A opt_args
     local context state line
@@ -169,6 +182,17 @@ function _dpmanip-move_node (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-show_projects (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--show_format)--show_format[show_format]: :_files' \
         '*::arguments:_files'
 }
 
@@ -205,6 +229,7 @@ function _dpmanip_subcmd_list() {
         change_path:'change path of node'
         add_run:'Add run.'
         add_conf:'Add a new configure to the path.'
+        show_runs:'output runs path'
         filter_project:'filter by project path. This pipe filters out runs which don'\''t belong to the project, and should be used with '\''-o'\'' in dpmanip.'
         normalize:'normalize nodes (i.e. fill necessary field)'
         load_json:'load node_list from a JSON file'
@@ -213,6 +238,7 @@ function _dpmanip_subcmd_list() {
         save_json:'save node_list in a JSON file'
         filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
         move_node:'move node whose directory is also moved like as UNIX mv'
+        show_projects:'output project name'
         untag:'remove a tag from specified path'
         configure_no_section:'Read parameter file (without section)'
     )
