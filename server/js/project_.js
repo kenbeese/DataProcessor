@@ -10,6 +10,10 @@ function get_project(path) {
       $("section.dp-project")
         .empty()
         .append(table_html);
+      $("ol#LocationBar>li>a.dp-project")
+        .empty()
+        .attr("dp-path", path)
+        .append(path); // TODO should be name
     }
   );
 }
