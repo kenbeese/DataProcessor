@@ -19,16 +19,6 @@ function _dpmanip-filter_node_type (){
 }
 
 
-function _dpmanip-show_all (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
 function _dpmanip-normalize (){
     typeset -A opt_args
     local context state line
@@ -213,7 +203,6 @@ function _dpmanip_subcmd_list() {
         configure:'Read parameter file (use ConfigParser)'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
-        show_all:'show all data.'
         add_run:'Add run.'
         add_conf:'Add a new configure to the path.'
         filter_project:'filter by project path. This pipe filters out runs which don'\''t belong to the project, and should be used with '\''-o'\'' in dpmanip.'
