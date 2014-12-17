@@ -5,10 +5,10 @@ function _dpserver-start (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--logfile)--logfile[The name of the log file (default=server.log)]: :_files' \
-        '(--root)--root[The root dir where the server stands (default=/home/kentaro/nora/DataProcessor/server)]: :_files' \
-        '(--port)--port[Port for the server (default=8080)]: :_files' \
-        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]: :_files' \
+        '(--logfile)--logfile[The name of the log file]: :_files' \
+        '(--root)--root[The root dir where the server stands]: :_files' \
+        '(--port)--port[Port for the server]: :_files' \
+        '(--lockfile)--lockfile[Lock filename]: :_files' \
         '*::arguments:_files'
 }
 
@@ -19,7 +19,7 @@ function _dpserver-stop (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]: :_files' \
+        '(--lockfile)--lockfile[Lock filename]: :_files' \
         '*::arguments:_files'
 }
 
@@ -30,7 +30,7 @@ function _dpserver-install (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--root)--root[The root dir where the server stands (default=/home/kentaro/nora/DataProcessor/server)]: :_files' \
+        '(--root)--root[The root dir where the server stands]: :_files' \
         '*::arguments:_files'
 }
 
@@ -53,7 +53,7 @@ function _dpserver (){
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '(--json)--json[path of JSON file]: :_files' \
-        '(--debug)--debug[output traceback]: :_files' \
+        '(--debug)--debug[output traceback]' \
         ':subcmd:->subcmd' \
         '*::subcmd-options-or-args:->subcmd-options-or-args'
 

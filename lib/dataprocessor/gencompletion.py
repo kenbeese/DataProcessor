@@ -156,10 +156,8 @@ function _%s_subcmd_list() {
 
     def _get_option_string(self, action):
         argfmt = ""
-        if not action.nargs:
-            if isinstance(action, argparse._StoreAction) or \
-               isinstance(action, argparse._StoreConstAction):
-                argfmt = ": :_files"
+        if not action.nargs and isinstance(action, argparse._StoreAction):
+            argfmt = ": :_files"
         if isinstance(action.nargs, int) and action.nargs > 0:
             argfmt = ": :_files" * action.nargs
         if action.nargs == '?':

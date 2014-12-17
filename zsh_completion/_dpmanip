@@ -1,5 +1,25 @@
 #compdef dpmanip
+function _dpmanip-add_comment (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-filter_node_type (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-show_all (){
     typeset -A opt_args
     local context state line
 
@@ -15,18 +35,6 @@ function _dpmanip-normalize (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-register_figure (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--runs)--runs[runs]: :_files' \
-        '(--generators)--generators[generators]: :_files' \
         '*::arguments:_files'
 }
 
@@ -79,16 +87,6 @@ function _dpmanip-change_path (){
 }
 
 
-function _dpmanip-add_tag (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
 function _dpmanip-load_json (){
     typeset -A opt_args
     local context state line
@@ -132,7 +130,7 @@ function _dpmanip-filter_project (){
 }
 
 
-function _dpmanip-add_comment (){
+function _dpmanip-add_tag (){
     typeset -A opt_args
     local context state line
 
@@ -175,26 +173,12 @@ function _dpmanip-save_json (){
 }
 
 
-function _dpmanip-show_runs (){
+function _dpmanip-move_node (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--project)--project[project name]: :_files' \
-        '(--show_format)--show_format[format]: :_files' \
-        '(--parameters)--parameters[parameters to be displayed]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-show_projects (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--show_format)--show_format[show_format]: :_files' \
         '*::arguments:_files'
 }
 
@@ -209,38 +193,39 @@ function _dpmanip-untag (){
 }
 
 
-function _dpmanip-move_node (){
+function _dpmanip-register_figure (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--runs)--runs[runs]: :_files' \
+        '(--generators)--generators[generators]: :_files' \
         '*::arguments:_files'
 }
 
 function _dpmanip_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
+        add_comment:'add comment to node with path'
         filter_node_type:'filter by node type. This pipe filters out nodes which has different type attribute, and should be used with '\''-o'\'' option in dpmanip.'
-        normalize:'normalize nodes (i.e. fill necessary field)'
-        configure_no_section:'Read parameter file (without section)'
+        register_figure:'add figure node into node_list'
         configure:'Read parameter file (use ConfigParser)'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
+        show_all:'show all data.'
         add_run:'Add run.'
         add_conf:'Add a new configure to the path.'
-        show_runs:'output runs path'
         filter_project:'filter by project path. This pipe filters out runs which don'\''t belong to the project, and should be used with '\''-o'\'' in dpmanip.'
-        add_tag:'Add a tag into the node'
+        normalize:'normalize nodes (i.e. fill necessary field)'
         load_json:'load node_list from a JSON file'
         scan_directory:'Scan nodes from all directories under the directory '\''root'\''.'
+        add_tag:'Add a tag into the node'
         save_json:'save node_list in a JSON file'
-        add_comment:'add comment to node with path'
         filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
         move_node:'move node whose directory is also moved like as UNIX mv'
-        show_projects:'output project name'
         untag:'remove a tag from specified path'
-        register_figure:'add figure node into node_list'
+        configure_no_section:'Read parameter file (without section)'
     )
     _describe -t subcmd 'subcommand list' subcmd_list && return
 }
@@ -254,11 +239,11 @@ function _dpmanip (){
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '(--json)--json[path of JSON file]: :_files' \
-        '(--debug)--debug[output traceback]: :_files' \
-        '(-s --silent)'{-s,--silent}'[Does not ask whether REPLACE JSON file]: :_files' \
-        '(-i --input)'{-i,--input}'[Use stdin as data JSON]: :_files' \
-        '(-o --output)'{-o,--output}'[Output result node_list]: :_files' \
-        '(-r --replace)'{-r,--replace}'[Use replace strategy for saving JSON]: :_files' \
+        '(--debug)--debug[output traceback]' \
+        '(-s --silent)'{-s,--silent}'[Does not ask whether REPLACE JSON file]' \
+        '(-i --input)'{-i,--input}'[Use stdin as data JSON]' \
+        '(-o --output)'{-o,--output}'[Output result node_list]' \
+        '(-r --replace)'{-r,--replace}'[Use replace strategy for saving JSON]' \
         ':subcmd:->subcmd' \
         '*::subcmd-options-or-args:->subcmd-options-or-args'
 
