@@ -244,7 +244,7 @@ def _resolve_path(name, create_dir, root, basket_name, rcpath):
         return utility.get_directory(os.path.join(basket, name))
     else:
         basket = utility.check_directory(os.path.join(root, basket_name))
-        return utility.ceck_directory(os.path.join(basket, name))
+        return utility.check_directory(os.path.join(basket, name))
 
 
 def resolve_project_path(name_or_path, create_dir, root=None,
