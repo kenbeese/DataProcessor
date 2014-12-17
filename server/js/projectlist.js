@@ -9,18 +9,28 @@ function get_project_list() {
     }, function (res) {
       paths = res["paths"];
       html = res["html"];
-      $("section.dp-projectlist").append(html);
+      $("section.dp-projectlist")
+        .empty()
+        .append(html);
+      enable_project_link();
     }
   );
 }
 
 function show_project_list(){
-  $(".dp-project").hide();
-  $(".dp-run").hide();
+  $("section.dp-project").hide();
+  $("section.dp-run").hide();
   $(".dp-projectlist").show();
+  $("a.dp-project").show()
 }
 
 $(function(){
   get_project_list();
   show_project_list();
+  $("a.dp-projectlist")
+    .off("click")
+    .on("click", function(){
+      get_project_list();
+      show_project_list();
+    });
 });
