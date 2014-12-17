@@ -14,6 +14,7 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main(args):
+    args.silent = False if args.verbose else True
     arguments = [vars(args)[i] for i, _ in args.val["args"]]
     if "kwds" in args.val:
         keywords = {i: vars(args)[i] for i, _ in args.val["kwds"]
