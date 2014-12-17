@@ -3,6 +3,8 @@ Sample
 
 とりあえず、使ってみましょう。
 そのために、お試し環境を作成しましょう。
+以下、DataProcessorを`$HOME`に置いた場合で話をすすめます。
+違う場所に置いた場合は適宜読み変え下さい。
 
 お試し環境の作成
 ----------------
@@ -13,7 +15,7 @@ Sample
 dpinit
 ```
 
-rootdirにはこのサンプルディレクトリの"datadir"を指定します。
+rootdirには"$HOME/DataProcessor/sample/datadir"を指定します。
 json fileの場所は適当に設定してください。
 
 
@@ -23,7 +25,7 @@ json fileの場所は適当に設定してください。
 
 ### データのスキャン
 
-datadir以下にあるファイルは以下の通りです。
+`$HOME/DataProcessor/sample/datadir`以下にあるファイルは以下の通りです。
 
 - datadir/project1/run01/parameters.conf: run parameter file
 - datadir/project1/run03/parameters.conf: run parameter file
@@ -34,14 +36,14 @@ datadir以下にあるファイルは以下の通りです。
 これらのrunをScanしましょう
 
 ```sh
-dpmanip -s scan_directory /path/to/datadir "parameters.ini"  # parameters.iniのファイルがあるディレクトリをランとして認識してscan
-dpmanip -s scan_directory /path/to/datadir "*.conf" # 拡張子.confのファイルがあるディレクトリをランとして認識してscan
+dpmanip -s scan_directory $HOME/DataProcessor/sample/datadir "parameters.ini"  # parameters.iniのファイルがあるディレクトリをランとして認識してscan
+dpmanip -s scan_directory $HOME/DataProcessor/sample/datadir "*.conf" # 拡張子.confのファイルがあるディレクトリをランとして認識してscan
 ```
 
 or
 
 ```sh
-dpmanip -s scan_directory /path/to/datadir "*.ini" "parameters.conf" # 拡張子.ini or parameters.confのファイルがあるディレクトリをランとして認識してscan
+dpmanip -s scan_directory $HOME/DataProcessor/sample/datadir "*.ini" "parameters.conf" # 拡張子.ini or parameters.confのファイルがあるディレクトリをランとして認識してscan
 ```
 
 スキャンした結果を表示してみる

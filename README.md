@@ -52,13 +52,15 @@ Tutorial (Linux/OS X)
 インストール
 ------------
 
-ダウンロードしてパスを通します。
+ダウンロードして依存関係のパッケージをインストールしてパスを通します。
 以下ではホーム(`$HOME`)にインストールしますが、
 環境に応じて変更してください。
 
 ```command
 cd ~
 git clone https://github.com/kenbeese/DataProcessor.git
+cd DataProcessor
+pip install -r requirements.txt # 依存関係のinstall
 ```
 
 `~/.bashrc`の最後に以下の行を追加してパスを通します。
