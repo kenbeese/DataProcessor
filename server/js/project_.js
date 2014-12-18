@@ -38,5 +38,5 @@ function enable_project_link(){
       get_project(path);
       show_project();
     });
-  _enable_nav_link();
+  _enable_nav();
 }
