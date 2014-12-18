@@ -11,8 +11,8 @@ from ..dataframe import get_project
 template_dir = check_directory(op.join(__file__, "../../../../template/"))
 
 
-def projects(node_list):
-    with open(op.join(template_dir, "project_table.html"), "r") as f:
+def projectlist(node_list):
+    with open(op.join(template_dir, "projectlist.html"), "r") as f:
         template = Template(f.read())
     projects = node_type(node_list, "project")
     res = {
@@ -23,7 +23,7 @@ def projects(node_list):
     return node_list
 
 
-def project_table(node_list, path):
+def project(node_list, path):
     df = get_project(node_list, path, properties=["comment"])
     # TODO replace with original HTML template
     print(df.to_html(classes=["table", "table-striped"]))
@@ -31,15 +31,15 @@ def project_table(node_list, path):
 
 
 def register(dicts):
-    dicts["projects_html"] = {
-        "func": projects,
+    dicts["projectlist_html"] = {
+        "func": projectlist,
         "args": [],
         "kwds": [],
         "desc": "output project HTML table",
         "output": "json",
     }
-    dicts["project_table_html"] = {
-        "func": project_table,
+    dicts["project_html"] = {
+        "func": project,
         "args": ["path"],
         "kwds": [],
         "desc": "output HTML table",
