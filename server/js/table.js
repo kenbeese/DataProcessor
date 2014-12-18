@@ -125,7 +125,7 @@ function enable_editable_comment($wrap_table){
     $wrap_table
         .off("click", "table>tbody>tr>td.comment")
         .on("click", "table>tbody>tr>td.comment", function(event){
-            var comment = this.innerHTML;
+            var comment = $(this).text();
             var path = $(this).parent().attr("path");
             var $parent = $(this).parent();
             var group = $(this).data("group");
@@ -140,7 +140,7 @@ function enable_editable_comment($wrap_table){
         })
         .off("blur", "table>tbody>tr>input.comment")
         .on("blur", "table>tbody>tr>input.comment", function(event){
-            var comment = this.value;
+            var comment = $(this).val();
             var path = $(this).parent().attr("path");
             var group = $(this).data("group");
             send_comment(comment, path);
