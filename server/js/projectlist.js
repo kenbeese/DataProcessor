@@ -13,6 +13,7 @@ function get_project_list() {
         .empty()
         .append(html);
       enable_project_link();
+      enable_editable_comment();
     }
   );
 }

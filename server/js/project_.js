@@ -18,6 +18,7 @@ function get_project(path) {
         .append(name)
         .appendTo(li$);
       enable_project_link();
+      enable_editable_comment();
     }
   );
 }

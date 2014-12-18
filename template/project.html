@@ -19,8 +19,8 @@
     {% for path in df.index %}
     {% set s = df.ix[path] %}
     <tr>
-      <td>{{s["name"]}}</td>
-      <td>{{s["comment"]}}</td>
+      <td><a class="dp-run" dp-path="{{path}}">{{s["name"]}}</a></td>
+      <td class="dp-comment" dp-path="{{path}}">{{s["comment"]}}</td>
       {% for c in cfg %}
       <td>{{s[c]}}</td>
       {% endfor %}
