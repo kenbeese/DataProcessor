@@ -7,6 +7,7 @@ from jinja2 import Template
 from ..utility import check_directory
 from ..filter import node_type
 from ..dataframe import get_project
+from .. import nodes
 
 template_dir = check_directory(op.join(__file__, "../../../../template/"))
 
@@ -24,9 +25,14 @@ def projectlist(node_list):
 
 
 def project(node_list, path):
+    node = nodes.get(node_list, path)
     df = get_project(node_list, path, properties=["comment"])
-    # TODO replace with original HTML template
-    print(df.to_html(classes=["table", "table-striped"]))
+    res = {
+        "name": node["name"],
+        # TODO replace with original HTML template
+        "html": df.to_html(classes=["table", "table-striped"]), 
+    }
+    print(json.dumps(res))
     return node_list
 
 
@@ -43,5 +49,5 @@ def register(dicts):
         "args": ["path"],
         "kwds": [],
         "desc": "output HTML table",
-        "output": "html",
+        "output": "json",
     }

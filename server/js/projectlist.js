@@ -4,7 +4,7 @@ var api_url = "/cgi-bin/api.cgi"
 function get_project_list() {
   $.post(api_url, {
       "type": "pipe", 
-      "name": "projects_html",
+      "name": "projectlist_html",
       "args": "[]", 
     }, function (res) {
       paths = res["paths"];
@@ -21,7 +21,7 @@ function show_project_list(){
   $("section.dp-project").hide();
   $("section.dp-run").hide();
   $(".dp-projectlist").show();
-  $("a.dp-project").show()
+  $("a.dp-project").show();
 }
 
 $(function(){

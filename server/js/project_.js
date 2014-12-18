@@ -4,16 +4,20 @@ var api_url = "/cgi-bin/api.cgi"
 function get_project(path) {
   $.post(api_url, {
       "type": "pipe", 
-      "name": "project_table_html",
+      "name": "project_html",
       "args": JSON.stringify([path,]), 
-    }, function (table_html) {
+    }, function (res) {
+      var name = res["name"];
+      var table_html = res["html"];
       $("section.dp-project")
         .empty()
         .append(table_html);
-      $("ol#LocationBar>li>a.dp-project")
-        .empty()
+      var li$ = $("<li>").appendTo("ol#LocationBar");
+      $("<a>")
         .attr("dp-path", path)
-        .append(path); // TODO should be name
+        .append(name)
+        .appendTo(li$);
+      enable_project_link();
     }
   );
 }
@@ -34,4 +38,5 @@ function enable_project_link(){
       get_project(path);
       show_project();
     });
+  _enable_nav_link();
 }
