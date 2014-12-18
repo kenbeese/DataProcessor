@@ -1,0 +1,30 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      {% for c in cfg %}
+      <th>{{c}}</th>
+      {% endfor %}
+    </tr>
+    <tr>
+      <th>name</th>
+      <th>comment</th>
+      {% for c in cfg %}
+      <th></th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for path in df.index %}
+    {% set s = df.ix[path] %}
+    <tr>
+      <td>{{s["name"]}}</td>
+      <td>{{s["comment"]}}</td>
+      {% for c in cfg %}
+      <td>{{s[c]}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -27,10 +27,12 @@ def projectlist(node_list):
 def project(node_list, path):
     node = nodes.get(node_list, path)
     df = get_project(node_list, path, properties=["comment"])
+    with open(op.join(template_dir, "project.html"), "r") as f:
+        template = Template(f.read())
+    cfg = [c for c in df.columns if c not in ["name", "comment"]]
     res = {
         "name": node["name"],
-        # TODO replace with original HTML template
-        "html": df.to_html(classes=["table", "table-striped"]), 
+        "html": template.render(df=df, cfg=cfg),
     }
     print(json.dumps(res))
     return node_list
