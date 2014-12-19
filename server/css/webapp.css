@@ -1,10 +1,11 @@
 td.dp-comment {
-  white-space: nowrap;
-  width: 300px;
+  white-space: pre;
 }
-
-td.dp-comment>input {
+td.dp-comment:hover {
+    background-color: #c1e2b3;
+}
+td.dp-comment>textarea {
   background: #EEEEEE;
-  width: 300px;
-  size: 120;
+  width: 30em;
+  height: 5em;
 }
