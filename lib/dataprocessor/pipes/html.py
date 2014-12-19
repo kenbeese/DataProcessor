@@ -26,7 +26,7 @@ def projectlist(node_list):
 
 def project(node_list, path):
     node = nodes.get(node_list, path)
-    df = get_project(node_list, path, properties=["comment"])
+    df = get_project(node_list, path, properties=["comment"]).fillna("")
     with open(op.join(template_dir, "project.html"), "r") as f:
         template = Template(f.read())
     cfg = [c for c in df.columns if c not in ["name", "comment"]]
