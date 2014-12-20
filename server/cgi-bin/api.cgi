@@ -57,9 +57,12 @@ def pipe(req):
     args = json.loads(req.get("args"))
     kwds = req.get("kwds") if req.has("kwds") else {}
 
-    with print_capture() as ss:
-        dp.execute.pipe(data_path, name, args, kwds)
-        output_str = ss.getvalue()
+    with dp.io.SyncDataHandler(data_path, silent=True) as dh:
+        nl = dh.get()
+        with print_capture() as ss:
+            nl = dp.execute.pipe(name, args, kwds, nl)
+            output_str = ss.getvalue()
+        dh.update(nl)
 
     p = dp.pipes.pipes_dics[name]
     if "output" in p and p["output"] in ["json", "xml", "html"]:

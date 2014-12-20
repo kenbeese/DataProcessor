@@ -3,7 +3,6 @@ import json
 
 from .exception import DataProcessorError, InvalidJSONError, pipe_execute
 from . import pipes
-from .io import SyncDataHandler
 
 
 def check_manip(manip):
@@ -109,26 +108,29 @@ def execute(manip, node_list=[]):
     return node_list
 
 
-def pipe(data_path, name, args, kwds={}):
-    """ Execute a pipe with SyncDataHandler
+def pipe(name, args, kwds={}, node_list=[]):
+    """ Execute a pipe
 
     Parameters
     ----------
-    data_path : str
-        The path of the JSON file
     name : str
         Name of pipe
     args : list
         arguments of pipe
     kwds : dict, optional
         keyword arguments of pipe (default={})
+    node_list : list, optional
+        initial node_list (default=[])
     """
-    p = pipes.pipes_dics[name]
-    # TODO args, kwdsのチェック
-    with SyncDataHandler(data_path, silent=True) as dh:
-        node_list = dh.get()
-        node_list = p["func"](node_list, *args, **kwds)
-        dh.update(node_list, silent=True)
+    mp = {
+        "name": name,
+        "args": args,
+    }
+    if kwds:
+        mp["kwds"] = kwds
+    manip = [mp, ]
+    check_manip(manip)
+    return execute(manip, node_list)
 
 
 def execute_from_json_str(manip_json_str, node_list=[]):
