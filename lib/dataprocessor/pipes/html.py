@@ -43,13 +43,13 @@ def register(dicts):
         "func": projectlist,
         "args": [],
         "kwds": [],
-        "desc": "output project HTML table",
+        "desc": "output project paths and rendered HTML as a JSON",
         "output": "json",
     }
     dicts["project_html"] = {
         "func": project,
         "args": ["path"],
         "kwds": [],
-        "desc": "output HTML table",
+        "desc": "output project name and its paramter table as a JSON",
         "output": "json",
     }
