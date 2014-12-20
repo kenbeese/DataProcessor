@@ -108,6 +108,31 @@ def execute(manip, node_list=[]):
     return node_list
 
 
+def pipe(name, args, kwds={}, node_list=[]):
+    """ Execute a pipe
+
+    Parameters
+    ----------
+    name : str
+        Name of pipe
+    args : list
+        arguments of pipe
+    kwds : dict, optional
+        keyword arguments of pipe (default={})
+    node_list : list, optional
+        initial node_list (default=[])
+    """
+    mp = {
+        "name": name,
+        "args": args,
+    }
+    if kwds:
+        mp["kwds"] = kwds
+    manip = [mp, ]
+    check_manip(manip)
+    return execute(manip, node_list)
+
+
 def execute_from_json_str(manip_json_str, node_list=[]):
     """execute pipeline from JSON string
 

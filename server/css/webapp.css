@@ -1,0 +1,10 @@
+td.dp-comment {
+  white-space: nowrap;
+  width: 300px;
+}
+
+td.dp-comment>input {
+  background: #EEEEEE;
+  width: 300px;
+  size: 120;
+}

@@ -1,0 +1,20 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>name</td>
+      <td>comment</td>
+      <td>path</td>
+    </tr>
+  </thead>
+  <tbody>
+    {%- for p in projects %}
+    <tr>
+      <td>
+        <a class="dp-project" dp-path="{{p.path}}">{{p.name}}</a>
+      </td>
+      <td class="dp-comment" dp-path="{{p.path}}">{{p.comment}}</td>
+      <td>{{p.path}}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
