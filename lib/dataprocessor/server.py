@@ -75,7 +75,10 @@ def install(args):
         f.write(urllib2.urlopen(jquery_cookie_url).read())
     print("Done.")
 
-    bootstrap_url = "https://github.com/twbs/bootstrap/releases/download/v3.3.1/bootstrap-3.3.1-dist.zip"
+    bootstrap_version = "3.3.1"
+    bootstrap_url = "https://github.com/twbs/bootstrap/releases/download/"\
+        + "v{version}/bootstrap-{version}-dist.zip"\
+        .format(version=bootstrap_version)
     print("Downloading Bootstrap...", end="")
     with NamedTemporaryFile(suffix=".zip", delete=False) as f:
         bootstrap_name = f.name
