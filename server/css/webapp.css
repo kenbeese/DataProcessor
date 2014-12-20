@@ -6,6 +6,6 @@ td.dp-comment:hover {
 }
 td.dp-comment>textarea {
   background: #EEEEEE;
-  width: 30em;
-  height: 5em;
+  width: 100%;
+  height: 100%;
 }
