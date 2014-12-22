@@ -93,3 +93,10 @@ def install(args):
         _copy_file(jspath, "dist/js/bootstrap.min.js")
         _copy_file(csspath, "dist/css/bootstrap.min.css")
     print("Done.")
+
+    jquery_blockUI_filename = "jquery.blockUI.js"
+    jquery_blockUI_url = "http://malsup.github.io/" + jquery_blockUI_filename
+    print("Downloading jquery blockUI...", end="")
+    with open(op.join(jspath, jquery_blockUI_filename), "w") as f:
+        f.write(urllib2.urlopen(jquery_blockUI_url).read())
+    print("Done.")

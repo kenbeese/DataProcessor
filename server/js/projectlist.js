@@ -14,6 +14,7 @@ function get_project_list() {
         .append(html);
       enable_project_link();
       enable_editable_comment();
+      $.unblockUI();
     }
   );
 }
@@ -31,6 +32,7 @@ $(function(){
   $("a.dp-projectlist")
     .off("click")
     .on("click", function(){
+      $.blockUI();
       get_project_list();
       show_project_list();
     });

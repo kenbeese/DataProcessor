@@ -19,6 +19,8 @@ function get_project(path) {
         .appendTo(li$);
       enable_project_link();
       enable_editable_comment();
+      $.unblockUI();
+      show_project();
     }
   );
 }
@@ -36,8 +38,8 @@ function enable_project_link(){
     .off("click")
     .on("click", function(){
       var path = $(this).attr("dp-path");
+      $.blockUI();
       get_project(path);
-      show_project();
     });
   _enable_nav();
 }
