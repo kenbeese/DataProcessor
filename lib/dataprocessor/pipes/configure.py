@@ -44,7 +44,11 @@ def parse_yaml(confpath, section):
     Specified section as a dictionary.
     """
     with open(confpath, "r") as f:
-        return yaml.load(f)[section]
+        d = yaml.load(f)
+        if section not in d:
+            Warning("No such section {} in {}".format(section, confpath))
+            return {}
+        return d[section]
 
 
 def add(node_list, filename, section="parameters"):
@@ -55,7 +59,7 @@ def add(node_list, filename, section="parameters"):
     ----------
     filename : str
         filename of parameter configure file
-        If file is not exists, add null list.
+        If file does not exist, add null list.
 
     section : str
         Specify section name in configure file.
@@ -106,7 +110,7 @@ def no_section(node_list, filename, split_char="=", comment_char=["#"]):
     ----------
     filename : str
         filename of parameter configure file
-        If file is not exists, add null list.
+        If file does not exist, add null list.
     split_char : str
         Specify the deliminator char.
     comment_char : str

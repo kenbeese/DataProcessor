@@ -50,6 +50,14 @@ class TestConfigure(TestNodeListAndDir):
             node.update(added_dict)
         self.assertEqual(self.node_list, compare_node_list)
 
+    def _get_testdata_path(self, filename):
+        return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "testdata", filename)
+
+    def _get_testdata(self, filename):
+        with open(self._get_testdata_path(filename), "r") as f:
+            return f.read()
+
     def test_add(self):
         import copy
         original_node_list = copy.deepcopy(self.node_list)
@@ -78,6 +86,24 @@ dsaf : ohd"""}]
         added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
                                     "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
+
+    def test_add_yaml(self):
+        import copy
+        original_node_list = copy.deepcopy(self.node_list)
+        list_file_dict = [{"name": "parameter1.yaml",
+                           "contents": self._get_testdata("parameter1.yaml")},
+                          {"name": "parameter2.yaml",
+                           "contents": self._get_testdata("parameter2.yaml")}]
+        self._create_conf_files(list_file_dict)
+
+        add(self.node_list, "parameter1.yaml", "parameters")
+        added_dict = {"configure": {"Nx": 100, "dx": 0.01, "msg": u"あ"}}
+        self._check_node_list(original_node_list, added_dict)
+
+        add(self.node_list, "parameter2.yaml", "params")
+        added_dict["configure"]["foo"] = "bar"
+        self._check_node_list(original_node_list, added_dict)
+
 
     def test_no_section(self):
         original_node_list = copy.deepcopy(self.node_list)
