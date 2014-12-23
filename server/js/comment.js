@@ -29,7 +29,7 @@ function enable_editable_comment() {
     send_comment(comment, path);
     $(this).parent()
       .empty()
-      .append(comment)
+      .text(comment)
       .on("click", f_click);
   };
   $("td.dp-comment")
