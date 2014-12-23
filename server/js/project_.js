@@ -1,27 +1,23 @@
 
 function get_project(path) {
-  $.blockUI(block_setting);
-  $("section.dp-project").empty();
-  $.post(api_url, {
-      "type": "pipe", 
-      "name": "project_html",
-      "args": JSON.stringify([path,]), 
-    }, function (res) {
-      var name = res["name"];
-      var table_html = res["html"];
-      $("section.dp-project")
-        .empty()
-        .append(table_html);
-      var li$ = $("<li>").appendTo("ol#LocationBar");
-      $("<a>")
-        .attr("dp-path", path)
-        .append(name)
-        .appendTo(li$);
-      enable_project_link();
-      enable_editable_comment();
-    }).always(function(){
-      $.unblockUI();
-    });
+  _sync_api_call({
+    "type": "pipe",
+    "name": "project_html",
+    "args": JSON.stringify([path,]),
+  }, function(res){
+    var name = res["name"];
+    var table_html = res["html"];
+    $("section.dp-project")
+      .empty()
+      .append(table_html);
+    var li$ = $("<li>").appendTo("ol#LocationBar");
+    $("<a>")
+      .attr("dp-path", path)
+      .append(name)
+      .appendTo(li$);
+    enable_project_link();
+    enable_editable_comment();
+  });
 }
 
 function show_project(){

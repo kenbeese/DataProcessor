@@ -1,22 +1,18 @@
 
 function get_project_list() {
-  $.blockUI(block_setting);
-  $("section.dp-projectlist").empty();
-  $.post(api_url, {
-      "type": "pipe", 
-      "name": "projectlist_html",
-      "args": "[]", 
-    }, function (res) {
-      paths = res["paths"];
-      html = res["html"];
-      $("section.dp-projectlist")
-        .empty()
-        .append(html);
-      enable_project_link();
-      enable_editable_comment();
-    }).always(function(){
-      $.unblockUI();
-    });
+  _sync_api_call({
+    "type": "pipe",
+    "name": "projectlist_html",
+    "args": "[]",
+  }, function(res){
+    paths = res["paths"];
+    html = res["html"];
+    $("section.dp-projectlist")
+      .empty()
+      .append(html);
+    enable_project_link();
+    enable_editable_comment();
+  })
 }
 
 function show_project_list(){
