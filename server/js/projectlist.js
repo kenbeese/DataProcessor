@@ -1,5 +1,6 @@
 
 function get_project_list() {
+  $("section.dp-projectlist").empty();
   _sync_api_call({
     "type": "pipe",
     "name": "projectlist_html",
@@ -7,9 +8,7 @@ function get_project_list() {
   }, function(res){
     paths = res["paths"];
     html = res["html"];
-    $("section.dp-projectlist")
-      .empty()
-      .append(html);
+    $("section.dp-projectlist").append(html);
     enable_project_link();
     enable_editable_comment();
   })
