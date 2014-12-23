@@ -14,9 +14,9 @@ function get_project_list() {
         .append(html);
       enable_project_link();
       enable_editable_comment();
+    }).always(function(){
       $.unblockUI();
-    }
-  );
+    });
 }
 
 function show_project_list(){

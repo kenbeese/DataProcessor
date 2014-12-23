@@ -19,9 +19,9 @@ function get_project(path) {
         .appendTo(li$);
       enable_project_link();
       enable_editable_comment();
+    }).always(function(){
       $.unblockUI();
-    }
-  );
+    });
 }
 
 function show_project(){
