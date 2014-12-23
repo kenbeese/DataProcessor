@@ -20,7 +20,7 @@ def parse_conf(confpath, section):
 
     Returns
     -------
-    Dictionary.
+    Specified section as a dictionary.
     """
     conf = SafeConfigParser()
     conf.optionxform = str
@@ -29,6 +29,20 @@ def parse_conf(confpath, section):
 
 
 def parse_yaml(confpath, section):
+    """
+    Parse .yaml to dictionary
+
+    Parameters
+    ----------
+    confpath : str
+        Path to config file.
+    section : str
+        Specify section name in configure file.
+
+    Returns
+    -------
+    Specified section as a dictionary.
+    """
     with open(confpath, "r") as f:
         return yaml.load(f)[section]
 
