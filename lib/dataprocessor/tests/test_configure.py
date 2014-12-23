@@ -91,7 +91,7 @@ dsaf : ohd"""}]
         import copy
         original_node_list = copy.deepcopy(self.node_list)
         list_file_dict = [{"name": "parameter1.yaml",
-                           "contents": self._get_testdata("parameter1.yaml")},
+                           "contents": self._get_testdata("parameter1.yml")},
                           {"name": "parameter2.yaml",
                            "contents": self._get_testdata("parameter2.yaml")}]
         self._create_conf_files(list_file_dict)

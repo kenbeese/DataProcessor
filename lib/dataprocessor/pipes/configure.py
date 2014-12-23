@@ -85,7 +85,7 @@ def add(node_list, filename, section="parameters"):
 
             if ext == ".ini" or ext == ".conf":
                 conf_d = parse_conf(confpath, section)
-            elif ext == ".yaml":
+            elif ext == ".yml" or ext == ".yaml":
                 conf_d = parse_yaml(confpath, section)
             else:
                 Warning("Unknown filename extension {}".format(ext))
