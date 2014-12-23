@@ -6,6 +6,27 @@ from ConfigParser import SafeConfigParser
 from ..utility import read_configure
 
 
+def parse_conf(confpath, section):
+    """
+    Parse .ini and .conf to dictionary
+
+    Parameters
+    ----------
+    confpath : str
+        Path to config file.
+    section : str
+        Specify section name in configure file.
+
+    Returns
+    -------
+    Dictionary.
+    """
+    conf = SafeConfigParser()
+    conf.optionxform = str
+    conf.read(confpath)
+    return {k:v for k, v in conf.items(section)}
+
+
 def add(node_list, filename, section="parameters"):
     """
     Add configure to node_list.
@@ -36,11 +57,7 @@ def add(node_list, filename, section="parameters"):
         confpath = os.path.join(node["path"], filename)
         conf_d = {}
         if os.path.exists(confpath):
-            conf = SafeConfigParser()
-            conf.optionxform = str
-            conf.read(confpath)
-            for key, var in conf.items(section):
-                conf_d[key] = var
+            conf_d = parse_conf(confpath, section)
         else:
             Warning("parameter file is not exists.")
         if not node_key in node:
