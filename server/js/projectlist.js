@@ -15,10 +15,10 @@ function get_project_list() {
 }
 
 function show_project_list(){
-  $("section.dp-project").hide(animation_speed);
-  $("section.dp-run").hide(animation_speed);
-  $(".dp-projectlist").show(animation_speed);
-  $("a.dp-project").show(animation_speed);
+  $("section.dp-project").hide(ANIMATION_SPEED);
+  $("section.dp-run").hide(ANIMATION_SPEED);
+  $(".dp-projectlist").show(ANIMATION_SPEED);
+  $("a.dp-project").show(ANIMATION_SPEED);
 }
 
 $(function(){

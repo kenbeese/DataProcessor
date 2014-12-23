@@ -20,11 +20,11 @@ function get_project(path) {
 }
 
 function show_project(){
-  $("section.dp-projectlist").hide(animation_speed);
-  $("section.dp-run").hide(animation_speed);
-  $("a.dp-projectlist").show(animation_speed);
-  $("a.dp-run").show(animation_speed);
-  $(".dp-project").show(animation_speed);
+  $("section.dp-projectlist").hide(ANIMATION_SPEED);
+  $("section.dp-run").hide(ANIMATION_SPEED);
+  $("a.dp-projectlist").show(ANIMATION_SPEED);
+  $("a.dp-run").show(ANIMATION_SPEED);
+  $(".dp-project").show(ANIMATION_SPEED);
 }
 
 function enable_project_link(){

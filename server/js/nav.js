@@ -11,9 +11,9 @@ function _enable_nav() {
 }
 
 function _sync_api_call(data, callback){
-  $.blockUI(block_setting);
+  $.blockUI(BLOCK_SETTING);
   $.ajax({
-    url: api_url,
+    url: API_URL,
     type: "POST",
     data: data,
     success: function(res, st){

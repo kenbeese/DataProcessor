@@ -1,7 +1,7 @@
 
-var animation_speed = "fast"
-var api_url = "/cgi-bin/api.cgi"
-var block_setting = {
+const ANIMATION_SPEED = "fast"
+const API_URL = "/cgi-bin/api.cgi"
+const BLOCK_SETTING = {
   message: false,
   overlayCSS: {
       backgroundColor: '#000',
