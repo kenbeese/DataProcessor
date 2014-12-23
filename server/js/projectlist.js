@@ -1,7 +1,6 @@
 
-var api_url = "/cgi-bin/api.cgi"
-
 function get_project_list() {
+  $("section.dp-projectlist").empty();
   $.post(api_url, {
       "type": "pipe", 
       "name": "projectlist_html",
@@ -19,10 +18,10 @@ function get_project_list() {
 }
 
 function show_project_list(){
-  $("section.dp-project").hide();
-  $("section.dp-run").hide();
-  $(".dp-projectlist").show();
-  $("a.dp-project").show();
+  $("section.dp-project").hide(animation_speed);
+  $("section.dp-run").hide(animation_speed);
+  $(".dp-projectlist").show(animation_speed);
+  $("a.dp-project").show(animation_speed);
 }
 
 $(function(){

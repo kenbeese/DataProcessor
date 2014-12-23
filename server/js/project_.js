@@ -1,7 +1,6 @@
 
-var api_url = "/cgi-bin/api.cgi"
-
 function get_project(path) {
+  $("section.dp-project").empty();
   $.post(api_url, {
       "type": "pipe", 
       "name": "project_html",
@@ -24,11 +23,11 @@ function get_project(path) {
 }
 
 function show_project(){
-  $("section.dp-projectlist").hide();
-  $("section.dp-run").hide();
-  $("a.dp-projectlist").show();
-  $("a.dp-run").show();
-  $(".dp-project").show();
+  $("section.dp-projectlist").hide(animation_speed);
+  $("section.dp-run").hide(animation_speed);
+  $("a.dp-projectlist").show(animation_speed);
+  $("a.dp-run").show(animation_speed);
+  $(".dp-project").show(animation_speed);
 }
 
 function enable_project_link(){
