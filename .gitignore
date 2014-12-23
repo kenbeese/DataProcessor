@@ -4,6 +4,7 @@ _build
 
 server/js/jquery-1.10.2.js
 server/js/jquery.cookie.js
+server/js/jquery.blockUI.js
 server/js/bootstrap.min.js
 server/css/bootstrap.min.css
 server/cfg.json
