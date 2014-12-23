@@ -1,5 +1,6 @@
 
 function get_project_list() {
+  $.blockUI(block_setting);
   $("section.dp-projectlist").empty();
   $.post(api_url, {
       "type": "pipe", 
@@ -31,7 +32,6 @@ $(function(){
   $("a.dp-projectlist")
     .off("click")
     .on("click", function(){
-      $.blockUI();
       get_project_list();
       show_project_list();
     });
