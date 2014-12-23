@@ -1,6 +1,7 @@
 # coding=utf-8
 """Pipes of configure."""
 import os.path
+import yaml
 from ConfigParser import SafeConfigParser
 
 from ..utility import read_configure
@@ -25,6 +26,11 @@ def parse_conf(confpath, section):
     conf.optionxform = str
     conf.read(confpath)
     return {k:v for k, v in conf.items(section)}
+
+
+def parse_yaml(confpath, section):
+    with open(confpath, "r") as f:
+        return yaml.load(f)[section]
 
 
 def add(node_list, filename, section="parameters"):
@@ -57,9 +63,16 @@ def add(node_list, filename, section="parameters"):
         confpath = os.path.join(node["path"], filename)
         conf_d = {}
         if os.path.exists(confpath):
-            conf_d = parse_conf(confpath, section)
+            _, ext = os.path.splitext(confpath)
+
+            if ext == ".ini" or ext == ".conf":
+                conf_d = parse_conf(confpath, section)
+            elif ext == ".yaml":
+                conf_d = parse_yaml(confpath, section)
+            else:
+                Warning("Unknown filename extension {}".format(ext))
         else:
-            Warning("parameter file is not exists.")
+            Warning("parameter file does not exist.")
         if not node_key in node:
             node[node_key] = conf_d
         else:
