@@ -58,6 +58,9 @@ def install(args):
     root_dir = utility.check_directory(args.root)
     jspath = op.join(root_dir, "js")
     csspath = op.join(root_dir, "css")
+    imagepath = op.join(root_dir, "images")
+    if not os.path.exists(imagepath):
+        os.mkdir(imagepath)
 
     jquery_filename = "jquery-1.10.2.js"
     jquery_url = "http://code.jquery.com/" + jquery_filename
@@ -84,6 +87,8 @@ def install(args):
         f.write(urllib2.urlopen(jquery_blockUI_url).read())
     print("Done.")
 
+    _install_jquery_datatables(jspath, csspath, imagepath)
+
     bootstrap_version = "3.3.1"
     bootstrap_url = "https://github.com/twbs/bootstrap/releases/download/"\
         + "v{version}/bootstrap-{version}-dist.zip"\
@@ -94,12 +99,51 @@ def install(args):
         bootstrap_name = f.name
         f.write(urllib2.urlopen(bootstrap_url).read())
 
-    def _copy_file(path, fn):
-        with zf.open(fn) as f_from:
-            with open(op.join(path, op.basename(fn)), 'w') as f_to:
-                f_to.write(f_from.read())
-
     with ZipFile(bootstrap_name, 'r') as zf:
-        _copy_file(jspath, "dist/js/bootstrap.min.js")
-        _copy_file(csspath, "dist/css/bootstrap.min.css")
+        _copy_file(jspath, zf, "dist/js/bootstrap.min.js")
+        _copy_file(csspath, zf, "dist/css/bootstrap.min.css")
     print("Done.")
+
+
+def _install_jquery_datatables(jspath, csspath, imagepath):
+
+    version = "1.10.4"
+    topdir = "DataTables-{}".format(version)
+    url = "http://datatables.net/releases/{}.zip".format(topdir)
+
+    sys.stdout.write("Downloading jQuery datatables...")
+    sys.stdout.flush()
+    req = urllib2.Request(url,
+                          headers={'User-Agent': "Magic Browser"})
+    with NamedTemporaryFile(suffix=".zip", delete=False) as f:
+        zipname = f.name
+        f.write(urllib2.urlopen(req).read())
+
+    with ZipFile(zipname, 'r') as zf:
+        _copy_file(jspath, zf,
+                   topdir + "/media/js/jquery.dataTables.min.js")
+        _copy_file(csspath, zf,
+                   topdir + "/media/css/jquery.dataTables.css")
+        for name in zf.namelist():
+            if not name.find("media/images") is -1 and not name.endswith("/"):
+                _copy_file(imagepath, zf, name)
+
+        _copy_file(jspath, zf,
+                   topdir + "/extensions/ColReorder/js/dataTables.colReorder.min.js")
+        _copy_file(csspath, zf,
+                   topdir + "/extensions/ColReorder/css/dataTables.colReorder.min.css")
+        _copy_file(imagepath, zf,
+                   topdir + "/extensions/ColReorder/images/insert.png")
+
+        _copy_file(jspath, zf,
+                   topdir + "/extensions/FixedColumns/js/dataTables.fixedColumns.min.js")
+        _copy_file(csspath, zf,
+                   topdir + "/extensions/FixedColumns/css/dataTables.fixedColumns.min.css")
+
+    print("Done.")
+
+
+def _copy_file(path, zf, fn):
+    with zf.open(fn) as f_from:
+        with open(op.join(path, op.basename(fn)), 'w') as f_to:
+            f_to.write(f_from.read())
