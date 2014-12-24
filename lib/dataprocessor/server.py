@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-
 import os
+import sys
 import os.path as op
 import json
 import urllib2
@@ -62,7 +61,8 @@ def install(args):
 
     jquery_filename = "jquery-1.10.2.js"
     jquery_url = "http://code.jquery.com/" + jquery_filename
-    print("Downloading jQuery...", end="")
+    sys.stdout.write("Downloading jQuery...")
+    sys.stdout.flush()
     with open(op.join(jspath, jquery_filename), "w") as f:
         f.write(urllib2.urlopen(jquery_url).read())
     print("Done.")
@@ -70,16 +70,26 @@ def install(args):
     jquery_cookie_filename = "jquery.cookie.js"
     jquery_cookie_url = "https://raw.github.com/carhartl/jquery-cookie/master/src/"\
         + jquery_cookie_filename
-    print("Downloading jQuery Cookie...", end="")
+    sys.stdout.write("Downloading jQuery Cookie...")
+    sys.stdout.flush()
     with open(op.join(jspath, jquery_cookie_filename), "w") as f:
         f.write(urllib2.urlopen(jquery_cookie_url).read())
+    print("Done.")
+
+    jquery_blockUI_filename = "jquery.blockUI.js"
+    jquery_blockUI_url = "http://malsup.github.io/" + jquery_blockUI_filename
+    sys.stdout.write("Downloading jQuery blockUI...")
+    sys.stdout.flush()
+    with open(op.join(jspath, jquery_blockUI_filename), "w") as f:
+        f.write(urllib2.urlopen(jquery_blockUI_url).read())
     print("Done.")
 
     bootstrap_version = "3.3.1"
     bootstrap_url = "https://github.com/twbs/bootstrap/releases/download/"\
         + "v{version}/bootstrap-{version}-dist.zip"\
         .format(version=bootstrap_version)
-    print("Downloading Bootstrap...", end="")
+    sys.stdout.write("Downloading Bootstrap...")
+    sys.stdout.flush()
     with NamedTemporaryFile(suffix=".zip", delete=False) as f:
         bootstrap_name = f.name
         f.write(urllib2.urlopen(bootstrap_url).read())
