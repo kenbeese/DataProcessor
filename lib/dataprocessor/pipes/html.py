@@ -3,6 +3,7 @@
 import json
 import os.path as op
 from jinja2 import Template
+from pandas import Series
 
 from ..utility import check_directory
 from ..filter import node_type
@@ -27,9 +28,13 @@ def projectlist(node_list):
 def project(node_list, path):
     node = nodes.get(node_list, path)
     df = get_project(node_list, path, properties=["comment"]).fillna("")
+    s = Series()
+    for index in df.axes[1]:
+        s[index] = len(df.drop_duplicates(index).index)
+    s.sort(ascending=False)
     with open(op.join(template_dir, "project.html"), "r") as f:
         template = Template(f.read())
-    cfg = [c for c in df.columns if c not in ["name", "comment"]]
+    cfg = [c for c in df[s.index].columns if c not in ["name", "comment"]]
     res = {
         "name": node["name"],
         "html": template.render(df=df, cfg=cfg),
