@@ -16,7 +16,7 @@ function get_project(path) {
       .appendTo(li$);
     enable_project_link();
     enable_editable_comment();
-    var table = $("table.dp-project").DataTable(DATATABLES_SETTING);
+    $("table.dp-project").DataTable(DATATABLES_SETTING);
   });
 }
 
