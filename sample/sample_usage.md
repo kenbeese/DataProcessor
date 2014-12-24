@@ -36,34 +36,34 @@ json fileの場所は適当に設定してください。
 これらのrunをScanしましょう
 
 ```sh
-dpmanip -s scan_directory $HOME/DataProcessor/sample/datadir "parameters.ini"  # parameters.iniのファイルがあるディレクトリをランとして認識してscan
-dpmanip -s scan_directory $HOME/DataProcessor/sample/datadir "*.conf" # 拡張子.confのファイルがあるディレクトリをランとして認識してscan
+dpmanip scan_directory $HOME/DataProcessor/sample/datadir "parameters.ini"  # parameters.iniのファイルがあるディレクトリをランとして認識してscan
+dpmanip scan_directory $HOME/DataProcessor/sample/datadir "*.conf" # 拡張子.confのファイルがあるディレクトリをランとして認識してscan
 ```
 
 or
 
 ```sh
-dpmanip -s scan_directory $HOME/DataProcessor/sample/datadir "*.ini" "parameters.conf" # 拡張子.ini or parameters.confのファイルがあるディレクトリをランとして認識してscan
+dpmanip scan_directory $HOME/DataProcessor/sample/datadir "*.ini" "parameters.conf" # 拡張子.ini or parameters.confのファイルがあるディレクトリをランとして認識してscan
 ```
 
 スキャンした結果を表示してみる
 
 ```sh
-dpmanip -s show_runs
-dpmanip -s show_projects
+dpmanip show_runs
+dpmanip show_projects
 ```
 
 ### 設定ファイルのスキャン
 
 ```sh
-dpmanip -s configure parameters.conf # parameters.confがあるrunで、このファイルを読み込む
-dpmanip -s configure parameters.ini  # parameters.iniがあるrunで、このファイルを読み込む
+dpmanip configure parameters.conf # parameters.confがあるrunで、このファイルを読み込む
+dpmanip configure parameters.ini  # parameters.iniがあるrunで、このファイルを読み込む
 ```
 
 スキャンした結果を表示してみる
 
 ```sh
-dpmanip -s show_runs --parameters nx
+dpmanip show_runs --parameters nx
 ```
 
 遊んでみよう

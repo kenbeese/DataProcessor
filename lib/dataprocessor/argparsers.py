@@ -15,8 +15,8 @@ def dpmanip():
         print("Please create configure file by dpinit")
         sys.exit(1)
 
-    parser.add_argument("-s", "--silent", action="store_true",
-                        help="Does not ask whether REPLACE JSON file")
+    parser.add_argument("-v", "--verbose", action="store_true",
+                        help="Ask whether REPLACE JSON file")
     parser.add_argument("-i", "--input", action="store_true",
                         help="Use stdin as data JSON")
     parser.add_argument("-o", "--output", action="store_true",
