@@ -7,7 +7,7 @@ from ConfigParser import SafeConfigParser
 from ..utility import read_configure
 
 
-def parse_conf(confpath, section):
+def parse_ini(confpath, section):
     """
     Parse .ini and .conf to dictionary
 
@@ -25,7 +25,7 @@ def parse_conf(confpath, section):
     conf = SafeConfigParser()
     conf.optionxform = str
     conf.read(confpath)
-    return {k:v for k, v in conf.items(section)}
+    return {k: v for k, v in conf.items(section)}
 
 
 def parse_yaml(confpath, section):
@@ -51,7 +51,31 @@ def parse_yaml(confpath, section):
         return d[section]
 
 
-def add(node_list, filename, section="parameters"):
+def get_parser(filetype):
+    """
+    Get parser corresponding to the filetype
+
+    Parameters
+    ----------
+    filetype : str
+        These filetypes are available; "ini", "conf", "yaml"
+
+    Returns
+    -------
+    function that takes 2 args, confpath and section.
+    """
+    # check extension in case insensitive way
+    filetype = filetype.lower()
+    if filetype in ("ini", "conf"):
+        return parse_ini
+    elif filetype in ("yaml"):
+        return parse_yaml
+    else:
+        # TODO Default behavior
+        return None
+
+
+def add(node_list, filename, filetype=None, section="parameters"):
     """
     Add configure to node_list.
 
@@ -83,15 +107,13 @@ def add(node_list, filename, section="parameters"):
         if os.path.exists(confpath):
             _, ext = os.path.splitext(confpath)
 
-            if ext == ".ini" or ext == ".conf":
-                conf_d = parse_conf(confpath, section)
-            elif ext == ".yml" or ext == ".yaml":
-                conf_d = parse_yaml(confpath, section)
-            else:
-                Warning("Unknown filename extension {}".format(ext))
+            # check extension in case insensitive way
+            ext = ext.lower()[1:]
+            parser = get_parser(ext)
+            conf_d = parser(confpath, section)
         else:
             Warning("parameter file does not exist.")
-        if not node_key in node:
+        if node_key not in node:
             node[node_key] = conf_d
         else:
             for key in conf_d:
@@ -144,7 +166,9 @@ def no_section(node_list, filename, split_char="=", comment_char=["#"]):
 def register(pipes_dics):
     pipes_dics["configure"] = {
         "func": add,
-        "args": ["filename"],
+        "args": [("filename", {"help": "filename parameters are written."}),
+                 ("filetype", {"help": "filetype: ini, yaml. if not given, "
+                                       "use filename extension."})],
         "kwds": ["section"],
         "desc": "Read parameter file (use ConfigParser)",
     }

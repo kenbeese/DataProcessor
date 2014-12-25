@@ -72,17 +72,17 @@ dsaf : ohd"""}]
         self._create_conf_files(list_file_dict)
 
         # there is no parameter.conf
-        add(self.node_list, "parameter.conf", "parameters")
+        add(self.node_list, "parameter.conf", "ini", "parameters")
         added_dict = {"configure": {}}
         self._check_node_list(original_node_list, added_dict)
 
         # Add parameter1.conf to node_list
-        add(self.node_list, "parameter1.conf", "parameters")
+        add(self.node_list, "parameter1.conf", "ini", "parameters")
         added_dict = {"configure": {"hgoe": "3", "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
 
         # Add parameter2.conf to added node_list
-        add(self.node_list, "parameter2.conf", "default")
+        add(self.node_list, "parameter2.conf", "ini", "default")
         added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
                                     "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
@@ -96,14 +96,13 @@ dsaf : ohd"""}]
                            "contents": self._get_testdata("parameter2.yaml")}]
         self._create_conf_files(list_file_dict)
 
-        add(self.node_list, "parameter1.yaml", "parameters")
+        add(self.node_list, "parameter1.yaml", "yaml", "parameters")
         added_dict = {"configure": {"Nx": 100, "dx": 0.01, "msg": u"あ"}}
         self._check_node_list(original_node_list, added_dict)
 
-        add(self.node_list, "parameter2.yaml", "params")
+        add(self.node_list, "parameter2.yaml", "yaml", "params")
         added_dict["configure"]["foo"] = "bar"
         self._check_node_list(original_node_list, added_dict)
-
 
     def test_no_section(self):
         original_node_list = copy.deepcopy(self.node_list)
