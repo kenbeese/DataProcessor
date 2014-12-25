@@ -5,7 +5,7 @@ import os
 import copy
 
 from .utils import TestNodeListAndDir
-from ..pipes.configure import add, no_section
+from ..pipes.configure import add, no_section, get_filetype
 
 
 class TestConfigure(TestNodeListAndDir):
@@ -58,6 +58,13 @@ class TestConfigure(TestNodeListAndDir):
         with open(self._get_testdata_path(filename), "r") as f:
             return f.read()
 
+    def test_get_filetype(self):
+        self.assertEqual("ini",  get_filetype("/path/to/hoge.ini"))
+        self.assertEqual("ini",  get_filetype("/path/to/hoge.conf"))
+        self.assertEqual("yaml", get_filetype("/path/to/hoge.yml"))
+        self.assertEqual("yaml", get_filetype("/path/to/hoge.yaml"))
+        self.assertEqual(None,   get_filetype("/path/to/hoge.jpg"))
+
     def test_add(self):
         import copy
         original_node_list = copy.deepcopy(self.node_list)
@@ -81,8 +88,8 @@ dsaf : ohd"""}]
         added_dict = {"configure": {"hgoe": "3", "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
 
-        # Add parameter2.conf to added node_list
-        add(self.node_list, "parameter2.conf", "ini", "default")
+        # Add parameter2.conf to added node_list without filetype
+        add(self.node_list, "parameter2.conf", None, "default")
         added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
                                     "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
@@ -100,6 +107,7 @@ dsaf : ohd"""}]
         added_dict = {"configure": {"Nx": 100, "dx": 0.01, "msg": u"あ"}}
         self._check_node_list(original_node_list, added_dict)
 
+        # without filetype
         add(self.node_list, "parameter2.yaml", "yaml", "params")
         added_dict["configure"]["foo"] = "bar"
         self._check_node_list(original_node_list, added_dict)

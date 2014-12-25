@@ -66,10 +66,37 @@ def get_parser(filetype):
     """
     # check extension in case insensitive way
     filetype = filetype.lower()
-    if filetype in ("ini", "conf"):
+    if filetype in ("ini"):
         return parse_ini
     elif filetype in ("yaml"):
         return parse_yaml
+    else:
+        # TODO Default behavior
+        return None
+
+
+def get_filetype(path):
+    """
+    Get filetype from path (filename extension).
+    Filetypes are defined
+
+    Parameters
+    ----------
+    path: str
+        path to a file
+
+    Returns
+    -------
+    filetype as a string.
+    """
+    _, ext = os.path.splitext(path)
+
+    # check extension in case insensitive way
+    ext = ext.lower()
+    if ext in (".ini", ".conf"):
+        return "ini"
+    elif ext in (".yml", ".yaml"):
+        return "yaml"
     else:
         # TODO Default behavior
         return None
@@ -105,11 +132,9 @@ def add(node_list, filename, filetype=None, section="parameters"):
         confpath = os.path.join(node["path"], filename)
         conf_d = {}
         if os.path.exists(confpath):
-            _, ext = os.path.splitext(confpath)
-
-            # check extension in case insensitive way
-            ext = ext.lower()[1:]
-            parser = get_parser(ext)
+            if not filetype:
+                filetype = get_filetype(confpath)
+            parser = get_parser(filetype)
             conf_d = parser(confpath, section)
         else:
             Warning("parameter file does not exist.")
