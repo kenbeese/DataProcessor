@@ -71,7 +71,7 @@ def get_parser(filetype):
     elif filetype in ("yaml"):
         return parse_yaml
     else:
-        # TODO Default behavior
+        Warning("Unknown filetype " + filetype)
         return None
 
 
@@ -98,7 +98,7 @@ def get_filetype(path):
     elif ext in (".yml", ".yaml"):
         return "yaml"
     else:
-        # TODO Default behavior
+        Warning("Unknown filename extension " + ext)
         return None
 
 
@@ -135,7 +135,8 @@ def add(node_list, filename, filetype=None, section="parameters"):
             if not filetype:
                 filetype = get_filetype(confpath)
             parser = get_parser(filetype)
-            conf_d = parser(confpath, section)
+            if parser:
+                conf_d = parser(confpath, section)
         else:
             Warning("parameter file does not exist.")
         if node_key not in node:
