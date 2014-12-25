@@ -103,7 +103,7 @@ DataProcessorのホームディレクトリと、計算の情報を保持するJ
 この条件を満している場合は`scan_directory`を使用する事ができます。
 
 ```command
-dpmanip -s scan_directory /path/of/root/directory "*.ini"
+dpmanip scan_directory /path/of/root/directory "*.ini"
 ```
 
 `/path/of/root/directory`は計算に対応するディレクトリの親ディレクトリを指定します。
@@ -111,8 +111,8 @@ dpmanip -s scan_directory /path/of/root/directory "*.ini"
 もし複数に分れている時は複数回呼びます。
 
 ```command
-dpmanip -s scan_directory /main/path/of/root/directory "*.ini"
-dpmanip -s scan_directory /another/path/of/directory "*.ini"
+dpmanip scan_directory /main/path/of/root/directory "*.ini"
+dpmanip scan_directory /another/path/of/directory "*.ini"
 ```
 
 最後の引数`"*.ini"`は見つけたディレクトリが計算と
@@ -125,7 +125,7 @@ dpmanip -s scan_directory /another/path/of/directory "*.ini"
 上記の条件を満たしていない場合、各ランのディレクトリを個別に登録します。
 
 ```command
-dpmanip -s add_run /path/to/run
+dpmanip add_run /path/to/run
 ```
 
 で登録できます。
@@ -133,7 +133,7 @@ dpmanip -s add_run /path/to/run
 同時にtag、commentや別名を残したい場合は
 
 ```command
-dpmanip -s add_run /path/to/run --tag tagname_or_projectpath --name run_run_run --comment "The best run."
+dpmanip add_run /path/to/run --tag tagname_or_projectpath --name run_run_run --comment "The best run."
 ```
 
 で出来ます。tagやcommentは後からでも下に記述してあるように、
@@ -149,14 +149,14 @@ dpmanip -s add_run /path/to/run --tag tagname_or_projectpath --name run_run_run 
 
 もし計算のディレクトリに設定ファイルがINI形式で保存されていれば
 ```command
-dpmanip -s configure conf.ini
+dpmanip configure conf.ini
 ```
 
 `conf.ini`はINIファイルの名前に変更してください。
 
 拡張子が異なる場合は指定することができます。
 ```command
-dpmanip -s configure conf.conf ini
+dpmanip configure conf.conf ini
 ```
 
 セクションのないINIファイル
@@ -170,7 +170,7 @@ C = 2.0
 のような場合には
 
 ```command
-dpmanip -s configure_no_section conf.ini
+dpmanip configure_no_section conf.ini
 ```
 
 で可能です。
@@ -179,9 +179,9 @@ dpmanip -s configure_no_section conf.ini
 設定ファイルが独自形式の場合、各ランのパラメータを
 
 ```command
-dpmanip -s add_conf /path/to/run a 1
-dpmanip -s add_conf /path/to/run b 1.0
-dpmanip -s add_conf /path/to/run c 2.0
+dpmanip add_conf /path/to/run a 1
+dpmanip add_conf /path/to/run b 1.0
+dpmanip add_conf /path/to/run c 2.0
 ```
 
 で登録可能です。
@@ -219,7 +219,7 @@ dpserver stop
 [`add_run`を使用する場合](#add_runを使用する場合)に書いてある通り、
 
 ```command
-dpmanip -s add_run /path/to/run --tag tagname --comment "comment comment"
+dpmanip add_run /path/to/run --tag tagname --comment "comment comment"
 ```
 
 で追加できます。
@@ -234,7 +234,7 @@ webappではコメント覧をクリックするとコメントが入力でき�
 `dpmanip`は以下の様にして使います：
 
 ```command
-dpmanip -s add_comment "comment" /path/of/run
+dpmanip add_comment "comment" /path/of/run
 ```
 
 `"comment"`にはコメントしたい文字列を、
@@ -242,7 +242,7 @@ dpmanip -s add_comment "comment" /path/of/run
 現在のディレクトリの計算にコメントを付けるには
 
 ```command
-dpmanip -s add_comment "comment" .
+dpmanip add_comment "comment" .
 ```
 
 とします。
@@ -254,25 +254,25 @@ dpmanip -s add_comment "comment" .
 webappのプロジェクトのリストにタグも一緒に一覧されます。
 
 ```command
-dpmanip -s add_tag /path/of/run "tagname"
+dpmanip add_tag /path/of/run "tagname"
 ```
 
 `"tagname"`の替りに存在しているプロジェクトのパスを書く事もできます。
 
 ```command
-dpmanip -s add_tag /path/of/run /path/of/project
+dpmanip add_tag /path/of/run /path/of/project
 ```
 
 tagは以下のコマンドで外せます。
 
 ```command
-dpmanip -s untag /path/of/run tagname
+dpmanip untag /path/of/run tagname
 ```
 
 or
 
 ```command
-dpmanip -s untag /path/of/run /path/of/project
+dpmanip untag /path/of/run /path/of/project
 ```
 
 ### Pythonから使う
