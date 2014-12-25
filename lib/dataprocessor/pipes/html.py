@@ -34,7 +34,7 @@ def project(node_list, path):
     s.sort(ascending=False)
     with open(op.join(template_dir, "project.html"), "r") as f:
         template = Template(f.read())
-    cfg = [c for c in df[s.index].columns if c not in ["name", "comment"]]
+    cfg = [c for c in s.index if c not in ["name", "comment"]]
     res = {
         "name": node["name"],
         "html": template.render(df=df, cfg=cfg),
