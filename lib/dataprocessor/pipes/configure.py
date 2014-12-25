@@ -78,7 +78,6 @@ def get_parser(filetype):
 def get_filetype(path):
     """
     Get filetype from path (filename extension).
-    Filetypes are defined
 
     Parameters
     ----------
@@ -192,10 +191,11 @@ def no_section(node_list, filename, split_char="=", comment_char=["#"]):
 def register(pipes_dics):
     pipes_dics["configure"] = {
         "func": add,
-        "args": [("filename", {"help": "filename parameters are written."}),
-                 ("filetype", {"help": "filetype: ini, yaml. if not given, "
-                                       "use filename extension."})],
-        "kwds": ["section"],
+        "args": ["filename"],
+        "kwds": [("section", {"help": "section parameters are written"}),
+                 ("filetype", {"help": "filetype [ini, yaml]. If not given, "
+                                       "determined automatically by the "
+                                       "filename extension."})],
         "desc": "Read parameter file (use ConfigParser)",
     }
     pipes_dics["configure_no_section"] = {
