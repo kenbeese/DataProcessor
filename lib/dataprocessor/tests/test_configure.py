@@ -6,6 +6,7 @@ import copy
 
 from .utils import TestNodeListAndDir
 from ..pipes.configure import add, no_section, get_filetype
+from ..exception import DataProcessorError
 
 
 class TestConfigure(TestNodeListAndDir):
@@ -63,7 +64,8 @@ class TestConfigure(TestNodeListAndDir):
         self.assertEqual("ini",  get_filetype("/path/to/hoge.conf"))
         self.assertEqual("yaml", get_filetype("/path/to/hoge.yml"))
         self.assertEqual("yaml", get_filetype("/path/to/hoge.yaml"))
-        self.assertEqual(None,   get_filetype("/path/to/hoge.jpg"))
+        with self.assertRaises(DataProcessorError):
+            get_filetype("/path/to/hoge.jpg")
 
     def test_add(self):
         import copy
