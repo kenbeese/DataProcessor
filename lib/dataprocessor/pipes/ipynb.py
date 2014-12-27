@@ -11,14 +11,13 @@ def gather_notebooks():
     """ Gather processes of IPython Notebook
     """
     notes = []
-    for pid in psutil.pids():
-        p = psutil.Process(pid)
-        if p.name()[:7] != "ipython":
+    for p in psutil.process_iter():
+        if not p.name().startswith("ipython"):
             continue
         if "notebook" not in p.cmdline():
             continue
         notes.append({
-            "pid": pid,
+            "pid": p.pid,
             "cwd": p.cwd(),
         })
 
@@ -38,7 +37,7 @@ def gather_notebooks():
     return notes
 
 
-def start_ipynb(nl, ipynb_path):
+def start(nl, ipynb_path):
     """
     Start existing .ipynb file
     at standing ipython notebook server
@@ -59,7 +58,7 @@ def start_ipynb(nl, ipynb_path):
     ipynb_path = check_file(ipynb_path)
     for note in gather_notebooks():
         cwd = note["cwd"]
-        if ipynb_path[:len(cwd)] != cwd:
+        if not ipynb_path.startswith(cwd):
             continue
         note["postfix"] = ipynb_path[len(cwd)+1:]  # remove '/'
         retcode = call([
@@ -76,7 +75,7 @@ def start_ipynb(nl, ipynb_path):
 
 def register(pipes_dics):
     pipes_dics["start_ipynb"] = {
-        "func": start_ipynb,
+        "func": start,
         "args": ["ipynb_path"],
         "desc": "start .ipynb in standing notebook",
     }
