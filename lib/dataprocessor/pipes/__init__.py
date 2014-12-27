@@ -26,7 +26,9 @@ for mod in mod_list:
     register(pipes_dics)
 
 # add empty dict into old style pipe definition
-for name, attr in pipes_dics.items():
+
+
+def _convert_old_pipes_dics(pipes_dics):
     def _add_dict(key):
         args = attr[key]
         if len(args) == 0:
@@ -34,22 +36,21 @@ for name, attr in pipes_dics.items():
         if isinstance(args[0], str):
             attr[key] = [(name, {"help": name}) for name in args]
 
-    _add_dict("args")
-    if "kwds" in attr:
-        _add_dict("kwds")
-
+    for name, attr in pipes_dics.items():
+        _add_dict("args")
+        if "kwds" in attr:
+            _add_dict("kwds")
+    return pipes_dics
+pipes_dics = _convert_old_pipes_dics(pipes_dics)
 # validate pipes
-for name, attr in pipes_dics.items():
-    msg0 = "(pipe={}) ".format(name)
+
+
+def _validate_pipes(pipes_dics):
 
     def _check_attr(key):
         if key not in attr:
             msg = "'{}' attribute does not exsit.".format(key)
             raise InvalidPipeError(msg0 + msg)
-
-    _check_attr("func")
-    _check_attr("desc")
-    _check_attr("args")
 
     def _check_type(key):
         args = attr[key]
@@ -64,6 +65,14 @@ for name, attr in pipes_dics.items():
             except TypeError:
                 raise InvalidPipeError(msg0 + msg)
 
-    _check_type("args")
-    if "kwds" in attr:
-        _check_type("kwds")
+    for name, attr in pipes_dics.items():
+        msg0 = "(pipe={}) ".format(name)
+        _check_attr("func")
+        _check_attr("desc")
+        _check_attr("args")
+
+        _check_type("args")
+        if "kwds" in attr:
+            _check_type("kwds")
+
+_validate_pipes(pipes_dics)
