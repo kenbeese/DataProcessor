@@ -16,26 +16,18 @@ def gather_notebooks():
             continue
         if "notebook" not in p.cmdline():
             continue
+        for net in p.connections(kind="inet4"):
+            if net.status != "LISTEN":
+                continue
+            _, port = net.laddr
+            break
         notes.append({
             "pid": p.pid,
             "cwd": p.cwd(),
+            "port": port,
         })
-
     if not notes:
         raise dpError("No IPython Notebook found")
-
-    try:
-        connections = psutil.net_connections(kind="inet4")
-    except psutil.AccessDenied:
-        raise dpError("Cannot scan the port of Notebook server")
-    for net in connections:
-        if not net.pid or net.status != "LISTEN":
-            continue
-        ip, port = net.laddr
-        for note in notes:
-            if net.pid == note["pid"]:
-                note["ip"], note["port"] = net.laddr
-
     return notes
 
 
@@ -64,7 +56,7 @@ def start(nl, ipynb_path):
         if not ipynb_path.startswith(cwd):
             continue
         note["postfix"] = ipynb_path[len(cwd)+1:]  # remove '/'
-        url = "http://{ip}:{port}/notebooks/{postfix}".format(**note)
+        url = "http://localhost:{port}/notebooks/{postfix}".format(**note)
         try:
             webbrowser.open(url)
         except webbrowser.Error:
