@@ -2,7 +2,7 @@
 
 
 import psutil
-from subprocess import call
+import webbrowser
 from ..utility import check_file
 from ..exception import DataProcessorError as dpError
 
@@ -53,6 +53,7 @@ def start(nl, ipynb_path):
         - No IPython Notebook found
         - Existing notebook servers do not start
           on the parent directory of .ipynb file.
+        - Cannot open browser
 
     """
     ipynb_path = check_file(ipynb_path)
@@ -61,13 +62,11 @@ def start(nl, ipynb_path):
         if not ipynb_path.startswith(cwd):
             continue
         note["postfix"] = ipynb_path[len(cwd)+1:]  # remove '/'
-        retcode = call([
-            "open",
-            "http://{ip}:{port}/notebooks/{postfix}".format(**note)
-        ])
-        if retcode:
-            raise dpError("Unknown error while opening notebook"
-                          " (return code={})".format(retcode))
+        url = "http://{ip}:{port}/notebooks/{postfix}".format(**note)
+        try:
+            webbrowser.open(url)
+        except webbrowser.Error:
+            raise dpError("Unknown error while opening notebook")
         return nl
     raise dpError("No valid Notebook found. "
                   "Please stand notebook server on the parent directory.")
