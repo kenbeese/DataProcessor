@@ -5,7 +5,7 @@ import os
 import copy
 
 from .utils import TestNodeListAndDir
-from ..pipes.configure import add, no_section
+from ..pipes.configure import add, no_section, get_filetype
 
 
 class TestConfigure(TestNodeListAndDir):
@@ -50,6 +50,21 @@ class TestConfigure(TestNodeListAndDir):
             node.update(added_dict)
         self.assertEqual(self.node_list, compare_node_list)
 
+    def _get_testdata_path(self, filename):
+        return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "testdata", filename)
+
+    def _get_testdata(self, filename):
+        with open(self._get_testdata_path(filename), "r") as f:
+            return f.read()
+
+    def test_get_filetype(self):
+        self.assertEqual("ini",  get_filetype("/path/to/hoge.ini"))
+        self.assertEqual("ini",  get_filetype("/path/to/hoge.conf"))
+        self.assertEqual("yaml", get_filetype("/path/to/hoge.yml"))
+        self.assertEqual("yaml", get_filetype("/path/to/hoge.yaml"))
+        self.assertEqual(None,   get_filetype("/path/to/hoge.jpg"))
+
     def test_add(self):
         import copy
         original_node_list = copy.deepcopy(self.node_list)
@@ -64,19 +79,37 @@ dsaf : ohd"""}]
         self._create_conf_files(list_file_dict)
 
         # there is no parameter.conf
-        add(self.node_list, "parameter.conf", "parameters")
+        add(self.node_list, "parameter.conf", "ini", "parameters")
         added_dict = {"configure": {}}
         self._check_node_list(original_node_list, added_dict)
 
         # Add parameter1.conf to node_list
-        add(self.node_list, "parameter1.conf", "parameters")
+        add(self.node_list, "parameter1.conf", "ini", "parameters")
         added_dict = {"configure": {"hgoe": "3", "hogehoge": "2"}}
         self._check_node_list(original_node_list, added_dict)
 
-        # Add parameter2.conf to added node_list
-        add(self.node_list, "parameter2.conf", "default")
+        # Add parameter2.conf to added node_list without filetype
+        add(self.node_list, "parameter2.conf", None, "default")
         added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
                                     "hogehoge": "2"}}
+        self._check_node_list(original_node_list, added_dict)
+
+    def test_add_yaml(self):
+        import copy
+        original_node_list = copy.deepcopy(self.node_list)
+        list_file_dict = [{"name": "parameter1.yaml",
+                           "contents": self._get_testdata("parameter1.yml")},
+                          {"name": "parameter2.yaml",
+                           "contents": self._get_testdata("parameter2.yaml")}]
+        self._create_conf_files(list_file_dict)
+
+        add(self.node_list, "parameter1.yaml", "yaml", "parameters")
+        added_dict = {"configure": {"Nx": 100, "dx": 0.01, "msg": u"あ"}}
+        self._check_node_list(original_node_list, added_dict)
+
+        # without filetype
+        add(self.node_list, "parameter2.yaml", "yaml", "params")
+        added_dict["configure"]["foo"] = "bar"
         self._check_node_list(original_node_list, added_dict)
 
     def test_no_section(self):

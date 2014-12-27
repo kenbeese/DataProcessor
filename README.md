@@ -153,6 +153,12 @@ dpmanip configure conf.ini
 ```
 
 `conf.ini`はINIファイルの名前に変更してください。
+
+拡張子が異なる場合は指定することができます。
+```command
+dpmanip configure conf.conf ini
+```
+
 セクションのないINIファイル
 
 ```

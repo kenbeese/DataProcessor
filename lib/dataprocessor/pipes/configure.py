@@ -1,12 +1,107 @@
 # coding=utf-8
 """Pipes of configure."""
 import os.path
+import yaml
 from ConfigParser import SafeConfigParser
 
 from ..utility import read_configure
 
 
-def add(node_list, filename, section="parameters"):
+def parse_ini(confpath, section):
+    """
+    Parse .ini and .conf to dictionary
+
+    Parameters
+    ----------
+    confpath : str
+        Path to config file.
+    section : str
+        Specify section name in configure file.
+
+    Returns
+    -------
+    Specified section as a dictionary.
+    """
+    conf = SafeConfigParser()
+    conf.optionxform = str
+    conf.read(confpath)
+    return {k: v for k, v in conf.items(section)}
+
+
+def parse_yaml(confpath, section):
+    """
+    Parse .yaml to dictionary
+
+    Parameters
+    ----------
+    confpath : str
+        Path to config file.
+    section : str
+        Specify section name in configure file.
+
+    Returns
+    -------
+    Specified section as a dictionary.
+    """
+    with open(confpath, "r") as f:
+        d = yaml.load(f)
+        if section not in d:
+            Warning("No such section {} in {}".format(section, confpath))
+            return {}
+        return d[section]
+
+
+def get_parser(filetype):
+    """
+    Get parser corresponding to the filetype
+
+    Parameters
+    ----------
+    filetype : str
+        These filetypes are available; "ini", "conf", "yaml"
+
+    Returns
+    -------
+    function that takes 2 args, confpath and section.
+    """
+    # check extension in case insensitive way
+    filetype = filetype.lower()
+    if filetype in ("ini"):
+        return parse_ini
+    elif filetype in ("yaml"):
+        return parse_yaml
+    else:
+        Warning("Unknown filetype " + filetype)
+        return None
+
+
+def get_filetype(path):
+    """
+    Get filetype from path (filename extension).
+
+    Parameters
+    ----------
+    path: str
+        path to a file
+
+    Returns
+    -------
+    filetype as a string.
+    """
+    _, ext = os.path.splitext(path)
+
+    # check extension in case insensitive way
+    ext = ext.lower()
+    if ext in (".ini", ".conf"):
+        return "ini"
+    elif ext in (".yml", ".yaml"):
+        return "yaml"
+    else:
+        Warning("Unknown filename extension " + ext)
+        return None
+
+
+def add(node_list, filename, filetype=None, section="parameters"):
     """
     Add configure to node_list.
 
@@ -14,7 +109,7 @@ def add(node_list, filename, section="parameters"):
     ----------
     filename : str
         filename of parameter configure file
-        If file is not exists, add null list.
+        If file does not exist, add null list.
 
     section : str
         Specify section name in configure file.
@@ -36,14 +131,14 @@ def add(node_list, filename, section="parameters"):
         confpath = os.path.join(node["path"], filename)
         conf_d = {}
         if os.path.exists(confpath):
-            conf = SafeConfigParser()
-            conf.optionxform = str
-            conf.read(confpath)
-            for key, var in conf.items(section):
-                conf_d[key] = var
+            if not filetype:
+                filetype = get_filetype(confpath)
+            parser = get_parser(filetype)
+            if parser:
+                conf_d = parser(confpath, section)
         else:
-            Warning("parameter file is not exists.")
-        if not node_key in node:
+            Warning("parameter file does not exist.")
+        if node_key not in node:
             node[node_key] = conf_d
         else:
             for key in conf_d:
@@ -62,7 +157,7 @@ def no_section(node_list, filename, split_char="=", comment_char=["#"]):
     ----------
     filename : str
         filename of parameter configure file
-        If file is not exists, add null list.
+        If file does not exist, add null list.
     split_char : str
         Specify the deliminator char.
     comment_char : str
@@ -97,7 +192,10 @@ def register(pipes_dics):
     pipes_dics["configure"] = {
         "func": add,
         "args": ["filename"],
-        "kwds": ["section"],
+        "kwds": [("section", {"help": "section parameters are written"}),
+                 ("filetype", {"help": "filetype [ini, yaml]. If not given, "
+                                       "determined automatically by the "
+                                       "filename extension."})],
         "desc": "Read parameter file (use ConfigParser)",
     }
     pipes_dics["configure_no_section"] = {
