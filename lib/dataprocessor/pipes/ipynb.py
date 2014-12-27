@@ -24,12 +24,14 @@ def gather_notebooks():
     if not notes:
         raise dpError("No IPython Notebook found")
 
-    for net in psutil.net_connections():
+    try:
+        connections = psutil.net_connections(kind="inet4")
+    except psutil.AccessDenied:
+        raise dpError("Cannot scan the port of Notebook server")
+    for net in connections:
         if not net.pid or net.status != "LISTEN":
             continue
         ip, port = net.laddr
-        if len(ip.split(".")) != 4:  # IPv4 only
-            continue
         for note in notes:
             if net.pid == note["pid"]:
                 note["ip"], note["port"] = net.laddr
