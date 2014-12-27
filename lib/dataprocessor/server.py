@@ -11,6 +11,7 @@ from zipfile import ZipFile
 from tempfile import NamedTemporaryFile
 from daemon import DaemonContext
 from daemon.pidfile import PIDLockFile
+from functools import wraps
 
 from . import utility
 from . import exception
@@ -69,45 +70,50 @@ def install(args):
     _install_bootstrap(jspath, csspath)
 
 
+def show_progress(name):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwds):
+            sys.stdout.write("Downloading {}...".format(name))
+            sys.stdout.flush()
+            res = f(*args, **kwds)
+            print("Done")
+            return res
+        return wrapper
+    return decorator
+
+
+@show_progress("jQuery")
 def _install_jquery(jspath):
     jquery_filename = "jquery-1.10.2.js"
     jquery_url = "http://code.jquery.com/" + jquery_filename
-    sys.stdout.write("Downloading jQuery...")
-    sys.stdout.flush()
     with open(op.join(jspath, jquery_filename), "w") as f:
         f.write(urllib2.urlopen(jquery_url).read())
-    print("Done.")
 
 
+@show_progress("jQuery Cookie")
 def _install_jquery_cookie(jspath):
     jquery_cookie_filename = "jquery.cookie.js"
     jquery_cookie_url = "https://raw.github.com/carhartl/jquery-cookie/master/src/"\
         + jquery_cookie_filename
-    sys.stdout.write("Downloading jQuery Cookie...")
-    sys.stdout.flush()
     with open(op.join(jspath, jquery_cookie_filename), "w") as f:
         f.write(urllib2.urlopen(jquery_cookie_url).read())
-    print("Done.")
 
 
+@show_progress("jQuery blockUI")
 def _install_jquery_blockUI(jspath):
     jquery_blockUI_filename = "jquery.blockUI.js"
     jquery_blockUI_url = "http://malsup.github.io/" + jquery_blockUI_filename
-    sys.stdout.write("Downloading jQuery blockUI...")
-    sys.stdout.flush()
     with open(op.join(jspath, jquery_blockUI_filename), "w") as f:
         f.write(urllib2.urlopen(jquery_blockUI_url).read())
-    print("Done.")
 
 
+@show_progress("jQuery datatables")
 def _install_jquery_datatables(jspath, csspath, imagepath):
-
     version = "1.10.4"
     topdir = "DataTables-{}".format(version)
     url = "http://datatables.net/releases/{}.zip".format(topdir)
 
-    sys.stdout.write("Downloading jQuery datatables...")
-    sys.stdout.flush()
     req = urllib2.Request(url,
                           headers={'User-Agent': "Magic Browser"})
     with NamedTemporaryFile(suffix=".zip", delete=False) as f:
@@ -135,16 +141,13 @@ def _install_jquery_datatables(jspath, csspath, imagepath):
         _copy_file(csspath, zf,
                    topdir + "/extensions/FixedColumns/css/dataTables.fixedColumns.min.css")
 
-    print("Done.")
 
-
+@show_progress("Bootstrap")
 def _install_bootstrap(jspath, csspath):
     bootstrap_version = "3.3.1"
     bootstrap_url = "https://github.com/twbs/bootstrap/releases/download/"\
         + "v{version}/bootstrap-{version}-dist.zip"\
         .format(version=bootstrap_version)
-    sys.stdout.write("Downloading Bootstrap...")
-    sys.stdout.flush()
     with NamedTemporaryFile(suffix=".zip", delete=False) as f:
         bootstrap_name = f.name
         f.write(urllib2.urlopen(bootstrap_url).read())
@@ -152,7 +155,6 @@ def _install_bootstrap(jspath, csspath):
     with ZipFile(bootstrap_name, 'r') as zf:
         _copy_file(jspath, zf, "dist/js/bootstrap.min.js")
         _copy_file(csspath, zf, "dist/css/bootstrap.min.css")
-    print("Done.")
 
 
 def _copy_file(path, zf, fn):
