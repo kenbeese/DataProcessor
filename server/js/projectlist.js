@@ -11,6 +11,7 @@ function get_project_list() {
     $("section.dp-projectlist").append(html);
     enable_project_link();
     enable_editable_comment();
+    $("table.dp-projectlist").DataTable(DATATABLES_SETTING);
   })
 }
 
