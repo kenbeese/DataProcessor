@@ -12,7 +12,7 @@ def gather_notebooks():
     """
     notes = []
     for p in psutil.process_iter():
-        if not p.name().startswith("ipython"):
+        if not p.name().lower() in ["ipython", "python"]:
             continue
         if "notebook" not in p.cmdline():
             continue
@@ -55,7 +55,7 @@ def start(nl, ipynb_path):
         cwd = note["cwd"]
         if not ipynb_path.startswith(cwd):
             continue
-        note["postfix"] = ipynb_path[len(cwd)+1:]  # remove '/'
+        note["postfix"] = ipynb_path[len(cwd) + 1:]  # remove '/'
         url = "http://localhost:{port}/notebooks/{postfix}".format(**note)
         try:
             webbrowser.open(url)
