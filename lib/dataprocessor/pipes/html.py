@@ -3,7 +3,6 @@
 import json
 import os.path as op
 from jinja2 import Template
-from pandas import Series
 
 from ..utility import check_directory
 from ..filter import node_type
