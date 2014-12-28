@@ -1,6 +1,6 @@
 
 function get_project(path) {
-  $("section.dp-project").empty();
+  $("section").hide(ANIMATION_SPEED);
   _sync_api_call({
     "type": "pipe",
     "name": "project_html",
@@ -8,7 +8,9 @@ function get_project(path) {
   }, function(res){
     var name = res["name"];
     var table_html = res["html"];
-    $("section.dp-project").append(table_html);
+    $("section.dp-project")
+      .empty()
+      .append(table_html);
     var li$ = $("<li>").appendTo("ol#LocationBar");
     $("<a>")
       .addClass("dp-project")
@@ -18,13 +20,8 @@ function get_project(path) {
       .appendTo(li$);
     enable_link();
     $("table.dp-project").DataTable(DATATABLES_SETTING);
+    $(".dp-project").show(ANIMATION_SPEED);
   });
-}
-
-function show_project(){
-  $("section.dp-projectlist").hide(ANIMATION_SPEED);
-  $("section.dp-run").hide(ANIMATION_SPEED);
-  $(".dp-project").show(ANIMATION_SPEED);
 }
 
 function enable_project_link(){
@@ -33,6 +30,5 @@ function enable_project_link(){
     .on("click", function(){
       var path = $(this).attr("dp-path");
       get_project(path);
-      show_project();
     });
 }
