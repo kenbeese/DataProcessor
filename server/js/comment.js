@@ -32,7 +32,7 @@ function enable_editable_comment() {
       .text(comment)
       .on("click", f_click);
   };
-  $("td.dp-comment")
+  $(".dp-comment")
     .off("click")
     .on("click", f_click)
     .off("blur", "textarea.dp-comment")

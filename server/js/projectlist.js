@@ -16,7 +16,6 @@ function get_projectlist() {
       .append("Project List")
       .appendTo(li$);
     enable_link();
-    enable_editable_comment();
     $("table.dp-projectlist").DataTable(DATATABLES_SETTING);
   })
 }

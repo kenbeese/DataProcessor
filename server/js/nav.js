@@ -8,6 +8,7 @@ function enable_link() {
       $(this).parent("li").nextAll().remove();
       $(this).parent("li").remove();
     });
+  enable_editable_comment();
 }
 
 function _sync_api_call(data, callback){
