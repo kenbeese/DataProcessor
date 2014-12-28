@@ -44,6 +44,18 @@ def project(node_list, path):
     return node_list
 
 
+def run(node_list, path):
+    node = nodes.get(node_list, path)
+    with open(op.join(template_dir, "run.html"), "r") as f:
+        template = Template(f.read())
+    res = {
+        "name": node["name"],
+        "html": template.render(node=node),
+    }
+    print(json.dumps(res))
+    return node_list
+
+
 def register(dicts):
     dicts["projectlist_html"] = {
         "func": projectlist,
@@ -57,5 +69,12 @@ def register(dicts):
         "args": ["path"],
         "kwds": [],
         "desc": "output project name and its paramter table as a JSON",
+        "output": "json",
+    }
+    dicts["run_html"] = {
+        "func": run,
+        "args": ["path"],
+        "kwds": [],
+        "desc": "run HTML",
         "output": "json",
     }

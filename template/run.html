@@ -1,0 +1,9 @@
+<div class="dp-run">
+  <h2>{{node["name"]}}</h2>
+  <dl class="dl-horizontal">
+  {% for key in ["path", "comment"] %}
+    <dt>{{key}}</dt>
+    <dd>{{node[key]}}</dd>
+  {% endfor %}
+  </dl>
+</div>
