@@ -28,13 +28,15 @@ def projectlist(node_list):
 def project(node_list, path):
     node = nodes.get(node_list, path)
     df = get_project(node_list, path, properties=["comment"]).fillna("")
-    s = Series()
-    for index in df.axes[1]:
-        s[index] = len(df.drop_duplicates(index).index)
-    s.sort(ascending=False)
+
     with open(op.join(template_dir, "project.html"), "r") as f:
         template = Template(f.read())
-    cfg = [c for c in s.index if c not in ["name", "comment"]]
+
+    def _count_uniq(col):
+        return len(set(df[col]))
+    index = sorted(df.columns, key=_count_uniq, reverse=True)
+
+    cfg = [c for c in index if c not in ["name", "comment"]]
     res = {
         "name": node["name"],
         "html": template.render(df=df, cfg=cfg),
