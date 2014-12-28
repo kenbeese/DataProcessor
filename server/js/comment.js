@@ -17,7 +17,6 @@ function enable_editable_comment() {
     var path = $(this).attr("dp-path");
     $(this).empty().off("click");
     $("<textarea>")
-      .addClass("dp-comment")
       .val(comment)
       .attr("dp-path", path)
       .appendTo(this)
@@ -35,6 +34,6 @@ function enable_editable_comment() {
   $(".dp-comment")
     .off("click")
     .on("click", f_click)
-    .off("blur", "textarea.dp-comment")
-    .on("blur", "textarea.dp-comment", f_blur);
+    .off("blur", "textarea")
+    .on("blur", "textarea", f_blur);
 }
