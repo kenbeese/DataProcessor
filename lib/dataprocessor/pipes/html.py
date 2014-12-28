@@ -75,6 +75,6 @@ def register(dicts):
         "func": run,
         "args": ["path"],
         "kwds": [],
-        "desc": "run HTML",
+        "desc": "output run name and a part of HTML as a JSON",
         "output": "json",
     }
