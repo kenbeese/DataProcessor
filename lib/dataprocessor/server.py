@@ -124,7 +124,7 @@ def _install_jquery_datatables(jspath, csspath, imagepath):
         _copy_file(jspath, zf,
                    topdir + "/media/js/jquery.dataTables.min.js")
         _copy_file(csspath, zf,
-                   topdir + "/media/css/jquery.dataTables.css")
+                   topdir + "/media/css/jquery.dataTables.min.css")
         for name in zf.namelist():
             if not name.find("media/images") is -1 and not name.endswith("/"):
                 _copy_file(imagepath, zf, name)
