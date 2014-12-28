@@ -1,5 +1,5 @@
 
-function get_project_list() {
+function get_projectlist() {
   $("section.dp-projectlist").empty();
   _sync_api_call({
     "type": "pipe",
@@ -9,26 +9,34 @@ function get_project_list() {
     paths = res["paths"];
     html = res["html"];
     $("section.dp-projectlist").append(html);
-    enable_project_link();
+    var li$ = $("<li>").appendTo("ol#LocationBar");
+    $("<a>")
+      .addClass("dp-projectlist")
+      .addClass("dp-nav")
+      .append("Project List")
+      .appendTo(li$);
+    enable_link();
     enable_editable_comment();
     $("table.dp-projectlist").DataTable(DATATABLES_SETTING);
   })
 }
 
-function show_project_list(){
+function show_projectlist(){
   $("section.dp-project").hide(ANIMATION_SPEED);
   $("section.dp-run").hide(ANIMATION_SPEED);
   $(".dp-projectlist").show(ANIMATION_SPEED);
-  $("a.dp-project").show(ANIMATION_SPEED);
 }
 
-$(function(){
-  get_project_list();
-  show_project_list();
+function enable_projectlist_link() {
   $("a.dp-projectlist")
     .off("click")
     .on("click", function(){
-      get_project_list();
-      show_project_list();
+      get_projectlist();
+      show_projectlist();
     });
+}
+
+$(function(){
+  get_projectlist();
+  show_projectlist();
 });

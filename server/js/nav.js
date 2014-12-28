@@ -1,12 +1,12 @@
 
-function _enable_nav() {
-  /** enable dp-nav which clears display history in location bar
-   *
-   * This must be called from enable_*_link
-   */
+function enable_link() {
+  enable_projectlist_link();
+  enable_project_link();
+  enable_run_link();
   $("a.dp-nav") // do not off event
     .on("click", function(){
-      $(this).parent("li").next().remove();
+      $(this).parent("li").nextAll().remove();
+      $(this).parent("li").remove();
     });
 }
 

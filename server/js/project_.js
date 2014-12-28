@@ -11,10 +11,12 @@ function get_project(path) {
     $("section.dp-project").append(table_html);
     var li$ = $("<li>").appendTo("ol#LocationBar");
     $("<a>")
+      .addClass("dp-project")
+      .addClass("dp-nav")
       .attr("dp-path", path)
       .append(name)
       .appendTo(li$);
-    enable_project_link();
+    enable_link();
     enable_editable_comment();
     $("table.dp-project").DataTable(DATATABLES_SETTING);
   });
@@ -23,8 +25,6 @@ function get_project(path) {
 function show_project(){
   $("section.dp-projectlist").hide(ANIMATION_SPEED);
   $("section.dp-run").hide(ANIMATION_SPEED);
-  $("a.dp-projectlist").show(ANIMATION_SPEED);
-  $("a.dp-run").show(ANIMATION_SPEED);
   $(".dp-project").show(ANIMATION_SPEED);
 }
 
@@ -36,5 +36,4 @@ function enable_project_link(){
       get_project(path);
       show_project();
     });
-  _enable_nav();
 }
