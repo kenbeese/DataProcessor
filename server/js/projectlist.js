@@ -1,34 +1,27 @@
 
-function get_project_list() {
-  $("section.dp-projectlist").empty();
+function get_projectlist() {
+  $("section").hide(ANIMATION_SPEED);
   _sync_api_call({
     "type": "pipe",
     "name": "projectlist_html",
     "args": "[]",
-  }, function(res){
-    paths = res["paths"];
-    html = res["html"];
-    $("section.dp-projectlist").append(html);
-    enable_project_link();
-    enable_editable_comment();
+  }, function(html){
+    $("section.dp-projectlist")
+      .empty()
+      .append(html);
+    enable_link();
     $("table.dp-projectlist").DataTable(DATATABLES_SETTING);
+    $(".dp-projectlist").show(ANIMATION_SPEED);
   })
 }
 
-function show_project_list(){
-  $("section.dp-project").hide(ANIMATION_SPEED);
-  $("section.dp-run").hide(ANIMATION_SPEED);
-  $(".dp-projectlist").show(ANIMATION_SPEED);
-  $("a.dp-project").show(ANIMATION_SPEED);
+function enable_projectlist_link() {
+  $("a.dp-projectlist")
+    .on("click", function(){
+      get_projectlist();
+    });
 }
 
 $(function(){
-  get_project_list();
-  show_project_list();
-  $("a.dp-projectlist")
-    .off("click")
-    .on("click", function(){
-      get_project_list();
-      show_project_list();
-    });
+  get_projectlist();
 });

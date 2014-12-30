@@ -1,13 +1,28 @@
 
-function _enable_nav() {
-  /** enable dp-nav which clears display history in location bar
-   *
-   * This must be called from enable_*_link
-   */
-  $("a.dp-nav") // do not off event
+function add_nav_link(path, name, classname) {
+    var li$ = $("<li>").appendTo("ol#LocationBar");
+    $("<a>")
+      .addClass(classname)
+      .addClass("dp-nav")
+      .attr("dp-path", path)
+      .append(name)
+      .appendTo(li$);
+}
+
+function enable_nav_link() {
+  $("a.dp-nav")
     .on("click", function(){
-      $(this).parent("li").next().remove();
+      $(this).parent("li").nextAll().remove();
     });
+}
+
+function enable_link() {
+  $("a").off("click");
+  enable_projectlist_link();
+  enable_project_link();
+  enable_run_link();
+  enable_nav_link();
+  enable_editable_comment();
 }
 
 function _sync_api_call(data, callback){
@@ -17,7 +32,7 @@ function _sync_api_call(data, callback){
     type: "POST",
     data: data,
     success: function(res, st){
-      if("exit_code" in res && res["exit_code"] != 0){
+      if(typeof(res) == "object" && "exit_code" in res && res["exit_code"] != 0){
         alert("Server Error: " + res["message"]);
       }
       callback(res);
