@@ -1,13 +1,27 @@
 
+function add_nav_link(path, name, classname) {
+    var li$ = $("<li>").appendTo("ol#LocationBar");
+    $("<a>")
+      .addClass(classname)
+      .addClass("dp-nav")
+      .attr("dp-path", path)
+      .append(name)
+      .appendTo(li$);
+}
+
+function enable_nav_link() {
+  $("a.dp-nav")
+    .on("click", function(){
+      $(this).parent("li").nextAll().remove();
+    });
+}
+
 function enable_link() {
+  $("a").off("click");
   enable_projectlist_link();
   enable_project_link();
   enable_run_link();
-  $("a.dp-nav") // do not off event
-    .on("click", function(){
-      $(this).parent("li").nextAll().remove();
-      $(this).parent("li").remove();
-    });
+  enable_nav_link();
   enable_editable_comment();
 }
 
