@@ -10,10 +10,10 @@
     {%- for p in projects %}
     <tr>
       <td>
-        <a class="dp-project" dp-path="{{p.path}}">{{p.name}}</a>
+        <a class="dp-project" dp-path="{{p.path}}">{{p.name|e}}</a>
       </td>
       <td class="dp-comment" dp-path="{{p.path}}">{{p.comment|e}}</td>
-      <td>{{p.path}}</td>
+      <td>{{p.path|e}}</td>
     </tr>
     {%- endfor %}
   </tbody>
