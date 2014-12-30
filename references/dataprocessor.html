@@ -70,6 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.configure">dataprocessor.pipes.configure module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.figure">dataprocessor.pipes.figure module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.filter">dataprocessor.pipes.filter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.ipynb">dataprocessor.pipes.ipynb module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.jsonio">dataprocessor.pipes.jsonio module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.move_node">dataprocessor.pipes.move_node module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.normalize">dataprocessor.pipes.normalize module</a></li>
@@ -106,6 +107,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.tests.html#module-dataprocessor.tests.test_nodes">dataprocessor.tests.test_nodes module</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.tests.html#module-dataprocessor.tests.test_pipes">dataprocessor.tests.test_pipes module</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.tests.html#module-dataprocessor.tests.test_scan">dataprocessor.tests.test_scan module</a><ul class="simple">
@@ -1186,7 +1190,7 @@ This must belong to the <cite>node_list</cite></p>
 <p>Configure manager of dataprocessor</p>
 <dl class="function">
 <dt id="dataprocessor.rc.ArgumentParser">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">ArgumentParser</code><span class="sig-paren">(</span><em>rcpath='~/.dataprocessor.ini'</em>, <em>options={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#ArgumentParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.ArgumentParser" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">ArgumentParser</code><span class="sig-paren">(</span><em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em>, <em>options={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#ArgumentParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.ArgumentParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Argument parser for executables in this project.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1231,7 +1235,7 @@ of the configure file.
 
 <dl class="function">
 <dt id="dataprocessor.rc.get_configparser">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">get_configparser</code><span class="sig-paren">(</span><em>rcpath='~/.dataprocessor.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configparser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configparser" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">get_configparser</code><span class="sig-paren">(</span><em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configparser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configparser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get configure parser</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1261,7 +1265,7 @@ of the configure file.
 
 <dl class="function">
 <dt id="dataprocessor.rc.get_configure">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">get_configure</code><span class="sig-paren">(</span><em>section</em>, <em>key</em>, <em>rcpath='~/.dataprocessor.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configure" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">get_configure</code><span class="sig-paren">(</span><em>section</em>, <em>key</em>, <em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get configure value</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1299,7 +1303,7 @@ of the configure file.
 
 <dl class="function">
 <dt id="dataprocessor.rc.get_configure_safe">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">get_configure_safe</code><span class="sig-paren">(</span><em>section</em>, <em>key</em>, <em>default</em>, <em>rcpath='~/.dataprocessor.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configure_safe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configure_safe" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">get_configure_safe</code><span class="sig-paren">(</span><em>section</em>, <em>key</em>, <em>default</em>, <em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#get_configure_safe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.get_configure_safe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get configure value safely.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1331,7 +1335,7 @@ of the configure file.
 
 <dl class="function">
 <dt id="dataprocessor.rc.load">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">load</code><span class="sig-paren">(</span><em>rcpath='~/.dataprocessor.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.load" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">load</code><span class="sig-paren">(</span><em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load node_list from default data.json.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1362,7 +1366,7 @@ of the configure file.
 
 <dl class="function">
 <dt id="dataprocessor.rc.load_into_argparse">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">load_into_argparse</code><span class="sig-paren">(</span><em>parser</em>, <em>section_name</em>, <em>options</em>, <em>allow_empty=False</em>, <em>rcpath='~/.dataprocessor.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#load_into_argparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.load_into_argparse" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">load_into_argparse</code><span class="sig-paren">(</span><em>parser</em>, <em>section_name</em>, <em>options</em>, <em>allow_empty=False</em>, <em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#load_into_argparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.load_into_argparse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load configure into argparse.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1391,7 +1395,7 @@ whose name is <cite>section_name</cite>.
 
 <dl class="function">
 <dt id="dataprocessor.rc.resolve_project_path">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">resolve_project_path</code><span class="sig-paren">(</span><em>name_or_path</em>, <em>create_dir</em>, <em>root=None</em>, <em>basket_name='Projects'</em>, <em>rcpath='~/.dataprocessor.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#resolve_project_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.resolve_project_path" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">resolve_project_path</code><span class="sig-paren">(</span><em>name_or_path</em>, <em>create_dir</em>, <em>root=None</em>, <em>basket_name='Projects'</em>, <em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#resolve_project_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.resolve_project_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resolve project path from its path or name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1451,7 +1455,7 @@ from the setting file.</p>
 
 <dl class="function">
 <dt id="dataprocessor.rc.update">
-<code class="descclassname">dataprocessor.rc.</code><code class="descname">update</code><span class="sig-paren">(</span><em>node_list</em>, <em>rcpath='~/.dataprocessor.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.update" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.rc.</code><code class="descname">update</code><span class="sig-paren">(</span><em>node_list</em>, <em>rcpath='/Users/kentaro/nora/DataProcessor/sample/debug.ini'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/rc.html#update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.rc.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save node_list into default data.json with update strategy.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

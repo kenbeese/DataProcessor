@@ -249,7 +249,7 @@ The path is resolved by resolve_project_path.</p>
 <p>Pipes of configure.</p>
 <dl class="function">
 <dt id="dataprocessor.pipes.configure.add">
-<code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">add</code><span class="sig-paren">(</span><em>node_list</em>, <em>filename</em>, <em>section='parameters'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.add" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">add</code><span class="sig-paren">(</span><em>node_list</em>, <em>filename</em>, <em>filetype=None</em>, <em>section='parameters'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add configure to node_list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -258,7 +258,7 @@ The path is resolved by resolve_project_path.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
 <div><p>filename of parameter configure file
-If file is not exists, add null list.</p>
+If file does not exist, add null list.</p>
 </div></blockquote>
 <p><strong>section</strong> : str</p>
 <blockquote>
@@ -283,6 +283,48 @@ If file is not exists, add null list.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="dataprocessor.pipes.configure.get_filetype">
+<code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">get_filetype</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#get_filetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.get_filetype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get filetype from path (filename extension).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path: str</strong></p>
+<blockquote>
+<div><p>path to a file</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">filetype as a string.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.configure.get_parser">
+<code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">get_parser</code><span class="sig-paren">(</span><em>filetype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#get_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.get_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parser corresponding to the filetype</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filetype</strong> : str</p>
+<blockquote>
+<div><p>These filetypes are available; &#8220;ini&#8221;, &#8220;conf&#8221;, &#8220;yaml&#8221;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">function that takes 2 args, confpath and section.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="dataprocessor.pipes.configure.no_section">
 <code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">no_section</code><span class="sig-paren">(</span><em>node_list, filename, split_char='=', comment_char=['#']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#no_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.no_section" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add configure to node_list.</p>
@@ -293,7 +335,7 @@ If file is not exists, add null list.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
 <div><p>filename of parameter configure file
-If file is not exists, add null list.</p>
+If file does not exist, add null list.</p>
 </div></blockquote>
 <p><strong>split_char</strong> : str</p>
 <blockquote>
@@ -323,6 +365,56 @@ If file is not exists, add null list.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="dataprocessor.pipes.configure.parse_ini">
+<code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">parse_ini</code><span class="sig-paren">(</span><em>confpath</em>, <em>section</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#parse_ini"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.parse_ini" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse .ini and .conf to dictionary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>confpath</strong> : str</p>
+<blockquote>
+<div><p>Path to config file.</p>
+</div></blockquote>
+<p><strong>section</strong> : str</p>
+<blockquote>
+<div><p>Specify section name in configure file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Specified section as a dictionary.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.configure.parse_yaml">
+<code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">parse_yaml</code><span class="sig-paren">(</span><em>confpath</em>, <em>section</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#parse_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.parse_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse .yaml to dictionary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>confpath</strong> : str</p>
+<blockquote>
+<div><p>Path to config file.</p>
+</div></blockquote>
+<p><strong>section</strong> : str</p>
+<blockquote>
+<div><p>Specify section name in configure file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Specified section as a dictionary.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="dataprocessor.pipes.configure.register">
 <code class="descclassname">dataprocessor.pipes.configure.</code><code class="descname">register</code><span class="sig-paren">(</span><em>pipes_dics</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.register" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -342,6 +434,39 @@ If file is not exists, add null list.</p>
 <dt id="dataprocessor.pipes.filter.register">
 <code class="descclassname">dataprocessor.pipes.filter.</code><code class="descname">register</code><span class="sig-paren">(</span><em>pipes_dics</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/filter.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.filter.register" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipes.ipynb">
+<span id="dataprocessor-pipes-ipynb-module"></span><h2>dataprocessor.pipes.ipynb module<a class="headerlink" href="#module-dataprocessor.pipes.ipynb" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.ipynb.gather_notebooks">
+<code class="descclassname">dataprocessor.pipes.ipynb.</code><code class="descname">gather_notebooks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/ipynb.html#gather_notebooks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.ipynb.gather_notebooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather processes of IPython Notebook</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.ipynb.register">
+<code class="descclassname">dataprocessor.pipes.ipynb.</code><code class="descname">register</code><span class="sig-paren">(</span><em>pipes_dics</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/ipynb.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.ipynb.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.ipynb.start">
+<code class="descclassname">dataprocessor.pipes.ipynb.</code><code class="descname">start</code><span class="sig-paren">(</span><em>nl</em>, <em>ipynb_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dataprocessor/pipes/ipynb.html#start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.ipynb.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start existing .ipynb file
+at standing ipython notebook server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ipynb_path</strong> : str</p>
+<blockquote class="last">
+<div><p>path of existing .ipynb file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="module-dataprocessor.pipes.jsonio">
@@ -586,6 +711,7 @@ by project id is not registered.</p>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.configure">dataprocessor.pipes.configure module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.figure">dataprocessor.pipes.figure module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.filter">dataprocessor.pipes.filter module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.ipynb">dataprocessor.pipes.ipynb module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.jsonio">dataprocessor.pipes.jsonio module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.move_node">dataprocessor.pipes.move_node module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.normalize">dataprocessor.pipes.normalize module</a></li>

@@ -68,6 +68,14 @@ dataprocessor.pipes.filter module
     :undoc-members:
     :show-inheritance:
 
+dataprocessor.pipes.ipynb module
+--------------------------------
+
+.. automodule:: dataprocessor.pipes.ipynb
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.pipes.jsonio module
 ---------------------------------
 
