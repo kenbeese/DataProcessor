@@ -127,7 +127,7 @@ class Response(object):
 
     def __str__(self):
         """Convert Request and return string."""
-        return self.make_output()
+        return self.make_output().encode("utf-8")
 
 
 def operation_success():

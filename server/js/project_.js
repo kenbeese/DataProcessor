@@ -5,11 +5,10 @@ function get_project(path) {
     "type": "pipe",
     "name": "project_html",
     "args": JSON.stringify([path,]),
-  }, function(res){
-    var table_html = res["html"];
+  }, function(html){
     $("section.dp-project")
       .empty()
-      .append(table_html);
+      .append(html);
     enable_link();
     $("table.dp-project").DataTable(DATATABLES_SETTING);
     $(".dp-project").show(ANIMATION_SPEED);

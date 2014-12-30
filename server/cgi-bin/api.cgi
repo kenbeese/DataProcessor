@@ -90,6 +90,8 @@ if __name__ == "__main__":
     except KeyError as key:
         handler.operation_fail("Request must include '%s'" % key)
     except ValueError:
+        with open("error.log", 'a+') as f:
+            f.write(traceback.format_exc())
         handler.operation_fail("JSON is invalid")
     except InvalidJSONError as e:
         message = "ERROR occurs in pipe '%s'; %s" % (e.name, e.msg)

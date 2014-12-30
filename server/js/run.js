@@ -5,8 +5,7 @@ function get_run(path) {
     "type": "pipe",
     "name": "run_html",
     "args": JSON.stringify([path,]),
-  }, function(res){
-    var html = res["html"];
+  }, function(html){
     $("section.dp-run")
       .empty()
       .append(html);

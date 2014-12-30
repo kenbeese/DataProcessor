@@ -32,7 +32,7 @@ function _sync_api_call(data, callback){
     type: "POST",
     data: data,
     success: function(res, st){
-      if("exit_code" in res && res["exit_code"] != 0){
+      if(typeof(res) == "object" && "exit_code" in res && res["exit_code"] != 0){
         alert("Server Error: " + res["message"]);
       }
       callback(res);

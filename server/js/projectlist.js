@@ -5,9 +5,7 @@ function get_projectlist() {
     "type": "pipe",
     "name": "projectlist_html",
     "args": "[]",
-  }, function(res){
-    paths = res["paths"];
-    html = res["html"];
+  }, function(html){
     $("section.dp-projectlist")
       .empty()
       .append(html);
