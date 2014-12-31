@@ -1,0 +1,4 @@
+parameters:
+  Nx: 100
+  dx: 0.01
+  msg: あ
