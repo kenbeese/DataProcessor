@@ -26,8 +26,8 @@
     <link rel="top" title="dataprocessor  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -44,7 +44,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <h1>Source code for dataprocessor.pipes.ipynb</h1><div class="highlight"><pre>
 <span class="c"># -*- coding: utf-8 -*-</span>
@@ -61,7 +61,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">notes</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">psutil</span><span class="o">.</span><span class="n">process_iter</span><span class="p">():</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;ipython&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;ipython&quot;</span><span class="p">,</span> <span class="s">&quot;python&quot;</span><span class="p">]:</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="s">&quot;notebook&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">cmdline</span><span class="p">():</span>
             <span class="k">continue</span>
@@ -104,7 +104,7 @@
         <span class="n">cwd</span> <span class="o">=</span> <span class="n">note</span><span class="p">[</span><span class="s">&quot;cwd&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ipynb_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">cwd</span><span class="p">):</span>
             <span class="k">continue</span>
-        <span class="n">note</span><span class="p">[</span><span class="s">&quot;postfix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ipynb_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>  <span class="c"># remove &#39;/&#39;</span>
+        <span class="n">note</span><span class="p">[</span><span class="s">&quot;postfix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ipynb_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>  <span class="c"># remove &#39;/&#39;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;http://localhost:{port}/notebooks/{postfix}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">note</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -126,9 +126,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -145,7 +145,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -158,9 +158,9 @@
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2013, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
