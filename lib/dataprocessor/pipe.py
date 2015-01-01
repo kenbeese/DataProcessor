@@ -31,7 +31,10 @@ def wrap(func):
     def wrapper(node_list, *args, **kwds):
         for node in node_list:
             try:
-                func(node, *args, **kwds)
+                new_node = func(node, *args, **kwds)
+                if new_node != node:
+                    node.clear()
+                    node.update(new_node)
             except dpError as e:
                 print >>sys.stderr, e
                 continue

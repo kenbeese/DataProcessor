@@ -109,6 +109,7 @@ def add(node, filename, filetype=None, section="parameters"):
     if "configure" not in node:
         node["configure"] = {}
     node["configure"].update(cfg)
+    return node
 
 
 @pipe.type("run")
@@ -139,6 +140,7 @@ def no_section(node, filename, split_char="=", comment_char=["#"]):
     if "configure" not in node:
         node["configure"] = {}
     node["configure"].update(cfg)
+    return node
 
 
 def register(pipes_dics):
