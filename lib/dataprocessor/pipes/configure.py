@@ -46,7 +46,10 @@ def parse_yaml(confpath, section):
     Specified section as a dictionary.
     """
     with open(confpath, "r") as f:
-        d = yaml.load(f)
+        try:
+            d = yaml.load(f)
+        except yaml.YAMLError:
+            raise dpError("Fail to parse YAML")
     if section not in d:
         raise dpError("No such section '{}' in {}".format(section, confpath))
     return d[section]
