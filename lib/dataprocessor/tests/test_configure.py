@@ -46,11 +46,13 @@ class TestConfigure_YAML(unittest.TestCase):
         nl = add(nl, "parameters.yml")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
 
-    def test_add_filetype(self):
+    def test_add_filetype_ini(self):
         nl = add(self.node_list, "parameters.yml", filetype="INI")
-        self.assertNotIn("configure", nl[0])  # fail to parse INI
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
+
+    def test_add_filetype_yaml(self):
         nl = add(self.node_list, "parameters.yml", filetype="YAML")
-        self.assertEqual(nl[0]["configure"], {"ny": "23"})
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
 
 
 class TestConfigure_CONF(unittest.TestCase):
