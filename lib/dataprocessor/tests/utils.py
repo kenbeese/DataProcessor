@@ -4,32 +4,8 @@
 import unittest
 import tempfile
 import os
-import os.path as op
 import shutil
-from jinja2 import Template
-
 from .. import nodes
-
-
-yaml_template = Template("""
-{{section_name}}:
-{% for key, val in setting %}
-    {{key}}: {{val}}
-{% endfor %}
-""")
-
-ini_template = Template("""
-[((section_name))]
-{% for key, val in setting %}
-{{key}}={{val}}
-{% endfor %}
-""")
-
-nosection_template = Template("""
-{% for key, val in setting %}
-{{key}}={{val}}
-{% endfor %}
-""")
 
 
 class TestNodeListAndDir(unittest.TestCase):
@@ -39,17 +15,17 @@ class TestNodeListAndDir(unittest.TestCase):
     create node_list including following nodes.
 
 
-    ===============   =========  ======== =========
-    path              node_type  name     conf_file
-    ===============   =========  ======== =========
-    tmpdir/p1         project    p1       None
-    tmpdir/p1/run00   run        run00    parameters.yml
-    tmpdir/p1/run01   run        run01    parameters.ini
-    tmpdir/p1/run02   run        run02    parameters.yaml
-    tmpdir/p2         project    p2       None
-    tmpdir/p2/run00   run        run00    param.conf (INI)
-    tmpdir/p2/run01   run        run01    run.cfg (no section)
-    ===============   =========  ======== ==========
+    ===============   =========  ========
+    path              node_type  name
+    ===============   =========  ========
+    tmpdir/p1         project    p1
+    tmpdir/p1/run00   run        run00
+    tmpdir/p1/run01   run        run01
+    tmpdir/p1/run02   run        run02
+    tmpdir/p2         project    p2
+    tmpdir/p2/run00   run        run00
+    tmpdir/p2/run01   run        run01
+    ===============   =========  ========
 
     Attributes
     ----------
@@ -91,31 +67,3 @@ class TestNodeListAndDir(unittest.TestCase):
                 "children": children,
                 "parents": parents}
         nodes.add(self.node_list, node)
-
-    def _place_conf_files(self):
-        def _create_conf_file(tmpl, fn, name, cfg):
-            with open(op.join(path, fn)) as f:
-                f.write(tmpl.render(section_name=name, setting=cfg))
-
-        for node in self.node_list:
-            path = node["path"]
-            if path.endswith("p1/run00"):
-                _create_conf_file(yaml_template, "parameters.yml",
-                                  "parameters", {"A": 1.0, "N": 100})
-                continue
-            if path.endswith("p1/run01"):
-                _create_conf_file(ini_template, "parameters.ini",
-                                  "parameters", {"A": 1.0, "N": 100})
-                continue
-            if path.endswith("p1/run02"):
-                _create_conf_file(yaml_template, "parameters.yaml",
-                                  "parameters", {"A": 1.0, "N": 100})
-                continue
-            if path.endswith("p2/run00"):
-                _create_conf_file(ini_template, "param.conf",
-                                  "param", {"A": 1.0, "N": 100})
-                continue
-            if path.endswith("p2/run01"):
-                _create_conf_file(nosection_template, "run.cfg",
-                                  "", {"A": 1.0, "N": 100})
-                continue
