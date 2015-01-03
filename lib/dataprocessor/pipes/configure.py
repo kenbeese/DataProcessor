@@ -49,7 +49,7 @@ def parse_yaml(confpath, section):
         try:
             d = yaml.load(f)
         except yaml.YAMLError:
-            raise dpError("Fail to parse YAML")
+            raise dpError("Fail to parse YAML file : " + confpath)
     if section not in d:
         raise dpError("No such section '{}' in {}".format(section, confpath))
     return d[section]
