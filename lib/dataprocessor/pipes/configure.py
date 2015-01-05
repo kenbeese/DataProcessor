@@ -1,8 +1,10 @@
 # coding=utf-8
 
+import sys
 import os.path as op
 import yaml
 from ConfigParser import SafeConfigParser
+from ConfigParser import Error as cpError
 
 from .. import pipe
 from ..utility import read_configure, check_file
@@ -26,7 +28,10 @@ def parse_ini(confpath, section):
     """
     conf = SafeConfigParser()
     conf.optionxform = str
-    conf.read(confpath)
+    try:
+        conf.read(confpath)
+    except cpError:
+        raise dpError("Error occured while reading configure: " + confpath)
     return dict(conf.items(section))
 
 
@@ -105,7 +110,12 @@ def add(node, filename, filetype=None, section="parameters"):
 
     """
     confpath = check_file(op.join(node["path"], filename))
-    if not filetype or filetype not in parsers:
+    if not filetype:
+        filetype = get_filetype(confpath)
+    filetype = filetype.lower()
+    if filetype not in parsers:
+        print >>sys.stderr, "Invalid filetype : " + filetype
+        print >>sys.stderr, "Guess from extention"
         filetype = get_filetype(confpath)
     cfg = parsers[filetype](confpath, section)
 
