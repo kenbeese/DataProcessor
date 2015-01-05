@@ -1,15 +1,36 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os.path as op
 from functools import wraps
 
 from .nodes import node_types
-from .filter import node_type as type_filter
 from .exception import DataProcessorError as dpError
 
 
-def wrap(func):
-    """ Create a pipe from a function operates on a node.
+def _wrap(filter_func):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(node_list, *args, **kwds):
+            for node in node_list:
+                if not filter_func(node):
+                    continue
+                try:
+                    new_node = func(node, *args, **kwds)
+                    if new_node != node:
+                        node.clear()
+                        node.update(new_node)
+                except dpError as e:
+                    print >>sys.stderr, e
+                    continue
+            return node_list
+        return wrapper
+    return decorator
+
+
+wrap = _wrap(lambda _: True)
+wrap.__doc__ = """
+    Create a pipe from a function operates on a node.
 
     This decorator makes easy to define a SIMD-like pipe,
     i.e. operates independently on each nodes.
@@ -27,19 +48,14 @@ def wrap(func):
     ...         print(node)
 
     """
-    @wraps(func)
-    def wrapper(node_list, *args, **kwds):
-        for node in node_list:
-            try:
-                new_node = func(node, *args, **kwds)
-                if new_node != node:
-                    node.clear()
-                    node.update(new_node)
-            except dpError as e:
-                print >>sys.stderr, e
-                continue
-        return node_list
-    return wrapper
+
+
+file = _wrap(lambda n: op.isfile(n["path"]))
+file.__doc__ = "Create a pipe which operates on file nodes"
+
+
+directory = _wrap(lambda n: op.isdir(n["path"]))
+directory.__doc__ = "Create a pipe which operates on directory nodes"
 
 
 def type(typename):
@@ -62,11 +78,5 @@ def type(typename):
 
     """
     if typename not in node_types:
-        raise dpError("invalid type name")
-
-    def decorator(func):
-        @wraps(func)
-        def wrapper(node_list, *args, **kwds):
-            return wrap(func)(type_filter(node_list, typename), *args, **kwds)
-        return wrapper
-    return decorator
+        raise dpError("Invalid type name: {}".format(typename))
+    return _wrap(lambda n: n["type"] == typename)
