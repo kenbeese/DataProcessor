@@ -6,4 +6,15 @@
     <dt>comment</dt>
     <dd class="dp-comment" dp-path="{{node['path']}}">{{node["comment"]|e}}</dd>
   </dl>
+  {% if ipynb %}
+  <ul>
+  {% for n in ipynb %}
+    {% if n["url"] %}
+    <li><a href="{{n['url']}}" target="_blank">{{n["name"]}}</a></li>
+    {% else %}
+    <li>{{n["name"]}}</li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+  {% endif %}
 </div>

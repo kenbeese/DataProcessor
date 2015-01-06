@@ -6,6 +6,8 @@ from jinja2 import Template
 from ..utility import check_directory
 from ..filter import node_type
 from ..dataframe import get_project
+from ..ipynb import resolve_url
+from ..exception import DataProcessorError as dpError
 from .. import nodes
 
 template_dir = check_directory(op.join(__file__, "../../../../template/"))
@@ -36,7 +38,19 @@ def run(node_list, path):
     node = nodes.get(node_list, path)
     with open(op.join(template_dir, "run.html"), "r") as f:
         template = Template(f.read())
-    print(template.render(node=node))
+
+    ipynb_nodes = []
+    for p in node["children"]:
+        n = nodes.get(node_list, p)
+        if n["type"] != "ipynb":
+            continue
+        try:
+            n["url"] = resolve_url(p)
+        except dpError:
+            n["url"] = ""
+        ipynb_nodes.append(n)
+
+    print(template.render(node=node, ipynb=ipynb_nodes))
     return node_list
 
 
