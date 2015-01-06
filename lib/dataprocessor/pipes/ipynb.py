@@ -43,6 +43,8 @@ def gather(node_list, pattern="*.ipynb"):
     """
     for node in node_list:
         path = node["path"]
+        if not op.isdir(path):
+            continue
         for fn in glob(op.join(path, pattern)):
             fn = path_expand(fn)
             node = {
