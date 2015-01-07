@@ -1,34 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-import psutil
+import os.path as op
 import webbrowser
-from ..utility import check_file
+from glob import glob
+from .. import nodes
+from ..utility import path_expand
+from ..ipynb import resolve_url, resolve_name
 from ..exception import DataProcessorError as dpError
-
-
-def gather_notebooks():
-    """ Gather processes of IPython Notebook
-    """
-    notes = []
-    for p in psutil.process_iter():
-        if not p.name().lower() in ["ipython", "python"]:
-            continue
-        if "notebook" not in p.cmdline():
-            continue
-        for net in p.connections(kind="inet4"):
-            if net.status != "LISTEN":
-                continue
-            _, port = net.laddr
-            break
-        notes.append({
-            "pid": p.pid,
-            "cwd": p.cwd(),
-            "port": port,
-        })
-    if not notes:
-        raise dpError("No IPython Notebook found")
-    return notes
 
 
 def start(nl, ipynb_path):
@@ -50,20 +29,33 @@ def start(nl, ipynb_path):
         - Cannot open browser
 
     """
-    ipynb_path = check_file(ipynb_path)
-    for note in gather_notebooks():
-        cwd = note["cwd"]
-        if not ipynb_path.startswith(cwd):
+    url = resolve_url(ipynb_path)
+    try:
+        webbrowser.open(url)
+    except webbrowser.Error:
+        raise dpError("Unknown error while opening notebook")
+    return nl
+
+
+def gather(node_list, pattern="*.ipynb"):
+    """
+    Search ipynb file by its extention
+    """
+    for node in node_list:
+        path = node["path"]
+        if not op.isdir(path):
             continue
-        note["postfix"] = ipynb_path[len(cwd) + 1:]  # remove '/'
-        url = "http://localhost:{port}/notebooks/{postfix}".format(**note)
-        try:
-            webbrowser.open(url)
-        except webbrowser.Error:
-            raise dpError("Unknown error while opening notebook")
-        return nl
-    raise dpError("No valid Notebook found. "
-                  "Please stand notebook server on the parent directory.")
+        for fn in glob(op.join(path, pattern)):
+            fn = path_expand(fn)
+            node = {
+                "path": fn,
+                "type": "ipynb",
+                "name": resolve_name(fn),
+                "parents": [path, ],
+                "children": [],
+            }
+            nodes.add(node_list, node)
+    return node_list
 
 
 def register(pipes_dics):
@@ -71,4 +63,9 @@ def register(pipes_dics):
         "func": start,
         "args": ["ipynb_path"],
         "desc": "start .ipynb in standing notebook",
+    }
+    pipes_dics["gather_ipynb"] = {
+        "func": gather,
+        "args": [],
+        "desc": "gather ipynb files",
     }

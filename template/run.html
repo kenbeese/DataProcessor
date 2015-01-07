@@ -6,4 +6,31 @@
     <dt>comment</dt>
     <dd class="dp-comment" dp-path="{{node['path']}}">{{node["comment"]|e}}</dd>
   </dl>
+  {% if ipynb %}
+  <div class="panel panel-default">
+    <div class="panel-heading">IPython Notebooks</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <td>name</td>
+          <td>comment</td>
+          <td>path</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for n in ipynb %}
+        <tr>
+          {% if n["url"] %}
+          <td><a href="{{n['url']}}" target="_blank">{{n["name"]|e}}</a></td>
+          {% else %}
+          <td>{{n["name"]|e}}</td>
+          {% endif %}
+          <td class="dp-comment" dp-path="{{n['path']}}">{{n["comment"]|e}}</td>
+          <td>{{n["path"]|e}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
 </div>
