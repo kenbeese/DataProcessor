@@ -5,7 +5,6 @@ import os
 
 from . import pipes
 from . import rc
-from . import server
 
 
 def dpmanip():
