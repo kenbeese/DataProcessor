@@ -6,7 +6,7 @@ from jinja2 import Template
 from ..utility import check_directory
 from ..filter import node_type
 from ..dataframe import get_project
-from ..ipynb import resolve_url
+from ..ipynb import resolve_url, resolve_name
 from ..exception import DataProcessorError as dpError
 from .. import nodes
 
@@ -41,13 +41,14 @@ def run(node_list, path):
 
     ipynb_nodes = []
     for p in node["children"]:
-        n = nodes.get(node_list, p)
+        n = nodes.get(node_list, p).copy()
         if n["type"] != "ipynb":
             continue
         try:
             n["url"] = resolve_url(p)
         except dpError:
             n["url"] = ""
+        n["name"] = resolve_name(p)
         ipynb_nodes.append(n)
 
     print(template.render(node=node, ipynb=ipynb_nodes))
