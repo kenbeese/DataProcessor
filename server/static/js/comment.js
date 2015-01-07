@@ -7,7 +7,7 @@ function send_comment(comment, path){
         contentType: "application/json",
         data: JSON.stringify({
             "name": "add_comment",
-            "args": JSON.stringify([comment, path])
+            "args": [comment, path],
         }),
         success: function(res){
             // alert("comment update");
