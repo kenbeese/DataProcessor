@@ -3,7 +3,7 @@ function get_projectlist() {
   $("section").hide(ANIMATION_SPEED);
   _sync_pipe_api_call({
     "name": "projectlist_html",
-    "args": "[]",
+    "args": [],
   }, function(html){
     $("section.dp-projectlist")
       .empty()

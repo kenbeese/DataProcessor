@@ -3,7 +3,7 @@ function get_project(path) {
   $("section").hide(ANIMATION_SPEED);
   _sync_pipe_api_call({
     "name": "project_html",
-    "args": JSON.stringify([path,]),
+    "args": [path,],
   }, function(html){
     $("section.dp-project")
       .empty()

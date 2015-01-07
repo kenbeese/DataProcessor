@@ -38,7 +38,7 @@ def execute_pipe():
     data_path = app.config["DATA_PATH"]
 
     name = request.json["name"]
-    args = json.loads(request.json["args"])
+    args = request.json["args"]
     kwds = request.json["kwds"] if "kwds" in request.json else {}
 
     with dp.io.SyncDataHandler(data_path, silent=True) as dh:

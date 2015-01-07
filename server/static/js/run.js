@@ -3,7 +3,7 @@ function get_run(path) {
   $("section").hide(ANIMATION_SPEED);
   _sync_pipe_api_call({
     "name": "run_html",
-    "args": JSON.stringify([path,]),
+    "args": [path,],
   }, function(html){
     $("section.dp-run")
       .empty()
