@@ -42,10 +42,13 @@ wrap.__doc__ = """
     >>> @wrap
     ... def pipe1(node, arg1, kwd1=""):
     ...     print(node)
+    ...     node["attr1"] = "val"
+    ...     return node
 
     >>> def pipe1(node_list, arg1, kwd1=""):
     ...     for node in node_list:
     ...         print(node)
+    ...         node["attr1"] = "val"
 
     """
 
