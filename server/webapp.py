@@ -58,7 +58,7 @@ def execute_pipe():
         name, args, kwds = _handle_json(request)
         p = dp.pipes.pipes_dics[name]
     except KeyError as key:
-        app.logger.warning("Request must include {}" % key)
+        app.logger.warning("Request must include {}".format(key))
         abort(400)
 
     try:
