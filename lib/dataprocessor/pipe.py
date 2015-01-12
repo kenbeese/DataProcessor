@@ -49,6 +49,7 @@ wrap.__doc__ = """
     ...     for node in node_list:
     ...         print(node)
     ...         node["attr1"] = "val"
+    ...     return node_list
 
     """
 
