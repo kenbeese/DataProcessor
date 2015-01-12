@@ -3,10 +3,11 @@
 import json
 import sys
 import os.path
+import traceback
 from StringIO import StringIO
 from contextlib import contextmanager
 
-from flask import Flask, request, render_template, Response
+from flask import Flask, request, render_template, Response, abort
 
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
@@ -35,20 +36,41 @@ def show_layout():
 
 @app.route('/api/pipe', methods=['POST'])
 def execute_pipe():
+
+    def _execute_pipe():
+        with dp.io.SyncDataHandler(data_path, silent=True) as dh:
+            nl = dh.get()
+            with print_capture() as ss:
+                nl = dp.execute.pipe(name, args, kwds, nl)
+                output_str = ss.getvalue()
+            dh.update(nl)
+        return output_str
+
+    def _handle_json(req):
+        name = req.json["name"]
+        args = req.json["args"]
+        kwds = req.json["kwds"] if "kwds" in req.json else {}
+        return name, args, kwds
+
     data_path = app.config["DATA_PATH"]
 
-    name = request.json["name"]
-    args = request.json["args"]
-    kwds = request.json["kwds"] if "kwds" in request.json else {}
+    try:
+        name, args, kwds = _handle_json(request)
+        p = dp.pipes.pipes_dics[name]
+    except KeyError as key:
+        app.logger.warning("Request must include {}" % key)
+        abort(400)
 
-    with dp.io.SyncDataHandler(data_path, silent=True) as dh:
-        nl = dh.get()
-        with print_capture() as ss:
-            nl = dp.execute.pipe(name, args, kwds, nl)
-            output_str = ss.getvalue()
-        dh.update(nl)
+    try:
+        output_str = _execute_pipe()
+    except dp.exception.DataProcessorError as e:
+        app.logger.error(e.msg)
+        abort(500)
+    except Exception:
+        app.logger.error(traceback.format_exc())
+        abort(500)
 
-    p = dp.pipes.pipes_dics[name]
     if "output" in p and p["output"] in ["json", "xml", "html"]:
         return output_str
-    return Response()
+    else:
+        return Response()
