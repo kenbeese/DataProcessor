@@ -3,8 +3,7 @@
 import sys
 import os.path as op
 import yaml
-from ConfigParser import SafeConfigParser
-from ConfigParser import Error as cpError
+import ConfigParser as cp
 
 from .. import pipe
 from ..utility import read_configure, check_file
@@ -26,13 +25,18 @@ def parse_ini(confpath, section):
     -------
     Specified section as a dictionary.
     """
-    conf = SafeConfigParser()
+    conf = cp.SafeConfigParser()
     conf.optionxform = str
     try:
-        conf.read(confpath)
-    except cpError:
-        raise dpError("Error occured while reading configure: " + confpath)
-    return dict(conf.items(section))
+        read_conf = conf.read(confpath)
+    except cp.MissingSectionHeaderError:
+        raise dpError("Invalid INI file: " + confpath )
+    if not read_conf:
+        raise dpError("Cannot read INI configure file: " + confpath)
+    try:
+        return dict(conf.items(section))
+    except cp.NoSectionError:
+        raise dpError("Section does not found: " + confpath)
 
 
 def parse_yaml(confpath, section):
