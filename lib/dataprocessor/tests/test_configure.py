@@ -3,7 +3,7 @@
 import os.path as op
 import unittest
 from ..utility import check_directory
-from ..pipes.configure import add, no_section
+from ..pipes.configure import load, no_section
 
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
@@ -16,20 +16,20 @@ class TestConfigure_INI(unittest.TestCase):
             "type": "run",
         }]
 
-    def test_add(self):
-        nl = add(self.node_list, "parameters.ini")
+    def test_load(self):
+        nl = load(self.node_list, "parameters.ini")
         self.assertEqual(nl[0]["configure"], {"ny": "23"})
-        nl = add(nl, "parameters.ini")  # 二回しても大丈夫
+        nl = load(nl, "parameters.ini")  # 二回しても大丈夫
         self.assertEqual(nl[0]["configure"], {"ny": "23"})
 
-    def test_add_filetype(self):
-        nl = add(self.node_list, "parameters.ini", filetype="yaml")
+    def test_load_filetype(self):
+        nl = load(self.node_list, "parameters.ini", filetype="yaml")
         self.assertNotIn("configure", nl[0])  # fail to parse YAML
-        nl = add(self.node_list, "parameters.ini", filetype="INI")
+        nl = load(self.node_list, "parameters.ini", filetype="INI")
         self.assertEqual(nl[0]["configure"], {"ny": "23"})
 
-    def test_add_missing_name(self):
-        add(self.node_list, "parame.yamlu")  # not raises
+    def test_load_missing_name(self):
+        load(self.node_list, "parame.yamlu")  # not raises
 
 
 class TestConfigure_YAML(unittest.TestCase):
@@ -40,16 +40,16 @@ class TestConfigure_YAML(unittest.TestCase):
             "type": "run",
         }]
 
-    def test_add(self):
-        nl = add(self.node_list, "parameters.yml")
+    def test_load(self):
+        nl = load(self.node_list, "parameters.yml")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
-        nl = add(nl, "parameters.yml")
+        nl = load(nl, "parameters.yml")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
 
-    def test_add_filetype_yaml(self):
-        nl = add(self.node_list, "parameters.yml", filetype="INI")
+    def test_load_filetype_yaml(self):
+        nl = load(self.node_list, "parameters.yml", filetype="INI")
         self.assertNotIn("configure", nl[0])  # fail to parse YAML
-        nl = add(self.node_list, "parameters.yml", filetype="YAML")
+        nl = load(self.node_list, "parameters.yml", filetype="YAML")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
 
 
@@ -61,7 +61,7 @@ class TestConfigure_CONF(unittest.TestCase):
             "type": "run",
         }]
 
-    def test_add_conf(self):
-        nl = add(self.node_list, "parameters.conf")
+    def test_load_conf(self):
+        nl = load(self.node_list, "parameters.conf")
         self.assertEqual(nl[0]["configure"]["nx"], "12")
         self.assertEqual(nl[0]["configure"]["ny"], "32")

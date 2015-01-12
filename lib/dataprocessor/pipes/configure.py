@@ -30,7 +30,7 @@ def parse_ini(confpath, section):
     try:
         read_conf = conf.read(confpath)
     except cp.MissingSectionHeaderError:
-        raise dpError("Invalid INI file: " + confpath )
+        raise dpError("Invalid INI file: " + confpath)
     if not read_conf:
         raise dpError("Cannot read INI configure file: " + confpath)
     try:
@@ -95,7 +95,7 @@ def get_filetype(path):
 
 
 @pipe.type("run")
-def add(node, filename, filetype=None, section="parameters"):
+def load(node, filename, filetype=None, section="parameters"):
     """ Load configure
 
     Parameters
@@ -108,9 +108,9 @@ def add(node, filename, filetype=None, section="parameters"):
 
     Examples
     --------
-    >>> add(node_list, "configure.conf") # doctest:+SKIP
+    >>> load(node_list, "configure.conf") # doctest:+SKIP
     >>> # Change load section.
-    >>> add(node_list, "configure.conf", "defaults") # doctest:+SKIP
+    >>> load(node_list, "configure.conf", "defaults") # doctest:+SKIP
 
     """
     confpath = check_file(op.join(node["path"], filename))
@@ -162,7 +162,7 @@ def no_section(node, filename, split_char="=", comment_char=["#"]):
 
 def register(pipes_dics):
     pipes_dics["configure"] = {
-        "func": add,
+        "func": load,
         "args": ["filename"],
         "kwds": [("section", {"help": "section parameters are written"}),
                  ("filetype", {"help": "filetype [ini, yaml]. If not given, "
@@ -173,6 +173,9 @@ def register(pipes_dics):
     pipes_dics["configure_no_section"] = {
         "func": no_section,
         "args": ["filename"],
-        "kwds": ["split_char", "comment_char"],
+        "kwds": [
+            ("split_char", {"help": "separetor of parameters"}),
+            ("comment_char", {"help": "charactors defines comment line"})
+        ],
         "desc": "Read parameter file (without section)",
     }
