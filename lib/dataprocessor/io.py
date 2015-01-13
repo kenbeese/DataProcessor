@@ -131,7 +131,7 @@ class DataHandler(object):
         nodes.add(self.node_list, node, strategy, skip_validate_link)
 
     def update(self, node_list, skip_validate_link=False):
-        """ Update node_list (use nodes.update).
+        """ Update node_list (use nodes.modest_update).
 
         Parameters
         ----------
@@ -139,11 +139,9 @@ class DataHandler(object):
             skip link validation about all nodes in new `node_list`
         """
         for node in node_list:
-            try:
-                nodes.add(self.node_list, node, strategy="raise",
-                          skip_validate_link=skip_validate_link)
-            except nodes.DataProcessorNodesError:
-                nodes.update(self.node_list, node, skip_validate_link=False)
+            nodes.add(self.node_list, node,
+                      strategy="modest_update",
+                      skip_validate_link=skip_validate_link)
         if skip_validate_link:
             return
         for node in node_list:
