@@ -92,8 +92,8 @@ def get(node_list, path):
     return None
 
 
-def update(node_list, node, skip_validate_link=False):
-    """ Update node properties
+def modest_update(node_list, node, skip_validate_link=False):
+    """ Update node properties modestly
 
     This keeps values as possible,
     besides the "update" strategy of `add(...)` simply uses `dict.update()`.
@@ -129,7 +129,7 @@ def update(node_list, node, skip_validate_link=False):
     ...   "configure": {"A": 1.0},
     ...   "comment": "",
     ... }
-    >>> update(node_list, node)
+    >>> modest_update(node_list, node)
     >>> node_list == [{
     ...   'comment': 'some comment',
     ...   'path': '/path/0',
@@ -146,7 +146,7 @@ def update(node_list, node, skip_validate_link=False):
     for key, val in node.items():
         if val:
             node0[key] = val
-    if validate_link:
+    if not skip_validate_link:
         validate_link(node_list, node0)
 
 
@@ -171,6 +171,7 @@ def add(node_list, node, skip_validate_link=False, strategy="raise"):
 
         - "raise" : raise DataProcessorNodesError (default)
         - "update" : use dict.update to update existing node
+        - "modest_update" : use nodes.modest_update to update existing node
         - "replace" : replace existing node with new node
 
     Raises
@@ -191,19 +192,23 @@ def add(node_list, node, skip_validate_link=False, strategy="raise"):
 
     """
     node0 = get(node_list, node["path"])
-    if node0:
+    if not node0:
+        node_list.append(node)
+    else:
         if strategy is "raise":
             raise DataProcessorNodesError("node already exists")
         elif strategy is "update":
             node0.update(node)
             node = node0
+        elif strategy is "modest_update":
+            modest_update(node_list, node,
+                          skip_validate_link=skip_validate_link)
+            skip_validate_link = False
         elif strategy is "replace":
             node_list.remove(node0)
             node_list.append(node)
         else:
             raise DataProcessorError("Invalid strategy: %s" % strategy)
-    else:
-        node_list.append(node)
     if not skip_validate_link:
         validate_link(node_list, node)
 
