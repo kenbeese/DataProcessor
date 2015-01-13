@@ -39,10 +39,7 @@ def add_node(node_list, path=".", node_type="run", children=[],
             "children": [utility.path_expand(c_path) for c_path in children],
             "parents": [utility.path_expand(c_path) for c_path in parents],
             "name": name}
-    try:
-        nodes.add(node_list, node)
-    except nodes.DataProcessorNodesError:
-        nodes.update(node_list, node)
+    nodes.add(node_list, node, strategy="modest_update")
     return node_list
 
 

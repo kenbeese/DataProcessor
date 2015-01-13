@@ -165,7 +165,7 @@ def add(node_list, node, skip_validate_link=False, strategy="raise"):
         The node will be added into node_list
     skip_validate_link : bool, optional
         skip link validation (default False)
-    strategy : str, optional {"raise", "update", "replace"}
+    strategy : str, optional {"raise", "update", "modest_update", "replace"}
         The strategy for the case
         where there exists a node whose "path" is same as new one
 
