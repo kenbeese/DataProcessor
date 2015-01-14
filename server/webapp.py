@@ -56,19 +56,21 @@ def execute_pipe():
 
     try:
         name, args, kwds = _handle_json(request)
+    except KeyError as key:
+        app.logger.error("Request must include {}".format(key))
+        abort(400)
+
+    try:
         p = dp.pipes.pipes_dics[name]
     except KeyError as key:
-        app.logger.warning("Request must include {}".format(key))
+        app.logger.error("The pipe {} is not found".format(key))
         abort(400)
 
     try:
         output_str = _execute_pipe()
     except dp.exception.DataProcessorError as e:
         app.logger.error(e.msg)
-        abort(500)
-    except Exception:
-        app.logger.error(traceback.format_exc())
-        abort(500)
+        abort(400)
 
     if "output" in p and p["output"] in ["json", "xml", "html"]:
         return output_str
