@@ -36,6 +36,21 @@ def show_projectlist():
     return render_template('projectlist.html', projects=projects)
 
 
+@app.route('/ipynb')
+def show_ipynblist():
+    data_path = app.config["DATA_PATH"]
+    nl = dp.io.load([], data_path)
+    ipynb = dp.filter.node_type(nl, "ipynb")
+    for n in ipynb:
+        p = n["path"]
+        try:
+            n["url"] = dp.ipynb.resolve_url(p)
+        except dp.exception.DataProcessorError:
+            n["url"] = ""
+        n["name"] = dp.ipynb.resolve_name(p)
+    return render_template("ipynb.html", ipynb=ipynb)
+
+
 @app.route('/run/<path:path>')
 def show_run(path):
     path = "/" + path

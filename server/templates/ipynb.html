@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block header %}
+<h2>IPython Notebooks</h2>
+{% endblock %}
+{% block body %}
+<table class="table">
+  <thead>
+    <tr>
+      <td>name</td>
+      <td>comment</td>
+      <td>path</td>
+    </tr>
+  </thead>
+  <tbody>
+    {% for n in ipynb %}
+    <tr>
+      {% if n["url"] %}
+      <td><a href="{{n['url']}}" target="_blank">{{n["name"]|e}}</a></td>
+      {% else %}
+      <td>{{n["name"]|e}}</td>
+      {% endif %}
+      <td class="dp-comment" dp-path="{{n['path']}}">{{n["comment"]|e}}</td>
+      <td>{{n["path"]|e}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+

@@ -3,7 +3,7 @@
 from .exception import DataProcessorError
 from . import utility
 
-node_types = ["run", "project", "figure"]
+node_types = ["run", "project", "figure", "ipynb"]
 
 
 def normalize(node):
