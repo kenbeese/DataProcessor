@@ -54,10 +54,17 @@ def get_project(node_list, project_path, properties=["comment", "tags"],
             properties.append(item)
 
     def _conv(val):
-        sr = Series(val["configure"])
+        new = {}
+        for key, value in val["configure"].items():
+            try:
+                new[key] = float(value)
+            except:
+                new[key] = value
+        sr = Series(new)
         for prop in properties:
             sr.set_value(prop, val[prop])
         return sr
+
     runs = runs_pre.apply(_conv, axis=1)
     runs = runs.convert_objects(convert_numeric=True)
     if index:

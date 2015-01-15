@@ -1,0 +1,23 @@
+<table class="dp-project table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>comment</th>
+      {% for c in cfg %}
+      <th>{{c|e}}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for path in df.index %}
+    {% set s = df.ix[path] %}
+    <tr>
+      <td><a class="dp-run" dp-path="{{path}}">{{s["name"]|e}}</a></td>
+      <td class="dp-comment" dp-path="{{path}}">{{s["comment"]|e}}</td>
+      {% for c in cfg %}
+      <td>{{s[c]|e}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
