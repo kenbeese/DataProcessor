@@ -77,40 +77,27 @@ def show_project(path):
 
 @app.route('/api/pipe', methods=['POST'])
 def execute_pipe():
+    data_path = app.config["DATA_PATH"]
 
     def _execute_pipe():
         with dp.io.SyncDataHandler(data_path, silent=True) as dh:
             nl = dh.get()
-            with print_capture() as ss:
-                nl = dp.execute.pipe(name, args, kwds, nl)
-                output_str = ss.getvalue()
+            nl = dp.execute.pipe(name, args, kwds, nl)
             dh.update(nl)
-        return output_str
 
-    def _handle_json(req):
+    def _parse_req(req):
         name = req.json["name"]
         args = req.json["args"]
         kwds = req.json["kwds"] if "kwds" in req.json else {}
         return name, args, kwds
 
-    data_path = app.config["DATA_PATH"]
-
     try:
-        name, args, kwds = _handle_json(request)
+        name, args, kwds = _parse_req(request)
+        _execute_pipe()
     except KeyError as key:
         app.logger.error("Request must include {}".format(key))
         abort(400)
-
-    try:
-        p = dp.pipes.pipes_dics[name]
-    except KeyError as key:
-        app.logger.error("The pipe {} is not found".format(key))
-        abort(400)
-
-    try:
-        output_str = _execute_pipe()
     except dp.exception.DataProcessorError as e:
         app.logger.error(e.msg)
         abort(400)
-
     return Response()

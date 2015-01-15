@@ -3,7 +3,6 @@
 import os
 import sys
 import os.path as op
-import json
 import urllib2
 from zipfile import ZipFile
 from tempfile import NamedTemporaryFile
