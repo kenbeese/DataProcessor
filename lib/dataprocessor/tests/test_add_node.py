@@ -21,10 +21,10 @@ class TestAddNode(TestNodeListAndDir):
         compare_list = copy.deepcopy(self.node_list)
         for n in self.node_list:
             nodes.validate_link(self.node_list, n)
-        node = {"path": os.path.join(self.project_paths[0], "run02"),
-                "parents": [self.project_paths[0]]}
-        try:
-            nodes.add(compare_list, node)
-        except nodes.DataProcessorNodesError:
-            nodes.update(compare_list, node)
+        node = {
+            "path": os.path.join(self.project_paths[0], "run02"),
+            "parents": [self.project_paths[0]],
+            "children": []
+        }
+        nodes.add(compare_list, node, strategy="modest_update")
         return compare_list
