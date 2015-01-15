@@ -28,8 +28,51 @@ def print_capture():
 
 
 @app.route('/')
-def show_layout():
-    return render_template('layout.html')
+def show_projectlist():
+    data_path = app.config["DATA_PATH"]
+    with dp.io.SyncDataHandler(data_path, silent=True) as dh:
+        nl = dh.get()
+    projects = dp.filter.node_type(nl, "project")
+    return render_template('projectlist.html', projects=projects)
+
+
+@app.route('/run/<path:path>')
+def show_run(path):
+    path = "/" + path
+    data_path = app.config["DATA_PATH"]
+    with dp.io.SyncDataHandler(data_path, silent=True) as dh:
+        nl = dh.get()
+
+    node = dp.nodes.get(nl, path)
+
+    ipynb_nodes = []
+    for p in node["children"]:
+        n = dp.nodes.get(nl, p).copy()
+        if n["type"] != "ipynb":
+            continue
+        try:
+            n["url"] = dp.ipynb.resolve_url(p)
+        except dp.exception.DataProcessorError:
+            n["url"] = ""
+        n["name"] = dp.ipynb.resolve_name(p)
+        ipynb_nodes.append(n)
+    return render_template("run.html", node=node, ipynb=ipynb_nodes)
+
+
+@app.route('/project/<path:path>')
+def show_project(path):
+    path = "/" + path
+    data_path = app.config["DATA_PATH"]
+    with dp.io.SyncDataHandler(data_path, silent=True) as dh:
+        nl = dh.get()
+
+    df = dp.dataframe.get_project(nl, path, properties=["comment"]).fillna("")
+
+    def _count_uniq(col):
+        return len(set(df[col]))
+    index = sorted(df.columns, key=_count_uniq, reverse=True)
+    cfg = [c for c in index if c not in ["name", "comment"]]
+    return render_template("project.html", df=df, cfg=cfg)
 
 
 @app.route('/api/pipe', methods=['POST'])
@@ -70,7 +113,4 @@ def execute_pipe():
         app.logger.error(e.msg)
         abort(400)
 
-    if "output" in p and p["output"] in ["json", "xml", "html"]:
-        return output_str
-    else:
-        return Response()
+    return Response()

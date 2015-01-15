@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block body %}
+<table class="dp-projectlist table table-striped">
+  <thead>
+    <tr>
+      <td>name</td>
+      <td>comment</td>
+      <td>path</td>
+    </tr>
+  </thead>
+  <tbody>
+    {%- for p in projects %}
+    <tr>
+      <td>
+        <a href="{{ url_for('show_project', path=p.path[1:]) }}">{{p.name|e}}</a>
+      </td>
+      <td class="dp-comment" dp-path="{{p.path}}">{{p.comment|e}}</td>
+      <td>{{p.path|e}}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+{% endblock %}

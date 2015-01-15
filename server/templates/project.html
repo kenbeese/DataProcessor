@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+<table class="dp-project table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>comment</th>
+      {% for c in cfg %}
+      <th>{{c|e}}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for path in df.index %}
+    {% set s = df.ix[path] %}
+    <tr>
+      <td>
+        <a href="{{ url_for('show_run', path=path[1:]) }}">{{s["name"]|e}}</a>
+      </td>
+      <td class="dp-comment" dp-path="{{path}}">{{s["comment"]|e}}</td>
+      {% for c in cfg %}
+      <td>{{s[c]|e}}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
