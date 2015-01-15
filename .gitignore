@@ -2,19 +2,18 @@
 _build
 *.pyc
 
-server/js/jquery-1.10.2.js
-server/js/jquery.cookie.js
-server/js/jquery.blockUI.js
-server/js/jquery.dataTables.min.js
-server/js/dataTables.colReorder.min.js
-server/js/dataTables.fixedColumns.min.js
-server/js/bootstrap.min.js
-server/css/bootstrap.min.css
-server/css/jquery.dataTables.min.css
-server/css/dataTables.colReorder.min.css
-server/css/dataTables.fixedColumns.min.css
-server/images
-server/cfg.json
+server/static/js/jquery-1.10.2.js
+server/static/js/jquery.cookie.js
+server/static/js/jquery.blockUI.js
+server/static/js/jquery.dataTables.min.js
+server/static/js/dataTables.colReorder.min.js
+server/static/js/dataTables.fixedColumns.min.js
+server/static/js/bootstrap.min.js
+server/static/css/bootstrap.min.css
+server/static/css/jquery.dataTables.min.css
+server/static/css/dataTables.colReorder.min.css
+server/static/css/dataTables.fixedColumns.min.css
+server/static/images
 server/server.log
 server/error.log
 

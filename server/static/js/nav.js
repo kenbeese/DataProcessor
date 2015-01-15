@@ -25,12 +25,13 @@ function enable_link() {
   enable_editable_comment();
 }
 
-function _sync_api_call(data, callback){
+function _sync_pipe_api_call(data, callback){
   $.blockUI(BLOCK_SETTING);
   $.ajax({
-    url: API_URL,
+    url: PIPE_API_URL,
+    contentType: "application/json",
     type: "POST",
-    data: data,
+    data: JSON.stringify(data),
     success: function(res, st){
       if(typeof(res) == "object" && "exit_code" in res && res["exit_code"] != 0){
         alert("Server Error: " + res["message"]);

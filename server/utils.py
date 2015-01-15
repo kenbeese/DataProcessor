@@ -5,42 +5,94 @@ import sys
 import os.path as op
 import json
 import urllib2
-import BaseHTTPServer
-import CGIHTTPServer
 from zipfile import ZipFile
 from tempfile import NamedTemporaryFile
 from daemon import DaemonContext
 from daemon.pidfile import PIDLockFile
 from functools import wraps
 
-from . import utility
-from . import exception
+
+sys.path = ([sys.path[0]]
+            + [os.path.join(os.path.dirname(__file__), "../lib")]
+            + sys.path[1:])
+from dataprocessor import utility, exception, rc
+sys.path = [sys.path[0]] + sys.path[2:]
+
+
+from webapp import app
+
+ROOT = op.dirname(__file__)
+
+
+def argparser():
+    parser = rc.ArgumentParser()
+    sub_psr = parser.add_subparsers()
+
+    port_cfg = {
+        "default": 8080,
+        "help": "Port for the server"
+    }
+    logfilepath_cfg = {
+        "default": os.path.join(ROOT, "server.log"),
+        "help": "The name of the log file",
+    }
+    lockfile_cfg = {
+        "default": "/tmp/DataProcessorServer.pid",
+        "help": "Lock filename",
+    }
+
+    # start
+    start_psr = sub_psr.add_parser("start",
+                                   help="start DataProcessor server daemon")
+    start_psr.set_defaults(func=start)
+    rc.load_into_argparse(start_psr, "dpserver", {
+        "port": port_cfg,
+        "logfilepath": logfilepath_cfg,
+        "lockfile": lockfile_cfg,
+    }, allow_empty=True)
+
+    # debug
+    debug_psr = sub_psr.add_parser("debug",
+                                   help="start DataProcessor server with debug-mode")
+    debug_psr.set_defaults(func=debug)
+    rc.load_into_argparse(debug_psr, "dpserver", {
+        "port": port_cfg,
+    }, allow_empty=True)
+
+    # stop
+    stop_psr = sub_psr.add_parser("stop", help="kill articles server")
+    stop_psr.set_defaults(func=stop)
+    rc.load_into_argparse(stop_psr, "dpserver", {
+        "lockfile": lockfile_cfg,
+    }, allow_empty=True)
+
+    # install
+    install_psr = sub_psr.add_parser("install", help="install jQuery")
+    install_psr.set_defaults(func=install)
+    return parser
 
 
 def start(args):
     port = int(args.port)
-    root_dir = utility.check_directory(args.root)
-    log_path = op.join(root_dir, args.logfile)
+    log_path = args.logfilepath
     lock_path = args.lockfile
-
     data_path = utility.check_file(args.json)
-    cfg = {"data_path": data_path}
-    with open(op.join(root_dir, "cfg.json"), 'w') as f:
-        json.dump(cfg, f)
-
+    app.config["DATA_PATH"] = data_path
     if not op.exists(lock_path):
         dc = DaemonContext(pidfile=PIDLockFile(lock_path),
                            stderr=open(log_path, "w+"),
-                           working_directory=root_dir)
+                           working_directory=ROOT)
         with dc:
-            server = BaseHTTPServer.HTTPServer
-            handler = CGIHTTPServer.CGIHTTPRequestHandler
-            addr = ("", port)
-            # handler.cgi_directories = [""]
-            httpd = server(addr, handler)
-            httpd.serve_forever()
+            app.run(port=port)
     else:
         raise exception.DataProcessorError("Server already stands.")
+
+
+def debug(args):
+    port = int(args.port)
+    data_path = utility.check_file(args.json)
+    app.config["DATA_PATH"] = data_path
+    app.run(debug=True, port=port)
 
 
 def stop(args):
@@ -56,10 +108,9 @@ def stop(args):
 def install(args):
     """Install jQuery and Bootstrap.
     """
-    root_dir = utility.check_directory(args.root)
-    jspath = op.join(root_dir, "js")
-    csspath = op.join(root_dir, "css")
-    imagepath = op.join(root_dir, "images")
+    jspath = op.join(ROOT, "static/js")
+    csspath = op.join(ROOT, "static/css")
+    imagepath = op.join(ROOT, "static/images")
     if not os.path.exists(imagepath):
         os.mkdir(imagepath)
 

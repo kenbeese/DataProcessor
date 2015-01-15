@@ -1,14 +1,21 @@
 
 function send_comment(comment, path){
   /** send comment to server */
-  $.post("/cgi-bin/api.cgi", {
-      "type": "pipe",
-      "name": "add_comment",
-      "args": JSON.stringify([comment, path])
-    }, function(res){
-      // alert("comment update");
-    }
-  );
+    $.ajax({
+        url: PIPE_API_URL,
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "name": "add_comment",
+            "args": [comment, path],
+        }),
+        success: function(res){
+            // alert("comment update");
+        },
+        error: function(xhr, st, error){
+            alert("Server connection failed");
+        },
+    });
 }
 
 function enable_editable_comment() {

@@ -1,6 +1,6 @@
 
 const ANIMATION_SPEED = "fast"
-const API_URL = "/cgi-bin/api.cgi"
+const PIPE_API_URL = "/api/pipe"
 const BLOCK_SETTING = {
   message: false,
   overlayCSS: {
