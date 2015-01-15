@@ -22,10 +22,13 @@
           <li><a class="dp-nav" href="{{ url_for('show_projectlist') }}">Project List</a></li>
         </ul>
       </div>
+      {% block header %}
+      {% endblock %}
     </div>
   </nav>
   <div class="container">
-    {% block body %}{% endblock %}
+    {% block body %}
+    {% endblock %}
   </div>
   <script src="{{ url_for('static', filename='js/jquery-1.10.2.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jquery.cookie.js') }}"></script>
