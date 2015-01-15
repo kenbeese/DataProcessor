@@ -16,12 +16,10 @@
     <header>
       <h1>DataProcessor</h1>
     </header>
-    <ol id="LocationBar" class="breadcrumb">
-      <li><a class="dp-nav dp-projectlist">Project List</a></li>
+    <ol id="HomeBar" class="breadcrumb">
+      <li><a class="dp-nav" href="{{ url_for('show_projectlist') }}">Project List</a></li>
     </ol>
-    <section class="dp-projectlist"></section>
-    <section class="dp-project"></section>
-    <section class="dp-run"></section>
+    {% block body %}{% endblock %}
   </div>
   <script src="{{ url_for('static', filename='js/jquery-1.10.2.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jquery.cookie.js') }}"></script>
@@ -30,11 +28,8 @@
   <script src="{{ url_for('static', filename='js/dataTables.colReorder.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/setting.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
   <script src="{{ url_for('static', filename='js/comment.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/run.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/project.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/projectlist.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dataprocessor.js') }}"></script>
 </body>
 
 </html>

@@ -1,3 +1,5 @@
+{% extends "layout.html" %}
+{% block body %}
 <div class="dp-run">
   <h2>{{node["name"]|e}}</h2>
   <dl class="dl-horizontal">
@@ -34,3 +36,4 @@
   </div>
   {% endif %}
 </div>
+{% endblock %}

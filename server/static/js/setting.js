@@ -1,5 +1,3 @@
-
-const ANIMATION_SPEED = "fast"
 const PIPE_API_URL = "/api/pipe"
 const BLOCK_SETTING = {
   message: false,
