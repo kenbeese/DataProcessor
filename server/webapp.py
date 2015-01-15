@@ -1,9 +1,7 @@
 # coding: utf-8
 
-import json
 import sys
 import os.path
-import traceback
 from StringIO import StringIO
 from contextlib import contextmanager
 
