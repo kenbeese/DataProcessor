@@ -5,7 +5,8 @@ import os.path as op
 import webbrowser
 from glob import glob
 from .. import nodes
-from ..utility import path_expand
+from .. import rc
+from ..utility import path_expand, check_file
 from ..ipynb import resolve_url, resolve_name
 from ..exception import DataProcessorError as dpError
 
@@ -54,7 +55,27 @@ def gather(node_list, pattern="*.ipynb"):
                 "parents": [path, ],
                 "children": [],
             }
-            nodes.add(node_list, node)
+            nodes.add(node_list, node, strategy="modest_update")
+    return node_list
+
+
+def add(node_list, path, parents=[]):
+    """
+    Add ipynb file manually
+    """
+    p = check_file(path)
+    if isinstance(parents, str):
+        parents = [parents]
+    if not isinstance(parents, list):
+        raise dpError("Parents must be a list")
+    parents = map(lambda p: rc.resolve_project_path(p, False), parents)
+    nodes.add(node_list, {
+        "path": p,
+        "type": "ipynb",
+        "name": resolve_name(p),
+        "parents": parents,
+        "children": []
+    }, strategy="modest_update")
     return node_list
 
 
@@ -68,4 +89,13 @@ def register(pipes_dics):
         "func": gather,
         "args": [],
         "desc": "gather ipynb files",
+    }
+    pipes_dics["add_ipynb"] = {
+        "func": add,
+        "args": [("path", {"help": "path of .ipynb file"})],
+        "kwds": [("parents", {
+            "help": "parents of new ipynb",
+            "nargs": "+"
+        })],
+        "desc": "register .ipynb file"
     }
