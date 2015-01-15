@@ -1,7 +1,9 @@
 # coding: utf-8
 
 import sys
+import os
 import os.path
+import time
 from StringIO import StringIO
 from contextlib import contextmanager
 
@@ -41,14 +43,21 @@ def show_ipynblist():
     data_path = app.config["DATA_PATH"]
     nl = dp.io.load([], data_path)
     ipynb = dp.filter.node_type(nl, "ipynb")
+    nb = dp.ipynb.gather_notebooks()
     for n in ipynb:
         p = n["path"]
         try:
-            n["url"] = dp.ipynb.resolve_url(p)
+            n["url"] = dp.ipynb.resolve_url(p, nb)
         except dp.exception.DataProcessorError:
             n["url"] = ""
         n["name"] = dp.ipynb.resolve_name(p)
-    return render_template("ipynb.html", ipynb=ipynb)
+        n["mtime"] = os.stat(p).st_mtime
+        n["mtime_str"] = time.strftime("%Y/%m/%d-%H:%M:%S",
+                                       time.localtime(n["mtime"]))
+    return render_template(
+        "ipynb.html",
+        ipynb=sorted(ipynb, key=lambda n: n["mtime"], reverse=True)
+    )
 
 
 @app.route('/run/<path:path>')

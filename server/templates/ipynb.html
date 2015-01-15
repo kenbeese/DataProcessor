@@ -8,6 +8,7 @@
     <tr>
       <td>name</td>
       <td>comment</td>
+      <td>last modified</td>
       <td>path</td>
     </tr>
   </thead>
@@ -20,6 +21,7 @@
       <td>{{n["name"]|e}}</td>
       {% endif %}
       <td class="dp-comment" dp-path="{{n['path']}}">{{n["comment"]|e}}</td>
+      <td>{{n["mtime_str"]|e}}</td>
       <td>{{n["path"]|e}}</td>
     </tr>
     {% endfor %}

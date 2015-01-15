@@ -41,7 +41,7 @@ def gather_notebooks():
     return notes
 
 
-def resolve_url(ipynb_path):
+def resolve_url(ipynb_path, notebooks=None):
     """
     Return valid URL for .ipynb
 
@@ -57,7 +57,9 @@ def resolve_url(ipynb_path):
           on the parent directory of .ipynb file.
     """
     ipynb_path = check_file(ipynb_path)
-    for note in gather_notebooks():
+    if not notebooks:
+        notebooks = gather_notebooks()
+    for note in notebooks:
         cwd = note["cwd"]
         if cwd.endswith("/"):
             cwd = cwd[:-1]
