@@ -66,13 +66,14 @@ def show_project(path):
     with dp.io.SyncDataHandler(data_path, silent=True) as dh:
         nl = dh.get()
 
+    node = dp.nodes.get(nl, path)
     df = dp.dataframe.get_project(nl, path, properties=["comment"]).fillna("")
 
     def _count_uniq(col):
         return len(set(df[col]))
     index = sorted(df.columns, key=_count_uniq, reverse=True)
     cfg = [c for c in index if c not in ["name", "comment"]]
-    return render_template("project.html", df=df, cfg=cfg)
+    return render_template("project.html", df=df, cfg=cfg, node=node)
 
 
 @app.route('/api/pipe', methods=['POST'])
