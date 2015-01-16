@@ -147,7 +147,7 @@ class DataHandler(object):
         for node in node_list:
             nodes.validate_link(node_list, node, silent=True)
 
-    def replace(self, node_list, skip_validate_link=True, silent=False):
+    def replace(self, node_list, skip_validate_link=True):
         """ Swap node_list.
 
         Parameters
@@ -159,7 +159,7 @@ class DataHandler(object):
         self.node_list = node_list
         if not skip_validate_link:
             for node in self.node_list:
-                nodes.validate_link(self.node_list, node, silent=silent)
+                nodes.validate_link(self.node_list, node, silent=True)
 
     def serialize(self):
         save(self.node_list, self.data_path, self.silent)
