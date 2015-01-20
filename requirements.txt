@@ -1,5 +1,5 @@
 jinja2>=1.7
-python-daemon>=0.6
+python-daemon==1.6.1
 Sphinx>=1.2
 numpydoc>=0.4
 pandas>=0.14
