@@ -68,6 +68,7 @@ zsh等を使用している場合は`~/.zshrc`等に読みかえて下さい。
 
 ```bash
 export PATH=$PATH:$HOME/DataProcessor/bin
+export PATH=$PATH:$HOME/DataProcessor/server
 export PYTHONPATH=$PYTHONPATH:$HOME/DataProcessor/lib
 ```
 

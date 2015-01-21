@@ -20,6 +20,7 @@ def normalize(node):
         normalized node
 
     Examples
+    --------
     >>> node = {
     ...     "path": "/path/0",
     ...     "type": "run",

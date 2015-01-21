@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DataProcessor WebApp</title>
+  <meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.min.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.colReorder.min.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.fixedColumns.min.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/webapp.css') }}" type="text/css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>DataProcessor</h1>
+    </header>
+    <ol id="HomeBar" class="breadcrumb">
+      <li><a class="dp-nav" href="{{ url_for('show_projectlist') }}">Project List</a></li>
+    </ol>
+    {% block body %}{% endblock %}
+  </div>
+  <script src="{{ url_for('static', filename='js/jquery-1.10.2.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.cookie.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.blockUI.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dataTables.colReorder.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/setting.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/comment.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dataprocessor.js') }}"></script>
+</body>
+
+</html>

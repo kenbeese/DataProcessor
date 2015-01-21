@@ -5,7 +5,6 @@ import os
 
 from . import pipes
 from . import rc
-from . import server
 
 
 def dpmanip():
@@ -41,8 +40,7 @@ def dpgenzshcomp():
         "dpmanip",
         "dpgenzshcomp",
         "dataprocessor",
-        "register_figure",
-        "dpserver"
+        "register_figure"
     ]
     parser.add_argument("EXECUTABLE", choices=executable_names)
     return parser
@@ -54,55 +52,6 @@ def dataprocessor():
     parser.add_argument('manip_json')
     parser.add_argument(
         '-d', "--data", nargs="?", help="The path of data JSON")
-    return parser
-
-
-def dpserver():
-    parser = rc.ArgumentParser()
-    sub_psr = parser.add_subparsers()
-
-    port_cfg = {
-        "default": 8080,
-        "help": "Port for the server"
-    }
-    root_cfg = {
-        "default": os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                "../../server")),
-        "help": "The root dir where the server stands"
-    }
-    logfile_cfg = {
-        "default": "server.log",
-        "help": "The name of the log file",
-    }
-    lockfile_cfg = {
-        "default": "/tmp/DataProcessorServer.pid",
-        "help": "Lock filename",
-    }
-
-    # start
-    start_psr = sub_psr.add_parser("start",
-                                   help="start DataProcessor server daemon")
-    start_psr.set_defaults(func=server.start)
-    rc.load_into_argparse(start_psr, "dpserver", {
-        "port": port_cfg,
-        "root": root_cfg,
-        "logfile": logfile_cfg,
-        "lockfile": lockfile_cfg,
-    }, allow_empty=True)
-
-    # stop
-    stop_psr = sub_psr.add_parser("stop", help="kill articles server")
-    stop_psr.set_defaults(func=server.stop)
-    rc.load_into_argparse(stop_psr, "dpserver", {
-        "lockfile": lockfile_cfg,
-    }, allow_empty=True)
-
-    # install
-    install_psr = sub_psr.add_parser("install", help="install jQuery")
-    install_psr.set_defaults(func=server.install)
-    rc.load_into_argparse(install_psr, "dpserver", {
-        "root": root_cfg,
-    }, allow_empty=True)
     return parser
 
 

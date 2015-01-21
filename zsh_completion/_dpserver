@@ -5,10 +5,20 @@ function _dpserver-start (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--logfile)--logfile[The name of the log file]: :_files' \
-        '(--root)--root[The root dir where the server stands]: :_files' \
-        '(--port)--port[Port for the server]: :_files' \
-        '(--lockfile)--lockfile[Lock filename]: :_files' \
+        '(--logfilepath)--logfilepath[The name of the log file (default=/home/kentaro/nora/DataProcessor/server/server.log)]: :_files' \
+        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]: :_files' \
+        '(--port)--port[Port for the server (default=8080)]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpserver-debug (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--port)--port[Port for the server (default=8080)]: :_files' \
         '*::arguments:_files'
 }
 
@@ -19,7 +29,7 @@ function _dpserver-stop (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--lockfile)--lockfile[Lock filename]: :_files' \
+        '(--lockfile)--lockfile[Lock filename (default=/tmp/DataProcessorServer.pid)]: :_files' \
         '*::arguments:_files'
 }
 
@@ -30,13 +40,13 @@ function _dpserver-install (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--root)--root[The root dir where the server stands]: :_files' \
         '*::arguments:_files'
 }
 
 function _dpserver_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
+        debug:'start DataProcessor server with debug-mode'
         start:'start DataProcessor server daemon'
         stop:'kill articles server'
         install:'install jQuery'

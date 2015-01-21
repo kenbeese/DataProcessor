@@ -10,8 +10,6 @@ BUILDDIR      = _build
 REFERENCEDIR  = references
 LIBDIR        = ../lib/dataprocessor
 
-TESTREFERENCEDIR  = test-references
-TESTLIBDIR        = ../test/test_dataprocessor
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -57,7 +55,6 @@ clean:
 
 updateref:
 	$(SPHINXAPIDOC) -f -o $(REFERENCEDIR) $(LIBDIR)
-	$(SPHINXAPIDOC) -f -o $(TESTREFERENCEDIR) $(TESTLIBDIR)
 
 html: updateref
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html

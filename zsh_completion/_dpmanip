@@ -35,7 +35,8 @@ function _dpmanip-configure (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--section)--section[section]: :_files' \
+        '(--section)--section[section parameters are written]: :_files' \
+        '(--filetype)--filetype[filetype \[ini, yaml\]. If not given, determined automatically by the filename extension.]: :_files' \
         '*::arguments:_files'
 }
 
@@ -152,6 +153,16 @@ function _dpmanip-configure_no_section (){
 }
 
 
+function _dpmanip-start_ipynb (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-show_runs (){
     typeset -A opt_args
     local context state line
@@ -234,6 +245,7 @@ function _dpmanip_subcmd_list() {
         normalize:'normalize nodes (i.e. fill necessary field)'
         load_json:'load node_list from a JSON file'
         scan_directory:'Scan nodes from all directories under the directory '\''root'\''.'
+        start_ipynb:'start .ipynb in standing notebook'
         add_tag:'Add a tag into the node'
         save_json:'save node_list in a JSON file'
         filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
@@ -255,7 +267,7 @@ function _dpmanip (){
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '(--json)--json[path of JSON file]: :_files' \
         '(--debug)--debug[output traceback]' \
-        '(-s --silent)'{-s,--silent}'[Does not ask whether REPLACE JSON file]' \
+        '(-v --verbose)'{-v,--verbose}'[Ask whether REPLACE JSON file]' \
         '(-i --input)'{-i,--input}'[Use stdin as data JSON]' \
         '(-o --output)'{-o,--output}'[Output result node_list]' \
         '(-r --replace)'{-r,--replace}'[Use replace strategy for saving JSON]' \
