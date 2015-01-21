@@ -55,7 +55,7 @@ def gather(node_list, pattern="*.ipynb"):
                 "parents": [path, ],
                 "children": [],
             }
-            nodes.add(node_list, node, strategy="modest_update")
+            nodes.add(node_list, node, strategy="update")
     return node_list
 
 
