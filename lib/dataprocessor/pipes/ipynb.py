@@ -75,7 +75,7 @@ def add(node_list, path, parents=[]):
         "name": resolve_name(p),
         "parents": parents,
         "children": []
-    }, strategy="modest_update")
+    })
     return node_list
 
 
