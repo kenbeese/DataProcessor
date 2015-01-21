@@ -1,5 +1,147 @@
 #compdef dpmanip
+function _dpmanip-add_node (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--path)--path[path]: :_files' \
+        '(--node_type)--node_type[node_type]: :_files' \
+        '(--children)--children[children]: :_files' \
+        '(--name)--name[name]: :_files' \
+        '(--parents)--parents[parents]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-change_path (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--silent)--silent[silent]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-filter_project (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-add_tag (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-save_json (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--silent)--silent[silent]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-show_projects (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--show_format)--show_format[show_format]: :_files' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-add_comment (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-gather_ipynb (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-configure_no_section (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--split_char)--split_char[split_char]: :_files' \
+        '(--comment_char)--comment_char[comment_char]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-load_json (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-register_figure (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--runs)--runs[runs]: :_files' \
+        '(--generators)--generators[generators]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-start_ipynb (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-filter_prefix (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-move_node (){
     typeset -A opt_args
     local context state line
 
@@ -41,53 +183,6 @@ function _dpmanip-configure (){
 }
 
 
-function _dpmanip-scan_directory (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--followlinks)--followlinks[whether scan in symbolic link]: :_files' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-add_node (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--path)--path[path]: :_files' \
-        '(--node_type)--node_type[node_type]: :_files' \
-        '(--children)--children[children]: :_files' \
-        '(--name)--name[name]: :_files' \
-        '(--parents)--parents[parents]: :_files' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-change_path (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--silent)--silent[silent]: :_files' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-load_json (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
 function _dpmanip-add_run (){
     typeset -A opt_args
     local context state line
@@ -97,68 +192,6 @@ function _dpmanip-add_run (){
         '(--tag)--tag[tag]: :_files' \
         '(--name)--name[name]: :_files' \
         '(--comment)--comment[comment]: :_files' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-add_conf (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-filter_project (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-add_tag (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-filter_prefix (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-configure_no_section (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--split_char)--split_char[split_char]: :_files' \
-        '(--comment_char)--comment_char[comment_char]: :_files' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-start_ipynb (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '*::arguments:_files'
 }
 
@@ -176,38 +209,6 @@ function _dpmanip-show_runs (){
 }
 
 
-function _dpmanip-save_json (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--silent)--silent[silent]: :_files' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-move_node (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
-function _dpmanip-show_projects (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--show_format)--show_format[show_format]: :_files' \
-        '*::arguments:_files'
-}
-
-
 function _dpmanip-untag (){
     typeset -A opt_args
     local context state line
@@ -218,41 +219,63 @@ function _dpmanip-untag (){
 }
 
 
-function _dpmanip-register_figure (){
+function _dpmanip-add_ipynb (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--runs)--runs[runs]: :_files' \
-        '(--generators)--generators[generators]: :_files' \
+        '(--parents)--parents[parents of new ipynb]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-add_conf (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-scan_directory (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--followlinks)--followlinks[whether scan in symbolic link]: :_files' \
         '*::arguments:_files'
 }
 
 function _dpmanip_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
-        add_comment:'add comment to node with path'
-        filter_node_type:'filter by node type. This pipe filters out nodes which has different type attribute, and should be used with '\''-o'\'' option in dpmanip.'
-        register_figure:'add figure node into node_list'
-        configure:'Read parameter file (use ConfigParser)'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
-        add_run:'Add run.'
-        add_conf:'Add a new configure to the path.'
-        show_runs:'output runs path'
         filter_project:'filter by project path. This pipe filters out runs which don'\''t belong to the project, and should be used with '\''-o'\'' in dpmanip.'
-        normalize:'normalize nodes (i.e. fill necessary field)'
-        load_json:'load node_list from a JSON file'
-        scan_directory:'Scan nodes from all directories under the directory '\''root'\''.'
-        start_ipynb:'start .ipynb in standing notebook'
         add_tag:'Add a tag into the node'
         save_json:'save node_list in a JSON file'
-        filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
-        move_node:'move node whose directory is also moved like as UNIX mv'
         show_projects:'output project name'
-        untag:'remove a tag from specified path'
+        add_comment:'add comment to node with path'
+        gather_ipynb:'gather ipynb files'
         configure_no_section:'Read parameter file (without section)'
+        load_json:'load node_list from a JSON file'
+        register_figure:'add figure node into node_list'
+        start_ipynb:'start .ipynb in standing notebook'
+        show_runs:'output runs path'
+        move_node:'move node whose directory is also moved like as UNIX mv'
+        filter_node_type:'filter by node type. This pipe filters out nodes which has different type attribute, and should be used with '\''-o'\'' option in dpmanip.'
+        normalize:'normalize nodes (i.e. fill necessary field)'
+        configure:'Read parameter file (use ConfigParser)'
+        add_run:'Add run.'
+        untag:'remove a tag from specified path'
+        add_ipynb:'register .ipynb file'
+        add_conf:'Add a new configure to the path.'
+        scan_directory:'Scan nodes from all directories under the directory '\''root'\''.'
+        filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
     )
     _describe -t subcmd 'subcommand list' subcmd_list && return
 }

@@ -7,7 +7,7 @@ function _dpgenzshcomp (){
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        ': :(dpmanip dpgenzshcomp dataprocessor register_figure dpserver)' \
+        ': :(dpmanip dpgenzshcomp dataprocessor register_figure)' \
         '*::arguments:_files'
     ret=0
     return ret
