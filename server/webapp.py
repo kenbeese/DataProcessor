@@ -78,6 +78,10 @@ def show_run(node, node_list):
     for p in node["parents"]:
         parent_nodes.append(dp.nodes.get(node_list, p))
 
+    project_id_nodes = dp.filter.prefix_path(
+        node_list, dp.rc.resolve_project_path("", False))
+    project_ids = [n["name"] for n in project_id_nodes]
+
     ipynb_nodes = []
     for p in node["children"]:
         n = dp.nodes.get(node_list, p).copy()
@@ -91,7 +95,7 @@ def show_run(node, node_list):
         ipynb_nodes.append(n)
 
     return render_template("run.html", node=node, ipynb=ipynb_nodes,
-                           parents=parent_nodes)
+                           parents=parent_nodes, project_ids=project_ids)
 
 
 def show_project(node, node_list):
@@ -102,12 +106,16 @@ def show_project(node, node_list):
     for p in node["parents"]:
         parent_nodes.append(dp.nodes.get(node_list, p))
 
+    project_id_nodes = dp.filter.prefix_path(
+        node_list, dp.rc.resolve_project_path("", False))
+    project_ids = [n["name"] for n in project_id_nodes]
+
     def _count_uniq(col):
         return len(set(df[col]))
     index = sorted(df.columns, key=_count_uniq, reverse=True)
     cfg = [c for c in index if c not in ["name", "comment"]]
     return render_template("project.html", df=df, cfg=cfg, node=node,
-                           parents=parent_nodes)
+                           parents=parent_nodes, project_ids=project_ids)
 
 
 @app.route('/api/pipe', methods=['POST'])
