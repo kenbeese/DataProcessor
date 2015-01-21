@@ -17,7 +17,7 @@ def _wrap(filter_func):
                     continue
                 try:
                     new_node = func(node, *args, **kwds)
-                    if new_node != node:
+                    if new_node and new_node != node:
                         node.clear()
                         node.update(new_node)
                 except dpError as e:
