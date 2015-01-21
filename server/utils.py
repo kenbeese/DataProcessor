@@ -110,14 +110,17 @@ def install(args):
     jspath = op.join(ROOT, "static/js")
     csspath = op.join(ROOT, "static/css")
     imagepath = op.join(ROOT, "static/images")
+    fontspath = op.join(ROOT, "static/fonts")
     if not os.path.exists(imagepath):
         os.mkdir(imagepath)
+    if not os.path.exists(fontspath):
+        os.mkdir(fontspath)
 
     _install_jquery(jspath)
     _install_jquery_cookie(jspath)
     _install_jquery_blockUI(jspath)
     _install_jquery_datatables(jspath, csspath, imagepath)
-    _install_bootstrap(jspath, csspath)
+    _install_bootstrap(jspath, csspath, fontspath)
 
 
 def show_progress(name):
@@ -193,7 +196,7 @@ def _install_jquery_datatables(jspath, csspath, imagepath):
 
 
 @show_progress("Bootstrap")
-def _install_bootstrap(jspath, csspath):
+def _install_bootstrap(jspath, csspath, fontspath):
     bootstrap_version = "3.3.1"
     bootstrap_url = "https://github.com/twbs/bootstrap/releases/download/"\
         + "v{version}/bootstrap-{version}-dist.zip"\
@@ -205,6 +208,10 @@ def _install_bootstrap(jspath, csspath):
     with ZipFile(bootstrap_name, 'r') as zf:
         _copy_file(jspath, zf, "dist/js/bootstrap.min.js")
         _copy_file(csspath, zf, "dist/css/bootstrap.min.css")
+        _copy_file(fontspath, zf, "dist/fonts/glyphicons-halflings-regular.eot")
+        _copy_file(fontspath, zf, "dist/fonts/glyphicons-halflings-regular.svg")
+        _copy_file(fontspath, zf, "dist/fonts/glyphicons-halflings-regular.ttf")
+        _copy_file(fontspath, zf, "dist/fonts/glyphicons-halflings-regular.woff")
 
 
 def _copy_file(path, zf, fn):
