@@ -38,7 +38,7 @@ def show_projectlist():
     return render_template('projectlist.html', projects=projects)
 
 
-@app.route('/ipynb')
+@app.route('/ipynblist')
 def show_ipynblist():
     data_path = app.config["DATA_PATH"]
     nl = dp.io.load([], data_path)
@@ -55,7 +55,7 @@ def show_ipynblist():
         n["mtime_str"] = time.strftime("%Y/%m/%d-%H:%M:%S",
                                        time.localtime(n["mtime"]))
     return render_template(
-        "ipynb.html",
+        "ipynblist.html",
         ipynb=sorted(ipynb, key=lambda n: n["mtime"], reverse=True)
     )
 
