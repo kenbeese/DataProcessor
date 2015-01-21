@@ -50,36 +50,16 @@
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 
-<span class="kn">import</span> <span class="nn">psutil</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">op</span>
 <span class="kn">import</span> <span class="nn">webbrowser</span>
-<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">check_file</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">nodes</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">rc</span>
+<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">path_expand</span><span class="p">,</span> <span class="n">check_file</span>
+<span class="kn">from</span> <span class="nn">..ipynb</span> <span class="kn">import</span> <span class="n">resolve_url</span><span class="p">,</span> <span class="n">resolve_name</span>
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span> <span class="k">as</span> <span class="n">dpError</span>
 
 
-<div class="viewcode-block" id="gather_notebooks"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.ipynb.gather_notebooks">[docs]</a><span class="k">def</span> <span class="nf">gather_notebooks</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot; Gather processes of IPython Notebook</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">notes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">psutil</span><span class="o">.</span><span class="n">process_iter</span><span class="p">():</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;ipython&quot;</span><span class="p">,</span> <span class="s">&quot;python&quot;</span><span class="p">]:</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="s">&quot;notebook&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">cmdline</span><span class="p">():</span>
-            <span class="k">continue</span>
-        <span class="k">for</span> <span class="n">net</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">connections</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">&quot;inet4&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">net</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s">&quot;LISTEN&quot;</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">laddr</span>
-            <span class="k">break</span>
-        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s">&quot;pid&quot;</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span>
-            <span class="s">&quot;cwd&quot;</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
-            <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="n">port</span><span class="p">,</span>
-        <span class="p">})</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">notes</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;No IPython Notebook found&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">notes</span>
-
-</div>
 <div class="viewcode-block" id="start"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.ipynb.start">[docs]</a><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">ipynb_path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Start existing .ipynb file</span>
@@ -99,20 +79,53 @@
 <span class="sd">        - Cannot open browser</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ipynb_path</span> <span class="o">=</span> <span class="n">check_file</span><span class="p">(</span><span class="n">ipynb_path</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">gather_notebooks</span><span class="p">():</span>
-        <span class="n">cwd</span> <span class="o">=</span> <span class="n">note</span><span class="p">[</span><span class="s">&quot;cwd&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">ipynb_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">cwd</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">resolve_url</span><span class="p">(</span><span class="n">ipynb_path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">webbrowser</span><span class="o">.</span><span class="n">Error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Unknown error while opening notebook&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nl</span>
+
+</div>
+<div class="viewcode-block" id="gather"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.ipynb.gather">[docs]</a><span class="k">def</span> <span class="nf">gather</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s">&quot;*.ipynb&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Search ipynb file by its extention</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">op</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="k">continue</span>
-        <span class="n">note</span><span class="p">[</span><span class="s">&quot;postfix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ipynb_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>  <span class="c"># remove &#39;/&#39;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;http://localhost:{port}/notebooks/{postfix}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">note</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">webbrowser</span><span class="o">.</span><span class="n">Error</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Unknown error while opening notebook&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">nl</span>
-    <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;No valid Notebook found. &quot;</span>
-                  <span class="s">&quot;Please stand notebook server on the parent directory.&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)):</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;ipynb&quot;</span><span class="p">,</span>
+                <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="n">resolve_name</span><span class="p">(</span><span class="n">fn</span><span class="p">),</span>
+                <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">path</span><span class="p">,</span> <span class="p">],</span>
+                <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="p">}</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node_list</span>
+
+</div>
+<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.ipynb.add">[docs]</a><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add ipynb file manually</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">check_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">parents</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Parents must be a list&quot;</span><span class="p">)</span>
+    <span class="n">parents</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">rc</span><span class="o">.</span><span class="n">resolve_project_path</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">False</span><span class="p">),</span> <span class="n">parents</span><span class="p">)</span>
+    <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;ipynb&quot;</span><span class="p">,</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="n">resolve_name</span><span class="p">(</span><span class="n">p</span><span class="p">),</span>
+        <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="n">parents</span><span class="p">,</span>
+        <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">node_list</span>
 
 </div>
 <div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.ipynb.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">pipes_dics</span><span class="p">):</span>
@@ -120,6 +133,20 @@
         <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">start</span><span class="p">,</span>
         <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;ipynb_path&quot;</span><span class="p">],</span>
         <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;start .ipynb in standing notebook&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;gather_ipynb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">gather</span><span class="p">,</span>
+        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;gather ipynb files&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;add_ipynb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">add</span><span class="p">,</span>
+        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s">&quot;path&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;path of .ipynb file&quot;</span><span class="p">})],</span>
+        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s">&quot;parents&quot;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;parents of new ipynb&quot;</span><span class="p">,</span>
+            <span class="s">&quot;nargs&quot;</span><span class="p">:</span> <span class="s">&quot;+&quot;</span>
+        <span class="p">})],</span>
+        <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;register .ipynb file&quot;</span>
     <span class="p">}</span></div>
 </pre></div>
 

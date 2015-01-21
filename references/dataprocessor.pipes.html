@@ -234,9 +234,6 @@ The path is resolved by resolve_project_path.</p>
 <span class="gt">Traceback (most recent call last):</span>
     <span class="o">...</span>
 <span class="gr">DataProcessorError</span>: <span class="n">&#39;There is no node with specified path: /path/to/hogehom&#39;</span>
-<span class="gt">Traceback (most recent call last):</span>
-    <span class="o">...</span>
-<span class="gr">DataProcessorError</span>: <span class="n">&#39;There is no node with specified path: /path/to/hogehom&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -442,9 +439,15 @@ If file does not exist, add null list.</p>
 <div class="section" id="module-dataprocessor.pipes.ipynb">
 <span id="dataprocessor-pipes-ipynb-module"></span><h2>dataprocessor.pipes.ipynb module<a class="headerlink" href="#module-dataprocessor.pipes.ipynb" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="dataprocessor.pipes.ipynb.gather_notebooks">
-<tt class="descclassname">dataprocessor.pipes.ipynb.</tt><tt class="descname">gather_notebooks</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/ipynb.html#gather_notebooks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.ipynb.gather_notebooks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gather processes of IPython Notebook</p>
+<dt id="dataprocessor.pipes.ipynb.add">
+<tt class="descclassname">dataprocessor.pipes.ipynb.</tt><tt class="descname">add</tt><big>(</big><em>node_list</em>, <em>path</em>, <em>parents=[]</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/ipynb.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.ipynb.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add ipynb file manually</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.ipynb.gather">
+<tt class="descclassname">dataprocessor.pipes.ipynb.</tt><tt class="descname">gather</tt><big>(</big><em>node_list</em>, <em>pattern='*.ipynb'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/ipynb.html#gather"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.ipynb.gather" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search ipynb file by its extention</p>
 </dd></dl>
 
 <dl class="function">

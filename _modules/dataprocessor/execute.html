@@ -157,6 +157,31 @@
     <span class="k">return</span> <span class="n">node_list</span>
 
 </div>
+<div class="viewcode-block" id="pipe"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.execute.pipe">[docs]</a><span class="k">def</span> <span class="nf">pipe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwds</span><span class="o">=</span><span class="p">{},</span> <span class="n">node_list</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot; Execute a pipe</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of pipe</span>
+<span class="sd">    args : list</span>
+<span class="sd">        arguments of pipe</span>
+<span class="sd">    kwds : dict, optional</span>
+<span class="sd">        keyword arguments of pipe (default={})</span>
+<span class="sd">    node_list : list, optional</span>
+<span class="sd">        initial node_list (default=[])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">kwds</span><span class="p">:</span>
+        <span class="n">mp</span><span class="p">[</span><span class="s">&quot;kwds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span>
+    <span class="n">manip</span> <span class="o">=</span> <span class="p">[</span><span class="n">mp</span><span class="p">,</span> <span class="p">]</span>
+    <span class="n">check_manip</span><span class="p">(</span><span class="n">manip</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">execute</span><span class="p">(</span><span class="n">manip</span><span class="p">,</span> <span class="n">node_list</span><span class="p">)</span>
+
+</div>
 <div class="viewcode-block" id="execute_from_json_str"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.execute.execute_from_json_str">[docs]</a><span class="k">def</span> <span class="nf">execute_from_json_str</span><span class="p">(</span><span class="n">manip_json_str</span><span class="p">,</span> <span class="n">node_list</span><span class="o">=</span><span class="p">[]):</span>
     <span class="sd">&quot;&quot;&quot;execute pipeline from JSON string</span>
 

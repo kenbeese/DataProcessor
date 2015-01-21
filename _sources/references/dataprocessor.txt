@@ -76,6 +76,14 @@ dataprocessor.io module
     :undoc-members:
     :show-inheritance:
 
+dataprocessor.ipynb module
+--------------------------
+
+.. automodule:: dataprocessor.ipynb
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.nodes module
 --------------------------
 
@@ -88,14 +96,6 @@ dataprocessor.rc module
 -----------------------
 
 .. automodule:: dataprocessor.rc
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-dataprocessor.server module
----------------------------
-
-.. automodule:: dataprocessor.server
     :members:
     :undoc-members:
     :show-inheritance:

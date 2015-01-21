@@ -151,11 +151,6 @@
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="dataprocessor.argparsers.dpserver">
-<tt class="descclassname">dataprocessor.argparsers.</tt><tt class="descname">dpserver</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/argparsers.html#dpserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.argparsers.dpserver" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
 <dt id="dataprocessor.argparsers.register_figure">
 <tt class="descclassname">dataprocessor.argparsers.</tt><tt class="descname">register_figure</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/argparsers.html#register_figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.argparsers.register_figure" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -372,6 +367,36 @@ Please check by <cite>.check_manip</cite></p>
 <blockquote class="last">
 <div><p>It is raised if manipulation is invalid.
 See also <cite>.check_manip</cite></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.execute.pipe">
+<tt class="descclassname">dataprocessor.execute.</tt><tt class="descname">pipe</tt><big>(</big><em>name</em>, <em>args</em>, <em>kwds={}</em>, <em>node_list=[]</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/execute.html#pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.execute.pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a pipe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
+<blockquote>
+<div><p>Name of pipe</p>
+</div></blockquote>
+<p><strong>args</strong> : list</p>
+<blockquote>
+<div><p>arguments of pipe</p>
+</div></blockquote>
+<p><strong>kwds</strong> : dict, optional</p>
+<blockquote>
+<div><p>keyword arguments of pipe (default={})</p>
+</div></blockquote>
+<p><strong>node_list</strong> : list, optional</p>
+<blockquote class="last">
+<div><p>initial node_list (default=[])</p>
 </div></blockquote>
 </td>
 </tr>
@@ -843,6 +868,61 @@ This class use JSON format for serializing.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>list</strong> : node_list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.ipynb">
+<span id="dataprocessor-ipynb-module"></span><h2>dataprocessor.ipynb module<a class="headerlink" href="#module-dataprocessor.ipynb" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.ipynb.gather_notebooks">
+<tt class="descclassname">dataprocessor.ipynb.</tt><tt class="descname">gather_notebooks</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/ipynb.html#gather_notebooks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.ipynb.gather_notebooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather processes of IPython Notebook</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>No IPython Notebook found</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.ipynb.resolve_name">
+<tt class="descclassname">dataprocessor.ipynb.</tt><tt class="descname">resolve_name</tt><big>(</big><em>ipynb_path</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/ipynb.html#resolve_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.ipynb.resolve_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.ipynb.resolve_url">
+<tt class="descclassname">dataprocessor.ipynb.</tt><tt class="descname">resolve_url</tt><big>(</big><em>ipynb_path</em>, <em>notebooks=None</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/ipynb.html#resolve_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.ipynb.resolve_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return valid URL for .ipynb</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ipynb_path</strong> : str</p>
+<blockquote>
+<div><p>path of existing .ipynb file</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorError</strong></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Existing notebook servers do not start
+on the parent directory of .ipynb file.</li>
+</ul>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -1478,25 +1558,6 @@ from the setting file.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-dataprocessor.server">
-<span id="dataprocessor-server-module"></span><h2>dataprocessor.server module<a class="headerlink" href="#module-dataprocessor.server" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="dataprocessor.server.install">
-<tt class="descclassname">dataprocessor.server.</tt><tt class="descname">install</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/server.html#install"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.server.install" title="Permalink to this definition">¶</a></dt>
-<dd><p>Install jQuery.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="dataprocessor.server.start">
-<tt class="descclassname">dataprocessor.server.</tt><tt class="descname">start</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/server.html#start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.server.start" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="dataprocessor.server.stop">
-<tt class="descclassname">dataprocessor.server.</tt><tt class="descname">stop</tt><big>(</big><em>args</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/server.html#stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.server.stop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 <div class="section" id="module-dataprocessor.table">
 <span id="dataprocessor-table-module"></span><h2>dataprocessor.table module<a class="headerlink" href="#module-dataprocessor.table" title="Permalink to this headline">¶</a></h2>
 <p>Create a part of HTML of table.</p>
@@ -1966,9 +2027,9 @@ then you should set <cite>split_char=&#8221;:&#8221;</cite>.</p>
 <li><a class="reference internal" href="#module-dataprocessor.filter">dataprocessor.filter module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.gencompletion">dataprocessor.gencompletion module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.io">dataprocessor.io module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.ipynb">dataprocessor.ipynb module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.nodes">dataprocessor.nodes module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.rc">dataprocessor.rc module</a></li>
-<li><a class="reference internal" href="#module-dataprocessor.server">dataprocessor.server module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.table">dataprocessor.table module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.utility">dataprocessor.utility module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor">Module contents</a></li>

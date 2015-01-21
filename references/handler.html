@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>handler module &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">dataprocessor  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-handler">
+<span id="handler-module"></span><h1>handler module<a class="headerlink" href="#module-handler" title="Permalink to this headline">¶</a></h1>
+<p>Handler of HTTP requasts and responses.</p>
+<dl class="class">
+<dt id="handler.Request">
+<em class="property">class </em><tt class="descclassname">handler.</tt><tt class="descname">Request</tt><big>(</big><em>environ={}</em><big>)</big><a class="headerlink" href="#handler.Request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A class handling HTTP requests.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#handler.Request.get" title="handler.Request.get"><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt></a>(name)</td>
+<td>Get value of request.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#handler.Request.has" title="handler.Request.has"><tt class="xref py py-obj docutils literal"><span class="pre">has</span></tt></a>(name)</td>
+<td>Ask whether request has <cite>name</cite>.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="handler.Request.get">
+<tt class="descname">get</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#handler.Request.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value of request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name: str</strong></p>
+<blockquote>
+<div><p>key of the request</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str</p>
+<blockquote>
+<div><p>the value of request</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>KeyError</strong></p>
+<blockquote class="last">
+<div><p>raises if request does not have element with <cite>name</cite></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="handler.Request.has">
+<tt class="descname">has</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#handler.Request.has" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ask whether request has <cite>name</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name: str</strong></p>
+<blockquote>
+<div><p>key of the request</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="handler.Response">
+<em class="property">class </em><tt class="descclassname">handler.</tt><tt class="descname">Response</tt><big>(</big><em>content_type='html'</em>, <em>charset='utf-8'</em><big>)</big><a class="headerlink" href="#handler.Response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The class handring Response of HTTP.</p>
+<p>You can use this class by making instance of this class
+before sending Response.</p>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li>JSON</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Response</span><span class="p">(</span><span class="s">&quot;json&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">set_body</span><span class="p">(</span><span class="s">&quot;{&#39;exit_code&#39; : 0}&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> 
+</pre></div>
+</div>
+<ul class="simple">
+<li>HTML</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Response</span><span class="p">(</span><span class="s">&quot;html&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">set_body</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s">    &lt;!DOCTYPE html&gt;</span>
+<span class="gp">... </span><span class="s">    &lt;html&gt;</span>
+<span class="gp">... </span><span class="s">        &lt;body&gt;</span>
+<span class="gp">... </span><span class="s">            &lt;h1&gt;My Home Page!&lt;/h1&gt;</span>
+<span class="gp">... </span><span class="s">        &lt;/body&gt;</span>
+<span class="gp">... </span><span class="s">    &lt;/html&gt;</span>
+<span class="gp">... </span><span class="s">    &#39;&#39;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> 
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#handler.Response.get_header" title="handler.Response.get_header"><tt class="xref py py-obj docutils literal"><span class="pre">get_header</span></tt></a>(name)</td>
+<td>Get the header which already set and return object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#handler.Response.make_output" title="handler.Response.make_output"><tt class="xref py py-obj docutils literal"><span class="pre">make_output</span></tt></a>([timestamp])</td>
+<td>Make Response text including header and text and return str.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#handler.Response.set_body" title="handler.Response.set_body"><tt class="xref py py-obj docutils literal"><span class="pre">set_body</span></tt></a>(bodystr)</td>
+<td>Set the body of response.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#handler.Response.set_header" title="handler.Response.set_header"><tt class="xref py py-obj docutils literal"><span class="pre">set_header</span></tt></a>(name,&nbsp;value)</td>
+<td>Set header of Response.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="handler.Response.get_header">
+<tt class="descname">get_header</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#handler.Response.get_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the header which already set and return object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="handler.Response.make_output">
+<tt class="descname">make_output</tt><big>(</big><em>timestamp=None</em><big>)</big><a class="headerlink" href="#handler.Response.make_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make Response text including header and text and return str.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="handler.Response.set_body">
+<tt class="descname">set_body</tt><big>(</big><em>bodystr</em><big>)</big><a class="headerlink" href="#handler.Response.set_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the body of response.</p>
+<p>See Examples of this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="handler.Response.set_header">
+<tt class="descname">set_header</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#handler.Response.set_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set header of Response.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="handler.operation_fail">
+<tt class="descclassname">handler.</tt><tt class="descname">operation_fail</tt><big>(</big><em>msg=''</em>, <em>code=1</em><big>)</big><a class="headerlink" href="#handler.operation_fail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="handler.operation_success">
+<tt class="descclassname">handler.</tt><tt class="descname">operation_success</tt><big>(</big><big>)</big><a class="headerlink" href="#handler.operation_success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/references/handler.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">dataprocessor  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

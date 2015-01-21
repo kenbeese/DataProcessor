@@ -54,7 +54,6 @@
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">pipes</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">rc</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">server</span>
 
 
 <div class="viewcode-block" id="dpmanip"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.argparsers.dpmanip">[docs]</a><span class="k">def</span> <span class="nf">dpmanip</span><span class="p">():</span>
@@ -90,8 +89,7 @@
         <span class="s">&quot;dpmanip&quot;</span><span class="p">,</span>
         <span class="s">&quot;dpgenzshcomp&quot;</span><span class="p">,</span>
         <span class="s">&quot;dataprocessor&quot;</span><span class="p">,</span>
-        <span class="s">&quot;register_figure&quot;</span><span class="p">,</span>
-        <span class="s">&quot;dpserver&quot;</span>
+        <span class="s">&quot;register_figure&quot;</span>
     <span class="p">]</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;EXECUTABLE&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">executable_names</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parser</span>
@@ -103,55 +101,6 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;manip_json&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&quot;--data&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s">&quot;?&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;The path of data JSON&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">parser</span>
-
-</div>
-<div class="viewcode-block" id="dpserver"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.argparsers.dpserver">[docs]</a><span class="k">def</span> <span class="nf">dpserver</span><span class="p">():</span>
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-    <span class="n">sub_psr</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">()</span>
-
-    <span class="n">port_cfg</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="mi">8080</span><span class="p">,</span>
-        <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;Port for the server&quot;</span>
-    <span class="p">}</span>
-    <span class="n">root_cfg</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span>
-                                                <span class="s">&quot;../../server&quot;</span><span class="p">)),</span>
-        <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;The root dir where the server stands&quot;</span>
-    <span class="p">}</span>
-    <span class="n">logfile_cfg</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;server.log&quot;</span><span class="p">,</span>
-        <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;The name of the log file&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="n">lockfile_cfg</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;/tmp/DataProcessorServer.pid&quot;</span><span class="p">,</span>
-        <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;Lock filename&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="c"># start</span>
-    <span class="n">start_psr</span> <span class="o">=</span> <span class="n">sub_psr</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&quot;start&quot;</span><span class="p">,</span>
-                                   <span class="n">help</span><span class="o">=</span><span class="s">&quot;start DataProcessor server daemon&quot;</span><span class="p">)</span>
-    <span class="n">start_psr</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">server</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
-    <span class="n">rc</span><span class="o">.</span><span class="n">load_into_argparse</span><span class="p">(</span><span class="n">start_psr</span><span class="p">,</span> <span class="s">&quot;dpserver&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="n">port_cfg</span><span class="p">,</span>
-        <span class="s">&quot;root&quot;</span><span class="p">:</span> <span class="n">root_cfg</span><span class="p">,</span>
-        <span class="s">&quot;logfile&quot;</span><span class="p">:</span> <span class="n">logfile_cfg</span><span class="p">,</span>
-        <span class="s">&quot;lockfile&quot;</span><span class="p">:</span> <span class="n">lockfile_cfg</span><span class="p">,</span>
-    <span class="p">},</span> <span class="n">allow_empty</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="c"># stop</span>
-    <span class="n">stop_psr</span> <span class="o">=</span> <span class="n">sub_psr</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&quot;stop&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;kill articles server&quot;</span><span class="p">)</span>
-    <span class="n">stop_psr</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">server</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
-    <span class="n">rc</span><span class="o">.</span><span class="n">load_into_argparse</span><span class="p">(</span><span class="n">stop_psr</span><span class="p">,</span> <span class="s">&quot;dpserver&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s">&quot;lockfile&quot;</span><span class="p">:</span> <span class="n">lockfile_cfg</span><span class="p">,</span>
-    <span class="p">},</span> <span class="n">allow_empty</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="c"># install</span>
-    <span class="n">install_psr</span> <span class="o">=</span> <span class="n">sub_psr</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&quot;install&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;install jQuery&quot;</span><span class="p">)</span>
-    <span class="n">install_psr</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">server</span><span class="o">.</span><span class="n">install</span><span class="p">)</span>
-    <span class="n">rc</span><span class="o">.</span><span class="n">load_into_argparse</span><span class="p">(</span><span class="n">install_psr</span><span class="p">,</span> <span class="s">&quot;dpserver&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s">&quot;root&quot;</span><span class="p">:</span> <span class="n">root_cfg</span><span class="p">,</span>
-    <span class="p">},</span> <span class="n">allow_empty</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parser</span>
 
 </div>
