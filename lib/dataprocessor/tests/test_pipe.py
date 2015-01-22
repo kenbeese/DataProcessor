@@ -8,7 +8,7 @@ from ..exception import DataProcessorError as dpError
 
 @pipe.wrap
 def wrap_noreturn(node):
-    """Arrow not returning pipe"""
+    """Not arrowed"""
     pass
 
 
@@ -25,8 +25,8 @@ def wrap_raise(node):
 class TestPipe(TestNodeListAndDir):
 
     def test_noreturn(self):
-        nl = wrap_noreturn(self.node_list)
-        self.assertEquals(nl, self.node_list)
+        with self.assertRaises(pipe.PipeImplementError):
+            wrap_noreturn(self.node_list)
 
     def test_raise(self):
         nl = wrap_noraise(self.node_list)  # no raise
