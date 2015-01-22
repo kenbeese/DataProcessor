@@ -12,21 +12,30 @@
       {% for p in parents %}
       <span class="label label-default">
         <a href="{{ url_for('show_node', path=p['path'][1:])}}"> {{p['name']|e}}</a>
-        <a href="{{ url_for('untag', path=node['path'][1:], project_path=p['path'][1:])}}">
+        <a href="{{ url_for('untag', path=node['path'][1:], project_path=p['path'][1:])}}"
+           data-toggle="tooltip" title="Remove tag">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"/>
       </a></span>
       {% endfor %}
+
+      <a data-toggle="collapse" href="#addTag" aria-controls="addTag"
+         class="label label-info" data-placement="right" title="Add tag">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"/>
+      </a>
       </p>
 
       <form action="{{ url_for('add_tag', path=node['path'][1:]) }}"
-            method="post" class="form-inline add_tag" >
+            method="post" class="form-inline add_tag collapse"
+            id="addTag">
         <div class="form-group">
           <input class="form-control" type="text" name="tagname"
                  autocomplete="off" list="project_id_list">
         </div>
-        <button type="submit" class="btn btn-default">
-          <span class="glyphicon glyphicon-tag" aria-hidden="true"/>
+        <button type="submit" class="btn btn-default"
+                data-toggle="tooltip" data-placement="right" title="Save">
+          <span class="glyphicon glyphicon-save" aria-hidden="true"/>
         </button>
+
       </form>
 
       <datalist id="project_id_list">
