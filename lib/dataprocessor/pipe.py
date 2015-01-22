@@ -93,15 +93,41 @@ def type(typename):
     Examples
     --------
 
+    >>> nl = [{
+    ...     "path": "/path/1",
+    ...     "type": "project",
+    ...     "children": ["/path/2"],
+    ...     "parents": [],
+    ... }, {
+    ...     "path": "/path/2",
+    ...     "type": "run",
+    ...     "children": [],
+    ...     "parents": ["/path/1"],
+    ... }]
     >>> @type("run")
-    ... def pipe1(node):
-    ...     pass
-
-    works on run nodes only, and
-
+    ... def run_pipe(node):
+    ...     node["comment"] = "RUN"
+    ...     return node
     >>> @type("project")
-    ... def pipe2(node):
-    ...     pass
+    ... def project_pipe(node):
+    ...     node["comment"] = "PROJECT"
+    ...     return node
+    >>> nl = run_pipe(nl)
+    >>> nl = project_pipe(nl)
+    >>> nl == [{
+    ...     "path": "/path/1",
+    ...     "type": "project",
+    ...     "children": ["/path/2"],
+    ...     "parents": [],
+    ...     "comment": "PROJECT",
+    ... }, {
+    ...     "path": "/path/2",
+    ...     "type": "run",
+    ...     "children": [],
+    ...     "parents": ["/path/1"],
+    ...     "comment": "RUN",
+    ... }]
+    True
 
     works on project nodes only.
 
