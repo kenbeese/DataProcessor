@@ -147,7 +147,7 @@ def modest_update(node_list, node, skip_validate_link=False):
         if val:
             node0[key] = val
     if not skip_validate_link:
-        validate_link(node_list, node0)
+        validate_link(node_list, node0, silent=True)
 
 
 def add(node_list, node, skip_validate_link=False, strategy="raise"):
@@ -210,7 +210,7 @@ def add(node_list, node, skip_validate_link=False, strategy="raise"):
         else:
             raise DataProcessorError("Invalid strategy: %s" % strategy)
     if not skip_validate_link:
-        validate_link(node_list, node)
+        validate_link(node_list, node, silent=True)
 
 
 def check_duplicate(node_list):

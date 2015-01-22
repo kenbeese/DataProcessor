@@ -13,6 +13,53 @@ def merge_nodelist(node_list, json_filename):
     ----------
     json_fn : str
         filename of JSON file including another node_list
+
+    Example
+    -------
+    >>> from tempfile import NamedTemporaryFile
+    >>> nl1 = [{
+    ...     u"path": u"/path/1",
+    ...     u"type": u"run",
+    ...     u"children": [u"/path/2"],
+    ...     u"parents": [],
+    ... }, {
+    ...     u"path": u"/path/2",
+    ...     u"type": u"run",
+    ...     u"children": [],
+    ...     u"parents": [u"/path/1"],
+    ... }]
+    >>> with NamedTemporaryFile(suffix=".json", delete=False) as f:
+    ...     json.dump(nl1, f)
+    >>> nl2 = [{
+    ...     u"path": u"/path/1",
+    ...     u"type": u"run",
+    ...     u"children": [u"/path/3"],
+    ...     u"parents": [],
+    ... }, {
+    ...     u"path": u"/path/3",
+    ...     u"type": u"run",
+    ...     u"children": [],
+    ...     u"parents": [u"/path/1"],
+    ... }]
+    >>> nl = merge_nodelist(nl2, f.name)
+    >>> nl == [{
+    ...     u"path": u"/path/1",
+    ...     u"type": u"run",
+    ...     u"children": [u"/path/2", u"/path/3"],
+    ...     u"parents": [],
+    ... }, {
+    ...     u"path": u"/path/3",
+    ...     u"type": u"run",
+    ...     u"children": [],
+    ...     u"parents": [u"/path/1"],
+    ... }, {
+    ...     u"path": u"/path/2",
+    ...     u"type": u"run",
+    ...     u"children": [],
+    ...     u"parents": [u"/path/1"],
+    ... }]
+    True
+
     """
     fn = utility.check_file(json_filename)
     with open(fn) as f:
