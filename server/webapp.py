@@ -6,7 +6,7 @@ import os.path
 import time
 
 from flask import Flask, request, render_template, Response, abort, \
-    redirect, url_for, g
+    redirect, url_for, g, flash, session
 
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
@@ -148,16 +148,21 @@ def _execute_pipe(data_path, name, args, kwds):
 
 @app.route('/add_tag/<path:path>', methods=['POST'])
 def add_tag(path):
+    session['logged_in'] = True
     if request.form['tagname'] == "":
+        flash("Specify tagname")
         return redirect(url_for('show_node', path=path))
     else:
+        flash("Added tag '{}'".format(request.form['tagname']))
         _execute_pipe(g.data_path,
                       "add_tag", ["/" + path, request.form['tagname']], {})
         return redirect(url_for('show_node', path=path))
 
 
-@app.route('/untag/<path:path>?project_id=<path:project_path>')
+@app.route('/untag/<path:path>?project_path=<path:project_path>')
 def untag(path, project_path):
+    session['logged_in'] = True
+    flash("Removed tag '{}'".format(os.path.basename(project_path)))
     _execute_pipe(g.data_path,
                   "untag", ["/" + path, "/" + project_path], {})
 
