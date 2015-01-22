@@ -159,6 +159,6 @@ def add_tag(path):
 @app.route('/untag/<path:path>?project_id=<path:project_path>')
 def untag(path, project_path):
     _execute_pipe(g.data_path,
-                  "untag", ["/" + path, project_path], {})
+                  "untag", ["/" + path, "/" + project_path], {})
 
     return redirect(url_for('show_node', path=path))

@@ -5,8 +5,10 @@
     <dd>{{node["path"]|e}}</dd>
     <dt>comment</dt>
     <dd class="dp-comment" dp-path="{{node['path']}}">{{node["comment"]|e}}</dd>
-    <dt>tag</dt>
+    <dt>tags</dt>
     <dd>
+
+      <p>
       {% for p in parents %}
       <span class="label label-default">
         <a href="{{ url_for('show_node', path=p['path'][1:])}}"> {{p['name']|e}}</a>
@@ -14,19 +16,25 @@
           <span class="glyphicon glyphicon-remove" aria-hidden="true"/>
       </a></span>
       {% endfor %}
+      </p>
+
       <form action="{{ url_for('add_tag', path=node['path'][1:]) }}"
             method="post" class="form-inline add_tag" >
-        <input class="form-control" type="text" name="tagname"
-               autocomplete="off" list="project_id_list">
-        <datalist id="project_id_list">
-          {% for p in project_ids %}
-          <option value="{{p}}">
-          {% endfor %}
-        </datalist>
+        <div class="form-group">
+          <input class="form-control" type="text" name="tagname"
+                 autocomplete="off" list="project_id_list">
+        </div>
         <button type="submit" class="btn btn-default">
           <span class="glyphicon glyphicon-tag" aria-hidden="true"/>
         </button>
       </form>
+
+      <datalist id="project_id_list">
+        {% for p in project_ids %}
+        <option value="{{p}}"/>
+        {% endfor %}
+      </datalist>
+
     </dd>
   </dl>
 </div>
