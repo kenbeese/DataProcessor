@@ -3,13 +3,14 @@
 <h2>IPython Notebooks</h2>
 {% endblock %}
 {% block body %}
-<table class="table">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
-      <td>name</td>
-      <td>comment</td>
-      <td>last modified</td>
-      <td>path</td>
+      <th>Name</th>
+      <th>Comment</th>
+      <th>Last modified</th>
+      <th>Tags</th>
+      <th>Path</th>
     </tr>
   </thead>
   <tbody>
@@ -22,10 +23,14 @@
       {% endif %}
       <td class="dp-comment" dp-path="{{n['path']}}">{{n["comment"]|e}}</td>
       <td>{{n["mtime_str"]|e}}</td>
+      <td>
+        {% for t in n["tag-nodes"] %}
+        <span class="label label-default"><a href="{{ url_for('show_node', path=t['path'][1:])}}">{{t['name']|e}}</a></span>
+        {% endfor %}
+      </td>
       <td>{{n["path"]|e}}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 {% endblock %}
-

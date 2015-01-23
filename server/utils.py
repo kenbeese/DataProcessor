@@ -77,6 +77,7 @@ def start(args):
     lock_path = args.lockfile
     data_path = utility.check_file(args.json)
     app.config["DATA_PATH"] = data_path
+    app.config["SECRET_KEY"] = "development key"
     if not op.exists(lock_path):
         dc = DaemonContext(pidfile=PIDLockFile(lock_path),
                            stderr=open(log_path, "w+"),
@@ -91,6 +92,7 @@ def debug(args):
     port = int(args.port)
     data_path = utility.check_file(args.json)
     app.config["DATA_PATH"] = data_path
+    app.config["SECRET_KEY"] = "development key"
     app.run(debug=True, port=port)
 
 

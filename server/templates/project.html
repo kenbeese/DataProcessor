@@ -1,21 +1,15 @@
 {% extends "layout.html" %}
+
 {% block header %}
-<div>
-  <h2>{{node["name"]|e}}</h2>
-  <dl class="dl-horizontal">
-    <dt>path</dt>
-    <dd>{{node["path"]|e}}</dd>
-    <dt>comment</dt>
-    <dd class="dp-comment" dp-path="{{node['path']}}">{{node["comment"]|e}}</dd>
-  </dl>
-</div>
+{% include "node_page_header.html" %}
 {% endblock %}
+
 {% block body %}
 <table class="dp-project table table-condensed table-striped">
   <thead>
     <tr>
-      <th>name</th>
-      <th>comment</th>
+      <th>Name</th>
+      <th>Comment</th>
       {% for c in cfg %}
       <th>{{c|e}}</th>
       {% endfor %}
@@ -26,7 +20,7 @@
     {% set s = df.ix[path] %}
     <tr>
       <td>
-        <a href="{{ url_for('show_run', path=path[1:]) }}">{{s["name"]|e}}</a>
+        <a href="{{ url_for('show_node', path=path[1:]) }}"> {{s["name"]|e}} </a>
       </td>
       <td class="dp-comment" dp-path="{{path}}">{{s["comment"]|e}}</td>
       {% for c in cfg %}

@@ -24,5 +24,7 @@ function _sync_pipe_api_call(data, callback){
 $(function(){
     $("table.dp-projectlist").DataTable(DATATABLES_SETTING);
     $("table.dp-project").DataTable(DATATABLES_SETTING);
+    $('[data-toggle="collapse"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip()
     enable_editable_comment();
 });

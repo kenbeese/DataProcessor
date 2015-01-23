@@ -1,0 +1,49 @@
+<div>
+  <h2>{{node["name"]|e}}</h2>
+  <dl class="dl-horizontal">
+    <dt>Path</dt>
+    <dd>{{node["path"]|e}}</dd>
+    <dt>Pomment</dt>
+    <dd class="dp-comment" dp-path="{{node['path']}}">{{node["comment"]|e}}</dd>
+    <dt>Tags</dt>
+    <dd>
+
+      <p>
+      {% for p in parents %}
+      <span class="label label-default">
+        <a href="{{ url_for('show_node', path=p['path'][1:])}}"> {{p['name']|e}}</a>
+        <a href="{{ url_for('untag', path=node['path'][1:], project_path=p['path'][1:])}}"
+           data-toggle="tooltip" title="Remove tag">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"/>
+        </a></span>
+      {% endfor %}
+
+      <a data-toggle="collapse" href="#addTag" aria-controls="addTag"
+         class="label label-info" data-placement="right" title="Add tag">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"/>
+      </a>
+      </p>
+
+      <form action="{{ url_for('add_tag', path=node['path'][1:]) }}"
+            method="post" class="form-inline add_tag collapse"
+            id="addTag">
+        <div class="form-group">
+          <input class="form-control" type="text" name="tagname"
+                 autocomplete="off" list="project_id_list">
+        </div>
+        <button type="submit" class="btn btn-default"
+                data-toggle="tooltip" data-placement="right" title="Save">
+          <span class="glyphicon glyphicon-save" aria-hidden="true"/>
+        </button>
+
+      </form>
+
+      <datalist id="project_id_list">
+        {% for p in project_ids %}
+        <option value="{{p}}"/>
+        {% endfor %}
+      </datalist>
+
+    </dd>
+  </dl>
+</div>
