@@ -14,6 +14,7 @@ server/static/css/jquery.dataTables.min.css
 server/static/css/dataTables.colReorder.min.css
 server/static/css/dataTables.fixedColumns.min.css
 server/static/images
+server/static/fonts
 server/server.log
 server/error.log
 
