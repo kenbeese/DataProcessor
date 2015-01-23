@@ -4,6 +4,7 @@ import sys
 import os
 import os.path
 import time
+import copy
 
 from flask import Flask, request, render_template, Response, abort, \
     redirect, url_for, g, flash, session
@@ -46,17 +47,16 @@ def show_ipynblist():
         n["mtime"] = os.stat(p).st_mtime
         n["mtime_str"] = time.strftime("%Y/%m/%d-%H:%M:%S",
                                        time.localtime(n["mtime"]))
-
-    children_parents = {}
+    # for tag
+    ipynb = copy.deepcopy(ipynb)
     for n in ipynb:
-        children_parents[n["path"]] = []
-        for p in dp.nodes.get(nl, n["path"])["parents"]:
-            children_parents[n["path"]].append(dp.nodes.get(nl, p))
+        n["tag-nodes"] = []
+        for p in n["parents"]:
+            n["tag-nodes"].append(dp.nodes.get(nl, p))
 
     return render_template(
         "ipynblist.html",
         ipynb=sorted(ipynb, key=lambda n: n["mtime"], reverse=True),
-        children_parents=children_parents
     )
 
 
@@ -74,14 +74,17 @@ def show_node(path):
 
 def show_run(node, node_list):
 
+    # for tag
     parent_nodes = []
     for p in node["parents"]:
         parent_nodes.append(dp.nodes.get(node_list, p))
 
+    # for completion of add tag
     project_id_nodes = dp.filter.prefix_path(
         node_list, dp.rc.resolve_project_path("", False))
     project_ids = [n["name"] for n in project_id_nodes]
 
+    # for ipynb
     ipynb_nodes = []
     for p in node["children"]:
         n = dp.nodes.get(node_list, p).copy()
@@ -102,10 +105,12 @@ def show_project(node, node_list):
     df = dp.dataframe.get_project(node_list, node["path"],
                                   properties=["comment"]).fillna("")
 
+    # for tag
     parent_nodes = []
     for p in node["parents"]:
         parent_nodes.append(dp.nodes.get(node_list, p))
 
+    # for completion of add tag
     project_id_nodes = dp.filter.prefix_path(
         node_list, dp.rc.resolve_project_path("", False))
     project_ids = [n["name"] for n in project_id_nodes]

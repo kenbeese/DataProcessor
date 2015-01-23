@@ -15,7 +15,6 @@
   </thead>
   <tbody>
     {% for n in ipynb %}
-    {% set child_parents = children_parents[n["path"]] %}
     <tr>
       {% if n["url"] %}
       <td><a href="{{n['url']}}" target="_blank">{{n["name"]|e}}</a></td>
@@ -24,8 +23,8 @@
       {% endif %}
       <td class="dp-comment" dp-path="{{n['path']}}">{{n["comment"]|e}}</td>
       <td>
-        {% for p in child_parents %}
-        <span class="label label-default"><a href="{{ url_for('show_node', path=p['path'][1:])}}">{{p['name']|e}}</a></span>
+        {% for t in n["tag-nodes"] %}
+        <span class="label label-default"><a href="{{ url_for('show_node', path=t['path'][1:])}}">{{t['name']|e}}</a></span>
         {% endfor %}
       </td>
       <td>{{n["mtime_str"]|e}}</td>
