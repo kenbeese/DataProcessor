@@ -8,10 +8,10 @@ from .nodes import node_types
 from .exception import DataProcessorError as dpError
 
 
-class PipeImplementError(Exception):
+class PipeImplementationError(Exception):
 
     """
-    Raised when the implemention of pipe is invalid
+    Raised when the implementation of pipe is invalid
 
     Attributes
     ----------
@@ -40,8 +40,8 @@ def _wrap(filter_func):
                 try:
                     new_node = func(node, *args, **kwds)
                     if not isinstance(new_node, dict):
-                        raise PipeImplementError(func.__name__,
-                                                 "Pipe must return node")
+                        raise PipeImplementationError(func.__name__,
+                                                      "Pipe must return node")
                     if new_node and new_node != node:
                         node.clear()
                         node.update(new_node)

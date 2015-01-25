@@ -29,7 +29,7 @@ def file_pipe(node):
 class TestPipe(TestNodeListAndDir):
 
     def test_noreturn(self):
-        with self.assertRaises(pipe.PipeImplementError):
+        with self.assertRaises(pipe.PipeImplementationError):
             wrap_noreturn(self.node_list)
 
     def test_raise(self):
