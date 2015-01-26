@@ -14,7 +14,8 @@ class TestAddNode(TestNodeListAndDir):
         compare_list = self._create_compare_node_list()
 
         runpath = os.path.join(self.project_paths[0], "run02")
-        add_node(self.node_list, path=runpath, parents=self.project_paths[0])
+        add_node(self.node_list, path=runpath, parents=self.project_paths[0],
+                 strategy="modest_update")
         self.assertEqual(self.node_list, compare_list)
 
     def _create_compare_node_list(self):
