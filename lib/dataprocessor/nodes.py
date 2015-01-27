@@ -6,6 +6,14 @@ from . import utility
 node_types = ["run", "project", "figure", "ipynb"]
 
 
+class DataProcessorNodesError(DataProcessorError):
+
+    """Exception about Nodes processings."""
+
+    def __init__(self, msg):
+        DataProcessorError.__init__(self, msg)
+
+
 def normalize(node):
     """ Normalize node (i.e. fill necessary field).
 
@@ -84,7 +92,65 @@ def get(node_list, path):
     return None
 
 
-def add(node_list, node, skip_validate_link=False, strategy="update"):
+def modest_update(node_list, node, skip_validate_link=False):
+    """ Update node properties modestly
+
+    This keeps values as possible,
+    besides the "update" strategy of `add(...)` simply uses `dict.update()`.
+    If `node` in the arguments has empty value
+    e.g. `node = {"path": "/path/0", "comment" : ""}`,
+    this function does not overwrite existing comment of
+    the node in `node_list`.
+
+    Parameters
+    ----------
+    node_list : list
+        the list of nodes
+    node : dict
+        The node will be added into node_list
+    skip_validate_link : bool, optional
+        skip link validation (default False)
+
+    Raises
+    ------
+    DataProcessorNodesError
+        there is no node whose "path" is `node["path"]`
+
+    Examples
+    --------
+    >>> node_list = [{
+    ...   "path": "/path/0",
+    ...   "comment": "some comment",
+    ...   "children": [],
+    ...   "parents": [],
+    ... }]
+    >>> node = {
+    ...   "path":"/path/0",
+    ...   "configure": {"A": 1.0},
+    ...   "comment": "",
+    ... }
+    >>> modest_update(node_list, node)
+    >>> node_list == [{
+    ...   'comment': 'some comment',
+    ...   'path': '/path/0',
+    ...   'parents': [],
+    ...   'children': [],
+    ...   'configure': {'A': 1.0}
+    ... }]
+    True
+    """
+    node0 = get(node_list, node["path"])
+    if not node0:
+        raise DataProcessorNodesError("There is no node [path={}]".format(
+                                      node["path"]))
+    for key, val in node.items():
+        if val:
+            node0[key] = val
+    if not skip_validate_link:
+        validate_link(node_list, node0, silent=True)
+
+
+def add(node_list, node, skip_validate_link=False, strategy="raise"):
     """Add a node into node_list.
 
     This adds a node into node_list,
@@ -99,12 +165,21 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
         The node will be added into node_list
     skip_validate_link : bool, optional
         skip link validation (default False)
-    strategy : str, optional {"update", "replace"}
+    strategy : str, optional {"raise", "update", "modest_update", "replace"}
         The strategy for the case
         where there exists a node whose "path" is same as new one
 
+        - "raise" : raise DataProcessorNodesError (default)
         - "update" : use dict.update to update existing node
+        - "modest_update" : use nodes.modest_update to update existing node
         - "replace" : replace existing node with new node
+
+    Raises
+    ------
+    DataProcessorNodesError:
+        there is already exist node whose path is `node["path"]`
+    DataProcessorError:
+        strategy is invalid string
 
     Examples
     --------
@@ -117,19 +192,25 @@ def add(node_list, node, skip_validate_link=False, strategy="update"):
 
     """
     node0 = get(node_list, node["path"])
-    if node0:
-        if strategy is "update":
+    if not node0:
+        node_list.append(node)
+    else:
+        if strategy is "raise":
+            raise DataProcessorNodesError("node already exists")
+        elif strategy is "update":
             node0.update(node)
             node = node0
+        elif strategy is "modest_update":
+            modest_update(node_list, node,
+                          skip_validate_link=skip_validate_link)
+            skip_validate_link = False
         elif strategy is "replace":
             node_list.remove(node0)
             node_list.append(node)
         else:
             raise DataProcessorError("Invalid strategy: %s" % strategy)
-    else:
-        node_list.append(node)
     if not skip_validate_link:
-        validate_link(node_list, node)
+        validate_link(node_list, node, silent=True)
 
 
 def check_duplicate(node_list):

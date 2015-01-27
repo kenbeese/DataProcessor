@@ -119,7 +119,7 @@ class DataHandler(object):
     def get(self):
         return self.node_list
 
-    def add(self, node, skip_validate_link=False):
+    def add(self, node, strategy="update", skip_validate_link=False):
         """ Add node into managed node_list.
 
         Parameters
@@ -128,26 +128,26 @@ class DataHandler(object):
             skip link check (default=False)
 
         """
-        nodes.add(self.node_list, node, skip_validate_link)
+        nodes.add(self.node_list, node, strategy, skip_validate_link)
 
-    def update(self, node_list, silent=False):
-        """ Update node_list (use dict.update).
-
-        See also the help of nodes.add.
+    def update(self, node_list, skip_validate_link=False):
+        """ Update node_list (use nodes.modest_update).
 
         Parameters
         ----------
         skip_validate_link : bool, optional
             skip link validation about all nodes in new `node_list`
-
         """
         for node in node_list:
-            nodes.add(self.node_list, node, skip_validate_link=True,
-                      strategy="update")
+            nodes.add(self.node_list, node,
+                      strategy="modest_update",
+                      skip_validate_link=skip_validate_link)
+        if skip_validate_link:
+            return
         for node in node_list:
-            nodes.validate_link(node_list, node, silent)
+            nodes.validate_link(node_list, node, silent=True)
 
-    def replace(self, node_list, skip_validate_link=True, silent=False):
+    def replace(self, node_list, skip_validate_link=True):
         """ Swap node_list.
 
         Parameters
@@ -159,7 +159,7 @@ class DataHandler(object):
         self.node_list = node_list
         if not skip_validate_link:
             for node in self.node_list:
-                nodes.validate_link(self.node_list, node, silent=silent)
+                nodes.validate_link(self.node_list, node, silent=True)
 
     def serialize(self):
         save(self.node_list, self.data_path, self.silent)
