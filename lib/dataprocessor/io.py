@@ -105,8 +105,11 @@ class DataHandler(object):
         self.load()  # reload
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exception_t, exception_v, traceback):
+        if exception_t:
+            return False
         self.serialize()
+        return True
 
     def load(self):
         if os.path.exists(self.data_path):

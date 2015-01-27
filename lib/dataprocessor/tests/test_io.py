@@ -6,6 +6,7 @@ import unittest
 
 from .. import io as dpio
 from .. import nodes
+from ..exception import DataProcessorError as dpError
 
 
 class TestIo(unittest.TestCase):
@@ -51,6 +52,21 @@ class TestIo(unittest.TestCase):
 
         node_list = dpio.load([], self.jsonfile)
         self.assertEqual(node_list, compare_node_list)
+
+    def test_datahandler_exception(self):
+        node_list = [{"path": "/path/to/hogehoge", "name": "Oh"},
+                     {"path": "/path/to/2", "name": "Yeah!!"}]
+        # Create json file
+        dpio.save(node_list, self.jsonfile, silent=True)
+
+        with self.assertRaises(dpError):
+            with dpio.DataHandler(self.jsonfile, silent=True) as dh:
+                nl = dh.get()
+                nl[0]["comment"] = "homhom"
+                raise dpError("sample dpError")
+
+        loaded = dpio.load([], self.jsonfile)
+        self.assertEqual(loaded, node_list)  # comment is not saved
 
     def test_sync_datahandler(self):
         node_list = [{"path": "/path/to/hogehoge", "name": ""}]
