@@ -3,10 +3,11 @@
 import os.path as op
 import unittest
 from ..utility import check_directory
-from ..pipes.configure import load, no_section
+from ..pipes.configure import load
 
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
+
 
 class TestConfigure_INI(unittest.TestCase):
 
@@ -19,7 +20,7 @@ class TestConfigure_INI(unittest.TestCase):
     def test_load(self):
         nl = load(self.node_list, "parameters.ini")
         self.assertEqual(nl[0]["configure"], {"ny": "23"})
-        nl = load(nl, "parameters.ini")  # 二回しても大丈夫
+        nl = load(nl, "parameters.ini")  # works if there already exist "configure"
         self.assertEqual(nl[0]["configure"], {"ny": "23"})
 
     def test_load_filetype(self):
