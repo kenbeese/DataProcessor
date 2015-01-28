@@ -1,5 +1,43 @@
 # -*- coding: utf-8 -*-
 
+"""
+This module provides wrapper functions
+which make easy to define a SIMD-like pipe,
+i.e. operates independently on each nodes.
+
+The following two codes are equal without error handling:
+
+>>> @wrap
+... def pipe1(node, arg1, kwd1=""):
+...     print(node)
+...     node["attr1"] = "val"
+...     return node
+
+>>> def pipe1(node_list, arg1, kwd1=""):
+...     for node in node_list:
+...         print(node)
+...         node["attr1"] = "val"
+...     return node_list
+
+Error handling policy is following:
+
+- If ``DataProcessorError`` or its inherited is raised
+  in the decorated function while processing a node,
+  this process is quited and continue with another nodes.
+
+- If another exception is raised,
+  whole processes are quited.
+
+Simply, corresponds to the following conceptual code:
+
+>>> for node in node_list:
+...     try:
+...         decorated(node)
+...     except DataProcessorError:
+...         continue
+
+"""
+
 import sys
 import os.path as op
 from functools import wraps
