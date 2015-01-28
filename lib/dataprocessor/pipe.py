@@ -30,7 +30,7 @@ Error handling policy is following:
 
 Simply, corresponds to the following conceptual code:
 
->>> for node in node_list:
+>>> for node in node_list:  # doctest:+SKIP
 ...     try:
 ...         decorated(node)
 ...     except DataProcessorError:
