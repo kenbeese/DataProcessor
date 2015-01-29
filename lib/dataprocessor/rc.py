@@ -26,14 +26,11 @@ class DataProcessorRcError(DataProcessorError):
         DataProcessorError.__init__(self, msg)
 
 
-def ArgumentParser(rcpath=default_rcpath, options={}):
+def ArgumentParser(options={}):
     """Argument parser for executables in this project.
 
     Parameters
     ----------
-    rcpath : str, optional
-        path of configure file (default=~/.dataprocessor.ini)
-
     options : [{str: dict}], optional
         options which you want to read from [data] section
         of the configure file.
@@ -57,15 +54,14 @@ def ArgumentParser(rcpath=default_rcpath, options={}):
     if "json" not in options:
         options["json"] = {"help": "path of JSON file"}
     for name, opt in options.items():
-        val = get_configure(rc_section, name, rcpath)
+        val = get_configure(rc_section, name)
         parser.add_argument("--" + name, default=val, **opt)
     parser.add_argument("--debug", action="store_true",
                         help="output traceback")
     return parser
 
 
-def load_into_argparse(parser, section_name, options, allow_empty=False,
-                       rcpath=default_rcpath):
+def load_into_argparse(parser, section_name, options, allow_empty=False):
     """ Load configure into argparse.
 
     Parameters
@@ -86,7 +82,7 @@ def load_into_argparse(parser, section_name, options, allow_empty=False,
     for name, opt in options.items():
         opt = copy.deepcopy(opt)
         try:
-            val = get_configure(section_name, name, rcpath)
+            val = get_configure(section_name, name)
             opt["default"] = val
         except DataProcessorRcError:
             if not allow_empty:
@@ -101,13 +97,8 @@ def load_into_argparse(parser, section_name, options, allow_empty=False,
         parser.add_argument("--" + name, **opt)
 
 
-def load(rcpath=default_rcpath):
+def load():
     """Load node_list from default data.json.
-
-    Parameters
-    ----------
-    rcpath : str, optional
-        path of configure file (default=~/.dataprocessor.ini)
 
     Returns
     -------
@@ -122,19 +113,14 @@ def load(rcpath=default_rcpath):
         - configure file does not contain JSON path
 
     """
-    parser = get_configparser(rcpath)
+    parser = get_configparser()
     if not parser.has_option(rc_section, "json"):
         raise DataProcessorRcError("Configure does not contains JSON path.")
     return io.load([], parser.get(rc_section, "json"))
 
 
-def update(node_list, rcpath=default_rcpath):
+def update(node_list):
     """Save node_list into default data.json with update strategy.
-
-    Parameters
-    ----------
-    rcpath : str, optional
-        path of configure file (default=~/.dataprocessor.ini)
 
     Raises
     ------
@@ -145,20 +131,15 @@ def update(node_list, rcpath=default_rcpath):
         - configure file does not contain JSON path
 
     """
-    parser = get_configparser(rcpath)
+    parser = get_configparser()
     if parser.has_option(rc_section, "json"):
         raise DataProcessorRcError("Configure does not contains JSON path.")
     with io.SyncDataHandler(parser.get(rc_section, "json"), silent=True) as dh:
         dh.update(node_list)
 
 
-def get_configparser(rcpath=default_rcpath):
+def get_configparser():
     """ Get configure parser
-
-    Parameters
-    ----------
-    rcpath : str, optional
-        path of configure file (default=~/.dataprocessor.ini)
 
     Returns
     -------
@@ -171,16 +152,16 @@ def get_configparser(rcpath=default_rcpath):
         raised when configure file does not exist.
 
     """
-    rcpath = utility.path_expand(rcpath)
-    if not os.path.exists(rcpath):
+    rcpath = utility.path_expand(default_rcpath)
+    if not os.path.exists(default_rcpath):
         raise DataProcessorRcError("Configure file does not exist")
 
     parser = ConfigParser.SafeConfigParser()
-    parser.read(rcpath)
+    parser.read(default_rcpath)
     return parser
 
 
-def get_configure(section, key, rcpath=default_rcpath):
+def get_configure(section, key):
     """ Get configure value
 
     Parameters
@@ -205,14 +186,14 @@ def get_configure(section, key, rcpath=default_rcpath):
         - configure file does not contain specified values
 
     """
-    cfg = get_configparser(rcpath)
+    cfg = get_configparser()
     if not cfg.has_option(section, key):
         raise DataProcessorRcError("Configure not found (section:{}, key:{}))"
                                    .format(section, key))
     return cfg.get(section, key)
 
 
-def get_configure_safe(section, key, default, rcpath=default_rcpath):
+def get_configure_safe(section, key, default):
     """ Get configure value safely.
 
     Parameters
@@ -230,14 +211,14 @@ def get_configure_safe(section, key, default, rcpath=default_rcpath):
         configure value
     """
     try:
-        return get_configure(section, key, rcpath)
+        return get_configure(section, key)
     except DataProcessorRcError:
         return default
 
 
-def _resolve_path(name, create_dir, root, basket_name, rcpath):
+def _resolve_path(name, create_dir, root, basket_name):
     if not root:
-        root = get_configure(rc_section, "root", rcpath=rcpath)
+        root = get_configure(rc_section, "root")
     root = utility.check_directory(root)
     if create_dir:
         basket = utility.get_directory(os.path.join(root, basket_name))
@@ -250,8 +231,7 @@ def _resolve_path(name, create_dir, root, basket_name, rcpath):
 def resolve_project_path(name_or_path, create_dir, root=None,
                          basket_name=get_configure_safe(rc_section,
                                                         "project_basket",
-                                                        "Projects"),
-                         rcpath=default_rcpath):
+                                                        "Projects")):
     """ Resolve project path from its path or name.
 
     Parameters
@@ -273,8 +253,6 @@ def resolve_project_path(name_or_path, create_dir, root=None,
         The name of the project basket.
         If "project_basket" is specified in the configure file,
         default value is it. Otherwise, default is "Projects".
-    rcpath : str, optional
-        path of the setting file
 
     Returns
     -------
@@ -292,7 +270,7 @@ def resolve_project_path(name_or_path, create_dir, root=None,
 
     """
     if os.path.basename(name_or_path) == name_or_path:
-        return _resolve_path(name_or_path, create_dir, root, basket_name, rcpath)
+        return _resolve_path(name_or_path, create_dir, root, basket_name)
     else:
         if create_dir:
             return utility.get_directory(name_or_path)
