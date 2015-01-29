@@ -23,7 +23,7 @@ Error handling policy is following:
 
 - If ``DataProcessorError`` or its inherited is raised
   in the decorated function while processing a node,
-  this process is quited and continue with another nodes.
+  this process is quited and continue with other nodes.
 
 - If another exception is raised,
   whole processes are quited.
