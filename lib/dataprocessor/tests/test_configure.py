@@ -1,143 +1,68 @@
-# coding=utf-8
-"""Test for dataprocessor.pipes.configure."""
+# coding: utf-8
 
-import os
-import copy
-
-from .utils import TestNodeListAndDir
-from ..pipes.configure import add, no_section, get_filetype
+import os.path as op
+import unittest
+from ..utility import check_directory
+from ..pipes.configure import load
 
 
-class TestConfigure(TestNodeListAndDir):
+ROOT = op.join(__file__, "../../../../sample/datadir")
 
-    """Unittest for dataprocessor.pipes.configure.
 
-    Attributes
-    ----------
-    tempdir_paths : list
-        list of project root dir path
-    node_list : list
+class TestConfigure_INI(unittest.TestCase):
 
-    """
+    def setUp(self):
+        self.node_list = [{
+            "path": check_directory(op.join(ROOT, "project2/run01")),
+            "type": "run",
+        }]
 
-    def _create_conf_files(self, list_file_dict, check_type=False):
-        """Create configure file on node path.
+    def test_load(self):
+        nl = load(self.node_list, "parameters.ini")
+        self.assertEqual(nl[0]["configure"], {"ny": "23"})
+        nl = load(nl, "parameters.ini")  # works if there already exist "configure"
+        self.assertEqual(nl[0]["configure"], {"ny": "23"})
 
-        Parameters
-        ----------
-        list_file_dict : list
-            list of dict as follows,
-            [{"name": "filename", "contents": "string of file contents"}, ]
-        check_type : bool (False)
-            If True, only create configure file on node with type run.
+    def test_load_filetype(self):
+        nl = load(self.node_list, "parameters.ini", filetype="yaml")
+        self.assertNotIn("configure", nl[0])  # fail to parse YAML
+        nl = load(self.node_list, "parameters.ini", filetype="INI")
+        self.assertEqual(nl[0]["configure"], {"ny": "23"})
 
-        """
-        def create_conf(conf_path, filestring):
-            f = open(conf_path, "w")
-            f.write(filestring)
-            f.close()
+    def test_load_missing_name(self):
+        load(self.node_list, "parame.yamlu")  # not raises
 
-        for node in self.node_list:
-            if check_type and not (node["type"] is "run"):
-                continue
-            for file_dict in list_file_dict:
-                path = os.path.join(node["path"], file_dict["name"])
-                create_conf(path, file_dict["contents"])
 
-    def _check_node_list(self, original_node_list, added_dict):
-        compare_node_list = copy.deepcopy(original_node_list)
-        for node in compare_node_list:
-            node.update(added_dict)
-        self.assertEqual(self.node_list, compare_node_list)
+class TestConfigure_YAML(unittest.TestCase):
 
-    def _get_testdata_path(self, filename):
-        return os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            "testdata", filename)
+    def setUp(self):
+        self.node_list = [{
+            "path": check_directory(op.join(ROOT, "project3/run01")),
+            "type": "run",
+        }]
 
-    def _get_testdata(self, filename):
-        with open(self._get_testdata_path(filename), "r") as f:
-            return f.read()
+    def test_load(self):
+        nl = load(self.node_list, "parameters.yml")
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
+        nl = load(nl, "parameters.yml")
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
 
-    def test_get_filetype(self):
-        self.assertEqual("ini",  get_filetype("/path/to/hoge.ini"))
-        self.assertEqual("ini",  get_filetype("/path/to/hoge.conf"))
-        self.assertEqual("yaml", get_filetype("/path/to/hoge.yml"))
-        self.assertEqual("yaml", get_filetype("/path/to/hoge.yaml"))
-        self.assertEqual(None,   get_filetype("/path/to/hoge.jpg"))
+    def test_load_filetype_yaml(self):
+        nl = load(self.node_list, "parameters.yml", filetype="INI")
+        self.assertNotIn("configure", nl[0])  # fail to parse YAML
+        nl = load(self.node_list, "parameters.yml", filetype="YAML")
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
 
-    def test_add(self):
-        import copy
-        original_node_list = copy.deepcopy(self.node_list)
-        list_file_dict = [{"name": "parameter1.conf",
-                           "contents": """[parameters]
-hgoe = 3
-hogehoge = 2"""},
-                          {"name": "parameter2.conf",
-                           "contents": """[default]
-hgoe : 4
-dsaf : ohd"""}]
-        self._create_conf_files(list_file_dict)
 
-        # there is no parameter.conf
-        add(self.node_list, "parameter.conf", "ini", "parameters")
-        added_dict = {"configure": {}}
-        self._check_node_list(original_node_list, added_dict)
+class TestConfigure_CONF(unittest.TestCase):
 
-        # Add parameter1.conf to node_list
-        add(self.node_list, "parameter1.conf", "ini", "parameters")
-        added_dict = {"configure": {"hgoe": "3", "hogehoge": "2"}}
-        self._check_node_list(original_node_list, added_dict)
+    def setUp(self):
+        self.node_list = [{
+            "path": check_directory(op.join(ROOT, "project1/run01")),
+            "type": "run",
+        }]
 
-        # Add parameter2.conf to added node_list without filetype
-        add(self.node_list, "parameter2.conf", None, "default")
-        added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
-                                    "hogehoge": "2"}}
-        self._check_node_list(original_node_list, added_dict)
-
-    def test_add_yaml(self):
-        import copy
-        original_node_list = copy.deepcopy(self.node_list)
-        list_file_dict = [{"name": "parameter1.yaml",
-                           "contents": self._get_testdata("parameter1.yml")},
-                          {"name": "parameter2.yaml",
-                           "contents": self._get_testdata("parameter2.yaml")}]
-        self._create_conf_files(list_file_dict)
-
-        add(self.node_list, "parameter1.yaml", "yaml", "parameters")
-        added_dict = {"configure": {"Nx": 100, "dx": 0.01, "msg": u"あ"}}
-        self._check_node_list(original_node_list, added_dict)
-
-        # without filetype
-        add(self.node_list, "parameter2.yaml", "yaml", "params")
-        added_dict["configure"]["foo"] = "bar"
-        self._check_node_list(original_node_list, added_dict)
-
-    def test_no_section(self):
-        original_node_list = copy.deepcopy(self.node_list)
-        list_file_dict = [{"name": "parameter1.conf",
-                           "contents": """
-# comment
-hgoe = 3
-hogehoge = 2"""},
-                          {"name": "parameter2.conf",
-                           "contents": """
-! comment
-hgoe :  4
-dsaf : ohd"""}]
-        self._create_conf_files(list_file_dict)
-
-        # there is no parameter.conf
-        no_section(self.node_list, "parameter.conf")
-        added_dict = {}
-        self._check_node_list(original_node_list, added_dict)
-
-        # Add parameter1.conf to node_list
-        no_section(self.node_list, "parameter1.conf")
-        added_dict = {"configure": {"hgoe": "3", "hogehoge": "2"}}
-        self._check_node_list(original_node_list, added_dict)
-
-        # Add parameter2.conf to added node_list
-        no_section(self.node_list, "parameter2.conf", ":", "!")
-        added_dict = {"configure": {"hgoe": "4", "dsaf": "ohd",
-                                    "hogehoge": "2"}}
-        self._check_node_list(original_node_list, added_dict)
+    def test_load_conf(self):
+        nl = load(self.node_list, "parameters.conf")
+        self.assertEqual(nl[0]["configure"]["nx"], "12")
+        self.assertEqual(nl[0]["configure"]["ny"], "32")
