@@ -54,13 +54,20 @@ def get_project(node_list, project_path, properties=["comment", "tags"],
             properties.append(item)
 
     def _conv(val):
+        """
+        Convert each lines to a pandas.Series
+        See also #160
+        """
         new = {}
-        for key, value in val["configure"].items():
-            try:
-                new[key] = float(value)
-            except:
-                new[key] = value
-        sr = Series(new)
+        if "configure" not in val or not isinstance(val["configure"], dict):
+            sr = Series()
+        else:
+            for key, value in val["configure"].items():
+                try:
+                    new[key] = float(value)
+                except ValueError:
+                    new[key] = value
+            sr = Series(new)
         for prop in properties:
             sr.set_value(prop, val[prop])
         return sr
