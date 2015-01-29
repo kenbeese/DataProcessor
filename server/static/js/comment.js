@@ -26,6 +26,7 @@ function enable_editable_comment() {
     $("<textarea>")
       .val(comment)
       .attr("dp-path", path)
+      .addClass("form-control")
       .appendTo(this)
       .focus();
   };
