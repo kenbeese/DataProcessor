@@ -55,6 +55,14 @@
 <span class="n">node_types</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;run&quot;</span><span class="p">,</span> <span class="s">&quot;project&quot;</span><span class="p">,</span> <span class="s">&quot;figure&quot;</span><span class="p">,</span> <span class="s">&quot;ipynb&quot;</span><span class="p">]</span>
 
 
+<div class="viewcode-block" id="DataProcessorNodesError"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.DataProcessorNodesError">[docs]</a><span class="k">class</span> <span class="nc">DataProcessorNodesError</span><span class="p">(</span><span class="n">DataProcessorError</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Exception about Nodes processings.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="n">DataProcessorError</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+</div>
 <div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Normalize node (i.e. fill necessary field).</span>
 
@@ -133,7 +141,65 @@
     <span class="k">return</span> <span class="bp">None</span>
 
 </div>
-<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.add">[docs]</a><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="modest_update"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.modest_update">[docs]</a><span class="k">def</span> <span class="nf">modest_update</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Update node properties modestly</span>
+
+<span class="sd">    This keeps values as possible,</span>
+<span class="sd">    besides the &quot;update&quot; strategy of `add(...)` simply uses `dict.update()`.</span>
+<span class="sd">    If `node` in the arguments has empty value</span>
+<span class="sd">    e.g. `node = {&quot;path&quot;: &quot;/path/0&quot;, &quot;comment&quot; : &quot;&quot;}`,</span>
+<span class="sd">    this function does not overwrite existing comment of</span>
+<span class="sd">    the node in `node_list`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    node_list : list</span>
+<span class="sd">        the list of nodes</span>
+<span class="sd">    node : dict</span>
+<span class="sd">        The node will be added into node_list</span>
+<span class="sd">    skip_validate_link : bool, optional</span>
+<span class="sd">        skip link validation (default False)</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorNodesError</span>
+<span class="sd">        there is no node whose &quot;path&quot; is `node[&quot;path&quot;]`</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; node_list = [{</span>
+<span class="sd">    ...   &quot;path&quot;: &quot;/path/0&quot;,</span>
+<span class="sd">    ...   &quot;comment&quot;: &quot;some comment&quot;,</span>
+<span class="sd">    ...   &quot;children&quot;: [],</span>
+<span class="sd">    ...   &quot;parents&quot;: [],</span>
+<span class="sd">    ... }]</span>
+<span class="sd">    &gt;&gt;&gt; node = {</span>
+<span class="sd">    ...   &quot;path&quot;:&quot;/path/0&quot;,</span>
+<span class="sd">    ...   &quot;configure&quot;: {&quot;A&quot;: 1.0},</span>
+<span class="sd">    ...   &quot;comment&quot;: &quot;&quot;,</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; modest_update(node_list, node)</span>
+<span class="sd">    &gt;&gt;&gt; node_list == [{</span>
+<span class="sd">    ...   &#39;comment&#39;: &#39;some comment&#39;,</span>
+<span class="sd">    ...   &#39;path&#39;: &#39;/path/0&#39;,</span>
+<span class="sd">    ...   &#39;parents&#39;: [],</span>
+<span class="sd">    ...   &#39;children&#39;: [],</span>
+<span class="sd">    ...   &#39;configure&#39;: {&#39;A&#39;: 1.0}</span>
+<span class="sd">    ... }]</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node0</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">node0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DataProcessorNodesError</span><span class="p">(</span><span class="s">&quot;There is no node [path={}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                      <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">node0</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_validate_link</span><span class="p">:</span>
+        <span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.add">[docs]</a><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;raise&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add a node into node_list.</span>
 
 <span class="sd">    This adds a node into node_list,</span>
@@ -148,12 +214,21 @@
 <span class="sd">        The node will be added into node_list</span>
 <span class="sd">    skip_validate_link : bool, optional</span>
 <span class="sd">        skip link validation (default False)</span>
-<span class="sd">    strategy : str, optional {&quot;update&quot;, &quot;replace&quot;}</span>
+<span class="sd">    strategy : str, optional {&quot;raise&quot;, &quot;update&quot;, &quot;modest_update&quot;, &quot;replace&quot;}</span>
 <span class="sd">        The strategy for the case</span>
 <span class="sd">        where there exists a node whose &quot;path&quot; is same as new one</span>
 
+<span class="sd">        - &quot;raise&quot; : raise DataProcessorNodesError (default)</span>
 <span class="sd">        - &quot;update&quot; : use dict.update to update existing node</span>
+<span class="sd">        - &quot;modest_update&quot; : use nodes.modest_update to update existing node</span>
 <span class="sd">        - &quot;replace&quot; : replace existing node with new node</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DataProcessorNodesError:</span>
+<span class="sd">        there is already exist node whose path is `node[&quot;path&quot;]`</span>
+<span class="sd">    DataProcessorError:</span>
+<span class="sd">        strategy is invalid string</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -166,19 +241,25 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">node0</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">node0</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;update&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">node0</span><span class="p">:</span>
+        <span class="n">node_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;raise&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DataProcessorNodesError</span><span class="p">(</span><span class="s">&quot;node already exists&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;update&quot;</span><span class="p">:</span>
             <span class="n">node0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
             <span class="n">node</span> <span class="o">=</span> <span class="n">node0</span>
+        <span class="k">elif</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;modest_update&quot;</span><span class="p">:</span>
+            <span class="n">modest_update</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span>
+                          <span class="n">skip_validate_link</span><span class="o">=</span><span class="n">skip_validate_link</span><span class="p">)</span>
+            <span class="n">skip_validate_link</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">elif</span> <span class="n">strategy</span> <span class="ow">is</span> <span class="s">&quot;replace&quot;</span><span class="p">:</span>
             <span class="n">node_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node0</span><span class="p">)</span>
             <span class="n">node_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">DataProcessorError</span><span class="p">(</span><span class="s">&quot;Invalid strategy: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">strategy</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">node_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_validate_link</span><span class="p">:</span>
-        <span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+        <span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="check_duplicate"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.nodes.check_duplicate">[docs]</a><span class="k">def</span> <span class="nf">check_duplicate</span><span class="p">(</span><span class="n">node_list</span><span class="p">):</span>

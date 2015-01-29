@@ -676,27 +676,10 @@
 </div>
 <div class="section" id="module-dataprocessor.tests.test_configure">
 <span id="dataprocessor-tests-test-configure-module"></span><h2>dataprocessor.tests.test_configure module<a class="headerlink" href="#module-dataprocessor.tests.test_configure" title="Permalink to this headline">¶</a></h2>
-<p>Test for dataprocessor.pipes.configure.</p>
 <dl class="class">
-<dt id="dataprocessor.tests.test_configure.TestConfigure">
-<em class="property">class </em><tt class="descclassname">dataprocessor.tests.test_configure.</tt><tt class="descname">TestConfigure</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#dataprocessor.tests.utils.TestNodeListAndDir" title="dataprocessor.tests.utils.TestNodeListAndDir"><tt class="xref py py-class docutils literal"><span class="pre">dataprocessor.tests.utils.TestNodeListAndDir</span></tt></a></p>
-<p>Unittest for dataprocessor.pipes.configure.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="27%" />
-<col width="73%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>tempdir_paths</td>
-<td>(list) list of project root dir path</td>
-</tr>
-<tr class="row-even"><td>node_list</td>
-<td>(list)</td>
-</tr>
-</tbody>
-</table>
+<dt id="dataprocessor.tests.test_configure.TestConfigure_CONF">
+<em class="property">class </em><tt class="descclassname">dataprocessor.tests.test_configure.</tt><tt class="descname">TestConfigure_CONF</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_CONF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_CONF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></tt></p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -863,7 +846,7 @@
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>([result])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUp</span></tt>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_CONF.setUp" title="dataprocessor.tests.test_configure.TestConfigure_CONF.setUp"><tt class="xref py py-obj docutils literal"><span class="pre">setUp</span></tt></a>()</td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUpClass</span></tt>()</td>
@@ -876,43 +859,458 @@
 <td>Skip this test.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDown</span></tt>()</td>
-<td></td>
+<td>Hook method for deconstructing the test fixture after testing it.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDownClass</span></tt>()</td>
 <td>Hook method for deconstructing the class fixture after running all tests in the class.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure.test_add" title="dataprocessor.tests.test_configure.TestConfigure.test_add"><tt class="xref py py-obj docutils literal"><span class="pre">test_add</span></tt></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure.test_add_yaml" title="dataprocessor.tests.test_configure.TestConfigure.test_add_yaml"><tt class="xref py py-obj docutils literal"><span class="pre">test_add_yaml</span></tt></a>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure.test_get_filetype" title="dataprocessor.tests.test_configure.TestConfigure.test_get_filetype"><tt class="xref py py-obj docutils literal"><span class="pre">test_get_filetype</span></tt></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure.test_no_section" title="dataprocessor.tests.test_configure.TestConfigure.test_no_section"><tt class="xref py py-obj docutils literal"><span class="pre">test_no_section</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_CONF.test_load_conf" title="dataprocessor.tests.test_configure.TestConfigure_CONF.test_load_conf"><tt class="xref py py-obj docutils literal"><span class="pre">test_load_conf</span></tt></a>()</td>
 <td></td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
-<dt id="dataprocessor.tests.test_configure.TestConfigure.test_add">
-<tt class="descname">test_add</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure.test_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure.test_add" title="Permalink to this definition">¶</a></dt>
+<dt id="dataprocessor.tests.test_configure.TestConfigure_CONF.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_CONF.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_CONF.setUp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="dataprocessor.tests.test_configure.TestConfigure.test_add_yaml">
-<tt class="descname">test_add_yaml</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure.test_add_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure.test_add_yaml" title="Permalink to this definition">¶</a></dt>
+<dt id="dataprocessor.tests.test_configure.TestConfigure_CONF.test_load_conf">
+<tt class="descname">test_load_conf</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_CONF.test_load_conf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_CONF.test_load_conf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dataprocessor.tests.test_configure.TestConfigure_INI">
+<em class="property">class </em><tt class="descclassname">dataprocessor.tests.test_configure.</tt><tt class="descname">TestConfigure_INI</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_INI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_INI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></tt></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(*args,&nbsp;**kwds)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">addCleanup</span></tt>(function,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Add a function, with arguments, to be called when the test is completed.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">addTypeEqualityFunc</span></tt>(typeobj,&nbsp;function)</td>
+<td>Add a type specific assertEqual style function to compare a type.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertAlmostEqual</span></tt>(first,&nbsp;second[,&nbsp;places,&nbsp;...])</td>
+<td>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertAlmostEquals</span></tt>(first,&nbsp;second[,&nbsp;places,&nbsp;...])</td>
+<td>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertDictContainsSubset</span></tt>(expected,&nbsp;actual[,&nbsp;msg])</td>
+<td>Checks whether actual is a superset of expected.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertDictEqual</span></tt>(d1,&nbsp;d2[,&nbsp;msg])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are unequal as determined by the &#8216;==&#8217; operator.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertEquals</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are unequal as determined by the &#8216;==&#8217; operator.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertFalse</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is false.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertGreater</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &gt; b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertGreaterEqual</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &gt;= b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIn</span></tt>(member,&nbsp;container[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a in b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIs</span></tt>(expr1,&nbsp;expr2[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a is b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsInstance</span></tt>(obj,&nbsp;cls[,&nbsp;msg])</td>
+<td>Same as self.assertTrue(isinstance(obj, cls)), with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNone</span></tt>(obj[,&nbsp;msg])</td>
+<td>Same as self.assertTrue(obj is None), with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNot</span></tt>(expr1,&nbsp;expr2[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a is not b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNotNone</span></tt>(obj[,&nbsp;msg])</td>
+<td>Included for symmetry with assertIsNone.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertItemsEqual</span></tt>(expected_seq,&nbsp;actual_seq[,&nbsp;msg])</td>
+<td>An unordered sequence specific comparison.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertLess</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &lt; b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertLessEqual</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &lt;= b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertListEqual</span></tt>(list1,&nbsp;list2[,&nbsp;msg])</td>
+<td>A list-specific equality assertion.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertMultiLineEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Assert that two multi-line strings are equal.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotAlmostEqual</span></tt>(first,&nbsp;second[,&nbsp;...])</td>
+<td>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotAlmostEquals</span></tt>(first,&nbsp;second[,&nbsp;...])</td>
+<td>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are equal as determined by the &#8216;!=&#8217; operator.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotEquals</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are equal as determined by the &#8216;!=&#8217; operator.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotIn</span></tt>(member,&nbsp;container[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a not in b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotIsInstance</span></tt>(obj,&nbsp;cls[,&nbsp;msg])</td>
+<td>Included for symmetry with assertIsInstance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotRegexpMatches</span></tt>(text,&nbsp;unexpected_regexp)</td>
+<td>Fail the test if the text matches the regular expression.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRaises</span></tt>(excClass[,&nbsp;callableObj])</td>
+<td>Fail unless an exception of class excClass is raised by callableObj when invoked with arguments args and keyword arguments kwargs.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRaisesRegexp</span></tt>(expected_exception,&nbsp;...)</td>
+<td>Asserts that the message in a raised exception matches a regexp.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRegexpMatches</span></tt>(text,&nbsp;expected_regexp[,&nbsp;msg])</td>
+<td>Fail the test unless the text matches the regular expression.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertSequenceEqual</span></tt>(seq1,&nbsp;seq2[,&nbsp;msg,&nbsp;seq_type])</td>
+<td>An equality assertion for ordered sequences (like lists and tuples).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertSetEqual</span></tt>(set1,&nbsp;set2[,&nbsp;msg])</td>
+<td>A set-specific equality assertion.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertTrue</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is true.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertTupleEqual</span></tt>(tuple1,&nbsp;tuple2[,&nbsp;msg])</td>
+<td>A tuple-specific equality assertion.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assert_</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is true.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">countTestCases</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">debug</span></tt>()</td>
+<td>Run the test without collecting errors in a TestResult</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">defaultTestResult</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">doCleanups</span></tt>()</td>
+<td>Execute all cleanup functions.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fail</span></tt>([msg])</td>
+<td>Fail immediately, with the given message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIfAlmostEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIfEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnless</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessAlmostEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessRaises</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failureException</span></tt></td>
+<td>alias of <tt class="xref py py-class docutils literal"><span class="pre">AssertionError</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">id</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>([result])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_INI.setUp" title="dataprocessor.tests.test_configure.TestConfigure_INI.setUp"><tt class="xref py py-obj docutils literal"><span class="pre">setUp</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUpClass</span></tt>()</td>
+<td>Hook method for setting up class fixture before running tests in the class.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">shortDescription</span></tt>()</td>
+<td>Returns a one-line description of the test, or None if no description has been provided.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">skipTest</span></tt>(reason)</td>
+<td>Skip this test.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDown</span></tt>()</td>
+<td>Hook method for deconstructing the test fixture after testing it.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDownClass</span></tt>()</td>
+<td>Hook method for deconstructing the class fixture after running all tests in the class.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_INI.test_load" title="dataprocessor.tests.test_configure.TestConfigure_INI.test_load"><tt class="xref py py-obj docutils literal"><span class="pre">test_load</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_INI.test_load_filetype" title="dataprocessor.tests.test_configure.TestConfigure_INI.test_load_filetype"><tt class="xref py py-obj docutils literal"><span class="pre">test_load_filetype</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_INI.test_load_missing_name" title="dataprocessor.tests.test_configure.TestConfigure_INI.test_load_missing_name"><tt class="xref py py-obj docutils literal"><span class="pre">test_load_missing_name</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="dataprocessor.tests.test_configure.TestConfigure_INI.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_INI.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_INI.setUp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="dataprocessor.tests.test_configure.TestConfigure.test_get_filetype">
-<tt class="descname">test_get_filetype</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure.test_get_filetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure.test_get_filetype" title="Permalink to this definition">¶</a></dt>
+<dt id="dataprocessor.tests.test_configure.TestConfigure_INI.test_load">
+<tt class="descname">test_load</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_INI.test_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_INI.test_load" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="dataprocessor.tests.test_configure.TestConfigure.test_no_section">
-<tt class="descname">test_no_section</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure.test_no_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure.test_no_section" title="Permalink to this definition">¶</a></dt>
+<dt id="dataprocessor.tests.test_configure.TestConfigure_INI.test_load_filetype">
+<tt class="descname">test_load_filetype</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_INI.test_load_filetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_INI.test_load_filetype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dataprocessor.tests.test_configure.TestConfigure_INI.test_load_missing_name">
+<tt class="descname">test_load_missing_name</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_INI.test_load_missing_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_INI.test_load_missing_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dataprocessor.tests.test_configure.TestConfigure_YAML">
+<em class="property">class </em><tt class="descclassname">dataprocessor.tests.test_configure.</tt><tt class="descname">TestConfigure_YAML</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_YAML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_YAML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></tt></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(*args,&nbsp;**kwds)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">addCleanup</span></tt>(function,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Add a function, with arguments, to be called when the test is completed.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">addTypeEqualityFunc</span></tt>(typeobj,&nbsp;function)</td>
+<td>Add a type specific assertEqual style function to compare a type.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertAlmostEqual</span></tt>(first,&nbsp;second[,&nbsp;places,&nbsp;...])</td>
+<td>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertAlmostEquals</span></tt>(first,&nbsp;second[,&nbsp;places,&nbsp;...])</td>
+<td>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertDictContainsSubset</span></tt>(expected,&nbsp;actual[,&nbsp;msg])</td>
+<td>Checks whether actual is a superset of expected.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertDictEqual</span></tt>(d1,&nbsp;d2[,&nbsp;msg])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are unequal as determined by the &#8216;==&#8217; operator.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertEquals</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are unequal as determined by the &#8216;==&#8217; operator.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertFalse</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is false.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertGreater</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &gt; b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertGreaterEqual</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &gt;= b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIn</span></tt>(member,&nbsp;container[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a in b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIs</span></tt>(expr1,&nbsp;expr2[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a is b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsInstance</span></tt>(obj,&nbsp;cls[,&nbsp;msg])</td>
+<td>Same as self.assertTrue(isinstance(obj, cls)), with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNone</span></tt>(obj[,&nbsp;msg])</td>
+<td>Same as self.assertTrue(obj is None), with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNot</span></tt>(expr1,&nbsp;expr2[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a is not b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNotNone</span></tt>(obj[,&nbsp;msg])</td>
+<td>Included for symmetry with assertIsNone.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertItemsEqual</span></tt>(expected_seq,&nbsp;actual_seq[,&nbsp;msg])</td>
+<td>An unordered sequence specific comparison.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertLess</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &lt; b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertLessEqual</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &lt;= b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertListEqual</span></tt>(list1,&nbsp;list2[,&nbsp;msg])</td>
+<td>A list-specific equality assertion.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertMultiLineEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Assert that two multi-line strings are equal.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotAlmostEqual</span></tt>(first,&nbsp;second[,&nbsp;...])</td>
+<td>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotAlmostEquals</span></tt>(first,&nbsp;second[,&nbsp;...])</td>
+<td>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are equal as determined by the &#8216;!=&#8217; operator.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotEquals</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are equal as determined by the &#8216;!=&#8217; operator.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotIn</span></tt>(member,&nbsp;container[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a not in b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotIsInstance</span></tt>(obj,&nbsp;cls[,&nbsp;msg])</td>
+<td>Included for symmetry with assertIsInstance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotRegexpMatches</span></tt>(text,&nbsp;unexpected_regexp)</td>
+<td>Fail the test if the text matches the regular expression.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRaises</span></tt>(excClass[,&nbsp;callableObj])</td>
+<td>Fail unless an exception of class excClass is raised by callableObj when invoked with arguments args and keyword arguments kwargs.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRaisesRegexp</span></tt>(expected_exception,&nbsp;...)</td>
+<td>Asserts that the message in a raised exception matches a regexp.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRegexpMatches</span></tt>(text,&nbsp;expected_regexp[,&nbsp;msg])</td>
+<td>Fail the test unless the text matches the regular expression.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertSequenceEqual</span></tt>(seq1,&nbsp;seq2[,&nbsp;msg,&nbsp;seq_type])</td>
+<td>An equality assertion for ordered sequences (like lists and tuples).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertSetEqual</span></tt>(set1,&nbsp;set2[,&nbsp;msg])</td>
+<td>A set-specific equality assertion.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertTrue</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is true.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertTupleEqual</span></tt>(tuple1,&nbsp;tuple2[,&nbsp;msg])</td>
+<td>A tuple-specific equality assertion.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assert_</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is true.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">countTestCases</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">debug</span></tt>()</td>
+<td>Run the test without collecting errors in a TestResult</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">defaultTestResult</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">doCleanups</span></tt>()</td>
+<td>Execute all cleanup functions.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fail</span></tt>([msg])</td>
+<td>Fail immediately, with the given message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIfAlmostEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIfEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnless</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessAlmostEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessRaises</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failureException</span></tt></td>
+<td>alias of <tt class="xref py py-class docutils literal"><span class="pre">AssertionError</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">id</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>([result])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_YAML.setUp" title="dataprocessor.tests.test_configure.TestConfigure_YAML.setUp"><tt class="xref py py-obj docutils literal"><span class="pre">setUp</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUpClass</span></tt>()</td>
+<td>Hook method for setting up class fixture before running tests in the class.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">shortDescription</span></tt>()</td>
+<td>Returns a one-line description of the test, or None if no description has been provided.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">skipTest</span></tt>(reason)</td>
+<td>Skip this test.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDown</span></tt>()</td>
+<td>Hook method for deconstructing the test fixture after testing it.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDownClass</span></tt>()</td>
+<td>Hook method for deconstructing the class fixture after running all tests in the class.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_YAML.test_load" title="dataprocessor.tests.test_configure.TestConfigure_YAML.test_load"><tt class="xref py py-obj docutils literal"><span class="pre">test_load</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dataprocessor.tests.test_configure.TestConfigure_YAML.test_load_filetype_yaml" title="dataprocessor.tests.test_configure.TestConfigure_YAML.test_load_filetype_yaml"><tt class="xref py py-obj docutils literal"><span class="pre">test_load_filetype_yaml</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="dataprocessor.tests.test_configure.TestConfigure_YAML.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_YAML.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_YAML.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dataprocessor.tests.test_configure.TestConfigure_YAML.test_load">
+<tt class="descname">test_load</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_YAML.test_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_YAML.test_load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dataprocessor.tests.test_configure.TestConfigure_YAML.test_load_filetype_yaml">
+<tt class="descname">test_load_filetype_yaml</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_configure.html#TestConfigure_YAML.test_load_filetype_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_configure.TestConfigure_YAML.test_load_filetype_yaml" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1799,7 +2197,10 @@
 <tr class="row-odd"><td><a class="reference internal" href="#dataprocessor.tests.test_io.TestIo.test_datahandler2" title="dataprocessor.tests.test_io.TestIo.test_datahandler2"><tt class="xref py py-obj docutils literal"><span class="pre">test_datahandler2</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_io.TestIo.test_sync_datahandler" title="dataprocessor.tests.test_io.TestIo.test_sync_datahandler"><tt class="xref py py-obj docutils literal"><span class="pre">test_sync_datahandler</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_io.TestIo.test_datahandler_exception" title="dataprocessor.tests.test_io.TestIo.test_datahandler_exception"><tt class="xref py py-obj docutils literal"><span class="pre">test_datahandler_exception</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dataprocessor.tests.test_io.TestIo.test_sync_datahandler" title="dataprocessor.tests.test_io.TestIo.test_sync_datahandler"><tt class="xref py py-obj docutils literal"><span class="pre">test_sync_datahandler</span></tt></a>()</td>
 <td></td>
 </tr>
 </tbody>
@@ -1822,6 +2223,11 @@
 <dl class="method">
 <dt id="dataprocessor.tests.test_io.TestIo.test_datahandler2">
 <tt class="descname">test_datahandler2</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_io.html#TestIo.test_datahandler2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_io.TestIo.test_datahandler2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dataprocessor.tests.test_io.TestIo.test_datahandler_exception">
+<tt class="descname">test_datahandler_exception</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_io.html#TestIo.test_datahandler_exception"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_io.TestIo.test_datahandler_exception" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2618,6 +3024,246 @@ mv tmpdir/p1 tmpdir/p3</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.tests.test_pipe">
+<span id="dataprocessor-tests-test-pipe-module"></span><h2>dataprocessor.tests.test_pipe module<a class="headerlink" href="#module-dataprocessor.tests.test_pipe" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dataprocessor.tests.test_pipe.TestPipe">
+<em class="property">class </em><tt class="descclassname">dataprocessor.tests.test_pipe.</tt><tt class="descname">TestPipe</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#TestPipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.TestPipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dataprocessor.tests.utils.TestNodeListAndDir" title="dataprocessor.tests.utils.TestNodeListAndDir"><tt class="xref py py-class docutils literal"><span class="pre">dataprocessor.tests.utils.TestNodeListAndDir</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">__call__</span></tt>(*args,&nbsp;**kwds)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">addCleanup</span></tt>(function,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Add a function, with arguments, to be called when the test is completed.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">addTypeEqualityFunc</span></tt>(typeobj,&nbsp;function)</td>
+<td>Add a type specific assertEqual style function to compare a type.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertAlmostEqual</span></tt>(first,&nbsp;second[,&nbsp;places,&nbsp;...])</td>
+<td>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertAlmostEquals</span></tt>(first,&nbsp;second[,&nbsp;places,&nbsp;...])</td>
+<td>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertDictContainsSubset</span></tt>(expected,&nbsp;actual[,&nbsp;msg])</td>
+<td>Checks whether actual is a superset of expected.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertDictEqual</span></tt>(d1,&nbsp;d2[,&nbsp;msg])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are unequal as determined by the &#8216;==&#8217; operator.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertEquals</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are unequal as determined by the &#8216;==&#8217; operator.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertFalse</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is false.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertGreater</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &gt; b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertGreaterEqual</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &gt;= b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIn</span></tt>(member,&nbsp;container[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a in b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIs</span></tt>(expr1,&nbsp;expr2[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a is b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsInstance</span></tt>(obj,&nbsp;cls[,&nbsp;msg])</td>
+<td>Same as self.assertTrue(isinstance(obj, cls)), with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNone</span></tt>(obj[,&nbsp;msg])</td>
+<td>Same as self.assertTrue(obj is None), with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNot</span></tt>(expr1,&nbsp;expr2[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a is not b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertIsNotNone</span></tt>(obj[,&nbsp;msg])</td>
+<td>Included for symmetry with assertIsNone.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertItemsEqual</span></tt>(expected_seq,&nbsp;actual_seq[,&nbsp;msg])</td>
+<td>An unordered sequence specific comparison.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertLess</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &lt; b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertLessEqual</span></tt>(a,&nbsp;b[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a &lt;= b), but with a nicer default message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertListEqual</span></tt>(list1,&nbsp;list2[,&nbsp;msg])</td>
+<td>A list-specific equality assertion.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertMultiLineEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Assert that two multi-line strings are equal.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotAlmostEqual</span></tt>(first,&nbsp;second[,&nbsp;...])</td>
+<td>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotAlmostEquals</span></tt>(first,&nbsp;second[,&nbsp;...])</td>
+<td>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotEqual</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are equal as determined by the &#8216;!=&#8217; operator.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotEquals</span></tt>(first,&nbsp;second[,&nbsp;msg])</td>
+<td>Fail if the two objects are equal as determined by the &#8216;!=&#8217; operator.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotIn</span></tt>(member,&nbsp;container[,&nbsp;msg])</td>
+<td>Just like self.assertTrue(a not in b), but with a nicer default message.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotIsInstance</span></tt>(obj,&nbsp;cls[,&nbsp;msg])</td>
+<td>Included for symmetry with assertIsInstance.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertNotRegexpMatches</span></tt>(text,&nbsp;unexpected_regexp)</td>
+<td>Fail the test if the text matches the regular expression.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRaises</span></tt>(excClass[,&nbsp;callableObj])</td>
+<td>Fail unless an exception of class excClass is raised by callableObj when invoked with arguments args and keyword arguments kwargs.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRaisesRegexp</span></tt>(expected_exception,&nbsp;...)</td>
+<td>Asserts that the message in a raised exception matches a regexp.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertRegexpMatches</span></tt>(text,&nbsp;expected_regexp[,&nbsp;msg])</td>
+<td>Fail the test unless the text matches the regular expression.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertSequenceEqual</span></tt>(seq1,&nbsp;seq2[,&nbsp;msg,&nbsp;seq_type])</td>
+<td>An equality assertion for ordered sequences (like lists and tuples).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertSetEqual</span></tt>(set1,&nbsp;set2[,&nbsp;msg])</td>
+<td>A set-specific equality assertion.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertTrue</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is true.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">assertTupleEqual</span></tt>(tuple1,&nbsp;tuple2[,&nbsp;msg])</td>
+<td>A tuple-specific equality assertion.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">assert_</span></tt>(expr[,&nbsp;msg])</td>
+<td>Check that the expression is true.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">countTestCases</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">debug</span></tt>()</td>
+<td>Run the test without collecting errors in a TestResult</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">defaultTestResult</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">doCleanups</span></tt>()</td>
+<td>Execute all cleanup functions.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">fail</span></tt>([msg])</td>
+<td>Fail immediately, with the given message.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIf</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIfAlmostEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failIfEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnless</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessAlmostEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessEqual</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">failUnlessRaises</span></tt>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">failureException</span></tt></td>
+<td>alias of <tt class="xref py py-class docutils literal"><span class="pre">AssertionError</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">id</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>([result])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUp</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">setUpClass</span></tt>()</td>
+<td>Hook method for setting up class fixture before running tests in the class.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">shortDescription</span></tt>()</td>
+<td>Returns a one-line description of the test, or None if no description has been provided.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">skipTest</span></tt>(reason)</td>
+<td>Skip this test.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDown</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">tearDownClass</span></tt>()</td>
+<td>Hook method for deconstructing the class fixture after running all tests in the class.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_pipe.TestPipe.test_nofilter" title="dataprocessor.tests.test_pipe.TestPipe.test_nofilter"><tt class="xref py py-obj docutils literal"><span class="pre">test_nofilter</span></tt></a>()</td>
+<td>Do not filter node_list.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dataprocessor.tests.test_pipe.TestPipe.test_noreturn" title="dataprocessor.tests.test_pipe.TestPipe.test_noreturn"><tt class="xref py py-obj docutils literal"><span class="pre">test_noreturn</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dataprocessor.tests.test_pipe.TestPipe.test_raise" title="dataprocessor.tests.test_pipe.TestPipe.test_raise"><tt class="xref py py-obj docutils literal"><span class="pre">test_raise</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="dataprocessor.tests.test_pipe.TestPipe.test_nofilter">
+<tt class="descname">test_nofilter</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#TestPipe.test_nofilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.TestPipe.test_nofilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not filter node_list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataprocessor.tests.test_pipe.TestPipe.test_noreturn">
+<tt class="descname">test_noreturn</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#TestPipe.test_noreturn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.TestPipe.test_noreturn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dataprocessor.tests.test_pipe.TestPipe.test_raise">
+<tt class="descname">test_raise</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#TestPipe.test_raise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.TestPipe.test_raise" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.tests.test_pipe.file_pipe">
+<tt class="descclassname">dataprocessor.tests.test_pipe.</tt><tt class="descname">file_pipe</tt><big>(</big><em>node_list</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#file_pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.file_pipe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.tests.test_pipe.wrap_noraise">
+<tt class="descclassname">dataprocessor.tests.test_pipe.</tt><tt class="descname">wrap_noraise</tt><big>(</big><em>node_list</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#wrap_noraise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.wrap_noraise" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.tests.test_pipe.wrap_noreturn">
+<tt class="descclassname">dataprocessor.tests.test_pipe.</tt><tt class="descname">wrap_noreturn</tt><big>(</big><em>node_list</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#wrap_noreturn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.wrap_noreturn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.tests.test_pipe.wrap_raise">
+<tt class="descclassname">dataprocessor.tests.test_pipe.</tt><tt class="descname">wrap_raise</tt><big>(</big><em>node_list</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/tests/test_pipe.html#wrap_raise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.tests.test_pipe.wrap_raise" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-dataprocessor.tests.test_pipes">
@@ -3954,7 +4600,9 @@ mv tmpdir/p1 tmpdir/p3</p>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_add_conf">dataprocessor.tests.test_add_conf module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_add_node">dataprocessor.tests.test_add_node module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_add_run">dataprocessor.tests.test_add_run module</a></li>
-<li><a class="reference internal" href="#module-dataprocessor.tests.test_configure">dataprocessor.tests.test_configure module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.tests.test_configure">dataprocessor.tests.test_configure module</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_dataframe">dataprocessor.tests.test_dataframe module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_filter">dataprocessor.tests.test_filter module</a><ul>
 </ul>
@@ -3964,6 +4612,7 @@ mv tmpdir/p1 tmpdir/p3</p>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_nodes">dataprocessor.tests.test_nodes module</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#module-dataprocessor.tests.test_pipe">dataprocessor.tests.test_pipe module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_pipes">dataprocessor.tests.test_pipes module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_scan">dataprocessor.tests.test_scan module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.tests.test_untag">dataprocessor.tests.test_untag module</a></li>

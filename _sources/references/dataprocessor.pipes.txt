@@ -84,6 +84,14 @@ dataprocessor.pipes.jsonio module
     :undoc-members:
     :show-inheritance:
 
+dataprocessor.pipes.merge_nodelist module
+-----------------------------------------
+
+.. automodule:: dataprocessor.pipes.merge_nodelist
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.pipes.move_node module
 ------------------------------------
 

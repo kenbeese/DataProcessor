@@ -76,6 +76,14 @@ dataprocessor.tests.test_nodes module
     :undoc-members:
     :show-inheritance:
 
+dataprocessor.tests.test_pipe module
+------------------------------------
+
+.. automodule:: dataprocessor.tests.test_pipe
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.tests.test_pipes module
 -------------------------------------
 

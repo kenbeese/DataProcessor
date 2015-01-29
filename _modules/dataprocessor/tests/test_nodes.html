@@ -134,7 +134,7 @@
             <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span>
             <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">,</span> <span class="s">&quot;/path/3&quot;</span><span class="p">]</span>
         <span class="p">}</span>
-        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span>
@@ -154,7 +154,7 @@
             <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/0&quot;</span><span class="p">],</span>
             <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]</span>
         <span class="p">}</span>
-        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">new_node</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">)</span>
 
         <span class="n">compare_node_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">],</span>

@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dataprocessor.pipe &mdash; dataprocessor  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="dataprocessor  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for dataprocessor.pipe</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides wrapper functions</span>
+<span class="sd">which make easy to define a SIMD-like pipe,</span>
+<span class="sd">i.e. operates independently on each nodes.</span>
+
+<span class="sd">The following two codes are equal without error handling:</span>
+
+<span class="sd">&gt;&gt;&gt; @wrap</span>
+<span class="sd">... def pipe1(node, arg1, kwd1=&quot;&quot;):</span>
+<span class="sd">...     print(node)</span>
+<span class="sd">...     node[&quot;attr1&quot;] = &quot;val&quot;</span>
+<span class="sd">...     return node</span>
+
+<span class="sd">&gt;&gt;&gt; def pipe1(node_list, arg1, kwd1=&quot;&quot;):</span>
+<span class="sd">...     for node in node_list:</span>
+<span class="sd">...         print(node)</span>
+<span class="sd">...         node[&quot;attr1&quot;] = &quot;val&quot;</span>
+<span class="sd">...     return node_list</span>
+
+<span class="sd">Error handling policy is following:</span>
+
+<span class="sd">- If ``DataProcessorError`` or its inherited is raised</span>
+<span class="sd">  in the decorated function while processing a node,</span>
+<span class="sd">  this process is quited and continue with other nodes.</span>
+
+<span class="sd">- If another exception is raised,</span>
+<span class="sd">  whole processes are quited.</span>
+
+<span class="sd">Simply, corresponds to the following conceptual code:</span>
+
+<span class="sd">&gt;&gt;&gt; for node in node_list:  # doctest:+SKIP</span>
+<span class="sd">...     try:</span>
+<span class="sd">...         decorated(node)</span>
+<span class="sd">...     except DataProcessorError:</span>
+<span class="sd">...         continue</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">op</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="kn">from</span> <span class="nn">.nodes</span> <span class="kn">import</span> <span class="n">node_types</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span> <span class="k">as</span> <span class="n">dpError</span>
+
+
+<div class="viewcode-block" id="PipeImplementationError"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.pipe.PipeImplementationError">[docs]</a><span class="k">class</span> <span class="nc">PipeImplementationError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raised when the implementation of pipe is invalid</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name of pipe in which error occurred.</span>
+<span class="sd">    msg : str</span>
+<span class="sd">        A message for the error</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;[</span><span class="si">%s</span><span class="s">]: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_wrap</span><span class="p">(</span><span class="n">filter_func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">filter_func</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">new_node</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_node</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="n">PipeImplementationError</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+                                                      <span class="s">&quot;Pipe must return node&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_node</span> <span class="ow">and</span> <span class="n">new_node</span> <span class="o">!=</span> <span class="n">node</span><span class="p">:</span>
+                        <span class="n">node</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                        <span class="n">node</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_node</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">dpError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="o">&gt;&gt;</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">e</span>
+                    <span class="k">continue</span>
+            <span class="k">return</span> <span class="n">node_list</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+
+
+<span class="n">wrap</span> <span class="o">=</span> <span class="n">_wrap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">wrap</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    Create a pipe from a function operates on a node.</span>
+
+<span class="s">    This decorator makes easy to define a SIMD-like pipe,</span>
+<span class="s">    i.e. operates independently on each nodes.</span>
+
+<span class="s">    Examples</span>
+<span class="s">    --------</span>
+<span class="s">    The following two codes are equal without error handling:</span>
+
+<span class="s">    &gt;&gt;&gt; @wrap</span>
+<span class="s">    ... def pipe1(node, arg1, kwd1=&quot;&quot;):</span>
+<span class="s">    ...     print(node)</span>
+<span class="s">    ...     node[&quot;attr1&quot;] = &quot;val&quot;</span>
+<span class="s">    ...     return node</span>
+
+<span class="s">    &gt;&gt;&gt; def pipe1(node_list, arg1, kwd1=&quot;&quot;):</span>
+<span class="s">    ...     for node in node_list:</span>
+<span class="s">    ...         print(node)</span>
+<span class="s">    ...         node[&quot;attr1&quot;] = &quot;val&quot;</span>
+<span class="s">    ...     return node_list</span>
+
+<span class="s">    &quot;&quot;&quot;</span>
+
+
+<span class="nb">file</span> <span class="o">=</span> <span class="n">_wrap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">op</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]))</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;Create a pipe which operates on file nodes&quot;</span>
+
+
+<span class="n">directory</span> <span class="o">=</span> <span class="n">_wrap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">op</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]))</span>
+<span class="n">directory</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;Create a pipe which operates on directory nodes&quot;</span>
+
+
+<div class="viewcode-block" id="type"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.pipe.type">[docs]</a><span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="n">typename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create a pipe which operates on nodes of specific type.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; nl = [{</span>
+<span class="sd">    ...     &quot;path&quot;: &quot;/path/1&quot;,</span>
+<span class="sd">    ...     &quot;type&quot;: &quot;project&quot;,</span>
+<span class="sd">    ...     &quot;children&quot;: [&quot;/path/2&quot;],</span>
+<span class="sd">    ...     &quot;parents&quot;: [],</span>
+<span class="sd">    ... }, {</span>
+<span class="sd">    ...     &quot;path&quot;: &quot;/path/2&quot;,</span>
+<span class="sd">    ...     &quot;type&quot;: &quot;run&quot;,</span>
+<span class="sd">    ...     &quot;children&quot;: [],</span>
+<span class="sd">    ...     &quot;parents&quot;: [&quot;/path/1&quot;],</span>
+<span class="sd">    ... }]</span>
+<span class="sd">    &gt;&gt;&gt; @type(&quot;run&quot;)</span>
+<span class="sd">    ... def run_pipe(node):</span>
+<span class="sd">    ...     node[&quot;comment&quot;] = &quot;RUN&quot;</span>
+<span class="sd">    ...     return node</span>
+<span class="sd">    &gt;&gt;&gt; @type(&quot;project&quot;)</span>
+<span class="sd">    ... def project_pipe(node):</span>
+<span class="sd">    ...     node[&quot;comment&quot;] = &quot;PROJECT&quot;</span>
+<span class="sd">    ...     return node</span>
+<span class="sd">    &gt;&gt;&gt; nl = run_pipe(nl)</span>
+<span class="sd">    &gt;&gt;&gt; nl = project_pipe(nl)</span>
+<span class="sd">    &gt;&gt;&gt; nl == [{</span>
+<span class="sd">    ...     &quot;path&quot;: &quot;/path/1&quot;,</span>
+<span class="sd">    ...     &quot;type&quot;: &quot;project&quot;,</span>
+<span class="sd">    ...     &quot;children&quot;: [&quot;/path/2&quot;],</span>
+<span class="sd">    ...     &quot;parents&quot;: [],</span>
+<span class="sd">    ...     &quot;comment&quot;: &quot;PROJECT&quot;,</span>
+<span class="sd">    ... }, {</span>
+<span class="sd">    ...     &quot;path&quot;: &quot;/path/2&quot;,</span>
+<span class="sd">    ...     &quot;type&quot;: &quot;run&quot;,</span>
+<span class="sd">    ...     &quot;children&quot;: [],</span>
+<span class="sd">    ...     &quot;parents&quot;: [&quot;/path/1&quot;],</span>
+<span class="sd">    ...     &quot;comment&quot;: &quot;RUN&quot;,</span>
+<span class="sd">    ... }]</span>
+<span class="sd">    True</span>
+
+<span class="sd">    works on project nodes only.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">typename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_types</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Invalid type name: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">typename</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">_wrap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">typename</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">dataprocessor  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

@@ -154,8 +154,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>  <span class="c"># reload</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception_t</span><span class="p">,</span> <span class="n">exception_v</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">exception_t</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">True</span>
 
 <div class="viewcode-block" id="DataHandler.load"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">):</span>
@@ -168,7 +171,7 @@
 <div class="viewcode-block" id="DataHandler.get"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span>
 </div>
-<div class="viewcode-block" id="DataHandler.add"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DataHandler.add"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add node into managed node_list.</span>
 
 <span class="sd">        Parameters</span>
@@ -177,26 +180,26 @@
 <span class="sd">            skip link check (default=False)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DataHandler.update"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Update node_list (use dict.update).</span>
-
-<span class="sd">        See also the help of nodes.add.</span>
+<div class="viewcode-block" id="DataHandler.update"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Update node_list (use nodes.modest_update).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        skip_validate_link : bool, optional</span>
 <span class="sd">            skip link validation about all nodes in new `node_list`</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
-            <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                      <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;update&quot;</span><span class="p">)</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span>
+                      <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;modest_update&quot;</span><span class="p">,</span>
+                      <span class="n">skip_validate_link</span><span class="o">=</span><span class="n">skip_validate_link</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">skip_validate_link</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
-            <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="p">)</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DataHandler.replace"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.replace">[docs]</a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DataHandler.replace"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.replace">[docs]</a>    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">,</span> <span class="n">skip_validate_link</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Swap node_list.</span>
 
 <span class="sd">        Parameters</span>
@@ -208,7 +211,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="n">node_list</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_validate_link</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">:</span>
-                <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="n">validate_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="DataHandler.serialize"><a class="viewcode-back" href="../../references/dataprocessor.html#dataprocessor.io.DataHandler.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span>

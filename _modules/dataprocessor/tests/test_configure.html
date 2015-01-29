@@ -47,149 +47,74 @@
           <div class="body">
             
   <h1>Source code for dataprocessor.tests.test_configure</h1><div class="highlight"><pre>
-<span class="c"># coding=utf-8</span>
-<span class="sd">&quot;&quot;&quot;Test for dataprocessor.pipes.configure.&quot;&quot;&quot;</span>
+<span class="c"># coding: utf-8</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">TestNodeListAndDir</span>
-<span class="kn">from</span> <span class="nn">..pipes.configure</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">no_section</span><span class="p">,</span> <span class="n">get_filetype</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">check_directory</span>
+<span class="kn">from</span> <span class="nn">..pipes.configure</span> <span class="kn">import</span> <span class="n">load</span>
 
 
-<div class="viewcode-block" id="TestConfigure"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure">[docs]</a><span class="k">class</span> <span class="nc">TestConfigure</span><span class="p">(</span><span class="n">TestNodeListAndDir</span><span class="p">):</span>
+<span class="n">ROOT</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__file__</span><span class="p">,</span> <span class="s">&quot;../../../../sample/datadir&quot;</span><span class="p">)</span>
 
-    <span class="sd">&quot;&quot;&quot;Unittest for dataprocessor.pipes.configure.</span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    tempdir_paths : list</span>
-<span class="sd">        list of project root dir path</span>
-<span class="sd">    node_list : list</span>
+<div class="viewcode-block" id="TestConfigure_INI"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_INI">[docs]</a><span class="k">class</span> <span class="nc">TestConfigure_INI</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">_create_conf_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_file_dict</span><span class="p">,</span> <span class="n">check_type</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create configure file on node path.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        list_file_dict : list</span>
-<span class="sd">            list of dict as follows,</span>
-<span class="sd">            [{&quot;name&quot;: &quot;filename&quot;, &quot;contents&quot;: &quot;string of file contents&quot;}, ]</span>
-<span class="sd">        check_type : bool (False)</span>
-<span class="sd">            If True, only create configure file on node with type run.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">def</span> <span class="nf">create_conf</span><span class="p">(</span><span class="n">conf_path</span><span class="p">,</span> <span class="n">filestring</span><span class="p">):</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">conf_path</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">filestring</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">check_type</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="s">&quot;run&quot;</span><span class="p">):</span>
-                <span class="k">continue</span>
-            <span class="k">for</span> <span class="n">file_dict</span> <span class="ow">in</span> <span class="n">list_file_dict</span><span class="p">:</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span> <span class="n">file_dict</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">])</span>
-                <span class="n">create_conf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">file_dict</span><span class="p">[</span><span class="s">&quot;contents&quot;</span><span class="p">])</span>
-
-    <span class="k">def</span> <span class="nf">_check_node_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">):</span>
-        <span class="n">compare_node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">compare_node_list</span><span class="p">:</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">added_dict</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="n">compare_node_list</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_testdata_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)),</span>
-                            <span class="s">&quot;testdata&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_testdata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_testdata_path</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-<div class="viewcode-block" id="TestConfigure.test_get_filetype"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure.test_get_filetype">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_filetype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&quot;ini&quot;</span><span class="p">,</span>  <span class="n">get_filetype</span><span class="p">(</span><span class="s">&quot;/path/to/hoge.ini&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&quot;ini&quot;</span><span class="p">,</span>  <span class="n">get_filetype</span><span class="p">(</span><span class="s">&quot;/path/to/hoge.conf&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&quot;yaml&quot;</span><span class="p">,</span> <span class="n">get_filetype</span><span class="p">(</span><span class="s">&quot;/path/to/hoge.yml&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&quot;yaml&quot;</span><span class="p">,</span> <span class="n">get_filetype</span><span class="p">(</span><span class="s">&quot;/path/to/hoge.yaml&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span>   <span class="n">get_filetype</span><span class="p">(</span><span class="s">&quot;/path/to/hoge.jpg&quot;</span><span class="p">))</span>
+<div class="viewcode-block" id="TestConfigure_INI.setUp"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_INI.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">check_directory</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&quot;project2/run01&quot;</span><span class="p">)),</span>
+            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;run&quot;</span><span class="p">,</span>
+        <span class="p">}]</span>
 </div>
-<div class="viewcode-block" id="TestConfigure.test_add"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure.test_add">[docs]</a>    <span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">import</span> <span class="nn">copy</span>
-        <span class="n">original_node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
-        <span class="n">list_file_dict</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter1.conf&quot;</span><span class="p">,</span>
-                           <span class="s">&quot;contents&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;[parameters]</span>
-<span class="s">hgoe = 3</span>
-<span class="s">hogehoge = 2&quot;&quot;&quot;</span><span class="p">},</span>
-                          <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter2.conf&quot;</span><span class="p">,</span>
-                           <span class="s">&quot;contents&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;[default]</span>
-<span class="s">hgoe : 4</span>
-<span class="s">dsaf : ohd&quot;&quot;&quot;</span><span class="p">}]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_create_conf_files</span><span class="p">(</span><span class="n">list_file_dict</span><span class="p">)</span>
-
-        <span class="c"># there is no parameter.conf</span>
-        <span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter.conf&quot;</span><span class="p">,</span> <span class="s">&quot;ini&quot;</span><span class="p">,</span> <span class="s">&quot;parameters&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{}}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
-
-        <span class="c"># Add parameter1.conf to node_list</span>
-        <span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter1.conf&quot;</span><span class="p">,</span> <span class="s">&quot;ini&quot;</span><span class="p">,</span> <span class="s">&quot;parameters&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;hgoe&quot;</span><span class="p">:</span> <span class="s">&quot;3&quot;</span><span class="p">,</span> <span class="s">&quot;hogehoge&quot;</span><span class="p">:</span> <span class="s">&quot;2&quot;</span><span class="p">}}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
-
-        <span class="c"># Add parameter2.conf to added node_list without filetype</span>
-        <span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter2.conf&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;default&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;hgoe&quot;</span><span class="p">:</span> <span class="s">&quot;4&quot;</span><span class="p">,</span> <span class="s">&quot;dsaf&quot;</span><span class="p">:</span> <span class="s">&quot;ohd&quot;</span><span class="p">,</span>
-                                    <span class="s">&quot;hogehoge&quot;</span><span class="p">:</span> <span class="s">&quot;2&quot;</span><span class="p">}}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
+<div class="viewcode-block" id="TestConfigure_INI.test_load"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_INI.test_load">[docs]</a>    <span class="k">def</span> <span class="nf">test_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameters.ini&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">],</span> <span class="p">{</span><span class="s">&quot;ny&quot;</span><span class="p">:</span> <span class="s">&quot;23&quot;</span><span class="p">})</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="s">&quot;parameters.ini&quot;</span><span class="p">)</span>  <span class="c"># works if there already exist &quot;configure&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">],</span> <span class="p">{</span><span class="s">&quot;ny&quot;</span><span class="p">:</span> <span class="s">&quot;23&quot;</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="TestConfigure.test_add_yaml"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure.test_add_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">import</span> <span class="nn">copy</span>
-        <span class="n">original_node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
-        <span class="n">list_file_dict</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter1.yaml&quot;</span><span class="p">,</span>
-                           <span class="s">&quot;contents&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_testdata</span><span class="p">(</span><span class="s">&quot;parameter1.yml&quot;</span><span class="p">)},</span>
-                          <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter2.yaml&quot;</span><span class="p">,</span>
-                           <span class="s">&quot;contents&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_testdata</span><span class="p">(</span><span class="s">&quot;parameter2.yaml&quot;</span><span class="p">)}]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_create_conf_files</span><span class="p">(</span><span class="n">list_file_dict</span><span class="p">)</span>
-
-        <span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter1.yaml&quot;</span><span class="p">,</span> <span class="s">&quot;yaml&quot;</span><span class="p">,</span> <span class="s">&quot;parameters&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;Nx&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s">&quot;dx&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s">&quot;msg&quot;</span><span class="p">:</span> <span class="s">u&quot;あ&quot;</span><span class="p">}}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
-
-        <span class="c"># without filetype</span>
-        <span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter2.yaml&quot;</span><span class="p">,</span> <span class="s">&quot;yaml&quot;</span><span class="p">,</span> <span class="s">&quot;params&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">][</span><span class="s">&quot;foo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;bar&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
+<div class="viewcode-block" id="TestConfigure_INI.test_load_filetype"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_INI.test_load_filetype">[docs]</a>    <span class="k">def</span> <span class="nf">test_load_filetype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameters.ini&quot;</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s">&quot;yaml&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s">&quot;configure&quot;</span><span class="p">,</span> <span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c"># fail to parse YAML</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameters.ini&quot;</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s">&quot;INI&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">],</span> <span class="p">{</span><span class="s">&quot;ny&quot;</span><span class="p">:</span> <span class="s">&quot;23&quot;</span><span class="p">})</span>
 </div>
-<div class="viewcode-block" id="TestConfigure.test_no_section"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure.test_no_section">[docs]</a>    <span class="k">def</span> <span class="nf">test_no_section</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">original_node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
-        <span class="n">list_file_dict</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter1.conf&quot;</span><span class="p">,</span>
-                           <span class="s">&quot;contents&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;</span>
-<span class="s"># comment</span>
-<span class="s">hgoe = 3</span>
-<span class="s">hogehoge = 2&quot;&quot;&quot;</span><span class="p">},</span>
-                          <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;parameter2.conf&quot;</span><span class="p">,</span>
-                           <span class="s">&quot;contents&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;&quot;</span>
-<span class="s">! comment</span>
-<span class="s">hgoe :  4</span>
-<span class="s">dsaf : ohd&quot;&quot;&quot;</span><span class="p">}]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_create_conf_files</span><span class="p">(</span><span class="n">list_file_dict</span><span class="p">)</span>
+<div class="viewcode-block" id="TestConfigure_INI.test_load_missing_name"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_INI.test_load_missing_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_load_missing_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parame.yamlu&quot;</span><span class="p">)</span>  <span class="c"># not raises</span>
 
-        <span class="c"># there is no parameter.conf</span>
-        <span class="n">no_section</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter.conf&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="TestConfigure_YAML"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_YAML">[docs]</a><span class="k">class</span> <span class="nc">TestConfigure_YAML</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
-        <span class="c"># Add parameter1.conf to node_list</span>
-        <span class="n">no_section</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter1.conf&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;hgoe&quot;</span><span class="p">:</span> <span class="s">&quot;3&quot;</span><span class="p">,</span> <span class="s">&quot;hogehoge&quot;</span><span class="p">:</span> <span class="s">&quot;2&quot;</span><span class="p">}}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span>
+<div class="viewcode-block" id="TestConfigure_YAML.setUp"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_YAML.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">check_directory</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&quot;project3/run01&quot;</span><span class="p">)),</span>
+            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;run&quot;</span><span class="p">,</span>
+        <span class="p">}]</span>
+</div>
+<div class="viewcode-block" id="TestConfigure_YAML.test_load"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_YAML.test_load">[docs]</a>    <span class="k">def</span> <span class="nf">test_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameters.yml&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">],</span> <span class="p">{</span><span class="s">&quot;ny&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">})</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="s">&quot;parameters.yml&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">],</span> <span class="p">{</span><span class="s">&quot;ny&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">})</span>
+</div>
+<div class="viewcode-block" id="TestConfigure_YAML.test_load_filetype_yaml"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_YAML.test_load_filetype_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">test_load_filetype_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameters.yml&quot;</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s">&quot;INI&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s">&quot;configure&quot;</span><span class="p">,</span> <span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c"># fail to parse YAML</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameters.yml&quot;</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s">&quot;YAML&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">],</span> <span class="p">{</span><span class="s">&quot;ny&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">})</span>
 
-        <span class="c"># Add parameter2.conf to added node_list</span>
-        <span class="n">no_section</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameter2.conf&quot;</span><span class="p">,</span> <span class="s">&quot;:&quot;</span><span class="p">,</span> <span class="s">&quot;!&quot;</span><span class="p">)</span>
-        <span class="n">added_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;hgoe&quot;</span><span class="p">:</span> <span class="s">&quot;4&quot;</span><span class="p">,</span> <span class="s">&quot;dsaf&quot;</span><span class="p">:</span> <span class="s">&quot;ohd&quot;</span><span class="p">,</span>
-                                    <span class="s">&quot;hogehoge&quot;</span><span class="p">:</span> <span class="s">&quot;2&quot;</span><span class="p">}}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_node_list</span><span class="p">(</span><span class="n">original_node_list</span><span class="p">,</span> <span class="n">added_dict</span><span class="p">)</span></div></div>
+</div></div>
+<div class="viewcode-block" id="TestConfigure_CONF"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_CONF">[docs]</a><span class="k">class</span> <span class="nc">TestConfigure_CONF</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestConfigure_CONF.setUp"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_CONF.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">check_directory</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="s">&quot;project1/run01&quot;</span><span class="p">)),</span>
+            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;run&quot;</span><span class="p">,</span>
+        <span class="p">}]</span>
+</div>
+<div class="viewcode-block" id="TestConfigure_CONF.test_load_conf"><a class="viewcode-back" href="../../../references/dataprocessor.tests.html#dataprocessor.tests.test_configure.TestConfigure_CONF.test_load_conf">[docs]</a>    <span class="k">def</span> <span class="nf">test_load_conf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;parameters.conf&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">][</span><span class="s">&quot;nx&quot;</span><span class="p">],</span> <span class="s">&quot;12&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;configure&quot;</span><span class="p">][</span><span class="s">&quot;ny&quot;</span><span class="p">],</span> <span class="s">&quot;32&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

@@ -48,12 +48,15 @@
             
   <h1>Source code for dataprocessor.pipes.configure</h1><div class="highlight"><pre>
 <span class="c"># coding=utf-8</span>
-<span class="sd">&quot;&quot;&quot;Pipes of configure.&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">os.path</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="kn">import</span> <span class="n">SafeConfigParser</span>
 
-<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">read_configure</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">ConfigParser</span> <span class="kn">as</span> <span class="nn">cp</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">pipe</span>
+<span class="kn">from</span> <span class="nn">..utility</span> <span class="kn">import</span> <span class="n">read_configure</span><span class="p">,</span> <span class="n">check_file</span>
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">DataProcessorError</span> <span class="k">as</span> <span class="n">dpError</span>
 
 
 <div class="viewcode-block" id="parse_ini"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.parse_ini">[docs]</a><span class="k">def</span> <span class="nf">parse_ini</span><span class="p">(</span><span class="n">confpath</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
@@ -71,10 +74,18 @@
 <span class="sd">    -------</span>
 <span class="sd">    Specified section as a dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">conf</span> <span class="o">=</span> <span class="n">SafeConfigParser</span><span class="p">()</span>
+    <span class="n">conf</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">SafeConfigParser</span><span class="p">()</span>
     <span class="n">conf</span><span class="o">.</span><span class="n">optionxform</span> <span class="o">=</span> <span class="nb">str</span>
-    <span class="n">conf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">confpath</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">section</span><span class="p">)}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">read_conf</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">confpath</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">cp</span><span class="o">.</span><span class="n">MissingSectionHeaderError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Invalid INI file: &quot;</span> <span class="o">+</span> <span class="n">confpath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">read_conf</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Cannot read INI configure file: &quot;</span> <span class="o">+</span> <span class="n">confpath</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">conf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">section</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">cp</span><span class="o">.</span><span class="n">NoSectionError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Section does not found: &quot;</span> <span class="o">+</span> <span class="n">confpath</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="parse_yaml"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.parse_yaml">[docs]</a><span class="k">def</span> <span class="nf">parse_yaml</span><span class="p">(</span><span class="n">confpath</span><span class="p">,</span> <span class="n">section</span><span class="p">):</span>
@@ -93,37 +104,20 @@
 <span class="sd">    Specified section as a dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">confpath</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">section</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
-            <span class="ne">Warning</span><span class="p">(</span><span class="s">&quot;No such section {} in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">confpath</span><span class="p">))</span>
-            <span class="k">return</span> <span class="p">{}</span>
-        <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="n">section</span><span class="p">]</span>
-
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">YAMLError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Fail to parse YAML file : &quot;</span> <span class="o">+</span> <span class="n">confpath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">section</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;No such section &#39;{}&#39; in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">confpath</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="n">section</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="get_parser"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.get_parser">[docs]</a><span class="k">def</span> <span class="nf">get_parser</span><span class="p">(</span><span class="n">filetype</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get parser corresponding to the filetype</span>
+<span class="n">parsers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;ini&quot;</span><span class="p">:</span> <span class="n">parse_ini</span><span class="p">,</span>
+    <span class="s">&quot;yaml&quot;</span><span class="p">:</span> <span class="n">parse_yaml</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    filetype : str</span>
-<span class="sd">        These filetypes are available; &quot;ini&quot;, &quot;conf&quot;, &quot;yaml&quot;</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    function that takes 2 args, confpath and section.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># check extension in case insensitive way</span>
-    <span class="n">filetype</span> <span class="o">=</span> <span class="n">filetype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">filetype</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;ini&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">parse_ini</span>
-    <span class="k">elif</span> <span class="n">filetype</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;yaml&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">parse_yaml</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="ne">Warning</span><span class="p">(</span><span class="s">&quot;Unknown filetype &quot;</span> <span class="o">+</span> <span class="n">filetype</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">None</span>
-
-</div>
 <div class="viewcode-block" id="get_filetype"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.get_filetype">[docs]</a><span class="k">def</span> <span class="nf">get_filetype</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get filetype from path (filename extension).</span>
@@ -137,7 +131,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    filetype as a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="c"># check extension in case insensitive way</span>
     <span class="n">ext</span> <span class="o">=</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -146,61 +140,47 @@
     <span class="k">elif</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;.yml&quot;</span><span class="p">,</span> <span class="s">&quot;.yaml&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;yaml&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="ne">Warning</span><span class="p">(</span><span class="s">&quot;Unknown filename extension &quot;</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">raise</span> <span class="n">dpError</span><span class="p">(</span><span class="s">&quot;Unknown filename extension ({})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ext</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.add">[docs]</a><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s">&quot;parameters&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add configure to node_list.</span>
+<span class="nd">@pipe.type</span><span class="p">(</span><span class="s">&quot;run&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s">&quot;parameters&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Load configure</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename : str</span>
 <span class="sd">        filename of parameter configure file</span>
 <span class="sd">        If file does not exist, add null list.</span>
-
 <span class="sd">    section : str</span>
 <span class="sd">        Specify section name in configure file.</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    list</span>
-<span class="sd">        node_list which is a list of dict.</span>
-
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; add(node_list, &quot;configure.conf&quot;) # doctest:+SKIP</span>
+<span class="sd">    &gt;&gt;&gt; load(node_list, &quot;configure.conf&quot;) # doctest:+SKIP</span>
 <span class="sd">    &gt;&gt;&gt; # Change load section.</span>
-<span class="sd">    &gt;&gt;&gt; add(node_list, &quot;configure.conf&quot;, &quot;defaults&quot;) # doctest:+SKIP</span>
+<span class="sd">    &gt;&gt;&gt; load(node_list, &quot;configure.conf&quot;, &quot;defaults&quot;) # doctest:+SKIP</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">node_key</span> <span class="o">=</span> <span class="s">&quot;configure&quot;</span>
-    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
-        <span class="n">confpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span> <span class="n">filename</span><span class="p">)</span>
-        <span class="n">conf_d</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">confpath</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">filetype</span><span class="p">:</span>
-                <span class="n">filetype</span> <span class="o">=</span> <span class="n">get_filetype</span><span class="p">(</span><span class="n">confpath</span><span class="p">)</span>
-            <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">parser</span><span class="p">:</span>
-                <span class="n">conf_d</span> <span class="o">=</span> <span class="n">parser</span><span class="p">(</span><span class="n">confpath</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="ne">Warning</span><span class="p">(</span><span class="s">&quot;parameter file does not exist.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">node_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
-            <span class="n">node</span><span class="p">[</span><span class="n">node_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf_d</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">conf_d</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="n">node_key</span><span class="p">]:</span>
-                    <span class="ne">Warning</span><span class="p">(</span><span class="s">&quot;overwrite configures&quot;</span><span class="p">)</span>
-            <span class="n">node</span><span class="p">[</span><span class="n">node_key</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">conf_d</span><span class="p">)</span>
+    <span class="n">confpath</span> <span class="o">=</span> <span class="n">check_file</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">],</span> <span class="n">filename</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filetype</span><span class="p">:</span>
+        <span class="n">filetype</span> <span class="o">=</span> <span class="n">get_filetype</span><span class="p">(</span><span class="n">confpath</span><span class="p">)</span>
+    <span class="n">filetype</span> <span class="o">=</span> <span class="n">filetype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">filetype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parsers</span><span class="p">:</span>
+        <span class="k">print</span> <span class="o">&gt;&gt;</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Invalid filetype : &quot;</span> <span class="o">+</span> <span class="n">filetype</span>
+        <span class="k">print</span> <span class="o">&gt;&gt;</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Guess from extention&quot;</span>
+        <span class="n">filetype</span> <span class="o">=</span> <span class="n">get_filetype</span><span class="p">(</span><span class="n">confpath</span><span class="p">)</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">parsers</span><span class="p">[</span><span class="n">filetype</span><span class="p">](</span><span class="n">confpath</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">node_list</span>
+    <span class="k">if</span> <span class="s">&quot;configure&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+        <span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node</span>
 
 </div>
-<div class="viewcode-block" id="no_section"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.no_section">[docs]</a><span class="k">def</span> <span class="nf">no_section</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">split_char</span><span class="o">=</span><span class="s">&quot;=&quot;</span><span class="p">,</span> <span class="n">comment_char</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;#&quot;</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add configure to node_list.</span>
+<span class="nd">@pipe.type</span><span class="p">(</span><span class="s">&quot;run&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="no_section"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.no_section">[docs]</a><span class="k">def</span> <span class="nf">no_section</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">split_char</span><span class="o">=</span><span class="s">&quot;=&quot;</span><span class="p">,</span> <span class="n">comment_char</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;#&quot;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot; Load configure</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -212,11 +192,6 @@
 <span class="sd">    comment_char : str</span>
 <span class="sd">        Specify the comment line signal char.</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    list</span>
-<span class="sd">        node_list which is a list of dict.</span>
-
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; no_section(node_list, &quot;foo.conf&quot;) # doctest:+SKIP</span>
@@ -225,21 +200,18 @@
 <span class="sd">    ... # doctest:+SKIP</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span>
-        <span class="n">cfg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cfg_path</span><span class="p">):</span>
-            <span class="k">continue</span>
-        <span class="n">cfg</span> <span class="o">=</span> <span class="n">read_configure</span><span class="p">(</span><span class="n">cfg_path</span><span class="p">,</span> <span class="n">split_char</span><span class="p">,</span> <span class="n">comment_char</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s">&quot;configure&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
-            <span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">node_list</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">]</span>
+    <span class="n">cfg_path</span> <span class="o">=</span> <span class="n">check_file</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">read_configure</span><span class="p">(</span><span class="n">cfg_path</span><span class="p">,</span> <span class="n">split_char</span><span class="p">,</span> <span class="n">comment_char</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&quot;configure&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+        <span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">node</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node</span>
 
 </div>
 <div class="viewcode-block" id="register"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.configure.register">[docs]</a><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">pipes_dics</span><span class="p">):</span>
     <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;configure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">add</span><span class="p">,</span>
+        <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">load</span><span class="p">,</span>
         <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;filename&quot;</span><span class="p">],</span>
         <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s">&quot;section&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;section parameters are written&quot;</span><span class="p">}),</span>
                  <span class="p">(</span><span class="s">&quot;filetype&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;filetype [ini, yaml]. If not given, &quot;</span>
@@ -250,7 +222,10 @@
     <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;configure_no_section&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">no_section</span><span class="p">,</span>
         <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;filename&quot;</span><span class="p">],</span>
-        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;split_char&quot;</span><span class="p">,</span> <span class="s">&quot;comment_char&quot;</span><span class="p">],</span>
+        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s">&quot;split_char&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;separetor of parameters&quot;</span><span class="p">}),</span>
+            <span class="p">(</span><span class="s">&quot;comment_char&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;charactors defines comment line&quot;</span><span class="p">})</span>
+        <span class="p">],</span>
         <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;Read parameter file (without section)&quot;</span><span class="p">,</span>
     <span class="p">}</span></div>
 </pre></div>

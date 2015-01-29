@@ -55,10 +55,10 @@
 
 
 <div class="viewcode-block" id="add_node"><a class="viewcode-back" href="../../../references/dataprocessor.pipes.html#dataprocessor.pipes.add_node.add_node">[docs]</a><span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">node_type</span><span class="o">=</span><span class="s">&quot;run&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[],</span>
-             <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;..&quot;</span><span class="p">]):</span>
+             <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;..&quot;</span><span class="p">],</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;raise&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add node.</span>
 
-<span class="sd">    A node is added to the node_list according to dict.update.</span>
+<span class="sd">    A node is added to the node_list.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -69,6 +69,11 @@
 <span class="sd">    name : str, optional</span>
 <span class="sd">    children : list, optional</span>
 <span class="sd">    parents : list, optional</span>
+<span class="sd">    strategy : str, optional</span>
+<span class="sd">        determines how to deal with conflict,</span>
+<span class="sd">        i.e. there alread exists another node</span>
+<span class="sd">        whose path is same as new one.</span>
+<span class="sd">        See docstring of nodes.add.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -84,11 +89,14 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-    <span class="n">node</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="n">node_type</span><span class="p">,</span>
-            <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">c_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_path</span> <span class="ow">in</span> <span class="n">children</span><span class="p">],</span>
-            <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">c_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_path</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">],</span>
-            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">}</span>
-    <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">normalize</span><span class="p">({</span>
+        <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="n">node_type</span><span class="p">,</span>
+        <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">c_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_path</span> <span class="ow">in</span> <span class="n">children</span><span class="p">],</span>
+        <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">utility</span><span class="o">.</span><span class="n">path_expand</span><span class="p">(</span><span class="n">c_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">c_path</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">],</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span>
+    <span class="p">})</span>
+    <span class="n">nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">node_list</span>
 
 </div>
@@ -96,7 +104,20 @@
     <span class="n">pipes_dics</span><span class="p">[</span><span class="s">&quot;add_node&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&quot;func&quot;</span><span class="p">:</span> <span class="n">add_node</span><span class="p">,</span>
         <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;path&quot;</span><span class="p">,</span> <span class="s">&quot;node_type&quot;</span><span class="p">,</span> <span class="s">&quot;children&quot;</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">],</span>
+        <span class="s">&quot;kwds&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s">&quot;path&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;path of new node&quot;</span><span class="p">}),</span>
+            <span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;name of new node&quot;</span><span class="p">}),</span>
+            <span class="p">(</span><span class="s">&quot;node_type&quot;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;type of new node&quot;</span><span class="p">,</span>
+                <span class="s">&quot;choices&quot;</span><span class="p">:</span> <span class="n">nodes</span><span class="o">.</span><span class="n">node_types</span><span class="p">,</span>
+            <span class="p">}),</span>
+            <span class="p">(</span><span class="s">&quot;children&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;children paths of new node&quot;</span><span class="p">}),</span>
+            <span class="p">(</span><span class="s">&quot;parents&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;paths parents of new node&quot;</span><span class="p">}),</span>
+            <span class="p">(</span><span class="s">&quot;strategy&quot;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">&quot;help&quot;</span><span class="p">:</span> <span class="s">&quot;strategy for resolving conflict&quot;</span><span class="p">,</span>
+                <span class="s">&quot;choices&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;raise&quot;</span><span class="p">,</span> <span class="s">&quot;update&quot;</span><span class="p">,</span> <span class="s">&quot;modest_update&quot;</span><span class="p">,</span> <span class="s">&quot;replace&quot;</span><span class="p">],</span>
+            <span class="p">}),</span>
+        <span class="p">],</span>
         <span class="s">&quot;desc&quot;</span><span class="p">:</span> <span class="s">&quot;Add node to node_list.&quot;</span>
     <span class="p">}</span></div>
 </pre></div>

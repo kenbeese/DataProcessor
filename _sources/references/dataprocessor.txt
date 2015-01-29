@@ -92,6 +92,14 @@ dataprocessor.nodes module
     :undoc-members:
     :show-inheritance:
 
+dataprocessor.pipe module
+-------------------------
+
+.. automodule:: dataprocessor.pipe
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 dataprocessor.rc module
 -----------------------
 

@@ -72,6 +72,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.filter">dataprocessor.pipes.filter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.ipynb">dataprocessor.pipes.ipynb module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.jsonio">dataprocessor.pipes.jsonio module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.merge_nodelist">dataprocessor.pipes.merge_nodelist module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.move_node">dataprocessor.pipes.move_node module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.normalize">dataprocessor.pipes.normalize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.pipes.html#module-dataprocessor.pipes.scan">dataprocessor.pipes.scan module</a></li>
@@ -107,6 +108,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.tests.html#module-dataprocessor.tests.test_nodes">dataprocessor.tests.test_nodes module</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessor.tests.html#module-dataprocessor.tests.test_pipe">dataprocessor.tests.test_pipe module</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessor.tests.html#module-dataprocessor.tests.test_pipes">dataprocessor.tests.test_pipes module</a><ul class="simple">
@@ -714,7 +718,7 @@ This class use JSON format for serializing.</p>
 </table>
 <dl class="method">
 <dt id="dataprocessor.io.DataHandler.add">
-<tt class="descname">add</tt><big>(</big><em>node</em>, <em>skip_validate_link=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.add" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add</tt><big>(</big><em>node</em>, <em>strategy='update'</em>, <em>skip_validate_link=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add node into managed node_list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -742,7 +746,7 @@ This class use JSON format for serializing.</p>
 
 <dl class="method">
 <dt id="dataprocessor.io.DataHandler.replace">
-<tt class="descname">replace</tt><big>(</big><em>node_list</em>, <em>skip_validate_link=True</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.replace" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">replace</tt><big>(</big><em>node_list</em>, <em>skip_validate_link=True</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Swap node_list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -765,9 +769,8 @@ This class use JSON format for serializing.</p>
 
 <dl class="method">
 <dt id="dataprocessor.io.DataHandler.update">
-<tt class="descname">update</tt><big>(</big><em>node_list</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update node_list (use dict.update).</p>
-<p>See also the help of nodes.add.</p>
+<tt class="descname">update</tt><big>(</big><em>node_list</em>, <em>skip_validate_link=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/io.html#DataHandler.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.io.DataHandler.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node_list (use nodes.modest_update).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -797,7 +800,7 @@ This class use JSON format for serializing.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add</span></tt>(node[,&nbsp;skip_validate_link])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add</span></tt>(node[,&nbsp;strategy,&nbsp;skip_validate_link])</td>
 <td>Add node into managed node_list.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt>()</td>
@@ -806,14 +809,14 @@ This class use JSON format for serializing.</p>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">replace</span></tt>(node_list[,&nbsp;skip_validate_link,&nbsp;silent])</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">replace</span></tt>(node_list[,&nbsp;skip_validate_link])</td>
 <td>Swap node_list.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">serialize</span></tt>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>(node_list[,&nbsp;silent])</td>
-<td>Update node_list (use dict.update).</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>(node_list[,&nbsp;skip_validate_link])</td>
+<td>Update node_list (use nodes.modest_update).</td>
 </tr>
 </tbody>
 </table>
@@ -933,9 +936,16 @@ on the parent directory of .ipynb file.</li>
 <div class="section" id="module-dataprocessor.nodes">
 <span id="dataprocessor-nodes-module"></span><h2>dataprocessor.nodes module<a class="headerlink" href="#module-dataprocessor.nodes" title="Permalink to this headline">¶</a></h2>
 <p>Tools for manipulation of node_list.</p>
+<dl class="exception">
+<dt id="dataprocessor.nodes.DataProcessorNodesError">
+<em class="property">exception </em><tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">DataProcessorNodesError</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#DataProcessorNodesError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.DataProcessorNodesError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dataprocessor.exception.DataProcessorError" title="dataprocessor.exception.DataProcessorError"><tt class="xref py py-class docutils literal"><span class="pre">dataprocessor.exception.DataProcessorError</span></tt></a></p>
+<p>Exception about Nodes processings.</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="dataprocessor.nodes.add">
-<tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">add</tt><big>(</big><em>node_list</em>, <em>node</em>, <em>skip_validate_link=False</em>, <em>strategy='update'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.add" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">add</tt><big>(</big><em>node_list</em>, <em>node</em>, <em>skip_validate_link=False</em>, <em>strategy='raise'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a node into node_list.</p>
 <p>This adds a node into node_list,
 and validate links in node[&#8220;children&#8221;] and node[&#8220;parents&#8221;].
@@ -956,14 +966,26 @@ In detail of validate link, see <cite>validate_link</cite>.</p>
 <blockquote>
 <div><p>skip link validation (default False)</p>
 </div></blockquote>
-<p><strong>strategy</strong> : str, optional {&#8220;update&#8221;, &#8220;replace&#8221;}</p>
-<blockquote class="last">
+<p><strong>strategy</strong> : str, optional {&#8220;raise&#8221;, &#8220;update&#8221;, &#8220;modest_update&#8221;, &#8220;replace&#8221;}</p>
+<blockquote>
 <div><p>The strategy for the case
 where there exists a node whose &#8220;path&#8221; is same as new one</p>
 <ul class="simple">
+<li>&#8220;raise&#8221; : raise DataProcessorNodesError (default)</li>
 <li>&#8220;update&#8221; : use dict.update to update existing node</li>
+<li>&#8220;modest_update&#8221; : use nodes.modest_update to update existing node</li>
 <li>&#8220;replace&#8221; : replace existing node with new node</li>
 </ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorNodesError:</strong></p>
+<blockquote>
+<div><p>there is already exist node whose path is <cite>node[&#8220;path&#8221;]</cite></p>
+</div></blockquote>
+<p><strong>DataProcessorError:</strong></p>
+<blockquote class="last">
+<div><p>strategy is invalid string</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1122,6 +1144,67 @@ The latter node has priority in merging (see Examples)</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="dataprocessor.nodes.modest_update">
+<tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">modest_update</tt><big>(</big><em>node_list</em>, <em>node</em>, <em>skip_validate_link=False</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#modest_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.modest_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node properties modestly</p>
+<p>This keeps values as possible,
+besides the &#8220;update&#8221; strategy of <cite>add(...)</cite> simply uses <cite>dict.update()</cite>.
+If <cite>node</cite> in the arguments has empty value
+e.g. <cite>node = {&#8220;path&#8221;: &#8220;/path/0&#8221;, &#8220;comment&#8221; : &#8220;&#8221;}</cite>,
+this function does not overwrite existing comment of
+the node in <cite>node_list</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>node_list</strong> : list</p>
+<blockquote>
+<div><p>the list of nodes</p>
+</div></blockquote>
+<p><strong>node</strong> : dict</p>
+<blockquote>
+<div><p>The node will be added into node_list</p>
+</div></blockquote>
+<p><strong>skip_validate_link</strong> : bool, optional</p>
+<blockquote>
+<div><p>skip link validation (default False)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>DataProcessorNodesError</strong></p>
+<blockquote class="last">
+<div><p>there is no node whose &#8220;path&#8221; is <cite>node[&#8220;path&#8221;]</cite></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">node_list</span> <span class="o">=</span> <span class="p">[{</span>
+<span class="gp">... </span>  <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="s">&quot;comment&quot;</span><span class="p">:</span> <span class="s">&quot;some comment&quot;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span>  <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;path&quot;</span><span class="p">:</span><span class="s">&quot;/path/0&quot;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="s">&quot;configure&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;A&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+<span class="gp">... </span>  <span class="s">&quot;comment&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">modest_update</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node_list</span> <span class="o">==</span> <span class="p">[{</span>
+<span class="gp">... </span>  <span class="s">&#39;comment&#39;</span><span class="p">:</span> <span class="s">&#39;some comment&#39;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/path/0&#39;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="s">&#39;parents&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span>  <span class="s">&#39;children&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span>  <span class="s">&#39;configure&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;A&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">}]</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="dataprocessor.nodes.normalize">
 <tt class="descclassname">dataprocessor.nodes.</tt><tt class="descname">normalize</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/nodes.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.nodes.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize node (i.e. fill necessary field).</p>
@@ -1256,6 +1339,146 @@ This must belong to the <cite>node_list</cite></p>
 <span class="gp">... </span>    <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/0&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">]},</span>
 <span class="gp">... </span>    <span class="p">{</span><span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/1&quot;</span><span class="p">,</span> <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/0&quot;</span><span class="p">],</span> <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[]}]</span>
 <span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipe">
+<span id="dataprocessor-pipe-module"></span><h2>dataprocessor.pipe module<a class="headerlink" href="#module-dataprocessor.pipe" title="Permalink to this headline">¶</a></h2>
+<p>This module provides wrapper functions
+which make easy to define a SIMD-like pipe,
+i.e. operates independently on each nodes.</p>
+<p>The following two codes are equal without error handling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@wrap</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">pipe1</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">kwd1</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">node</span><span class="p">[</span><span class="s">&quot;attr1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;val&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">node</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">pipe1</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">kwd1</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">node</span><span class="p">[</span><span class="s">&quot;attr1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;val&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">node_list</span>
+</pre></div>
+</div>
+<p>Error handling policy is following:</p>
+<ul class="simple">
+<li>If <tt class="docutils literal"><span class="pre">DataProcessorError</span></tt> or its inherited is raised
+in the decorated function while processing a node,
+this process is quited and continue with other nodes.</li>
+<li>If another exception is raised,
+whole processes are quited.</li>
+</ul>
+<p>Simply, corresponds to the following conceptual code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>  
+<span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">decorated</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">except</span> <span class="n">DataProcessorError</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">continue</span>
+</pre></div>
+</div>
+<dl class="exception">
+<dt id="dataprocessor.pipe.PipeImplementationError">
+<em class="property">exception </em><tt class="descclassname">dataprocessor.pipe.</tt><tt class="descname">PipeImplementationError</tt><big>(</big><em>name</em>, <em>msg</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipe.html#PipeImplementationError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipe.PipeImplementationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Raised when the implementation of pipe is invalid</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>name</td>
+<td>(str) The name of pipe in which error occurred.</td>
+</tr>
+<tr class="row-even"><td>msg</td>
+<td>(str) A message for the error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipe.directory">
+<tt class="descclassname">dataprocessor.pipe.</tt><tt class="descname">directory</tt><big>(</big><em>func</em><big>)</big><a class="headerlink" href="#dataprocessor.pipe.directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pipe which operates on directory nodes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipe.file">
+<tt class="descclassname">dataprocessor.pipe.</tt><tt class="descname">file</tt><big>(</big><em>func</em><big>)</big><a class="headerlink" href="#dataprocessor.pipe.file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pipe which operates on file nodes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipe.type">
+<tt class="descclassname">dataprocessor.pipe.</tt><tt class="descname">type</tt><big>(</big><em>typename</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipe.html#type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipe.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pipe which operates on nodes of specific type.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span> <span class="o">=</span> <span class="p">[{</span>
+<span class="gp">... </span>    <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;project&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span><span class="p">},</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/2&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;run&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span>    <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@type</span><span class="p">(</span><span class="s">&quot;run&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">run_pipe</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">node</span><span class="p">[</span><span class="s">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;RUN&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">node</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@type</span><span class="p">(</span><span class="s">&quot;project&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">project_pipe</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">node</span><span class="p">[</span><span class="s">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;PROJECT&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">node</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span> <span class="o">=</span> <span class="n">run_pipe</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span> <span class="o">=</span> <span class="n">project_pipe</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nl</span> <span class="o">==</span> <span class="p">[{</span>
+<span class="gp">... </span>    <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;project&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/2&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span>    <span class="s">&quot;comment&quot;</span><span class="p">:</span> <span class="s">&quot;PROJECT&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">},</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&quot;path&quot;</span><span class="p">:</span> <span class="s">&quot;/path/2&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;run&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="gp">... </span>    <span class="s">&quot;parents&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;/path/1&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s">&quot;comment&quot;</span><span class="p">:</span> <span class="s">&quot;RUN&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">}]</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>works on project nodes only.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipe.wrap">
+<tt class="descclassname">dataprocessor.pipe.</tt><tt class="descname">wrap</tt><big>(</big><em>func</em><big>)</big><a class="headerlink" href="#dataprocessor.pipe.wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a pipe from a function operates on a node.</p>
+<p>This decorator makes easy to define a SIMD-like pipe,
+i.e. operates independently on each nodes.</p>
+<p class="rubric">Examples</p>
+<p>The following two codes are equal without error handling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@wrap</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">pipe1</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">kwd1</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">node</span><span class="p">[</span><span class="s">&quot;attr1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;val&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">node</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">pipe1</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">kwd1</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">node</span><span class="p">[</span><span class="s">&quot;attr1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;val&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">node_list</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2029,6 +2252,7 @@ then you should set <cite>split_char=&#8221;:&#8221;</cite>.</p>
 <li><a class="reference internal" href="#module-dataprocessor.io">dataprocessor.io module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.ipynb">dataprocessor.ipynb module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.nodes">dataprocessor.nodes module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipe">dataprocessor.pipe module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.rc">dataprocessor.rc module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.table">dataprocessor.table module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.utility">dataprocessor.utility module</a></li>

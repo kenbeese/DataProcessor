@@ -98,9 +98,9 @@
 <span id="dataprocessor-pipes-add-node-module"></span><h2>dataprocessor.pipes.add_node module<a class="headerlink" href="#module-dataprocessor.pipes.add_node" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="dataprocessor.pipes.add_node.add_node">
-<tt class="descclassname">dataprocessor.pipes.add_node.</tt><tt class="descname">add_node</tt><big>(</big><em>node_list, path='.', node_type='run', children=[], name=None, parents=['..']</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/add_node.html#add_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.add_node.add_node" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">dataprocessor.pipes.add_node.</tt><tt class="descname">add_node</tt><big>(</big><em>node_list, path='.', node_type='run', children=[], name=None, parents=['..'], strategy='raise'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/add_node.html#add_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.add_node.add_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add node.</p>
-<p>A node is added to the node_list according to dict.update.</p>
+<p>A node is added to the node_list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -116,6 +116,13 @@
 <p><strong>name</strong> : str, optional</p>
 <p><strong>children</strong> : list, optional</p>
 <p><strong>parents</strong> : list, optional</p>
+<p><strong>strategy</strong> : str, optional</p>
+<blockquote>
+<div><p>determines how to deal with conflict,
+i.e. there alread exists another node
+whose path is same as new one.
+See docstring of nodes.add.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">node_list</p>
@@ -246,42 +253,6 @@ The path is resolved by resolve_project_path.</p>
 </div>
 <div class="section" id="module-dataprocessor.pipes.configure">
 <span id="dataprocessor-pipes-configure-module"></span><h2>dataprocessor.pipes.configure module<a class="headerlink" href="#module-dataprocessor.pipes.configure" title="Permalink to this headline">¶</a></h2>
-<p>Pipes of configure.</p>
-<dl class="function">
-<dt id="dataprocessor.pipes.configure.add">
-<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">add</tt><big>(</big><em>node_list</em>, <em>filename</em>, <em>filetype=None</em>, <em>section='parameters'</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add configure to node_list.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
-<blockquote>
-<div><p>filename of parameter configure file
-If file does not exist, add null list.</p>
-</div></blockquote>
-<p><strong>section</strong> : str</p>
-<blockquote>
-<div><p>Specify section name in configure file.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
-<blockquote class="last">
-<div><p>node_list which is a list of dict.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;configure.conf&quot;</span><span class="p">)</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Change load section.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;configure.conf&quot;</span><span class="p">,</span> <span class="s">&quot;defaults&quot;</span><span class="p">)</span> 
-</pre></div>
-</div>
-</dd></dl>
-
 <dl class="function">
 <dt id="dataprocessor.pipes.configure.get_filetype">
 <tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">get_filetype</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#get_filetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.get_filetype" title="Permalink to this definition">¶</a></dt>
@@ -304,30 +275,38 @@ If file does not exist, add null list.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="dataprocessor.pipes.configure.get_parser">
-<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">get_parser</tt><big>(</big><em>filetype</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#get_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.get_parser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get parser corresponding to the filetype</p>
+<dt id="dataprocessor.pipes.configure.load">
+<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">load</tt><big>(</big><em>node_list</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load configure</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filetype</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
-<div><p>These filetypes are available; &#8220;ini&#8221;, &#8220;conf&#8221;, &#8220;yaml&#8221;</p>
+<div><p>filename of parameter configure file
+If file does not exist, add null list.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">function that takes 2 args, confpath and section.</p>
+<p><strong>section</strong> : str</p>
+<blockquote class="last">
+<div><p>Specify section name in configure file.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">load</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;configure.conf&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Change load section.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load</span><span class="p">(</span><span class="n">node_list</span><span class="p">,</span> <span class="s">&quot;configure.conf&quot;</span><span class="p">,</span> <span class="s">&quot;defaults&quot;</span><span class="p">)</span> 
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="dataprocessor.pipes.configure.no_section">
-<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">no_section</tt><big>(</big><em>node_list, filename, split_char='=', comment_char=['#']</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#no_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.no_section" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add configure to node_list.</p>
+<tt class="descclassname">dataprocessor.pipes.configure.</tt><tt class="descname">no_section</tt><big>(</big><em>node_list</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/configure.html#no_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.configure.no_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load configure</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -342,14 +321,8 @@ If file does not exist, add null list.</p>
 <div><p>Specify the deliminator char.</p>
 </div></blockquote>
 <p><strong>comment_char</strong> : str</p>
-<blockquote>
-<div><p>Specify the comment line signal char.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list</p>
 <blockquote class="last">
-<div><p>node_list which is a list of dict.</p>
+<div><p>Specify the comment line signal char.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -480,6 +453,32 @@ at standing ipython notebook server</p>
 <dl class="function">
 <dt id="dataprocessor.pipes.jsonio.register">
 <tt class="descclassname">dataprocessor.pipes.jsonio.</tt><tt class="descname">register</tt><big>(</big><em>pipes_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/jsonio.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.jsonio.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-dataprocessor.pipes.merge_nodelist">
+<span id="dataprocessor-pipes-merge-nodelist-module"></span><h2>dataprocessor.pipes.merge_nodelist module<a class="headerlink" href="#module-dataprocessor.pipes.merge_nodelist" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dataprocessor.pipes.merge_nodelist.merge_nodelist">
+<tt class="descclassname">dataprocessor.pipes.merge_nodelist.</tt><tt class="descname">merge_nodelist</tt><big>(</big><em>node_list</em>, <em>json_filename</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/merge_nodelist.html#merge_nodelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.merge_nodelist.merge_nodelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge another node_list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>json_fn</strong> : str</p>
+<blockquote class="last">
+<div><p>filename of JSON file including another node_list</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dataprocessor.pipes.merge_nodelist.register">
+<tt class="descclassname">dataprocessor.pipes.merge_nodelist.</tt><tt class="descname">register</tt><big>(</big><em>pipes_dics</em><big>)</big><a class="reference internal" href="../_modules/dataprocessor/pipes/merge_nodelist.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dataprocessor.pipes.merge_nodelist.register" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -719,6 +718,7 @@ by project id is not registered.</p>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.filter">dataprocessor.pipes.filter module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.ipynb">dataprocessor.pipes.ipynb module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.jsonio">dataprocessor.pipes.jsonio module</a></li>
+<li><a class="reference internal" href="#module-dataprocessor.pipes.merge_nodelist">dataprocessor.pipes.merge_nodelist module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.move_node">dataprocessor.pipes.move_node module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.normalize">dataprocessor.pipes.normalize module</a></li>
 <li><a class="reference internal" href="#module-dataprocessor.pipes.scan">dataprocessor.pipes.scan module</a></li>
