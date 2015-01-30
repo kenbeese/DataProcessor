@@ -153,11 +153,12 @@ def get_configparser():
 
     """
     rcpath = utility.path_expand(default_rcpath)
-    if not os.path.exists(default_rcpath):
-        raise DataProcessorRcError("Configure file does not exist")
+    if not os.path.exists(rcpath):
+        raise DataProcessorRcError(
+            "Configure file does not exist at {}".format(rcpath))
 
     parser = ConfigParser.SafeConfigParser()
-    parser.read(default_rcpath)
+    parser.read(rcpath)
     return parser
 
 

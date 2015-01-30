@@ -80,10 +80,3 @@ class TestEnvironment(unittest.TestCase):
 
     def tearDown(self):
         _remove_environment(self.tempdir_path)
-
-
-class TestTestEnvironment(TestEnvironment):
-
-    def test1(self):
-        self.assertEqual(self.node_list, "")
-        self.assertEqual(rc.default_rcpath, "")
