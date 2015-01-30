@@ -63,10 +63,10 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     ...     "children": [],
     ... }]
     >>> get_project(nl, "/path/p0")
-       A name      path
-    0  1   c0  /path/c0
-    1  2   c1  /path/c1
-
+              A name
+    path            
+    /path/c0  1   c0
+    /path/c1  2   c1
     """
     def _append_if_not_exist(key):
         if key not in properties:
@@ -95,4 +95,7 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
                 if prop in n:
                     cfg[prop] = n[prop]
             run_nodes.append(cfg)
-    return DataFrame(run_nodes).set_index("path")
+    if index:
+        return DataFrame(run_nodes).set_index(index)
+    else:
+        return DataFrame(run_nodes)
