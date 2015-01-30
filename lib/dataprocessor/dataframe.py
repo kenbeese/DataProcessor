@@ -83,14 +83,11 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     run_nodes = []
     for p in pnode["children"]:
         n = nodes.get(node_list, p)
-        if n["type"] == "run" and "configure" in n \
-                and isinstance(n["configure"], dict):
-            cfg = {}
-            for k, v in n["configure"].items():
-                try:
-                    cfg[k] = float(v)
-                except ValueError:
-                    cfg[k] = v
+        if n["type"] == "run":
+            if "configure" in n and isinstance(n["configure"], dict):
+                cfg = _convert_to_float(n["configure"])
+            else:
+                cfg = {}
             for prop in properties:
                 if prop in n:
                     cfg[prop] = n[prop]
@@ -99,3 +96,13 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
         return DataFrame(run_nodes).set_index(index)
     else:
         return DataFrame(run_nodes)
+
+
+def _convert_to_float(configure):
+    cfg = {}
+    for k, v in configure.items():
+        try:
+            cfg[k] = float(v)
+        except ValueError:
+            cfg[k] = v
+    return cfg
