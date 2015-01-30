@@ -1,7 +1,8 @@
 # coding=utf-8
 
-from pandas import DataFrame, Series
+from pandas import DataFrame
 from . import utility
+from . import nodes
 from .exception import DataProcessorError
 
 
@@ -18,12 +19,9 @@ def get_projects(node_list):
     return projects.dropna(how='all', axis=1)
 
 
-def get_project(node_list, project_path, properties=["comment", "tags"],
-                index="path"):
-    """Get project in dataframe format.
-
-    If there are two or more project of specified name,
-    the latter one is selected.
+def get_project(node_list, project_path, properties=["comment"], index="path"):
+    """ Get project dataframe
+    i.e. the table of configures of runs which belongs the project
 
     Parameters
     ----------
@@ -42,38 +40,59 @@ def get_project(node_list, project_path, properties=["comment", "tags"],
     -------
     project : pandas.DataFrame
 
+    Example
+    -------
+    >>> nl = [{
+    ...     "path": "/path/p0",
+    ...     "type": "project",
+    ...     "parents": [],
+    ...     "children": ["/path/c0", "/path/c1"],
+    ... }, {
+    ...     "path": "/path/c0",
+    ...     "name": "c0",
+    ...     "type": "run",
+    ...     "configure": { "A": "1", },
+    ...     "parents": ["/path/p0"],
+    ...     "children": [],
+    ... },{
+    ...     "path": "/path/c1",
+    ...     "name": "c1",
+    ...     "type": "run",
+    ...     "configure": { "A": "2", },
+    ...     "parents": ["/path/p0"],
+    ...     "children": [],
+    ... }]
+    >>> get_project(nl, "/path/p0")
+       A name      path
+    0  1   c0  /path/c0
+    1  2   c1  /path/c1
+
     """
+    def _append_if_not_exist(key):
+        if key not in properties:
+            properties.append(key)
+    _append_if_not_exist("path")
+    _append_if_not_exist("name")
     project_path = utility.path_expand(project_path)
-    df = DataFrame(node_list)
-    runs_pre = df[df['parents'].apply(lambda val: project_path in val)]
-    if len(runs_pre) == 0:
+
+    pnode = nodes.get(node_list, project_path)
+    if not pnode:
         raise DataProcessorError("There is no project of specified path :"
                                  + project_path)
-    for item in ["name", "path"]:
-        if item not in properties:
-            properties.append(item)
 
-    def _conv(val):
-        """
-        Convert each lines to a pandas.Series
-        See also #160
-        """
-        new = {}
-        if "configure" not in val or not isinstance(val["configure"], dict):
-            sr = Series()
-        else:
-            for key, value in val["configure"].items():
+    run_nodes = []
+    for p in pnode["children"]:
+        n = nodes.get(node_list, p)
+        if n["type"] == "run" and "configure" in n \
+                and isinstance(n["configure"], dict):
+            cfg = {}
+            for k, v in n["configure"].items():
                 try:
-                    new[key] = float(value)
+                    cfg[k] = float(v)
                 except ValueError:
-                    new[key] = value
-            sr = Series(new)
-        for prop in properties:
-            sr.set_value(prop, val[prop])
-        return sr
-
-    runs = runs_pre.apply(_conv, axis=1)
-    runs = runs.convert_objects(convert_numeric=True)
-    if index:
-        runs = runs.set_index(index)
-    return runs.dropna(how="all", axis=1)
+                    cfg[k] = v
+            for prop in properties:
+                if prop in n:
+                    cfg[prop] = n[prop]
+            run_nodes.append(cfg)
+    return DataFrame(run_nodes).set_index("path")
