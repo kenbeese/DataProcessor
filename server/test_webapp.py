@@ -20,7 +20,7 @@ class WebappTestCase(dp.tests.helper.TestEnvironment):
             dp.rc.rc_section, "json")
         self.app = webapp.app.test_client()
 
-    def test_projectpage(self):
+    def test_projectlistpage(self):
         rv = self.app.get('/')
         self.assertIn('<h2>Project List</h2>', rv.data)
         self.assertIn('<th>Name</th>', rv.data)
@@ -35,3 +35,24 @@ class WebappTestCase(dp.tests.helper.TestEnvironment):
         self.assertIn('<th>Last modified</th>', rv.data)
         self.assertIn('<th>Tags</th>', rv.data)
         self.assertIn('<th>Path</th>', rv.data)
+
+    def test_runpage(self):
+        run_nodes = dp.filter.node_type(self.node_list, "run")
+        for n in run_nodes:
+            rv = self.app.get('/node/' + n['path'][1:])
+            # For page header
+            self.assertIn("<h2>{}</h2>".format(n['name']), rv.data)
+            self.check_tag(n["parents"], rv.data)
+
+    def test_projectpage(self):
+        project_nodes = dp.filter.node_type(self.node_list, "project")
+        for n in project_nodes:
+            rv = self.app.get('/node/' + n['path'][1:])
+            # For page header
+            self.assertIn("<h2>{}</h2>".format(n['name']), rv.data)
+            self.check_tag(n["parents"], rv.data)
+
+    def check_tag(self, paths, data):
+        for p in paths:
+            n = dp.nodes.get(self.node_list, p)
+            self.assertIn("{}</a>".format(n["name"]), data)
