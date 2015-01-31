@@ -22,11 +22,7 @@ class WebappTestCase(dp.tests.helper.TestEnvironment):
 
     def test_projectpage(self):
         rv = self.app.get('/')
-        self.assertIn(
-            '<a class="navbar-brand" href="/">DataProcessor</a>', rv.data)
-        self.assertIn('<a class="dp-nav" href="/">Project List</a>', rv.data)
-        self.assertIn(
-            '<a class="dp-nav" href="/ipynblist">IPython Notebooks</a>', rv.data)
+        self.assertIn('<h2>Project List</h2>', rv.data)
         self.assertIn('<th>Name</th>', rv.data)
         self.assertIn('<th>Comment</th>', rv.data)
         self.assertIn('<th>Path</th>', rv.data)
