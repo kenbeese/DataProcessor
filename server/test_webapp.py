@@ -30,3 +30,12 @@ class WebappTestCase(dp.tests.helper.TestEnvironment):
         self.assertIn('<th>Name</th>', rv.data)
         self.assertIn('<th>Comment</th>', rv.data)
         self.assertIn('<th>Path</th>', rv.data)
+
+    def test_ipynblistpage(self):
+        rv = self.app.get('/ipynblist')
+        self.assertIn('<h2>IPython Notebooks</h2>', rv.data)
+        self.assertIn('<th>Name</th>', rv.data)
+        self.assertIn('<th>Comment</th>', rv.data)
+        self.assertIn('<th>Last modified</th>', rv.data)
+        self.assertIn('<th>Tags</th>', rv.data)
+        self.assertIn('<th>Path</th>', rv.data)
