@@ -12,7 +12,7 @@
       {% for p in parents %}
       <span class="label label-default">
         <a href="{{ url_for('show_node', path=p['path'][1:])}}"> {{p['name']|e}}</a>
-        <a href="{{ url_for('untag', path=node['path'][1:], project_path=p['path'][1:])}}"
+        <a href="{{ url_for('untag', path=node['path'][1:], tag_path=p['path'][1:])}}"
            data-toggle="tooltip" title="Remove tag">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"/>
         </a></span>
