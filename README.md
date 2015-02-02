@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kenbeese/DataProcessor.png)](https://travis-ci.org/kenbeese/DataProcessor)
+[![Build Status](https://travis-ci.org/kenbeese/DataProcessor.svg?branch=master)](https://travis-ci.org/kenbeese/DataProcessor)
 
         ___      _          ___
        /   \__ _| |_ __ _  / _ \_ __ ___   ___ ___  ___ ___  ___  _ __
