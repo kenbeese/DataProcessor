@@ -7,8 +7,16 @@ from .utility import check_file
 from .exception import DataProcessorError as dpError
 
 
-def gather_notebooks():
-    """ Gather processes of IPython Notebook
+class DataProcessorIpynbError(dpError):
+
+    """Exception about IPython Notebook."""
+
+    def __init__(self, msg):
+        dpError.__init__(self, msg)
+
+
+def gather_servers():
+    """ Gather processes of IPython Notebook Server.
 
     Return
     ------
@@ -17,8 +25,8 @@ def gather_notebooks():
 
     Raises
     ------
-    DataProcessorError
-        - No IPython Notebook found
+    DataProcessorIpynbError
+        - No IPython Notebook Server found
     """
     notes = []
     for p in psutil.process_iter():
@@ -37,38 +45,42 @@ def gather_notebooks():
             "port": port,
         })
     if not notes:
-        raise dpError("No IPython Notebook found")
+        raise DataProcessorIpynbError("No IPython Notebook Server found")
     return notes
 
 
-def resolve_url(ipynb_path, notebooks=None):
+def resolve_url(ipynb_path, servers=None):
     """
-    Return valid URL for .ipynb
+    Return valid URL for .ipynb.
 
     Parameters
     ----------
     ipynb_path : str
         path of existing .ipynb file
+    servers : list, optional
+        list of the information of notebook servers, which is
+        got from "gather_servers". When this is specified, skip
+        "gather_servers".(default=None)
 
     Raises
     ------
-    DataProcessorError
+    DataProcessorIpynbError
         - Existing notebook servers do not start
           on the parent directory of .ipynb file.
     """
     ipynb_path = check_file(ipynb_path)
-    if not notebooks:
-        notebooks = gather_notebooks()
-    for note in notebooks:
-        cwd = note["cwd"]
+    if servers is None:
+        servers = gather_servers()
+    for server in servers:
+        cwd = server["cwd"]
         if cwd.endswith("/"):
             cwd = cwd[:-1]
         if not ipynb_path.startswith(cwd):
             continue
-        note["postfix"] = ipynb_path[len(cwd) + 1:]  # remove '/'
-        return "http://localhost:{port}/notebooks/{postfix}".format(**note)
-    raise dpError("No valid Notebook found. "
-                  "Please stand notebook server on the parent directory.")
+        server["postfix"] = ipynb_path[len(cwd) + 1:]  # remove '/'
+        return "http://localhost:{port}/notebooks/{postfix}".format(**server)
+    raise DataProcessorIpynbError("""No valid IPython Notebook Server found.
+    Please stand notebook server on the parent directory.""")
 
 
 def resolve_name(ipynb_path):
