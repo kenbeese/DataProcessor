@@ -30,11 +30,9 @@ def _create_nodelist(tempdir):
 
 def _create_ini(tempdir):
     tempdir = utility.path_expand(tempdir)
-    with open(os.path.join(_TEMPLATE_DIR, "test.ini")) as f:
-        template = jinja2.Template(f.read())
-
-    with open(os.path.join(tempdir, "test.ini"), "w") as f:
-        f.write(template.render(TEMPORARY_DIRECTORY=tempdir))
+    rc.create_configure_file(os.path.join(tempdir, "test.ini"),
+                             os.path.join(tempdir, "root"),
+                             os.path.join(tempdir, "data.json"),)
 
 
 def _remove_environment(temppath):
@@ -43,13 +41,14 @@ def _remove_environment(temppath):
 
 def cli_create():
     tempdir = tempfile.mkdtemp()
+    os.putenv("DP_DEBUG_RCPATH", "{}/test.ini".format(tempdir))
+    os.putenv("DP_DEBUG_DIR", "{}".format(tempdir))
     _create_environment(tempdir)
+    print("Start test environment created in {}.".format(tempdir))
+    print(
+        "Environment variables DP_DEBUG_RCPATH and DP_DEBUG_DIR are set.")
+
     try:
-        os.putenv("DP_DEBUG_RCPATH", "{}/test.ini".format(tempdir))
-        os.putenv("DP_DEBUG_DIR", "{}".format(tempdir))
-        print("Start test environment created in {}.".format(tempdir))
-        print(
-            "Environment variables DP_DEBUG_RCPATH and DP_DEBUG_DIR are set.")
         os.system(os.environ["SHELL"])
     finally:
         _remove_environment(tempdir)

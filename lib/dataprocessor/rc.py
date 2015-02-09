@@ -4,7 +4,7 @@
 
 from . import utility, io
 from .exception import DataProcessorError
-import os.path
+import sys
 import os
 import copy
 import argparse
@@ -277,3 +277,64 @@ def resolve_project_path(name_or_path, create_dir, root=None,
             return utility.get_directory(name_or_path)
         else:
             return utility.check_directory(name_or_path)
+
+
+def create_configure_file(rcpath, root_dir, json_path):
+    """
+    Create a configure file and a json.
+
+    If the json file does not exist, the file is created.
+
+    Parameters
+    ----------
+    rcpath : str
+        path of configure file
+    rootdir : str
+        path of data root directory
+    jsonpath : str
+        path of data json
+
+    """
+    rcpath = utility.path_expand(rcpath)
+
+    if not os.path.exists(json_path):
+        with open(json_path, "w") as f:
+            f.write("[]")
+
+    cfg = ConfigParser.RawConfigParser()
+    cfg.add_section(rc_section)
+    cfg.set(rc_section, "root", root_dir)
+    cfg.set(rc_section, "json", json_path)
+
+    with open(rcpath, 'wb') as f:
+        cfg.write(f)
+
+
+def create_configure_file_interactively():
+    """
+    Interactive version of create_configure_file.
+
+    This function is for 'dpinit'.
+
+    """
+    rcpath = utility.path_expand(default_rcpath)
+
+    if os.path.exists(rcpath):
+        print("There already exists : " + rcpath)
+        ans = raw_input("Replace? [y/N]")
+        if ans not in ["y", "yes", "Yes", "YES", "Y"]:
+            print("Nothing has done")
+            sys.exit(1)
+
+    print("Creating " + rcpath)
+    root = raw_input("Enter your Root direcotry: ")
+    root_dir = utility.get_directory(root)
+    default_path = os.path.join(root_dir, "data.json")
+    json_path = raw_input("Enter path of your data json (default:{}): "
+                          .format(default_path))
+    if not json_path:
+        json_path = default_path
+    json_path = utility.path_expand(json_path)
+
+    create_configure_file(rcpath, root_dir, json_path)
+    print("Your configure file: " + rcpath + " is successfully created")
