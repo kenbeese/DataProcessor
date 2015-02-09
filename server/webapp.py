@@ -167,11 +167,12 @@ def add_tag(path):
         return redirect(url_for('show_node', path=path))
 
 
-@app.route('/untag/<path:path>?tag_path=<path:tag_path>')
-def untag(path, tag_path):
+@app.route('/untag/<path:path>')
+def untag(path):
     session['logged_in'] = True
+    tag_path = request.args["tag_path"]
     flash("Removed tag '{}'".format(os.path.basename(tag_path)))
     _execute_pipe(g.data_path,
-                  "untag", ["/" + path, "/" + tag_path], {})
+                  "untag", ["/" + path, tag_path], {})
 
     return redirect(url_for('show_node', path=path))

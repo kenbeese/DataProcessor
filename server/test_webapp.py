@@ -59,12 +59,22 @@ class WebappTestCase(dp.tests.helper.TestEnvironment):
                                  query("nav.navbar p.navbar-text").text())
 
     def test_untag(self):
-        for node in self.node_list:
+        for node in [n for n in self.node_list]:
             if node["type"] in _TAG_EDITABLE_NODETYPE:
-                for tag_path in node["parents"]:
-                    rv = self.untag(node["path"], tag_path)
-                    # tag 以外のにも引っかかるのを何とかする
-                    self.assertNotIn(tag_path, rv.data)
+
+                self.add_tag(node["path"], "test_tag")
+                tag_path = dp.rc.resolve_project_path("test_tag", False)
+
+                rv = self.untag(node["path"], tag_path)
+                query = PQ(rv.data)
+
+                self.assertEqual("Removed tag 'test_tag'",
+                                 query("nav.navbar p.navbar-text").text())
+
+                # get tags
+                tags = query("dt + dd>p>span.label>a:eq(0)")
+                if tags:
+                    self.assertNotIn(tag_path, tags.attr("href"))
 
     def add_tag(self, path, tagname):
         return self.app.post('/add_tag' + path,
@@ -72,10 +82,5 @@ class WebappTestCase(dp.tests.helper.TestEnvironment):
                              follow_redirects=True)
 
     def untag(self, path, tag_path):
-        return self.app.get('/untag' + path + '?tag_path=' + tag_path)
-
-    def check_name_and_link(self, paths, data):
-        for p in paths:
-            n = dp.nodes.get(self.node_list, p)
-            self.assertIn(
-                "<a href='{}'>{}</a>".format(n["path"], n["name"]), data)
+        path = "/untag" + path + "?tag_path=" + tag_path
+        return self.app.get(path, follow_redirects=True)
