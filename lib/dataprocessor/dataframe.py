@@ -82,20 +82,20 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     run_nodes = []
     for p in pnode["children"]:
         n = nodes.get(node_list, p)
-        if n["type"] == "run":
-            if "configure" in n and isinstance(n["configure"], dict):
-                cfg = _convert_to_float(n["configure"])
-            else:
-                cfg = {}
-            for prop in properties:
-                if prop in n:
-                    cfg[prop] = n[prop]
-            run_nodes.append(cfg)
+        if n["type"] != "run":
+            continue
+        if "configure" in n and isinstance(n["configure"], dict):
+            cfg = _convert_to_float(n["configure"])
+        else:
+            cfg = {}
+        for prop in properties:
+            if prop in n:
+                cfg[prop] = n[prop]
+        run_nodes.append(cfg)
     df = DataFrame(run_nodes)
     if index and index in df.columns:
-        return df.set_index(index)
-    else:
-        return df
+        df = df.set_index(index)
+    return df
 
 
 def _convert_to_float(configure):
