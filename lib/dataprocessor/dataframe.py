@@ -3,7 +3,7 @@
 from pandas import DataFrame
 from . import utility
 from . import nodes
-from .exception import DataProcessorError
+from .exception import DataProcessorError as dpError
 
 
 def get_projects(node_list):
@@ -77,8 +77,7 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
 
     pnode = nodes.get(node_list, project_path)
     if not pnode:
-        raise DataProcessorError("There is no project of specified path :"
-                                 + project_path)
+        raise dpError("There is no project: " + project_path)
 
     run_nodes = []
     for p in pnode["children"]:
@@ -92,10 +91,11 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
                 if prop in n:
                     cfg[prop] = n[prop]
             run_nodes.append(cfg)
-    if index:
-        return DataFrame(run_nodes).set_index(index)
+    df = DataFrame(run_nodes)
+    if index and index in df.columns:
+        return df.set_index(index)
     else:
-        return DataFrame(run_nodes)
+        return df
 
 
 def _convert_to_float(configure):
