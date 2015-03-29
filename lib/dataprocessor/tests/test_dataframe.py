@@ -1,7 +1,6 @@
 # coding=utf-8
 import unittest
 from pandas import DataFrame
-from pandas.util.testing import assert_frame_equal
 
 from .. import dataframe as df
 
@@ -43,16 +42,3 @@ class TestIo(unittest.TestCase):
             "parents": [],
         }])
         self.assertTrue(projects.equals(projects_m))
-
-    def test_get_project(self):
-        proj = df.get_project(
-            self.node_list, "/proj1", properties=[], index=None)
-
-        def _cfg(node):
-            cfg = node["configure"]
-            cfg.update({"name": node["name"], "path": node["path"]})
-            return cfg
-        conf = [_cfg(node) for node in self.node_list[1:]]
-        proj_m = DataFrame(conf, index=[1, 2, 3]).convert_objects(
-            convert_numeric=True)
-        assert_frame_equal(proj, proj_m)
