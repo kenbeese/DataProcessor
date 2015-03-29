@@ -33,10 +33,11 @@ def untag(node_list, path, project_id):
     if not pnode:
         raise dpError("The path %s of project is not registered." % project_path)
 
-    if project_path in node["parents"]:
+    if project_path in node["parents"] and path in pnode["children"]:
         node["parents"].remove(project_path)
-    if path in node["children"]:
-        node["children"].remove(path)
+        pnode["children"].remove(path)
+    else:
+        raise dpError('The tag %s is not specified.' % project_path)
     return node_list
 
 
