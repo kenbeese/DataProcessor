@@ -4,7 +4,6 @@
 
 from . import utility, io
 from .exception import DataProcessorError
-import sys
 import os
 import copy
 import argparse
@@ -308,33 +307,3 @@ def create_configure_file(rcpath, root_dir, json_path):
 
     with open(rcpath, 'wb') as f:
         cfg.write(f)
-
-
-def create_configure_file_interactively():
-    """
-    Interactive version of create_configure_file.
-
-    This function is for 'dpinit'.
-
-    """
-    rcpath = utility.path_expand(default_rcpath)
-
-    if os.path.exists(rcpath):
-        print("There already exists : " + rcpath)
-        ans = raw_input("Replace? [y/N]")
-        if ans not in ["y", "yes", "Yes", "YES", "Y"]:
-            print("Nothing has done")
-            sys.exit(1)
-
-    print("Creating " + rcpath)
-    root = raw_input("Enter your Root direcotry: ")
-    root_dir = utility.get_directory(root)
-    default_path = os.path.join(root_dir, "data.json")
-    json_path = raw_input("Enter path of your data json (default:{}): "
-                          .format(default_path))
-    if not json_path:
-        json_path = default_path
-    json_path = utility.path_expand(json_path)
-
-    create_configure_file(rcpath, root_dir, json_path)
-    print("Your configure file: " + rcpath + " is successfully created")
