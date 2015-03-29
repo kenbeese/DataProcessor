@@ -2,7 +2,7 @@
 from ..nodes import get, add
 from ..utility import abspath
 from ..rc import resolve_project_path
-from ..exception import DataProcessorError
+from ..exception import DataProcessorError as dpError
 
 import os.path
 
@@ -22,7 +22,12 @@ def add_tag(node_list, node_path, project_id):
 
     """
     path = abspath(node_path)
+    node = get(node_list, path)
+    if not node:
+        raise dpError("There is no node (path=%s)." % path)
     project_path = resolve_project_path(project_id, True)
+    if project_path == path:
+        raise dpError("Cannot tag itself")
     project_node = get(node_list, project_path)
     if not project_node:
         add(node_list, {
@@ -35,9 +40,6 @@ def add_tag(node_list, node_path, project_id):
     else:
         if path not in project_node["children"]:
             project_node["children"].append(path)
-    node = get(node_list, path)
-    if not node:
-        raise DataProcessorError("There is no node (path=%s)." % path)
     if project_path not in node["parents"]:
         node["parents"].append(project_path)
     return node_list
