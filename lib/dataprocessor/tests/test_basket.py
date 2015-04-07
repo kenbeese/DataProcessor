@@ -6,6 +6,15 @@ from ..exception import DataProcessorError as dpError
 
 import os
 import os.path as op
+from contextlib import contextmanager
+
+
+@contextmanager
+def chdir(dirname):
+    cwd = os.getcwd()
+    os.chdir(dirname)
+    yield
+    os.chdir(cwd)
 
 
 class TestBasket(helper.TestEnvironment):
@@ -37,14 +46,14 @@ class TestBasket(helper.TestEnvironment):
     def test_resolve_project_path_dot(self):
         true_path = op.join(self.tempdir_path, "proj1")
         os.mkdir(true_path)
-        os.chdir(true_path)
-        p_path = basket.resolve_project_path(".", True)
+        with chdir(true_path):
+            p_path = basket.resolve_project_path(".", True)
         self.assertEqual(p_path, true_path)
 
     def test_resolve_project_path_dots(self):
         true_path = op.join(self.tempdir_path, "proj1")
         work_dir = op.join(true_path, "work")
         os.makedirs(work_dir)
-        os.chdir(work_dir)
-        p_path = basket.resolve_project_path("..", True)
+        with chdir(work_dir):
+            p_path = basket.resolve_project_path("..", True)
         self.assertEqual(p_path, true_path)
