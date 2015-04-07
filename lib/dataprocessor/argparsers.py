@@ -5,6 +5,7 @@ import os
 
 from . import pipes
 from . import rc
+from tests import helper
 
 
 def dpmanip():
@@ -71,4 +72,15 @@ def register_figure():
     parser.add_argument("-g", "--generators", dest="generators",
                         nargs="+", default=[],
                         help="Paths of generator files (s.t. fig.gp, fig.py)")
+    return parser
+
+
+def dptest():
+    parser = argparse.ArgumentParser("""
+    Start test environment shell.
+
+    After executing this command, DP_DEBUG_RCPATH and DP_DEBUG_PATH are set.
+    DP_DEBUG_RCPATH : rcpath for test
+    DP_DEBUG_PATH : path for test
+    """)
     return parser

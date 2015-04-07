@@ -1,0 +1,175 @@
+[
+    {
+        "comment": "",
+        "name": "tag1",
+        "parents": [],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag1",
+        "type": "project",
+        "children": [
+            "{{ TEMPORARY_DIRECTORY }}/root/Runs/20140909"
+        ]
+    },
+    {
+        "comment": "",
+        "name": "tag2",
+        "parents": [],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag2",
+        "type": "project",
+        "children": [
+            "{{ TEMPORARY_DIRECTORY }}/root/Runs/20140909",
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run01",
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run02"
+        ]
+    },
+    {
+        "comment": "",
+        "name": "tag3",
+        "parents": [],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag3",
+        "type": "project",
+        "children": [
+            "{{ TEMPORARY_DIRECTORY }}/root/Runs/20150101"
+        ]
+    },
+    {
+        "comment": "",
+        "name": "20140909",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag1",
+            "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag2"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/Runs/20140909",
+        "type": "run",
+        "children": [
+            "{{ TEMPORARY_DIRECTORY }}/root/Runs/20140909/fooooo.ipynb"
+        ],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "20150101",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag3"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/Runs/20150101",
+        "type": "run",
+        "children": [],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "run01",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1/run01",
+        "type": "run",
+        "children": [],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "run02",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1/run02",
+        "type": "run",
+        "children": [],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "run03",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1/run03",
+        "type": "run",
+        "children": [],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "run03",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run03",
+        "type": "run",
+        "children": [],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "run02",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2",
+            "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag2"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run02",
+        "type": "run",
+        "children": [],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "run01",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2",
+            "{{ TEMPORARY_DIRECTORY }}/root/Projects/tag2"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run01",
+        "type": "run",
+        "children": [],
+        "configure": {}
+    },
+    {
+        "comment": "",
+        "name": "project1",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1",
+        "type": "project",
+        "children": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1/run01",
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1/run02",
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1/run03"
+        ]
+    },
+    {
+        "comment": "",
+        "name": "project2",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project"
+        ],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2",
+        "type": "project",
+        "children": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run03",
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run02",
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2/run01"
+        ]
+    },
+    {
+        "comment": "",
+        "name": "big_project",
+        "parents": [],
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/big_project",
+        "type": "project",
+        "children": [
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project1",
+            "{{ TEMPORARY_DIRECTORY }}/root/big_project/project2"
+        ]
+    },
+    {
+        "path": "{{ TEMPORARY_DIRECTORY }}/root/Runs/20140909/fooooo.ipynb",
+        "children": [],
+        "type": "ipynb",
+        "name": "fooooo.ipynb",
+        "parents": [
+            "{{ TEMPORARY_DIRECTORY }}/root/Runs/20140909"
+        ]
+    }
+]

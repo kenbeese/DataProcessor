@@ -4,7 +4,6 @@
 import os.path
 import sys
 import traceback
-import ConfigParser
 
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
@@ -13,9 +12,8 @@ import dataprocessor as dp
 sys.path = [sys.path[0]] + sys.path[2:]
 
 
-def create_configure_file():
+def main():
     rcpath = dp.utility.path_expand(dp.rc.default_rcpath)
-    rc_section = dp.rc.rc_section
 
     if os.path.exists(rcpath):
         print("There already exists : " + rcpath)
@@ -33,24 +31,13 @@ def create_configure_file():
     if not json_path:
         json_path = default_path
     json_path = dp.utility.path_expand(json_path)
-    if not os.path.exists(json_path):
-        print("Creating " + json_path)
-        with open(json_path, "w") as f:
-            f.write("[]")
 
-    cfg = ConfigParser.RawConfigParser()
-    cfg.add_section(rc_section)
-    cfg.set(rc_section, "root", root_dir)
-    cfg.set(rc_section, "json", json_path)
-
-    with open(rcpath, 'wb') as f:
-        cfg.write(f)
+    dp.rc.create_configure_file(rcpath, root_dir, json_path)
     print("Your configure file: " + rcpath + " is successfully created")
-
 
 if __name__ == '__main__':
     try:
-        create_configure_file()
+        main()
     except dp.exception.DataProcessorError as e:
         print(traceback.format_exc())
         print("=*= ERROR =*=")
