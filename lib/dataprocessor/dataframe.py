@@ -68,11 +68,9 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     /path/c0  1   c0
     /path/c1  2   c1
     """
-    def _append_if_not_exist(key):
-        if key not in properties:
-            properties.append(key)
-    _append_if_not_exist("path")
-    _append_if_not_exist("name")
+    properties = set(properties)
+    properties.add("path")
+    properties.add("name")
     project_path = utility.path_expand(project_path)
 
     pnode = nodes.get(node_list, project_path)
