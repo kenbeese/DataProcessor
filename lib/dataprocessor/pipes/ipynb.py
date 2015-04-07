@@ -5,7 +5,7 @@ import os.path as op
 import webbrowser
 from glob import glob
 from .. import nodes
-from .. import rc
+from .. import basket
 from ..utility import abspath, check_file
 from ..ipynb import resolve_url, resolve_name
 from ..exception import DataProcessorError as dpError
@@ -69,7 +69,7 @@ def add(node_list, path, parents=[]):
         parents = [parents]
     if not isinstance(parents, list):
         raise dpError("Parents must be a list")
-    parents = map(lambda p: rc.resolve_project_path(p, False), parents)
+    parents = map(lambda p: basket.resolve_project_path(p, False), parents)
     nodes.add(node_list, {
         "path": p,
         "type": "ipynb",

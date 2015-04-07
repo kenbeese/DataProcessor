@@ -1,8 +1,8 @@
 # coding: utf-8
 from ..nodes import get
 from ..utility import abspath
-from ..rc import resolve_project_path
 from ..exception import DataProcessorError as dpError
+from ..basket import resolve_project_path
 
 
 def untag(node_list, path, project_id):
