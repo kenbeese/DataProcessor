@@ -52,7 +52,13 @@ def resolve_project_path(name_or_path, create_dir, root=None,
         occurs when create_dir is False and a path is not resolved.
 
     """
-    if os.path.basename(name_or_path) == name_or_path:
+    def _is_name(s):
+        if "/" in s:  # path
+            return False
+        if s[0] is ".":  # relative path
+            return False
+        return True
+    if _is_name(name_or_path):
         name = name_or_path
         basket = _ready_basket(root, basket_name)
         path = os.path.join(basket, name)
