@@ -52,33 +52,6 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     -------
     project : pandas.DataFrame
 
-    Example
-    -------
-    >>> nl = [{
-    ...     "path": "/path/p0",
-    ...     "type": "project",
-    ...     "parents": [],
-    ...     "children": ["/path/c0", "/path/c1"],
-    ... }, {
-    ...     "path": "/path/c0",
-    ...     "name": "c0",
-    ...     "type": "run",
-    ...     "configure": { "A": "1", },
-    ...     "parents": ["/path/p0"],
-    ...     "children": [],
-    ... },{
-    ...     "path": "/path/c1",
-    ...     "name": "c1",
-    ...     "type": "run",
-    ...     "configure": { "A": "2", },
-    ...     "parents": ["/path/p0"],
-    ...     "children": [],
-    ... }]
-    >>> get_project(nl, "/path/p0")
-              A name
-    path            
-    /path/c0  1   c0
-    /path/c1  2   c1
     """
     properties = set(properties)
     properties.add("path")
