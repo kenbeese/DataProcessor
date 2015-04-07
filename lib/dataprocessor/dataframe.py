@@ -83,7 +83,12 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
         if n["type"] != "run":
             continue
         if "configure" in n and isinstance(n["configure"], dict):
-            cfg = _convert_to_float(n["configure"])
+            def safe_float(val):
+                try:
+                    return float(val)
+                except ValueError:
+                    return val
+            cfg = {k: safe_float(v) for k, v in n["configure"].items()}
         else:
             cfg = {}
         for prop in properties:
@@ -94,13 +99,3 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     if index and index in df.columns:
         df = df.set_index(index)
     return df
-
-
-def _convert_to_float(configure):
-    cfg = {}
-    for k, v in configure.items():
-        try:
-            cfg[k] = float(v)
-        except ValueError:
-            cfg[k] = v
-    return cfg
