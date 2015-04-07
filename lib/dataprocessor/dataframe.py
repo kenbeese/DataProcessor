@@ -19,6 +19,13 @@ def get_projects(node_list):
     return projects.dropna(how='all', axis=1)
 
 
+def safe_float(val):
+    try:
+        return float(val)
+    except ValueError:
+        return val
+
+
 def get_project(node_list, project_path, properties=["comment"], index="path"):
     """ Get project dataframe
     i.e. the table of configures of runs which belongs the project
@@ -88,11 +95,6 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
         if n["type"] != "run":
             continue
         if "configure" in n and isinstance(n["configure"], dict):
-            def safe_float(val):
-                try:
-                    return float(val)
-                except ValueError:
-                    return val
             cfg = {k: safe_float(v) for k, v in n["configure"].items()}
         else:
             cfg = {}
