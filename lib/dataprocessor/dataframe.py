@@ -76,8 +76,12 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
                 cfg[prop] = n[prop]
         run_nodes.append(cfg)
     df = DataFrame(run_nodes)
+    if not index:
+        return df
     if isinstance(index, str):
         index = [index, ]
+    if not isinstance(index, list):
+        raise dpError("Invalid index {}".format(index))
     for idx in index:
         if idx not in df.columns:
             raise dpError("Invalid index: {}".format(idx))

@@ -3,6 +3,7 @@ import unittest
 from pandas import DataFrame
 
 from .. import dataframe
+from ..exception import DataProcessorError as dpError
 
 
 class TestIo(unittest.TestCase):
@@ -72,3 +73,17 @@ class TestIo(unittest.TestCase):
                 continue
             indices.append((n["path"], n["name"]))
         self.assertItemsEqual(df.index, indices)
+
+    def test_get_project_invalid_inputs(self):
+        # invalid project name
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "proj1")
+        # invalid index
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "/proj1", index=1)
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "/proj1", index="pat")
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "/proj1", index=["pat", "name"])
+        # not raise
+        dataframe.get_project(self.node_list, "/proj1", index=[])
