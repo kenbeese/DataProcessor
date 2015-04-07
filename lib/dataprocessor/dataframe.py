@@ -28,12 +28,12 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     project_path : str
         the path of project
     properties : list of str (optional)
-        properties successed from node_list into project dataframe
-        "name" and "path" are successed always
+        properties succeeded from node_list into project dataframe
+        "name" and "path" are always succeeded
         (Default=["comment", "tags"])
     index : str or list of str (optional)
         index of project dataframe
-        if it is `None`, the index of DataFrame(node_list) will be successed
+        if it is `None`, the index of DataFrame(node_list) will be succeeded
         (Default="path")
 
     Returns
