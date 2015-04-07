@@ -36,6 +36,11 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
         if it is `None`, the index of DataFrame(node_list) will be succeeded
         (Default="path")
 
+    Raises
+    ------
+    DataProcessorError
+        raised if the index is invalid
+
     Returns
     -------
     project : pandas.DataFrame
@@ -96,6 +101,10 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
                 cfg[prop] = n[prop]
         run_nodes.append(cfg)
     df = DataFrame(run_nodes)
-    if index and index in df.columns:
-        df = df.set_index(index)
+    if isinstance(index, str):
+        index = [index, ]
+    for idx in index:
+        if idx not in df.columns:
+            raise dpError("Invalid index: {}".format(idx))
+    df = df.set_index(index)
     return df
