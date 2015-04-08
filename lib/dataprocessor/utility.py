@@ -29,7 +29,7 @@ def abspath(path):
 
 
 def check_file(path):
-    """Check whether file exists.
+    """ Check whether file exists.
 
     Raises
     ------
@@ -62,17 +62,13 @@ def check_dir(path):
 
 
 def check_or_create_dir(path):
-    """ Get absolute path of the directory.
-
+    """ Check whether directory exists.
     If it does not exist, it will be created.
 
     Raises
     ------
     DataProcessorError
-        occurs in two cases
-
-        + another file (does not directory) exist
-        + refused by user to create directory
+        occurs when another file (not directory) exist
 
     """
     if not os.path.isdir(path):
