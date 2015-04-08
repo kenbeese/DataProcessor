@@ -23,7 +23,8 @@ def add_run(node_list, path, tag=None, name=None, comment=""):
         Comment of node. (default="")
 
     """
-    path = utility.check_directory(path)
+    path = utility.abspath(path)
+    utility.check_dir(path)
     if not name:
         name = os.path.basename(path)
     node = {"path": path,

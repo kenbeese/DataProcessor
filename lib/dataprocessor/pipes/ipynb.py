@@ -63,7 +63,8 @@ def add(node_list, path, parents=[]):
     """
     Add ipynb file manually
     """
-    p = check_file(path)
+    p = abspath(path)
+    check_file(p)
     if isinstance(parents, str):
         parents = [parents]
     if not isinstance(parents, list):

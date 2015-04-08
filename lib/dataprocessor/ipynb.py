@@ -3,7 +3,7 @@
 import os.path as op
 import psutil
 import json
-from .utility import check_file
+from .utility import check_file, abspath
 from .exception import DataProcessorError as dpError
 
 
@@ -56,7 +56,7 @@ def resolve_url(ipynb_path, notebooks=None):
         - Existing notebook servers do not start
           on the parent directory of .ipynb file.
     """
-    ipynb_path = check_file(ipynb_path)
+    ipynb_path = abspath(ipynb_path)
     if not notebooks:
         notebooks = gather_notebooks()
     for note in notebooks:
@@ -72,7 +72,8 @@ def resolve_url(ipynb_path, notebooks=None):
 
 
 def resolve_name(ipynb_path):
-    ipynb_path = check_file(ipynb_path)
+    ipynb_path = abspath(ipynb_path)
+    check_file(ipynb_path)
     try:
         with open(ipynb_path, "r") as f:
             name = json.load(f)["metdata"]["name"]

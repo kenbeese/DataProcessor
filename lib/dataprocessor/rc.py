@@ -219,13 +219,17 @@ def get_configure_safe(section, key, default):
 def _resolve_path(name, create_dir, root, basket_name):
     if not root:
         root = get_configure(rc_section, "root")
-    root = utility.check_directory(root)
+    root = utility.abspath(root)
+    utility.check_dir(root)
     if create_dir:
         basket = utility.get_directory(os.path.join(root, basket_name))
         return utility.get_directory(os.path.join(basket, name))
     else:
-        basket = utility.check_directory(os.path.join(root, basket_name))
-        return utility.check_directory(os.path.join(basket, name))
+        basket = os.path.join(root, basket_name)
+        utility.check_dir(basket)
+        new_dir = os.path.join(basket, name)
+        utility.check_dir(new_dir)
+        return new_dir
 
 
 def resolve_project_path(name_or_path, create_dir, root=None,
@@ -275,7 +279,9 @@ def resolve_project_path(name_or_path, create_dir, root=None,
         if create_dir:
             return utility.get_directory(name_or_path)
         else:
-            return utility.check_directory(name_or_path)
+            p = utility.abspath(name_or_path)
+            utility.check_dir(p)
+            return p
 
 
 def create_configure_file(rcpath, root_dir, json_path):

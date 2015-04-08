@@ -75,7 +75,8 @@ def start(args):
     port = int(args.port)
     log_path = args.logfilepath
     lock_path = args.lockfile
-    data_path = utility.check_file(args.json)
+    data_path = utility.abspath(args.json)
+    utility.check_file(data_path)
     app.config["DATA_PATH"] = data_path
     app.config["SECRET_KEY"] = "development key"
     if not op.exists(lock_path):
@@ -90,7 +91,8 @@ def start(args):
 
 def debug(args):
     port = int(args.port)
-    data_path = utility.check_file(args.json)
+    data_path = utility.abspath(args.json)
+    utility.check_file(data_path)
     app.config["DATA_PATH"] = data_path
     app.config["SECRET_KEY"] = "development key"
     app.run(debug=True, port=port)
