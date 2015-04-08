@@ -218,10 +218,7 @@ def get_configure_safe(section, key, default):
 
 def _check_and_create_dir_abspath(path):
     path = utility.abspath(path)
-    if os.path.exists(path):
-        utility.check_dir(path)
-        return path
-    os.makedirs(path)
+    utility.check_or_create_dir(path)
     return path
 
 
