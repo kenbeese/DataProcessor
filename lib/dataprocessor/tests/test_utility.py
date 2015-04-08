@@ -17,109 +17,43 @@ class TestUtility(unittest.TestCase):
 
     def test_check_file(self):
         tempfile = os.path.join(self.tempdir, "foo")
-        relative_path = os.path.relpath(tempfile)
         with self.assertRaises(DataProcessorError):
             utility.check_file(tempfile)
         open(tempfile, "a").close()
-        self.assertEqual(utility.check_file(tempfile), tempfile)
-        self.assertEqual(utility.check_file(relative_path), tempfile)
+        utility.check_file(tempfile)  # not raise
 
         dir_path = os.path.join(self.tempdir, "bar")
-        relative_path = os.path.relpath(dir_path)
         with self.assertRaises(DataProcessorError):
             utility.check_file(dir_path)
         os.mkdir(dir_path)
         with self.assertRaises(DataProcessorError):
             utility.check_file(dir_path)
-        with self.assertRaises(DataProcessorError):
-            utility.check_file(relative_path)
 
-    def test_check_directory(self):
+    def test_check_dir(self):
         tempfile = os.path.join(self.tempdir, "foo")
         with self.assertRaises(DataProcessorError):
-            utility.check_directory(tempfile)
+            utility.check_dir(tempfile)
         open(tempfile, "a").close()
         with self.assertRaises(DataProcessorError):
-            utility.check_directory(tempfile)
-        relative_path = os.path.relpath(tempfile)
-        with self.assertRaises(DataProcessorError):
-            utility.check_directory(relative_path)
+            utility.check_dir(tempfile)
 
         dir_path = os.path.join(self.tempdir, "bar")
-        relative_path = os.path.relpath(dir_path)
         with self.assertRaises(DataProcessorError):
-            utility.check_directory(dir_path)
+            utility.check_dir(dir_path)
         os.mkdir(dir_path)
-        self.assertEqual(utility.check_directory(dir_path), dir_path)
-        self.assertEqual(utility.check_directory(relative_path), dir_path)
+        utility.check_dir(dir_path)  # not raise
 
-    def test_get_directory1(self):
+    def test_check_or_create(self):
         tempfile = os.path.join(self.tempdir, "foo")
         open(tempfile, "a").close()
         with self.assertRaises(DataProcessorError):
-            utility.get_directory(tempfile)
+            utility.check_or_create_dir(tempfile)
 
         temp_dir = os.path.join(self.tempdir, "bar")
-        os.mkdir(temp_dir)
-        self.assertEqual(utility.get_directory(temp_dir), temp_dir)
-
-    def test_get_directory2(self):
-        temp_dir = os.path.join(self.tempdir, "bar")
-        self.assertEqual(utility.get_directory(temp_dir, True), temp_dir)
-
-    def test_get_directory3(self):
-        temp_dir = os.path.join(self.tempdir, "bar")
-        relative_path = os.path.relpath(temp_dir)
-        os.mkdir(temp_dir)
-        self.assertEqual(utility.get_directory(relative_path, temp_dir),
-                         temp_dir)
-
-    def test_copy_file1(self):
-        from_path = os.path.join(self.tempdir, "fromfile")
-        to_path = os.path.join(self.tempdir, "to_file")
-        open(from_path, "a").close()
-
-        utility.copy_file(from_path, to_path)
-        self.assertTrue(os.path.exists(to_path))
-
-    def test_copy_file2(self):
-        from_path = os.path.join(self.tempdir, "fromfile")
-        to_path = os.path.join(self.tempdir, "to_file")
-        open(from_path, "a").close()
-        open(to_path, "a").close()
-
-        utility.copy_file(from_path, to_path)
-        self.assertTrue(os.path.exists(to_path))
-
-    def test_copy_file3(self):
-        from_path = os.path.join(self.tempdir, "fromfile")
-        to_path = os.path.join(self.tempdir, "foo/hogedir/to_file")
-        open(from_path, "a").close()
-
-        utility.copy_file(from_path, to_path)
-        self.assertTrue(os.path.exists(to_path))
-
-    def test_copy_file4(self):
-        from_path = os.path.join(self.tempdir, "fromfile")
-        to_path = os.path.join(self.tempdir, "to_file")
-
-        with self.assertRaises(DataProcessorError):
-            utility.copy_file(from_path, to_path)
-
-    def test_copy_file5(self):
-        from_path = os.path.join(self.tempdir, "fromfile")
-        to_path = os.path.join(self.tempdir, "to_file")
-        open(from_path, "a").close()
-        f = open(to_path, "a")
-        f.write("hoge")
-        f.close()
-
-        with self.assertRaises(DataProcessorError):
-            utility.copy_file(from_path, to_path, "error")
-        utility.copy_file(from_path, to_path, "skip")
-        self.assertTrue(os.path.exists(to_path))
-        utility.copy_file(from_path, to_path, "replace")
-        self.assertTrue(os.path.exists(to_path))
+        self.assertFalse(os.path.exists(temp_dir))
+        utility.check_or_create_dir(temp_dir)  # not raise, create
+        self.assertTrue(os.path.exists(temp_dir))
+        utility.check_or_create_dir(temp_dir)  # not raise
 
     def test_read_configure1(self):
         configure_path = os.path.join(self.tempdir, "conf")
