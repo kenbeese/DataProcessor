@@ -1,8 +1,9 @@
 # coding=utf-8
 
-from pandas import DataFrame, Series
+from pandas import DataFrame
 from . import utility
-from .exception import DataProcessorError
+from . import nodes
+from .exception import DataProcessorError as dpError
 
 
 def get_projects(node_list):
@@ -18,62 +19,71 @@ def get_projects(node_list):
     return projects.dropna(how='all', axis=1)
 
 
-def get_project(node_list, project_path, properties=["comment", "tags"],
-                index="path"):
-    """Get project in dataframe format.
+def safe_float(val):
+    try:
+        return float(val)
+    except ValueError:
+        return val
 
-    If there are two or more project of specified name,
-    the latter one is selected.
+
+def get_project(node_list, project_path, properties=["comment"], index="path"):
+    """ Get project dataframe
+    i.e. the table of configures of runs which belongs the project
 
     Parameters
     ----------
     project_path : str
         the path of project
     properties : list of str (optional)
-        properties successed from node_list into project dataframe
-        "name" and "path" are successed always
+        properties succeeded from node_list into project dataframe
+        "name" and "path" are always succeeded
         (Default=["comment", "tags"])
     index : str or list of str (optional)
         index of project dataframe
-        if it is `None`, the index of DataFrame(node_list) will be successed
+        if it is `None`, the index of DataFrame(node_list) will be succeeded
         (Default="path")
+
+    Raises
+    ------
+    DataProcessorError
+        raised if the index is invalid
 
     Returns
     -------
     project : pandas.DataFrame
 
     """
+    properties = set(properties)
+    properties.add("path")
+    properties.add("name")
     project_path = utility.path_expand(project_path)
-    df = DataFrame(node_list)
-    runs_pre = df[df['parents'].apply(lambda val: project_path in val)]
-    if len(runs_pre) == 0:
-        raise DataProcessorError("There is no project of specified path :"
-                                 + project_path)
-    for item in ["name", "path"]:
-        if item not in properties:
-            properties.append(item)
 
-    def _conv(val):
-        """
-        Convert each lines to a pandas.Series
-        See also #160
-        """
-        new = {}
-        if "configure" not in val or not isinstance(val["configure"], dict):
-            sr = Series()
+    pnode = nodes.get(node_list, project_path)
+    if not pnode:
+        raise dpError("There is no project: " + project_path)
+
+    run_nodes = []
+    for p in pnode["children"]:
+        n = nodes.get(node_list, p)
+        if n["type"] != "run":
+            continue
+        if "configure" in n and isinstance(n["configure"], dict):
+            cfg = {k: safe_float(v) for k, v in n["configure"].items()}
         else:
-            for key, value in val["configure"].items():
-                try:
-                    new[key] = float(value)
-                except ValueError:
-                    new[key] = value
-            sr = Series(new)
+            cfg = {}
         for prop in properties:
-            sr.set_value(prop, val[prop])
-        return sr
-
-    runs = runs_pre.apply(_conv, axis=1)
-    runs = runs.convert_objects(convert_numeric=True)
-    if index:
-        runs = runs.set_index(index)
-    return runs.dropna(how="all", axis=1)
+            if prop in n:
+                cfg[prop] = n[prop]
+        run_nodes.append(cfg)
+    df = DataFrame(run_nodes)
+    if not index:
+        return df
+    if isinstance(index, str):
+        index = [index, ]
+    if not isinstance(index, list):
+        raise dpError("Invalid index {}".format(index))
+    for idx in index:
+        if idx not in df.columns:
+            raise dpError("Invalid index: {}".format(idx))
+    df = df.set_index(index)
+    return df

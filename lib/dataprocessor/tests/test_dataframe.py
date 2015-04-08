@@ -1,9 +1,9 @@
 # coding=utf-8
 import unittest
 from pandas import DataFrame
-from pandas.util.testing import assert_frame_equal
 
-from .. import dataframe as df
+from .. import dataframe
+from ..exception import DataProcessorError as dpError
 
 
 class TestIo(unittest.TestCase):
@@ -32,9 +32,16 @@ class TestIo(unittest.TestCase):
              "children": [], "type": "run", "name": "2",
              "configure": {"A": 3.0, "D": u"私って本当バカ"}}
         ]
+        col = set([])
+        for n in self.node_list:
+            if "configure" not in n:
+                continue
+            for c in n["configure"]:
+                col.add(c)
+        self.configures = col
 
     def test_get_projects(self):
-        projects = df.get_projects(self.node_list)
+        projects = dataframe.get_projects(self.node_list)
         projects_m = DataFrame([{
             "name": "proj1",
             "path": "/proj1",
@@ -45,14 +52,38 @@ class TestIo(unittest.TestCase):
         self.assertTrue(projects.equals(projects_m))
 
     def test_get_project(self):
-        proj = df.get_project(
-            self.node_list, "/proj1", properties=[], index=None)
+        df = dataframe.get_project(self.node_list, "/proj1")
+        self.assertItemsEqual(df.index, self.children)
+        col = self.configures
+        # default properties
+        col.add("name")
+        col.add("path")
+        # col.add("comment")
+        # remove index property
+        col.discard("path")
+        self.assertItemsEqual(df.columns, col)
 
-        def _cfg(node):
-            cfg = node["configure"]
-            cfg.update({"name": node["name"], "path": node["path"]})
-            return cfg
-        conf = [_cfg(node) for node in self.node_list[1:]]
-        proj_m = DataFrame(conf, index=[1, 2, 3]).convert_objects(
-            convert_numeric=True)
-        assert_frame_equal(proj, proj_m)
+    def test_get_project_multi_index(self):
+        df = dataframe.get_project(self.node_list, "/proj1", index=["path", "name"])
+        col = self.configures
+        self.assertItemsEqual(df.columns, col)
+        indices = []
+        for n in self.node_list:
+            if n["type"] is not "run":
+                continue
+            indices.append((n["path"], n["name"]))
+        self.assertItemsEqual(df.index, indices)
+
+    def test_get_project_invalid_inputs(self):
+        # invalid project name
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "proj1")
+        # invalid index
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "/proj1", index=1)
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "/proj1", index="pat")
+        with self.assertRaises(dpError):
+            dataframe.get_project(self.node_list, "/proj1", index=["pat", "name"])
+        # not raise
+        dataframe.get_project(self.node_list, "/proj1", index=[])
