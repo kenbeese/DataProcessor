@@ -20,7 +20,7 @@ def add_conf(node_list, path, key, value):
 
     """
     conf_key = "configure"
-    path = utility.path_expand(path)
+    path = utility.abspath(path)
     node = nodes.get(node_list, path)
     nodes.remove(node_list, path)
     node = nodes.normalize(node)

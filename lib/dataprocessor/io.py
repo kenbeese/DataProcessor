@@ -24,7 +24,7 @@ def save(node_list, json_path, silent=False):
 
     """
     silent = utility.boolenize(silent)
-    path = utility.path_expand(json_path)
+    path = utility.abspath(json_path)
     if not silent and os.path.exists(path):
         ans = raw_input("File %s already exists. Replace? [y/N]"
                         % json_path).lower()
@@ -55,7 +55,7 @@ def load(node_list, json_path):
         occurs when JSON file does not exist.
 
     """
-    path = utility.path_expand(json_path)
+    path = utility.abspath(json_path)
     if not os.path.exists(path):
         raise DataProcessorError("JSON does not exist")
     with open(path, "r") as f:
@@ -97,7 +97,7 @@ class DataHandler(object):
     """
 
     def __init__(self, filename, silent=False):
-        self.data_path = utility.path_expand(filename)
+        self.data_path = utility.abspath(filename)
         self.silent = silent
         self.load()
 
@@ -183,7 +183,7 @@ class SyncDataHandler(DataHandler):
         DataHandler.__init__(self, filename, silent)
         self.pid = os.getpid()
         self.lock_dir = os.path.join(lock_dir,
-                                     prefix + utility.path_expand(filename)
+                                     prefix + utility.abspath(filename)
                                                      .replace("/", "_"))
         self.lock_fn = os.path.join(self.lock_dir, "pid")
         self.duration = duration

@@ -4,7 +4,7 @@ import shutil
 import copy
 from ..exception import DataProcessorError
 from ..nodes import change_path
-from ..utility import path_expand
+from ..utility import abspath
 from ..filter import prefix_path
 
 
@@ -42,8 +42,8 @@ def move_node(node_list, from_path, dest):
         raise DataProcessorError(
             "The destinaition %s already exists." % dest)
 
-    from_path = path_expand(from_path)
-    dest = path_expand(dest)  # for move function
+    from_path = abspath(from_path)
+    dest = abspath(dest)  # for move function
     to_path = resolve_destination(dest)  # for node_list
     work_nl = copy.deepcopy(node_list)
 

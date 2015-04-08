@@ -5,7 +5,7 @@ import os.path
 from jinja2 import Template
 
 from .nodes import get
-from .utility import path_expand
+from .utility import abspath
 from .exception import DataProcessorError
 
 
@@ -237,7 +237,7 @@ class Table(object):
                  groups=[{"dict_path": ["configure"],
                           "items": None, "name": None},
                          ]):
-        node = get(node_list, path_expand(path))
+        node = get(node_list, abspath(path))
         if node is None:
             raise DataProcessorError("Any node don't have path: %s" % path)
         if not table_type in node:

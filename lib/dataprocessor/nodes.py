@@ -85,7 +85,7 @@ def get(node_list, path):
     None
 
     """
-    path = utility.path_expand(path)
+    path = utility.abspath(path)
     for node in node_list:
         if path == node["path"]:
             return node
@@ -444,12 +444,12 @@ def change_path(node_list, from_path, to_path, silent=False):
 
     """
 
-    frm_p = utility.path_expand(from_path)
+    frm_p = utility.abspath(from_path)
     target_node = get(node_list, frm_p)
     if not target_node:
         raise DataProcessorError(
             "There is no node with the from_path %s." % frm_p)
-    to_p = utility.path_expand(to_path)
+    to_p = utility.abspath(to_path)
     if get(node_list, to_p):
         raise DataProcessorError(
             "The distination path %s is already registered." % to_p)

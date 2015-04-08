@@ -56,7 +56,7 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
     properties = set(properties)
     properties.add("path")
     properties.add("name")
-    project_path = utility.path_expand(project_path)
+    project_path = utility.abspath(project_path)
 
     pnode = nodes.get(node_list, project_path)
     if not pnode:

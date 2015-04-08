@@ -11,7 +11,7 @@ import ConfigParser
 
 
 if "DP_DEBUG_RCPATH" in os.environ and os.environ["DP_DEBUG_RCPATH"]:
-    default_rcpath = utility.path_expand(os.environ["DP_DEBUG_RCPATH"])
+    default_rcpath = utility.abspath(os.environ["DP_DEBUG_RCPATH"])
 else:
     default_rcpath = "~/.dataprocessor.ini"
 rc_section = "data"
@@ -151,7 +151,7 @@ def get_configparser():
         raised when configure file does not exist.
 
     """
-    rcpath = utility.path_expand(default_rcpath)
+    rcpath = utility.abspath(default_rcpath)
     if not os.path.exists(rcpath):
         raise DataProcessorRcError(
             "Configure file does not exist at {}".format(rcpath))
@@ -294,7 +294,7 @@ def create_configure_file(rcpath, root_dir, json_path):
         path of data json
 
     """
-    rcpath = utility.path_expand(rcpath)
+    rcpath = utility.abspath(rcpath)
 
     if not os.path.exists(json_path):
         with open(json_path, "w") as f:

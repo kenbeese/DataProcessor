@@ -81,7 +81,7 @@ def prefix_path(node_list, pre_path):
     node_list
 
     """
-    p = utility.path_expand(pre_path)
+    p = utility.abspath(pre_path)
     length = len(p)
     return [node for node in node_list
             if node["path"] == p or node["path"][0:length + 1] == p + "/"]
