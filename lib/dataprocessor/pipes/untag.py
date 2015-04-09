@@ -1,6 +1,6 @@
 # coding: utf-8
-from ..nodes import get, add, remove
-from ..utility import path_expand
+from ..nodes import get
+from ..utility import abspath
 from ..rc import resolve_project_path
 from ..exception import DataProcessorError as dpError
 
