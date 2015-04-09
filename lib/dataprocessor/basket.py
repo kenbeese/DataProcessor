@@ -9,8 +9,11 @@ import os.path as op
 def _ready_basket(root, basket_name):
     if not root:
         root = rc.get_configure(rc.rc_section, "root")
-    root = utility.check_directory(root)
-    return utility.get_directory(op.join(root, basket_name))
+    root = utility.abspath(root)
+    utility.check_dir(root)
+    basket = op.join(root, basket_name)
+    utility.check_or_create_dir(basket)
+    return basket
 
 
 def resolve_project_path(name_or_path, create_dir, root=None,
@@ -63,8 +66,10 @@ def resolve_project_path(name_or_path, create_dir, root=None,
         basket = _ready_basket(root, basket_name)
         path = os.path.join(basket, name)
     else:
-        path = utility.path_expand(name_or_path)
+        path = utility.abspath(name_or_path)
     if create_dir:
-        return utility.get_directory(path)
+        utility.check_or_create_dir(path)
+        return path
     else:
-        return utility.check_directory(path)
+        utility.check_dir(path)
+        return path
