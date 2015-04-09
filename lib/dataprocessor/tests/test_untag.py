@@ -42,3 +42,13 @@ class TestUntag(TestNodeListAndDir):
         with self.assertRaisesRegexp(DataProcessorError,
                                      'The tag .* is not specified.'):
             untag(self.node_list, path, tag_path)
+
+    def test_untag_itself(self):
+        node = self.node_list[0]
+        path = node["path"]
+        node["children"].append(path)
+        node["parents"].append(path)
+        untag(self.node_list, path, path)
+        self.assertFalse(path in node["children"])
+        self.assertFalse(path in node["parents"])
+        self.assertTrue(node in self.node_list)
