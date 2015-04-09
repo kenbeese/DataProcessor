@@ -6,7 +6,7 @@ import yaml
 import ConfigParser as cp
 
 from .. import pipe
-from ..utility import read_configure, check_file
+from ..utility import read_configure, check_file, abspath
 from ..exception import DataProcessorError as dpError
 
 
@@ -113,7 +113,8 @@ def load(node, filename, filetype=None, section="parameters"):
     >>> load(node_list, "configure.conf", "defaults") # doctest:+SKIP
 
     """
-    confpath = check_file(op.join(node["path"], filename))
+    confpath = abspath(op.join(node["path"], filename))
+    check_file(confpath)
     if not filetype:
         filetype = get_filetype(confpath)
     filetype = filetype.lower()
@@ -152,7 +153,8 @@ def no_section(node, filename, split_char="=", comment_char=["#"]):
 
     """
     path = node["path"]
-    cfg_path = check_file(op.join(path, filename))
+    cfg_path = abspath(op.join(path, filename))
+    check_file(cfg_path)
     cfg = read_configure(cfg_path, split_char, comment_char)
     if "configure" not in node:
         node["configure"] = {}

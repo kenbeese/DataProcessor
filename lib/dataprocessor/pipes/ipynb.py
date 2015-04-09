@@ -6,7 +6,7 @@ import webbrowser
 from glob import glob
 from .. import nodes
 from .. import rc
-from ..utility import path_expand, check_file
+from ..utility import abspath, check_file
 from ..ipynb import resolve_url, resolve_name
 from ..exception import DataProcessorError as dpError
 
@@ -47,7 +47,7 @@ def gather(node_list, pattern="*.ipynb"):
         if not op.isdir(path):
             continue
         for fn in glob(op.join(path, pattern)):
-            fn = path_expand(fn)
+            fn = abspath(fn)
             node = {
                 "path": fn,
                 "type": "ipynb",
@@ -63,7 +63,8 @@ def add(node_list, path, parents=[]):
     """
     Add ipynb file manually
     """
-    p = check_file(path)
+    p = abspath(path)
+    check_file(p)
     if isinstance(parents, str):
         parents = [parents]
     if not isinstance(parents, list):

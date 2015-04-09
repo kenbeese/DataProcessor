@@ -31,7 +31,7 @@ def add_node(node_list, path=".", node_type="run", children=[],
     node_list
 
     """
-    path = utility.path_expand(path)
+    path = utility.abspath(path)
 
     if isinstance(children, str):
         children = [children]
@@ -43,8 +43,8 @@ def add_node(node_list, path=".", node_type="run", children=[],
     node = nodes.normalize({
         "path": path,
         "type": node_type,
-        "children": [utility.path_expand(c_path) for c_path in children],
-        "parents": [utility.path_expand(c_path) for c_path in parents],
+        "children": [utility.abspath(c_path) for c_path in children],
+        "parents": [utility.abspath(c_path) for c_path in parents],
         "name": name
     })
     nodes.add(node_list, node, strategy=strategy)

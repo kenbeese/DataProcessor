@@ -1,6 +1,6 @@
 # coding: utf-8
 from ..nodes import get, add, remove
-from ..utility import path_expand
+from ..utility import abspath
 from ..rc import resolve_project_path
 from ..exception import DataProcessorError
 
@@ -23,7 +23,7 @@ def untag(node_list, path, project_id):
         by project id is not registered.
 
     """
-    path = path_expand(path)
+    path = abspath(path)
     project_path = resolve_project_path(project_id, False)
 
     node = get(node_list, path)

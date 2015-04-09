@@ -20,7 +20,7 @@ def _create_environment(temppath):
 
 
 def _create_nodelist(tempdir):
-    tempdir = utility.path_expand(tempdir)
+    tempdir = utility.abspath(tempdir)
     with open(os.path.join(_TEMPLATE_DIR, "data.json")) as f:
         template = jinja2.Template(f.read())
 
@@ -29,7 +29,7 @@ def _create_nodelist(tempdir):
 
 
 def _create_ini(tempdir):
-    tempdir = utility.path_expand(tempdir)
+    tempdir = utility.abspath(tempdir)
     rc.create_configure_file(os.path.join(tempdir, "test.ini"),
                              os.path.join(tempdir, "root"),
                              os.path.join(tempdir, "data.json"),)

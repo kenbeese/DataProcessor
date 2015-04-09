@@ -1,6 +1,6 @@
 # coding=utf-8
 from ..nodes import get, add
-from ..utility import path_expand
+from ..utility import abspath
 from ..rc import resolve_project_path
 from ..exception import DataProcessorError
 
@@ -21,7 +21,7 @@ def add_tag(node_list, node_path, project_id):
         The path is resolved by resolve_project_path.
 
     """
-    path = path_expand(node_path)
+    path = abspath(node_path)
     project_path = resolve_project_path(project_id, True)
     project_node = get(node_list, project_path)
     if not project_node:

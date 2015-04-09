@@ -61,7 +61,8 @@ def merge_nodelist(node_list, json_filename):
     True
 
     """
-    fn = utility.check_file(json_filename)
+    fn = utility.abspath(json_filename)
+    utility.check_file(fn)
     with open(fn) as f:
         another_nl = json.load(f)
     for node in another_nl:

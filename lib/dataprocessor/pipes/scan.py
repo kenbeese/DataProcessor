@@ -4,7 +4,7 @@ import os
 from glob import glob
 
 from ..nodes import get, validate_link
-from ..utility import path_expand, boolenize
+from ..utility import abspath, boolenize
 
 
 def directory(node_list, root, whitelist, followlinks=False):
@@ -45,7 +45,7 @@ def directory(node_list, root, whitelist, followlinks=False):
     >>> node_list = directory([], "scandir_path", ["*.conf"])
 
     """
-    root = path_expand(root)
+    root = abspath(root)
     followlinks = boolenize(followlinks)
     if isinstance(whitelist, str):
         whitelist = [whitelist]
