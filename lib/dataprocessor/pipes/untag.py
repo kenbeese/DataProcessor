@@ -28,7 +28,7 @@ def untag(node_list, path, project_id):
     if not node:
         raise dpError("The path %s of node is not registered." % path)
 
-    project_path = resolve_project_path(project_id, False)
+    project_path = resolve_project_path(project_id)
     pnode = get(node_list, project_path)
     if not pnode:
         raise dpError("The path %s of project is not registered." % project_path)

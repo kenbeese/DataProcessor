@@ -6,34 +6,24 @@ import os
 import os.path as op
 
 
-def _ready_basket(root, basket_name):
-    if not root:
-        root = rc.get_configure(rc.rc_section, "root")
-    root = utility.abspath(root)
-    utility.check_dir(root)
+def _ready_basket():
+    root = rc.get_configure(rc.rc_section, "root")
+    utility.check_or_create_dir(root)
+    basket_name = rc.get_configure_safe(rc.rc_section, "project_basket", "Projects")
     basket = op.join(root, basket_name)
     utility.check_or_create_dir(basket)
     return basket
 
 
-def resolve_project_path(name_or_path, create_dir, root=None,
-                         basket_name=rc.get_configure_safe(rc.rc_section, "project_basket", "Projects")):
-    """ Resolve project path from its path or name.
+def get_tag_abspath(tag_name):
+    """ Get abspath of the corresponding directory from tag name
 
     Parameters
     ----------
-    name_or_path : str
-        Project identifier.
-        If name (i.e. basename(name_or_path) == name_or_path),
-        abspath of `root/basket_name/name` is returned.
-        If path (otherwise case), returns its abspath.
-    create_dir : boolean
-        This flag determine the behavior occured when there is no directory at
-        the resolved path as follows:
-        - if create_dir is True: create new directory
-        - if create_dir is False: raise DataProcessorError
+    tag_name : str
+        name of tag
     root : str, optional
-        The root path of baskets. (default=None)
+        The root path of baskets.
         If None, the path is read from the configure file.
     basket_name : str, optional
         The name of the project basket.
@@ -43,33 +33,35 @@ def resolve_project_path(name_or_path, create_dir, root=None,
     Returns
     -------
     path : str
-        existing project path
-
-    Raises
-    ------
-    DataProcessorRcError
-        occurs when `root` is not specified and it cannot be loaded
-        from the setting file.
-
-    DataProcessorError
-        occurs when create_dir is False and a path is not resolved.
 
     """
-    def _is_name(s):
+    basket = _ready_basket()
+    path = os.path.join(basket, tag_name)
+    return path
+
+
+def resolve_project_path(tagname_or_path):
+    """ Autodetect tagname or path and return its abspath
+
+    Parameters
+    ----------
+    tagname_or_path : str
+        Project identifier.
+        If tagname, call get_tag_abspath,
+        If path, call utility.abspath
+
+    Returns
+    -------
+    path : str
+
+    """
+    def _is_tag(s):
         if "/" in s:  # path
             return False
         if s[0] is ".":  # relative path
             return False
         return True
-    if _is_name(name_or_path):
-        name = name_or_path
-        basket = _ready_basket(root, basket_name)
-        path = os.path.join(basket, name)
+    if _is_tag(tagname_or_path):
+        return get_tag_abspath(tagname_or_path)
     else:
-        path = utility.abspath(name_or_path)
-    if create_dir:
-        utility.check_or_create_dir(path)
-        return path
-    else:
-        utility.check_dir(path)
-        return path
+        return utility.abspath(tagname_or_path)

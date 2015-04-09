@@ -1,6 +1,6 @@
 # coding=utf-8
 from ..nodes import get, add
-from ..utility import abspath
+from ..utility import abspath, check_or_create_dir
 from ..exception import DataProcessorError as dpError
 from ..basket import resolve_project_path
 
@@ -25,7 +25,8 @@ def add_tag(node_list, node_path, project_id):
     node = get(node_list, path)
     if not node:
         raise dpError("There is no node (path=%s)." % path)
-    project_path = resolve_project_path(project_id, True)
+    project_path = resolve_project_path(project_id)
+    check_or_create_dir(project_path)
     if project_path == path:
         raise dpError("Cannot tag itself")
     project_node = get(node_list, project_path)

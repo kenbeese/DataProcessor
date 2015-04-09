@@ -69,7 +69,7 @@ def add(node_list, path, parents=[]):
         parents = [parents]
     if not isinstance(parents, list):
         raise dpError("Parents must be a list")
-    parents = map(lambda p: basket.resolve_project_path(p, False), parents)
+    parents = map(lambda p: basket.resolve_project_path(p), parents)
     nodes.add(node_list, {
         "path": p,
         "type": "ipynb",
