@@ -1,8 +1,8 @@
 # coding: utf-8
-from ..nodes import get, add, remove
+from ..nodes import get
 from ..utility import abspath
 from ..rc import resolve_project_path
-from ..exception import DataProcessorError
+from ..exception import DataProcessorError as dpError
 
 
 def untag(node_list, path, project_id):
@@ -24,32 +24,20 @@ def untag(node_list, path, project_id):
 
     """
     path = abspath(path)
-    project_path = resolve_project_path(project_id, False)
-
     node = get(node_list, path)
     if not node:
-        raise DataProcessorError(
-            "The path %s of node is not registered." % path)
-    new_node = {}
-    new_node.update(node)
+        raise dpError("The path %s of node is not registered." % path)
 
-    node = get(node_list, project_path)
-    if not node:
-        raise DataProcessorError(
-            "The path %s of project is not registered." % project_path)
-    new_project_node = {}
-    new_project_node.update(node)
+    project_path = resolve_project_path(project_id, False)
+    pnode = get(node_list, project_path)
+    if not pnode:
+        raise dpError("The path %s of project is not registered." % project_path)
 
-    if not project_path in new_node["parents"] or \
-       not path in new_project_node["children"]:
-        raise DataProcessorError("The tag %s is not specified." % project_id)
-    new_node["parents"].remove(project_path)
-    new_project_node["children"].remove(path)
-
-    remove(node_list, path)
-    remove(node_list, project_path)
-    add(node_list, new_node)
-    add(node_list, new_project_node)
+    if project_path in node["parents"] and path in pnode["children"]:
+        node["parents"].remove(project_path)
+        pnode["children"].remove(path)
+    else:
+        raise dpError('The tag %s is not specified.' % project_path)
     return node_list
 
 
