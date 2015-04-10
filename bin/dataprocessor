@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
-import argparse
+
 import os.path
 import sys
 import traceback
@@ -16,9 +16,10 @@ def main():
     parser = dp.argparsers.dataprocessor()
     args = parser.parse_args()
 
-    json_fn = dp.utility.check_file(args.manip_json)
+    json_fn = dp.utility.abspath(args.manip_json)
+    dp.utility.check_file(json_fn)
     if args.data:
-        data_fn = dp.utility.path_expand(args.data)
+        data_fn = dp.utility.abspath(args.data)
         with open(json_fn, 'r') as f, dp.io.SyncDataHandler(data_fn,
                                                             duration=1) as dh:
             dp.execute.execute_from_json_str(f.read(), dh.get())
