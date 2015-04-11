@@ -17,7 +17,7 @@ def main():
     func = getattr(dp.argparsers, "%s" % args.EXECUTABLE)
     generator = dp.gencompletion.CompletionGenerator(
         args.EXECUTABLE, func())
-    filename = dp.utility.path_expand(
+    filename = dp.utility.abspath(
         os.path.join(os.path.dirname(__file__),
                      "../zsh_completion", "_%s" % args.EXECUTABLE))
     with open(filename, "w") as f:
