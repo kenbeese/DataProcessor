@@ -24,7 +24,8 @@ def main():
 
     print("Creating " + rcpath)
     root = raw_input("Enter your Root direcotry: ")
-    root_dir = dp.utility.get_directory(root)
+    root_dir = dp.utility.abspath(root)
+    dp.utility.check_dir(root_dir)
     default_path = os.path.join(root_dir, "data.json")
     json_path = raw_input("Enter path of your data json (default:{}): "
                           .format(default_path))
