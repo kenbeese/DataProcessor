@@ -6,6 +6,9 @@ Some useful tools for dataprocessor are included.
 """
 from .exception import DataProcessorError
 import os.path
+import subprocess
+from contextlib import contextmanager
+from datetime import datetime
 
 
 def abspath(path):
@@ -75,6 +78,74 @@ def check_or_create_dir(path):
         if os.path.exists(path):
             raise DataProcessorError("Another file already exists in %s" % path)
         os.makedirs(path)
+
+
+@contextmanager
+def chdir(path):
+    """ do in another directory and return previsous directory """
+    cwd = os.getcwd()
+    check_dir(path)
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(cwd)
+
+
+@contextmanager
+def mkdir(path):
+    """ Create directory unless anything goes bad """
+    os.mkdir(path)
+    try:
+        yield
+    except Exception:
+        os.rmdir(path)
+        raise
+
+
+def check_call(args, **kwds):
+    try:
+        subprocess.check_call(args, **kwds)
+    except subprocess.CalledProcessError:
+        raise DataProcessorError("Failed: {}".format(args))
+
+
+def now_str(formatter="%FT%T"):
+    return datetime.now().strftime(formatter)
+
+
+def read_configure(filename, split_char="=", comment_char=["#"]):
+    """ Read configure file without sections.
+
+    Parameters
+    ----------
+    filename : str
+        The file name of the configure file
+    split_char : str, optional
+        The lines in configure file are splited by this char (default "=").
+        If your configure has line s.t. `a : 1.2`,
+        then you should set `split_char=":"`.
+    comment_char : list of str, optional
+        The line starting with chars in this list will be skipped.
+        (default=["#"])
+
+    Returns
+    -------
+    dict
+        {parameter-name: value} dictionary.
+
+    """
+    f = open(filename, 'r')
+    config = {}
+    for line in f:
+        if line[0] in comment_char or line == "\n":
+            continue
+        lines = line.strip().split(split_char)
+        if(len(lines) != 2):
+            print("invalid line : " + line)
+            continue
+        config[lines[0].strip()] = lines[1].strip()
+    return config
 
 
 def boolenize(arg):

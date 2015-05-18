@@ -2,18 +2,10 @@
 
 from . import helper
 from .. import basket
+from ..utility import chdir
 
 import os
 import os.path as op
-from contextlib import contextmanager
-
-
-@contextmanager
-def chdir(dirname):
-    cwd = os.getcwd()
-    os.chdir(dirname)
-    yield
-    os.chdir(cwd)
 
 
 class TestBasket(helper.TestEnvironment):
