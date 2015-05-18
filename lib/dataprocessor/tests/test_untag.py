@@ -33,7 +33,7 @@ class TestUntag(TestNodeListAndDir):
         path = os.path.join(self.tempdir_path, "p1/run01")
         tag_path = os.path.join(self.tempdir_path, "noproject")
         with self.assertRaisesRegexp(DataProcessorError,
-                                     'Directory .* does not exist'):
+                                     'The path .* of project is not registered'):
             untag(self.node_list, path, tag_path)
 
     def test_no_tag(self):

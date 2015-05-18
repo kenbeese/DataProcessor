@@ -1,8 +1,8 @@
 # coding: utf-8
 from ..nodes import get
 from ..utility import abspath
-from ..rc import resolve_project_path
 from ..exception import DataProcessorError as dpError
+from ..basket import resolve_project_path
 
 
 def untag(node_list, path, project_id):
@@ -28,7 +28,7 @@ def untag(node_list, path, project_id):
     if not node:
         raise dpError("The path %s of node is not registered." % path)
 
-    project_path = resolve_project_path(project_id, False)
+    project_path = resolve_project_path(project_id)
     pnode = get(node_list, project_path)
     if not pnode:
         raise dpError("The path %s of project is not registered." % project_path)
