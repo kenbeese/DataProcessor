@@ -6,13 +6,21 @@ import os
 import os.path as op
 
 
-def _ready_basket():
+def _get_basket(key, default_value):
     root = rc.get_configure(rc.rc_section, "root")
     utility.check_or_create_dir(root)
-    basket_name = rc.get_configure_safe(rc.rc_section, "project_basket", "Projects")
+    basket_name = rc.get_configure_safe(rc.rc_section, key, default_value)
     basket = op.join(root, basket_name)
     utility.check_or_create_dir(basket)
     return basket
+
+
+def get_project_basket():
+    return _get_basket("project_basket", "Projects")
+
+
+def get_run_basket():
+    return _get_basket("run_basket", "Runs")
 
 
 def get_tag_abspath(tag_name):
@@ -35,7 +43,7 @@ def get_tag_abspath(tag_name):
     path : str
 
     """
-    basket = _ready_basket()
+    basket = get_project_basket()
     path = os.path.join(basket, tag_name)
     return path
 
@@ -65,3 +73,10 @@ def resolve_project_path(tagname_or_path):
         return get_tag_abspath(tagname_or_path)
     else:
         return utility.abspath(tagname_or_path)
+
+
+def get_new_run_abspath(run_name):
+    """ Generate abspath of a new run"""
+    basket = get_run_basket()
+    path = os.path.join(basket, run_name)
+    return path
