@@ -3,6 +3,7 @@
 from . import utility
 from .exception import DataProcessorError
 
+import tempfile
 import functools
 from logging import getLogger, DEBUG
 logger = getLogger(__name__)
@@ -42,3 +43,15 @@ def sync(args, work_dir):
     """ execute command in localhost """
     with utility.chdir(work_dir):
         utility.check_call(args)
+
+
+@runner
+def atnow(args, work_dir):
+    atnow_template = """#!/bin/sh
+    cd {path}
+    {args}
+    """
+    tmp = tempfile.NamedTemporaryFile()
+    tmp.write(atnow_template.format(path=work_dir, args=" ".join(args)))
+    tmp.flush()
+    utility.check_call(['at', 'now', '-f', tmp.name])
