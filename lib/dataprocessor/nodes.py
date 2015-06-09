@@ -147,7 +147,7 @@ def modest_update(node_list, node, skip_validate_link=False):
         if val:
             node0[key] = val
     if not skip_validate_link:
-        validate_link(node_list, node0, silent=True)
+        validate_link(node_list, node0)
 
 
 def add(node_list, node, skip_validate_link=False, strategy="raise"):
@@ -210,7 +210,7 @@ def add(node_list, node, skip_validate_link=False, strategy="raise"):
         else:
             raise DataProcessorError("Invalid strategy: %s" % strategy)
     if not skip_validate_link:
-        validate_link(node_list, node, silent=True)
+        validate_link(node_list, node)
 
 
 def check_duplicate(node_list):
@@ -342,7 +342,7 @@ def remove(node_list, path, skip_validate_link=False):
     node_list.remove(node)
 
 
-def validate_link(node_list, node, silent=False):
+def validate_link(node_list, node):
     """Validate the link of the node.
 
     Check node["children"] and node["parents"] is correct.
@@ -379,7 +379,7 @@ def validate_link(node_list, node, silent=False):
     ...     {"path": "/path/0", "parents": [], "children": ["/path/1"]},
     ...     {"path": "/path/1", "parents": ["/path/0"],
     ...      "children": ["/not/exist"]}]
-    >>> validate_link(node_list, node_list[1], silent=True)
+    >>> validate_link(node_list, node_list[1])
     >>> node_list == [
     ...     {"path": "/path/0", "parents": [], "children": ["/path/1"]},
     ...     {"path": "/path/1", "parents": ["/path/0"], "children": []}]
@@ -387,16 +387,6 @@ def validate_link(node_list, node, silent=False):
 
     """
     path = node["path"]
-
-    def ask_remove(path):
-        print("No nodes whose path is %s does not exists." % path)
-        ans = raw_input("Remove this link? [Y/n]")
-        if ans in ["n", "N", "no", "No"]:
-            print("Path %s is kept. Please fix manually." % path)
-            return False
-        else:
-            print("Removed.")
-            return True
 
     def validate(check_key):
         against_key = {"parents": "children", "children": "parents"}[check_key]
@@ -407,18 +397,13 @@ def validate_link(node_list, node, silent=False):
                 link_path_list.append(link_path)
                 if path not in link_node[against_key]:
                     link_node[against_key].append(path)
-            else:
-                if silent:
-                    continue
-                if not ask_remove(link_path):
-                    link_path_list.append(link_path)
         node[check_key] = link_path_list
 
     validate("parents")
     validate("children")
 
 
-def change_path(node_list, from_path, to_path, silent=False):
+def change_path(node_list, from_path, to_path):
     """
     Change node path.
 
@@ -428,9 +413,6 @@ def change_path(node_list, from_path, to_path, silent=False):
         The path of node.
     to_path : str
         The destination path of node.
-    silent : bool or { 'False', 'True' }, optional
-        Does not ask whether delete nonexist-path in parents or children.
-        (default='False')
 
     Returns
     -------
@@ -457,12 +439,8 @@ def change_path(node_list, from_path, to_path, silent=False):
     target_node["path"] = to_p
     validate_link(node_list, target_node)
     for check_path in target_node["children"]:
-        validate_link(
-            node_list, get(node_list, check_path),
-            silent=utility.boolenize(silent))
+        validate_link(node_list, get(node_list, check_path))
     for check_path in target_node["parents"]:
-        validate_link(
-            node_list, get(node_list, check_path),
-            silent=utility.boolenize(silent))
+        validate_link(node_list, get(node_list, check_path))
 
     return node_list

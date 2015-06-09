@@ -70,7 +70,7 @@ def merge_nodelist(node_list, json_filename):
                   strategy="modest_update",
                   skip_validate_link=True)
     for node in node_list:
-        nodes.validate_link(node_list, node, silent=True)
+        nodes.validate_link(node_list, node)
     return node_list
 
 

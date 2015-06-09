@@ -79,7 +79,7 @@ def directory(node_list, root, whitelist, followlinks=False):
     origin_len = len(node_list)
     node_list = node_list + scan_nodelist
     for node in node_list[origin_len:]:
-        validate_link(node_list, node, silent=True)
+        validate_link(node_list, node)
     return node_list
 
 

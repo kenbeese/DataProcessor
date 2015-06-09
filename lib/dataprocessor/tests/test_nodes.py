@@ -200,9 +200,9 @@ class TestNodes(unittest.TestCase):
              "children": ["/not/exists"],                    # does not exist
              }]
         # remove not exist parents link
-        nodes.validate_link(node_list, node_list[0], True)
+        nodes.validate_link(node_list, node_list[0])
         # remove not exist children link
-        nodes.validate_link(node_list, node_list[3], True)
+        nodes.validate_link(node_list, node_list[3])
         self.assertEqual(node_list, self.node_list)
 
     def test_merge_duplicate(self):
@@ -240,7 +240,7 @@ class TestChangePath(TestNodeListAndDir):
         before_path = self.project_paths[0]
         os.mkdir(after_path)
         nodes.change_path(
-            self.node_list, before_path, after_path, silent=True)
+            self.node_list, before_path, after_path)
 
         changed_node = nodes.get(self.node_list, after_path)
         # check target node path
@@ -257,7 +257,7 @@ class TestChangePath(TestNodeListAndDir):
         before_path = os.path.join(self.project_paths[0], "run01")
         os.mkdir(after_path)
         nodes.change_path(
-            self.node_list, before_path, after_path, silent=True)
+            self.node_list, before_path, after_path)
 
         # check path
         self.assertIsNotNone(nodes.get(self.node_list, after_path))

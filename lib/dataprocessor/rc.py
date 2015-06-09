@@ -135,7 +135,7 @@ def update(node_list):
     parser = get_configparser()
     if parser.has_option(rc_section, "json"):
         raise DataProcessorRcError("Configure does not contains JSON path.")
-    with io.SyncDataHandler(parser.get(rc_section, "json"), silent=True) as dh:
+    with io.SyncDataHandler(parser.get(rc_section, "json")) as dh:
         dh.update(node_list)
 
 
