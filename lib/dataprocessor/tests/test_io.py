@@ -26,12 +26,12 @@ class TestIo(unittest.TestCase):
         added_node = {"path": "/path/to/foo", "name": "yahoooooo",
                       "parents": [], "children": ["/path/to/2"]}
         # Create json file
-        dpio.save(node_list, self.jsonfile, silent=True)
+        dpio.save(node_list, self.jsonfile)
 
         compare_node_list = copy.deepcopy(node_list)
         nodes.add(compare_node_list, copy.deepcopy(added_node))
 
-        with dpio.DataHandler(self.jsonfile, True) as data:
+        with dpio.DataHandler(self.jsonfile) as data:
             data.add(added_node)
             self.assertEqual(data.get(), compare_node_list)
 
@@ -43,11 +43,11 @@ class TestIo(unittest.TestCase):
                      {"path": "/path/to/2", "name": "Yeah!!"}]
         replace_node_list = [{"path": "/path/to/foo", "name": "yahoooooo"}]
         # Create json file
-        dpio.save(node_list, self.jsonfile, silent=True)
+        dpio.save(node_list, self.jsonfile)
 
         compare_node_list = copy.deepcopy(replace_node_list)
 
-        with dpio.DataHandler(self.jsonfile, True) as data:
+        with dpio.DataHandler(self.jsonfile) as data:
             data.replace(replace_node_list)
 
         node_list = dpio.load([], self.jsonfile)
@@ -57,10 +57,10 @@ class TestIo(unittest.TestCase):
         node_list = [{"path": "/path/to/hogehoge", "name": "Oh"},
                      {"path": "/path/to/2", "name": "Yeah!!"}]
         # Create json file
-        dpio.save(node_list, self.jsonfile, silent=True)
+        dpio.save(node_list, self.jsonfile)
 
         with self.assertRaises(dpError):
-            with dpio.DataHandler(self.jsonfile, silent=True) as dh:
+            with dpio.DataHandler(self.jsonfile) as dh:
                 nl = dh.get()
                 nl[0]["comment"] = "homhom"
                 raise dpError("sample dpError")
@@ -72,18 +72,18 @@ class TestIo(unittest.TestCase):
         node_list = [{"path": "/path/to/hogehoge", "name": ""}]
 
         # Create json file
-        dpio.save(node_list, self.jsonfile, silent=True)
+        dpio.save(node_list, self.jsonfile)
 
         import time
 
         def do_update1():
-            with dpio.SyncDataHandler(self.jsonfile, silent=True) as data:
+            with dpio.SyncDataHandler(self.jsonfile) as data:
                 node_list = data.get()
                 node_list[0]["name"] += "update1"
                 time.sleep(1)
 
         def do_update2():
-            with dpio.SyncDataHandler(self.jsonfile, silent=True) as data:
+            with dpio.SyncDataHandler(self.jsonfile) as data:
                 node_list = data.get()
                 node_list[0]["name"] += "update2"
                 time.sleep(1)
