@@ -5,7 +5,7 @@ import os.path
 import sys
 import json
 import traceback
-from logging import getLogger, StreamHandler, DEBUG, INFO
+import logging
 
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
@@ -15,7 +15,6 @@ sys.path = [sys.path[0]] + sys.path[2:]
 
 
 def main(args):
-    args.silent = not args.verbose
     arguments = [vars(args)[i] for i, _ in args.val["args"]]
     if "kwds" in args.val:
         keywords = {i: vars(args)[i] for i, _ in args.val["kwds"]
@@ -24,7 +23,7 @@ def main(args):
         keywords = {}
 
     if not args.input and not args.output:
-        with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
+        with dp.io.SyncDataHandler(args.json) as dh:
             node_list = args.val["func"](dh.get(), *arguments, **keywords)
             if args.replace:
                 dh.replace(node_list)
@@ -33,7 +32,7 @@ def main(args):
         return
 
     if args.input:
-        with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
+        with dp.io.SyncDataHandler(args.json) as dh:
             node_list = dh.get()
     else:
         node_list = dp.io.load([], args.json)
@@ -41,7 +40,7 @@ def main(args):
     if args.output:
         json.dump(node_list, sys.stdout)
     else:
-        with dp.io.SyncDataHandler(args.json, silent=args.silent) as dh:
+        with dp.io.SyncDataHandler(args.json) as dh:
             if args.replace:
                 dh.replace(node_list)
             else:
@@ -52,13 +51,14 @@ if __name__ == '__main__':
     parser = dp.argparsers.dpmanip()
     args = parser.parse_args()
 
-    if args.debug or args.verbose:
-        logger = getLogger("dataprocessor")
-        logger.addHandler(StreamHandler())
-        if args.debug:
-            logger.setLevel(DEBUG)
-        if args.verbose:
-            logger.setLevel(INFO)
+    logger = logging.getLogger("dataprocessor")
+    logger.addHandler(logging.StreamHandler())
+    if args.debug:
+        logger.setLevel(logging.DEBUG)
+    elif args.verbose:
+        logger.setLevel(logging.INFO)
+    else:
+        logger.setLevel(logging.WARNING)
 
     try:
         main(args)

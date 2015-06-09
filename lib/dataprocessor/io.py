@@ -6,9 +6,10 @@ import json
 import os
 import os.path
 import time
-from logging import getLogger, DEBUG
+from logging import getLogger, NullHandler
+
 logger = getLogger(__name__)
-logger.setLevel(DEBUG)
+logger.addHandler(NullHandler())
 
 
 def save(node_list, json_path):
@@ -26,7 +27,7 @@ def save(node_list, json_path):
     """
     path = utility.abspath(json_path)
     if os.path.exists(path):
-        logger.warning("File {} is overwritten.".format(json_path))
+        logger.debug("File {} is overwritten.".format(json_path))
     with open(path, "w") as f:
         json.dump(node_list, f, indent=4)
     return node_list
