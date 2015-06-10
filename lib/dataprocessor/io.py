@@ -54,7 +54,7 @@ def load(node_list, json_path):
     """
     path = utility.abspath(json_path)
     if not os.path.exists(path):
-        raise DataProcessorError("JSON does not exist")
+        raise DataProcessorError("JSON does not exist: " + path)
     with open(path, "r") as f:
         read_node_list = json.load(f)
     return node_list + read_node_list
@@ -111,7 +111,7 @@ class DataHandler(object):
         if os.path.exists(self.data_path):
             self.node_list = load([], self.data_path)
         else:
-            logger.warning("File {} does not exists. Create new list".format(self.data_path))
+            logger.warning("File {} does not exist. Create new list.".format(self.data_path))
             self.node_list = []
 
     def get(self):

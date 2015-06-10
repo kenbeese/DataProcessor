@@ -56,7 +56,7 @@ def ArgumentParser(options={}):
         val = get_configure(rc_section, name)
         parser.add_argument("--" + name, default=val, **opt)
     parser.add_argument("--debug", action="store_true",
-                        help="output traceback nad debug message")
+                        help="output traceback and debug message")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="output INFO log")
     return parser
