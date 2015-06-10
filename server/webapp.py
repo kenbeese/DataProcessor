@@ -26,7 +26,7 @@ def before_request():
 
 @app.route('/')
 def show_projectlist():
-    with dp.io.SyncDataHandler(g.data_path, silent=True) as dh:
+    with dp.io.SyncDataHandler(g.data_path) as dh:
         nl = dh.get()
     projects = dp.filter.node_type(nl, "project")
     return render_template('projectlist.html', projects=projects)
@@ -63,7 +63,7 @@ def show_ipynblist():
 @app.route('/node/<path:path>')
 def show_node(path):
     path = "/" + path
-    with dp.io.SyncDataHandler(g.data_path, silent=True) as dh:
+    with dp.io.SyncDataHandler(g.data_path) as dh:
         nl = dh.get()
 
     node = dp.nodes.get(nl, path)
@@ -145,7 +145,7 @@ def execute_pipe():
 
 
 def _execute_pipe(data_path, name, args, kwds):
-    with dp.io.SyncDataHandler(data_path, silent=True) as dh:
+    with dp.io.SyncDataHandler(data_path) as dh:
         nl = dh.get()
         nl = dp.execute.pipe(name, args, kwds, nl)
         dh.update(nl)
