@@ -27,34 +27,29 @@ def check_manip(manip):
     ...         print("[%s] %s" % (e.name, e.msg))
     >>> do_check_manip([{"nae": "save_json", # typo: "nae"
     ...                  "args": ["out.json"],
-    ...                  "kwds": {"silent" : "True"}}])
+    ...                  "kwds": {}}])
     [] pipe name is not defined
     >>> do_check_manip([{"name": "save_json",
     ...                  "arg": ["out.json"], # typo: "arg"
-    ...                  "kwds": {"silent" : "True"}}])
+    ...                  "kwds": {}}])
     [save_json] attributes of pipes must be in 'name', 'args', 'kwds'
     >>> do_check_manip([{"name": "save_json",
     ...                  "args": ["out.json"],
-    ...                  "kwd": {"silent" : "True"}}]) # typo: "kwd"
+    ...                  "kwd": {}}]) # typo: "kwd"
     [save_json] attributes of pipes must be in 'name', 'args', 'kwds'
     >>> do_check_manip([{"name": "sav_json", # typo: "sav_json"
     ...                  "args": ["out.json"],
-    ...                  "kwds": {"silent" : "True"}}])
+    ...                  "kwds": {}}])
     [sav_json] invalid pipe name
     >>> do_check_manip([{"name": "save_json",
     ...                  "args": [], # argument mismatch
-    ...                  "kwds": {"silent" : "True"}}])
+    ...                  "kwds": {}}])
     [save_json] the number of arguments mismatches
     >>> do_check_manip([{"name": "load_json",
     ...                  "args": ["in.json"],
-    ...                  "kwds": {"silent": "True"}}])
+    ...                  "kwds": {}}])
     ...                  # `load_json` does not have "kwds"
     [load_json] pipe does not have 'kwds'
-    >>> do_check_manip([{"name": "save_json",
-    ...                  "args": ["out.json"],
-    ...                  "kwds": {"silnt" : "True"}}])
-    ...                  # typo in keywords: "silnt"
-    [save_json] keyword argument 'silnt' does not exist
     """
     for mn in manip:
         if "name" not in mn:

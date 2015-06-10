@@ -6,31 +6,28 @@ import json
 import os
 import os.path
 import time
+from logging import getLogger, NullHandler
+
+logger = getLogger(__name__)
+logger.addHandler(NullHandler())
 
 
-def save(node_list, json_path, silent=False):
+def save(node_list, json_path):
     """Save node_list into a JSON file.
 
     Parameters
     ----------
     json_path : str
         the path to JSON
-    slient : bool, str, optional
-        Ask whether replace JSON file (default=False)
 
     Returns
     -------
     list : node_list
 
     """
-    silent = utility.boolenize(silent)
     path = utility.abspath(json_path)
-    if not silent and os.path.exists(path):
-        ans = raw_input("File %s already exists. Replace? [y/N]"
-                        % json_path).lower()
-        if ans not in ["yes", "y"]:
-            print("Skip save_json pipe.")
-            return node_list
+    if os.path.exists(path):
+        logger.debug("File {} is overwritten.".format(json_path))
     with open(path, "w") as f:
         json.dump(node_list, f, indent=4)
     return node_list
@@ -57,7 +54,7 @@ def load(node_list, json_path):
     """
     path = utility.abspath(json_path)
     if not os.path.exists(path):
-        raise DataProcessorError("JSON does not exist")
+        raise DataProcessorError("JSON does not exist: " + path)
     with open(path, "r") as f:
         read_node_list = json.load(f)
     return node_list + read_node_list
@@ -90,15 +87,14 @@ class DataHandler(object):
 
     Examples
     --------
-    >>> with DataHandler(filename, silent=True) as dh:  # doctest: +SKIP
+    >>> with DataHandler(filename) as dh:  # doctest: +SKIP
     ...     dh.add({"path" : "/path/to/data1", "name" : "data1",
     ...             "parents": [], "children": []})
 
     """
 
-    def __init__(self, filename, silent=False):
+    def __init__(self, filename):
         self.data_path = utility.abspath(filename)
-        self.silent = silent
         self.load()
 
     def __enter__(self):
@@ -115,8 +111,7 @@ class DataHandler(object):
         if os.path.exists(self.data_path):
             self.node_list = load([], self.data_path)
         else:
-            if not self.silent:
-                print("Create new data in %s" % self.data_path)
+            logger.warning("File {} does not exist. Create new list.".format(self.data_path))
             self.node_list = []
 
     def get(self):
@@ -148,7 +143,7 @@ class DataHandler(object):
         if skip_validate_link:
             return
         for node in node_list:
-            nodes.validate_link(node_list, node, silent=True)
+            nodes.validate_link(node_list, node)
 
     def replace(self, node_list, skip_validate_link=True):
         """ Swap node_list.
@@ -162,10 +157,10 @@ class DataHandler(object):
         self.node_list = node_list
         if not skip_validate_link:
             for node in self.node_list:
-                nodes.validate_link(self.node_list, node, silent=True)
+                nodes.validate_link(self.node_list, node)
 
     def serialize(self):
-        save(self.node_list, self.data_path, self.silent)
+        save(self.node_list, self.data_path)
 
 
 class SyncDataHandler(DataHandler):
@@ -176,26 +171,19 @@ class SyncDataHandler(DataHandler):
 
     """
 
-    def __init__(self, filename, silent=False,
-                 lock_dir="/tmp",
-                 prefix="SyncDH",
-                 duration=0.1):
-        DataHandler.__init__(self, filename, silent)
+    def __init__(self, filename, lock_dir="/tmp", prefix="SyncDH", duration=0.1):
+        DataHandler.__init__(self, filename)
         self.pid = os.getpid()
-        self.lock_dir = os.path.join(lock_dir,
-                                     prefix + utility.abspath(filename)
-                                                     .replace("/", "_"))
+        self.lock_dir = os.path.join(lock_dir, prefix + utility.abspath(filename).replace("/", "_"))
         self.lock_fn = os.path.join(self.lock_dir, "pid")
         self.duration = duration
 
     def __enter__(self):
         while(True):
             if os.path.exists(self.lock_dir):
-                if not self.silent:
-                    with open(self.lock_fn, 'r') as f:
-                        pid = int(f.read())
-                    print("Waiting to lock %s ..." % self.data_path)
-                    print("PID of the locking process is %d" % pid)
+                with open(self.lock_fn, 'r') as f:
+                    pid = int(f.read())
+                logger.info("Waiting to lock {file:s} (PID={pid})".format(file=self.data_path, pid=pid))
                 time.sleep(self.duration)
             else:
                 os.mkdir(self.lock_dir)

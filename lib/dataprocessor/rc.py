@@ -56,7 +56,9 @@ def ArgumentParser(options={}):
         val = get_configure(rc_section, name)
         parser.add_argument("--" + name, default=val, **opt)
     parser.add_argument("--debug", action="store_true",
-                        help="output traceback")
+                        help="output traceback and debug message")
+    parser.add_argument("-v", "--verbose", action="store_true",
+                        help="output INFO log")
     return parser
 
 
@@ -133,7 +135,7 @@ def update(node_list):
     parser = get_configparser()
     if parser.has_option(rc_section, "json"):
         raise DataProcessorRcError("Configure does not contains JSON path.")
-    with io.SyncDataHandler(parser.get(rc_section, "json"), silent=True) as dh:
+    with io.SyncDataHandler(parser.get(rc_section, "json")) as dh:
         dh.update(node_list)
 
 

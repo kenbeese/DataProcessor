@@ -1,13 +1,16 @@
 # coding=utf-8
 
-import sys
 import os.path as op
 import yaml
 import ConfigParser as cp
+from logging import getLogger, NullHandler
 
 from .. import pipe
 from ..utility import read_configure, check_file, abspath
 from ..exception import DataProcessorError as dpError
+
+logger = getLogger(__name__)
+logger.addHandler(NullHandler())
 
 
 def parse_ini(confpath, section):
@@ -119,8 +122,8 @@ def load(node, filename, filetype=None, section="parameters"):
         filetype = get_filetype(confpath)
     filetype = filetype.lower()
     if filetype not in parsers:
-        print >>sys.stderr, "Invalid filetype : " + filetype
-        print >>sys.stderr, "Guess from extention"
+        logger.info("Invalid filetype : " + filetype)
+        logger.info("Guess from extention")
         filetype = get_filetype(confpath)
     cfg = parsers[filetype](confpath, section)
 

@@ -38,12 +38,15 @@ Simply, corresponds to the following conceptual code:
 
 """
 
-import sys
 import os.path as op
 from functools import wraps
+from logging import getLogger, NullHandler
 
 from .nodes import node_types
 from .exception import DataProcessorError as dpError
+
+logger = getLogger(__name__)
+logger.addHandler(NullHandler())
 
 
 class PipeImplementationError(Exception):
@@ -84,7 +87,7 @@ def _wrap(filter_func):
                         node.clear()
                         node.update(new_node)
                 except dpError as e:
-                    print >>sys.stderr, e
+                    logger.error(str(e))
                     continue
             return node_list
         return wrapper

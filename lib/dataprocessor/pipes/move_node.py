@@ -48,14 +48,14 @@ def move_node(node_list, from_path, dest):
     work_nl = copy.deepcopy(node_list)
 
     if os.path.isfile(from_path):
-        work_nl = change_path(work_nl, from_path, to_path, silent=True)
+        work_nl = change_path(work_nl, from_path, to_path)
         shutil.move(from_path, dest)
 
     if os.path.isdir(from_path):
         target_nodes = prefix_path(work_nl, from_path)
         for node in target_nodes:
             to_p = node["path"].replace(from_path, to_path, 1)
-            work_nl = change_path(work_nl, node["path"], to_p, silent=True)
+            work_nl = change_path(work_nl, node["path"], to_p)
         shutil.move(from_path, dest)
 
     node_list = work_nl
@@ -72,6 +72,6 @@ def register(pipe_dics):
     pipe_dics["change_path"] = {
         "func": change_path,
         "args": ["from_path", "to_path"],
-        "kwds": ["silent"],
+        "kwds": [],
         "desc": "change path of node",
     }
