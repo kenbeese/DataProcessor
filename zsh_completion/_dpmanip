@@ -1,4 +1,14 @@
 #compdef dpmanip
+function _dpmanip-merge_nodelist (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-add_node (){
     typeset -A opt_args
     local context state line
@@ -66,7 +76,7 @@ function _dpmanip-show_projects (){
 }
 
 
-function _dpmanip-normalize (){
+function _dpmanip-add_comment (){
     typeset -A opt_args
     local context state line
 
@@ -108,6 +118,20 @@ function _dpmanip-load_json (){
 }
 
 
+function _dpmanip-starter (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--requirements)--requirements[section parameters are written]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '(--name)--name[name of new run]: :_files' \
+        '(--projects)--projects[projects of new run]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '(--runner)--runner[runner]': :(atnow sync)' \' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-start_ipynb (){
     typeset -A opt_args
     local context state line
@@ -118,15 +142,12 @@ function _dpmanip-start_ipynb (){
 }
 
 
-function _dpmanip-show_runs (){
+function _dpmanip-filter_prefix (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--project)--project[project name]: :_files' \
-        '(--show_format)--show_format[format]: :_files' \
-        '(--parameters)--parameters[parameters to be displayed]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
         '*::arguments:_files'
 }
 
@@ -151,7 +172,7 @@ function _dpmanip-filter_node_type (){
 }
 
 
-function _dpmanip-merge_nodelist (){
+function _dpmanip-normalize (){
     typeset -A opt_args
     local context state line
 
@@ -186,12 +207,15 @@ function _dpmanip-add_run (){
 }
 
 
-function _dpmanip-add_comment (){
+function _dpmanip-show_runs (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--project)--project[project name]: :_files' \
+        '(--show_format)--show_format[format]: :_files' \
+        '(--parameters)--parameters[parameters to be displayed]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
         '*::arguments:_files'
 }
 
@@ -237,29 +261,20 @@ function _dpmanip-scan_directory (){
         '*::arguments:_files'
 }
 
-
-function _dpmanip-filter_prefix (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
 function _dpmanip_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
         add_node:'Add node to node_list.'
         change_path:'change path of node'
         filter_project:'filter by project path. This pipe filters out runs which don'\''t belong to the project, and should be used with '\''-o'\'' in dpmanip.'
-        add_tag:'Add a tag into the node'
+        normalize:'normalize nodes (i.e. fill necessary field)'
         save_json:'save node_list in a JSON file'
         show_projects:'output project name'
-        normalize:'normalize nodes (i.e. fill necessary field)'
+        add_comment:'add comment to node with path'
         gather_ipynb:'gather ipynb files'
         configure_no_section:'Read parameter file (without section)'
         load_json:'load node_list from a JSON file'
+        starter:'Start new run'
         start_ipynb:'start .ipynb in standing notebook'
         show_runs:'output runs path'
         move_node:'move node whose directory is also moved like as UNIX mv'
@@ -267,10 +282,10 @@ function _dpmanip_subcmd_list() {
         merge_nodelist:'Merge another node_list'
         configure:'Read parameter file (use ConfigParser)'
         add_run:'Add run.'
-        add_comment:'add comment to node with path'
         untag:'remove a tag from specified path'
         add_ipynb:'register .ipynb file'
         add_conf:'Add a new configure to the path.'
+        add_tag:'Add a tag into the node'
         scan_directory:'Scan nodes from all directories under the directory '\''root'\''.'
         filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
     )
@@ -286,7 +301,7 @@ function _dpmanip (){
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '(--json)--json[path of JSON file]: :_files' \
-        '(--debug)--debug[output traceback nad debug message]' \
+        '(--debug)--debug[output traceback and debug message]' \
         '(-v --verbose)'{-v,--verbose}'[output INFO log]' \
         '(-i --input)'{-i,--input}'[Use stdin as data JSON]' \
         '(-o --output)'{-o,--output}'[Output result node_list]' \
