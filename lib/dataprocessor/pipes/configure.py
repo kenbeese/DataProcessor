@@ -1,12 +1,9 @@
 # coding=utf-8
 
-import sys
 import os.path as op
-
-from .. import pipe
+from .. import pipe, configure
 from ..utility import read_configure, abspath, check_file
 from ..exception import DataProcessorError as dpError
-from ..configure import FileType, get_parser, guess_filetype_from_path
 
 
 @pipe.type("run")
@@ -28,33 +25,20 @@ def load(node, filename, filetype=None, section="parameters"):
     >>> load(node_list, "configure.conf", "defaults") # doctest:+SKIP
 
     """
-    NODE_KEY = "configure"
-
     confpath = abspath(op.join(node["path"], filename))
     check_file(confpath)
-    ft = FileType.NONE
 
-    if filetype:
-        try:
-            ft = FileType[filetype.lower()]
-        except KeyError:
-            print >>sys.stderr, "Invalid filetype : " + filetype
-            print >>sys.stderr, "Guess from extention"
-            ft = guess_filetype_from_path(confpath)
-    else:
-        ft = guess_filetype_from_path(confpath)
+    ft = configure.string_to_filetype(filetype)
+    if ft is configure.FileType.NONE:
+        ft = configure.guess_filetype_from_path(confpath)
+    if ft is configure.FileType.NONE:
+        raise dpError("Cannot determine filetype of configure file.")
 
-    print ft
-    # Invalid filetype
-    if ft == FileType.NONE:
-        raise dpError("File type error.")
+    cfg = configure.parse(ft, confpath, section)
 
-    parser = get_parser(ft)
-    cfg = parser(confpath, section)
-
-    if NODE_KEY not in node:
-        node[NODE_KEY] = {}
-    node[NODE_KEY].update(cfg)
+    if configure.node_key not in node:
+        node[configure.node_key] = {}
+    node[configure.node_key].update(cfg)
     return node
 
 

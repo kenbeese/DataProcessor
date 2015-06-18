@@ -13,6 +13,7 @@ logger.addHandler(NullHandler())
 
 _filetype_list = ["ini", "yaml"]
 FileType = enum.Enum("FileType", "NONE " + " ".join(_filetype_list))
+node_key = "configure"
 
 
 def guess_filetype_from_path(path):
@@ -26,7 +27,8 @@ def guess_filetype_from_path(path):
 
     Returns
     -------
-    FileType enum. If unknown filename extension is given, show warning
+    FileType enum
+
     """
     _, ext = os.path.splitext(path)
 
@@ -37,7 +39,31 @@ def guess_filetype_from_path(path):
     elif ext in (".yml", ".yaml"):
         return FileType.yaml
     else:
-        logger.warnings("Unknown ext '{}'".format(ext))
+        logger.warning("Unknown extension '{}'".format(ext))
+        return FileType.NONE
+
+
+def string_to_filetype(filetype_str):
+    """
+    Convert string to FileType.
+
+    Parameters
+    ----------
+    filetype_str: str
+        name of FileType
+
+    Returns
+    -------
+    FileType enum
+
+    """
+    if not filetype_str:
+        logger.debug("Empty filetype")
+        return FileType.NONE
+    try:
+        return FileType[filetype_str.lower()]
+    except KeyError:
+        logger.warning("Invalid filetype : " + filetype_str)
         return FileType.NONE
 
 
@@ -55,6 +81,7 @@ def parse_ini(confpath, section):
     Returns
     -------
     Specified section as a dictionary.
+
     """
     conf = cp.SafeConfigParser()
     conf.optionxform = str
@@ -84,6 +111,7 @@ def parse_yaml(confpath, section):
     Returns
     -------
     Specified section as a dictionary.
+
     """
     with open(confpath, "r") as f:
         try:
@@ -98,13 +126,16 @@ def parse_yaml(confpath, section):
 def get_parser(filetype):
     """
     Get parser corresponding to the filetype
+
     Parameters
     ----------
     filetype : FileType
         see enum filetype.FileType
+
     Returns
     -------
     function that takes 2 args, confpath and section.
+
     """
     # check extension in case insensitive way
     if filetype == FileType.ini:
@@ -112,4 +143,26 @@ def get_parser(filetype):
     elif filetype == FileType.yaml:
         return parse_yaml
     else:
-        raise dpError("Invalid filetype: {}".format(filetype))
+        raise dpError("Unsupported filetype: {}".format(filetype))
+
+
+def parse(filetype, path, section, **kwds):
+    """
+    Parse configure file
+
+    Parameters
+    ----------
+    filetype : FileType
+        see enum filetype.FileType
+    confpath : str
+        Path to config file.
+    section : str
+        Specify section name in configure file.
+
+    Returns
+    -------
+    dict
+
+    """
+    parser = get_parser(filetype)
+    return parser(path, section, **kwds)
