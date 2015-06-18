@@ -2,24 +2,18 @@
 
 import os.path as op
 import unittest
-from ..utility import check_dir, abspath
+from ..utility import check_directory
 from ..pipes.configure import load
 
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
 
 
-def _check_and_get_abspath(path):
-    path = abspath(path)
-    check_dir(path)
-    return path
-
-
 class TestConfigure_INI(unittest.TestCase):
 
     def setUp(self):
         self.node_list = [{
-            "path": _check_and_get_abspath(op.join(ROOT, "project2/run01")),
+            "path": check_directory(op.join(ROOT, "project2/run01")),
             "type": "run",
         }]
 
@@ -35,6 +29,10 @@ class TestConfigure_INI(unittest.TestCase):
         nl = load(self.node_list, "parameters.ini", filetype="INI")
         self.assertEqual(nl[0]["configure"], {"ny": "23"})
 
+    def test_invalid_filetype(self):
+        nl = load(self.node_list, "parameters.ini", filetype="ababababa")
+        self.assertEqual(nl[0]["configure"], {"ny": "23"})
+
     def test_load_missing_name(self):
         load(self.node_list, "parame.yamlu")  # not raises
 
@@ -43,7 +41,7 @@ class TestConfigure_YAML(unittest.TestCase):
 
     def setUp(self):
         self.node_list = [{
-            "path": _check_and_get_abspath(op.join(ROOT, "project3/run01")),
+            "path": check_directory(op.join(ROOT, "project3/run01")),
             "type": "run",
         }]
 
@@ -64,7 +62,7 @@ class TestConfigure_CONF(unittest.TestCase):
 
     def setUp(self):
         self.node_list = [{
-            "path": _check_and_get_abspath(op.join(ROOT, "project1/run01")),
+            "path": check_directory(op.join(ROOT, "project1/run01")),
             "type": "run",
         }]
 

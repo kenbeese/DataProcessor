@@ -1,16 +1,15 @@
 # coding=utf-8
 
+import sys
 import os.path as op
 import yaml
 import ConfigParser as cp
-from logging import getLogger, NullHandler
 
 from .. import pipe
-from ..utility import read_configure, check_file, abspath
+from ..utility import read_configure, check_file
 from ..exception import DataProcessorError as dpError
-
-logger = getLogger(__name__)
-logger.addHandler(NullHandler())
+from ..filetype import FileType
+from ..filetype import guess_filetype_from_path as guess_ft
 
 
 def parse_ini(confpath, section):
@@ -66,35 +65,25 @@ def parse_yaml(confpath, section):
         raise dpError("No such section '{}' in {}".format(section, confpath))
     return d[section]
 
-parsers = {
-    "ini": parse_ini,
-    "yaml": parse_yaml,
-}
 
-
-def get_filetype(path):
+def get_parser(filetype):
     """
-    Get filetype from path (filename extension).
-
+    Get parser corresponding to the filetype
     Parameters
     ----------
-    path: str
-        path to a file
-
+    filetype : FileType
+        see enum filetype.FileType
     Returns
     -------
-    filetype as a string.
+    function that takes 2 args, confpath and section.
     """
-    _, ext = op.splitext(path)
-
     # check extension in case insensitive way
-    ext = ext.lower()
-    if ext in (".ini", ".conf"):
-        return "ini"
-    elif ext in (".yml", ".yaml"):
-        return "yaml"
+    if filetype == FileType.ini:
+        return parse_ini
+    elif filetype == FileType.yaml:
+        return parse_yaml
     else:
-        raise dpError("Unknown filename extension ({})".format(ext))
+        return None
 
 
 @pipe.type("run")
@@ -116,20 +105,32 @@ def load(node, filename, filetype=None, section="parameters"):
     >>> load(node_list, "configure.conf", "defaults") # doctest:+SKIP
 
     """
-    confpath = abspath(op.join(node["path"], filename))
-    check_file(confpath)
-    if not filetype:
-        filetype = get_filetype(confpath)
-    filetype = filetype.lower()
-    if filetype not in parsers:
-        logger.info("Invalid filetype : " + filetype)
-        logger.info("Guess from extention")
-        filetype = get_filetype(confpath)
-    cfg = parsers[filetype](confpath, section)
+    NODE_KEY = "configure"
 
-    if "configure" not in node:
-        node["configure"] = {}
-    node["configure"].update(cfg)
+    confpath = check_file(op.join(node["path"], filename))
+    ft = FileType.NONE
+
+    if filetype:
+        try:
+            ft = FileType[filetype.lower()] 
+        except KeyError:
+            print >>sys.stderr, "Invalid filetype : " + filetype
+            print >>sys.stderr, "Guess from extention"
+            ft = guess_ft(confpath)
+    else:
+        ft = guess_ft(confpath)
+
+    print ft
+    # Invalid filetype
+    if ft == FileType.NONE:
+        raise dpError("File type error.")
+
+    parser = get_parser(ft)
+    cfg = parser(confpath, section)
+
+    if NODE_KEY not in node:
+        node[NODE_KEY] = {}
+    node[NODE_KEY].update(cfg)
     return node
 
 
@@ -156,8 +157,7 @@ def no_section(node, filename, split_char="=", comment_char=["#"]):
 
     """
     path = node["path"]
-    cfg_path = abspath(op.join(path, filename))
-    check_file(cfg_path)
+    cfg_path = check_file(op.join(path, filename))
     cfg = read_configure(cfg_path, split_char, comment_char)
     if "configure" not in node:
         node["configure"] = {}
