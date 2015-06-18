@@ -2,9 +2,10 @@
 
 import os.path as op
 import unittest
+from .helper import TestEnvironment
 from ..utility import abspath
 from ..pipes.configure import load
-
+from .. import configure
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
 
@@ -70,3 +71,33 @@ class TestConfigure_CONF(unittest.TestCase):
         nl = load(self.node_list, "parameters.conf")
         self.assertEqual(nl[0]["configure"]["nx"], "12")
         self.assertEqual(nl[0]["configure"]["ny"], "32")
+
+
+class TestConfigure_NoSection(TestEnvironment):
+
+    def test_read_configure1(self):
+        configure_path = op.join(self.tempdir_path, "conf")
+        contents = """hgoe=1\nhoge=2\ndafo=ds\n#hoge=ds"""
+        self.create_file(configure_path, contents)
+        conf = configure.parse_nosection(configure_path)
+        self.assertEqual(conf, {"hgoe": "1", "hoge": "2", "dafo": "ds"})
+
+    def test_read_configure2(self):
+        configure_path = op.join(self.tempdir_path, "conf")
+        # does not comment.
+        contents = """hgoe=1\nhoge=2\ndafo=ds\n #hoge=ds"""
+        self.create_file(configure_path, contents)
+        conf = configure.parse_nosection(configure_path)
+        self.assertEqual(conf, {"hgoe": "1", "hoge": "2",
+                                "dafo": "ds", "#hoge": "ds"})
+
+    def test_read_configure3(self):
+        configure_path = op.join(self.tempdir_path, "conf")
+        contents = """hgoe:1\nhoge   :   2\ndafo : ds\n!hoge=ds"""
+        self.create_file(configure_path, contents)
+        conf = configure.parse_nosection(configure_path, ":", "!")
+        self.assertEqual(conf, {"hgoe": "1", "hoge": "2", "dafo": "ds"})
+
+    def create_file(self, path, contents):
+        with open(path, "w") as f:
+            f.write(contents)

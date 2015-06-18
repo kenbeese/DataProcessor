@@ -11,7 +11,7 @@ logger = getLogger(__name__)
 logger.addHandler(NullHandler())
 
 
-_filetype_list = ["ini", "yaml"]
+_filetype_list = ["ini", "yaml", "nosection"]
 FileType = enum.Enum("FileType", "NONE " + " ".join(_filetype_list))
 node_key = "configure"
 
@@ -67,7 +67,7 @@ def string_to_filetype(filetype_str):
         return FileType.NONE
 
 
-def parse_ini(confpath, section):
+def parse_ini(confpath, section="defaults", **kwds):
     """
     Parse .ini and .conf to dictionary
 
@@ -97,7 +97,40 @@ def parse_ini(confpath, section):
         raise dpError("Section does not found: " + confpath)
 
 
-def parse_yaml(confpath, section):
+def parse_nosection(confpath, split_char="=", comment_char=["#"], **kwds):
+    """ Read configure file without sections.
+
+    Parameters
+    ----------
+    confpath : str
+        The file name of the configure file
+    split_char : str, optional
+        The lines in configure file are splited by this char (default "=").
+        If your configure has line s.t. `a : 1.2`,
+        then you should set `split_char=":"`.
+    comment_char : list of str, optional
+        The line starting with chars in this list will be skipped.
+        (default=["#"])
+
+    Returns
+    -------
+    dict
+
+    """
+    config = {}
+    with open(confpath, "r") as f:
+        for i, line in enumerate(f):
+            if line[0] in comment_char or line == "\n":
+                continue
+            lines = line.strip().split(split_char)
+            if(len(lines) != 2):
+                logger.debug("Invalid line {path}:{i} {line}".format(path=confpath, i=i, line=line))
+                continue
+            config[lines[0].strip()] = lines[1].strip()
+    return config
+
+
+def parse_yaml(confpath, section="parameters", **kwds):
     """
     Parse .yaml to dictionary
 
@@ -146,7 +179,7 @@ def get_parser(filetype):
         raise dpError("Unsupported filetype: {}".format(filetype))
 
 
-def parse(filetype, path, section, **kwds):
+def parse(filetype, path, **kwds):
     """
     Parse configure file
 
@@ -165,4 +198,4 @@ def parse(filetype, path, section, **kwds):
 
     """
     parser = get_parser(filetype)
-    return parser(path, section, **kwds)
+    return parser(path, **kwds)

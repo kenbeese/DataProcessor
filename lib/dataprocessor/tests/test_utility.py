@@ -54,31 +54,3 @@ class TestUtility(unittest.TestCase):
         utility.check_or_create_dir(temp_dir)  # not raise, create
         self.assertTrue(os.path.exists(temp_dir))
         utility.check_or_create_dir(temp_dir)  # not raise
-
-    def test_read_configure1(self):
-        configure_path = os.path.join(self.tempdir, "conf")
-        contents = """hgoe=1\nhoge=2\ndafo=ds\n#hoge=ds"""
-        self.create_file(configure_path, contents)
-        conf = utility.read_configure(configure_path)
-        self.assertEqual(conf, {"hgoe": "1", "hoge": "2", "dafo": "ds"})
-
-    def test_read_configure2(self):
-        configure_path = os.path.join(self.tempdir, "conf")
-        # does not comment.
-        contents = """hgoe=1\nhoge=2\ndafo=ds\n #hoge=ds"""
-        self.create_file(configure_path, contents)
-        conf = utility.read_configure(configure_path)
-        self.assertEqual(conf, {"hgoe": "1", "hoge": "2",
-                                "dafo": "ds", "#hoge": "ds"})
-
-    def test_read_configure3(self):
-        configure_path = os.path.join(self.tempdir, "conf")
-        contents = """hgoe:1\nhoge   :   2\ndafo : ds\n!hoge=ds"""
-        self.create_file(configure_path, contents)
-        conf = utility.read_configure(configure_path, ":", "!")
-        self.assertEqual(conf, {"hgoe": "1", "hoge": "2", "dafo": "ds"})
-
-    def create_file(self, path, contents):
-        f = open(path, "w")
-        f.write(contents)
-        f.close()
