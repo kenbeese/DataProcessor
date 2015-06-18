@@ -2,7 +2,7 @@
 
 import os.path as op
 import unittest
-from ..utility import check_directory
+from ..utility import abspath
 from ..pipes.configure import load
 
 
@@ -13,7 +13,7 @@ class TestConfigure_INI(unittest.TestCase):
 
     def setUp(self):
         self.node_list = [{
-            "path": check_directory(op.join(ROOT, "project2/run01")),
+            "path": abspath(op.join(ROOT, "project2/run01")),
             "type": "run",
         }]
 
@@ -41,7 +41,7 @@ class TestConfigure_YAML(unittest.TestCase):
 
     def setUp(self):
         self.node_list = [{
-            "path": check_directory(op.join(ROOT, "project3/run01")),
+            "path": abspath(op.join(ROOT, "project3/run01")),
             "type": "run",
         }]
 
@@ -62,7 +62,7 @@ class TestConfigure_CONF(unittest.TestCase):
 
     def setUp(self):
         self.node_list = [{
-            "path": check_directory(op.join(ROOT, "project1/run01")),
+            "path": abspath(op.join(ROOT, "project1/run01")),
             "type": "run",
         }]
 
