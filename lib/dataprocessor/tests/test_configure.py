@@ -22,8 +22,8 @@ class TestFileType(unittest.TestCase):
                          guess_filetype_from_path("/path/to/hoge.yml"))
         self.assertEqual(FileType.yaml,
                          guess_filetype_from_path("/path/to/hoge.yaml"))
-        # TODO catch exception after #169 is merges
-        # self.assertEqual(FileType.NONE, guess_filetype_from_path("/path/to/hoge.jpg"))
+        self.assertEqual(FileType.NONE,
+                         guess_filetype_from_path("/path/to/hoge.jpg"))
 
 
 class TestConfigure_INI(unittest.TestCase):
@@ -90,6 +90,15 @@ class TestConfigure_CONF(unittest.TestCase):
 
 
 class TestConfigure_NoSection(TestEnvironment):
+
+    def test_load_conf(self):
+        nl = [{
+            "path": abspath(op.join(ROOT, "project4/run01")),
+            "type": "run",
+        }]
+        nl = load(nl, "parameters.cfg", filetype="nosection")
+        self.assertEqual(nl[0]["configure"]["N"], "10")
+        self.assertEqual(nl[0]["configure"]["A"], "1.0")
 
     def test_read_configure1(self):
         configure_path = op.join(self.tempdir_path, "conf")

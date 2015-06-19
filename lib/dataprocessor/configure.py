@@ -175,6 +175,8 @@ def get_parser(filetype):
         return parse_ini
     elif filetype == FileType.yaml:
         return parse_yaml
+    elif filetype == FileType.nosection:
+        return parse_nosection
     else:
         raise dpError("Unsupported filetype: {}".format(filetype))
 
