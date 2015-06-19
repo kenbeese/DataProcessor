@@ -6,8 +6,24 @@ from .helper import TestEnvironment
 from ..utility import abspath
 from ..pipes.configure import load
 from .. import configure
+from ..configure import FileType, guess_filetype_from_path
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
+
+
+class TestFileType(unittest.TestCase):
+
+    def test_get_filetype(self):
+        self.assertEqual(FileType.ini,
+                         guess_filetype_from_path("/path/to/hoge.ini"))
+        self.assertEqual(FileType.ini,
+                         guess_filetype_from_path("/path/to/hoge.conf"))
+        self.assertEqual(FileType.yaml,
+                         guess_filetype_from_path("/path/to/hoge.yml"))
+        self.assertEqual(FileType.yaml,
+                         guess_filetype_from_path("/path/to/hoge.yaml"))
+        # TODO catch exception after #169 is merges
+        # self.assertEqual(FileType.NONE, guess_filetype_from_path("/path/to/hoge.jpg"))
 
 
 class TestConfigure_INI(unittest.TestCase):
