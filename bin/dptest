@@ -9,7 +9,6 @@ sys.path = ([sys.path[0]]
 import dataprocessor as dp
 sys.path = [sys.path[0]] + sys.path[2:]
 
-
 if __name__ == "__main__":
     try:
         parser = dp.argparsers.dptest()
