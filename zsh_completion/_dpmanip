@@ -96,6 +96,16 @@ function _dpmanip-gather_ipynb (){
 }
 
 
+function _dpmanip-foreach_project (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-configure_no_section (){
     typeset -A opt_args
     local context state line
@@ -207,6 +217,17 @@ function _dpmanip-add_run (){
 }
 
 
+function _dpmanip-foreach_run (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--project)--project[project name or path]: :_files' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-show_runs (){
     typeset -A opt_args
     local context state line
@@ -241,6 +262,16 @@ function _dpmanip-add_ipynb (){
 }
 
 
+function _dpmanip-foreach (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-add_conf (){
     typeset -A opt_args
     local context state line
@@ -264,6 +295,7 @@ function _dpmanip-scan_directory (){
 function _dpmanip_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
+        foreach_project:'Execute a command in project directories'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
         filter_project:'filter by project path. This pipe filters out runs which don'\''t belong to the project, and should be used with '\''-o'\'' in dpmanip.'
@@ -274,7 +306,7 @@ function _dpmanip_subcmd_list() {
         gather_ipynb:'gather ipynb files'
         configure_no_section:'Read parameter file (without section)'
         load_json:'load node_list from a JSON file'
-        starter:'Start new run'
+        untag:'remove a tag from specified path'
         start_ipynb:'start .ipynb in standing notebook'
         show_runs:'output runs path'
         move_node:'move node whose directory is also moved like as UNIX mv'
@@ -282,8 +314,10 @@ function _dpmanip_subcmd_list() {
         merge_nodelist:'Merge another node_list'
         configure:'Read parameter file (use ConfigParser)'
         add_run:'Add run.'
-        untag:'remove a tag from specified path'
+        foreach_run:'Execute a command in run directories'
+        starter:'Start new run'
         add_ipynb:'register .ipynb file'
+        foreach:'Execute a command in all managed directories'
         add_conf:'Add a new configure to the path.'
         add_tag:'Add a tag into the node'
         scan_directory:'Scan nodes from all directories under the directory '\''root'\''.'
