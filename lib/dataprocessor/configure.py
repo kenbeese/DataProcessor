@@ -171,13 +171,13 @@ def get_parser(filetype):
 
     """
     # check extension in case insensitive way
-    if filetype == FileType.ini:
-        return parse_ini
-    elif filetype == FileType.yaml:
-        return parse_yaml
-    elif filetype == FileType.nosection:
-        return parse_nosection
-    else:
+    try:
+        return {
+            FileType.ini: parse_ini,
+            FileType.yaml: parse_yaml,
+            FileType.nosection: parse_nosection,
+        }[filetype]
+    except KeyError:
         raise dpError("Unsupported filetype: {}".format(filetype))
 
 
