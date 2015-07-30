@@ -80,8 +80,7 @@ def show_run(node, node_list):
         parent_nodes.append(dp.nodes.get(node_list, p))
 
     # for completion of add tag
-    project_id_nodes = dp.filter.prefix_path(
-        node_list, dp.basket._ready_basket())
+    project_id_nodes = dp.filter.prefix_path(node_list, dp.basket.get_project_basket())
     project_ids = [n["name"] for n in project_id_nodes]
 
     # for ipynb
@@ -111,8 +110,7 @@ def show_project(node, node_list):
         parent_nodes.append(dp.nodes.get(node_list, p))
 
     # for completion of add tag
-    project_id_nodes = dp.filter.prefix_path(
-        node_list, dp.basket._ready_basket())
+    project_id_nodes = dp.filter.prefix_path(node_list, dp.basket.get_project_basket())
     project_ids = [n["name"] for n in project_id_nodes]
 
     def _count_uniq(col):
