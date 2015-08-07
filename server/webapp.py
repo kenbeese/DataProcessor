@@ -29,6 +29,8 @@ def show_projectlist():
     with dp.io.SyncDataHandler(g.data_path) as dh:
         nl = dh.get()
     projects = dp.filter.node_type(nl, "project")
+    for p in projects:
+        p["num_children"] = len(p["children"])
     return render_template('projectlist.html', projects=projects)
 
 
