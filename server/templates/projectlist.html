@@ -5,6 +5,7 @@
 <table class="dp-projectlist table table-striped">
   <thead>
     <tr>
+      <th></th>
       <th>Name</th>
       <th>#Nodes</th>
       <th>Comment</th>
@@ -14,6 +15,21 @@
   <tbody>
     {%- for p in projects %}
     <tr>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </div>
+      </td>
       <td>
         <a href="{{ url_for('show_node', path=p.path[1:]) }}">{{p.name|e}}</a>
       </td>
