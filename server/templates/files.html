@@ -11,11 +11,11 @@
 {% if files %}
 <div class="panel panel-default">
   <div class="panel-heading">Files</div>
-  <ul class="list-group">
+  <div class="row">
     {% for fn in files %}
-    <li class="list-group-item">{{fn|e}}</td>
+    <div class="col-md-2">{{fn|e}}</div>
     {% endfor %}
-  </ul>
+  </div>
 </div>
 {% endif %}
 {% if sequences %}
