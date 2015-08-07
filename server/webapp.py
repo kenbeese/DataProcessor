@@ -95,9 +95,17 @@ def show_run(node, node_list):
             n["url"] = ""
         n["name"] = dp.ipynb.resolve_name(p)
         ipynb_nodes.append(n)
+    ipynb_names = [n["name"] for n in ipynb_nodes]
 
-    return render_template("run.html", node=node, ipynb=ipynb_nodes,
-                           parents=parent_nodes, project_ids=project_ids)
+    # files
+    path = node["path"]
+    non_seq, seq = dp.utility.detect_sequence(os.listdir(path))
+    dirs = sorted([name for name in non_seq if os.path.isdir(os.path.join(path, name))])
+    files = sorted([name for name in non_seq if name not in dirs and name not in ipynb_names])
+    patterns = [(pat, len(seq[pat])) for pat in sorted(seq.keys())]
+
+    return render_template("run.html", node=node, ipynb=ipynb_nodes, files=files, dirs=dirs,
+                           sequences=patterns, parents=parent_nodes, project_ids=project_ids)
 
 
 def show_project(node, node_list):
