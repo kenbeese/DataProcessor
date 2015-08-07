@@ -111,9 +111,6 @@ def show_run(node, node_list):
 
 
 def show_project(node, node_list):
-    df = dp.dataframe.get_project(node_list, node["path"],
-                                  properties=["comment"]).fillna("")
-
     # for tag
     parent_nodes = []
     for p in node["parents"]:
@@ -123,10 +120,12 @@ def show_project(node, node_list):
     project_id_nodes = dp.filter.prefix_path(node_list, dp.basket.get_project_basket())
     project_ids = [n["name"] for n in project_id_nodes]
 
-    def _count_uniq(col):
-        return len(set(df[col]))
-    index = sorted(df.columns, key=_count_uniq, reverse=True)
-    cfg = [c for c in index if c not in ["name", "comment"]]
+    df = dp.dataframe.get_project(node_list, node["path"], properties=["comment"])
+    if not df.empty:
+        index = sorted(df.columns, reverse=True, key=lambda col: len(set(df[col])))
+        cfg = [c for c in index if c not in ["name", "comment"]]
+    else:
+        cfg = None
     return render_template("project.html", df=df, cfg=cfg, node=node,
                            parents=parent_nodes, project_ids=project_ids)
 

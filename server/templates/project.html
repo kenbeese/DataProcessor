@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body %}
+{% if not df.empty %}
 <table class="dp-project table table-condensed table-striped">
   <thead>
     <tr>
@@ -30,5 +31,6 @@
     {% endfor %}
   </tbody>
 </table>
+{% endif %}
 {% include "files.html" %}
 {% endblock %}
