@@ -179,3 +179,11 @@ def untag(path, project_path):
                   "untag", ["/" + path, "/" + project_path], {})
 
     return redirect(url_for('show_node', path=path))
+
+
+@app.route('/delete_project/<path:path>')
+def delete_project(path):
+    session['logged_in'] = True
+    flash("Delete project: '{}'".format("/" + path))
+    _execute_pipe(g.data_path, "remove_node", ["/" + path], {})
+    return redirect(url_for('show_projectlist'))
