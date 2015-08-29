@@ -25,6 +25,8 @@ def main(args):
     if not args.input and not args.output:
         with dp.io.SyncDataHandler(args.json) as dh:
             node_list = args.val["func"](dh.get(), *arguments, **keywords)
+            if node_list is None:
+                raise dp.exception.DataProcessorError("Pipe implement error")
             if args.replace:
                 dh.replace(node_list)
             else:
