@@ -280,6 +280,16 @@ function _dpmanip-add_conf (){
 }
 
 
+function _dpmanip-remove_node (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '*::arguments:_files'
+}
+
+
 function _dpmanip-scan_directory (){
     typeset -A opt_args
     local context state line
@@ -299,6 +309,7 @@ function _dpmanip_subcmd_list() {
         change_path:'change path of node'
         filter_project:'filter by project path. This pipe filters out runs which don'\''t belong to the project, and should be used with '\''-o'\'' in dpmanip.'
         normalize:'normalize nodes (i.e. fill necessary field)'
+        remove_node:'Remove node from nodelist (does not remove data)'
         save_json:'save node_list in a JSON file'
         show_projects:'output project name'
         add_comment:'add comment to node with path'
