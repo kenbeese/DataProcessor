@@ -320,6 +320,8 @@ def remove(node_list, path, skip_validate_link=False):
     ...              {"path": "/some/path", "children": ["/remove/path"],
     ...               "parents": []}]
     >>> remove(node_list, "/remove/path")
+    >>> node_list
+    [{'path': '/some/path', 'parents': [], 'children': []}]
 
     If skip_validate_link=True, node_list[1]["chilrdren"] is not removed.
 
