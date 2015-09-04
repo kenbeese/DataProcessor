@@ -7,7 +7,7 @@ from ..exception import DataProcessorError as dpError
 
 
 @pipe.type("run")
-def load(node, filename, filetype=None, section="parameters"):
+def load(node, filename, filetype=None, section=None):
     """ Load configure
 
     Parameters

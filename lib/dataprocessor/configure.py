@@ -159,7 +159,34 @@ def parse_nosection(confpath, split_char="=", comment_char=["#"], **kwds):
     return config
 
 
-def parse_yaml(confpath, section="parameters", **kwds):
+def _key_or_root(d, key, confpath):
+    """
+    Returns value of d[key]. If key is None, returns the dictionary as it is.
+    TODO key as list
+
+    Parameters
+    ----------
+    d : dictionary
+        Dictionary
+    key: str
+        Key.
+    confpath: str
+        for error message
+
+    Returns
+    -------
+    Value of dict.
+    """
+    if not key:
+        return d
+    if key in d:
+        return d[key]
+    else:
+        raise dpError("No such section '{}' in {}".format(key, confpath))
+
+
+
+def parse_yaml(confpath, section=None, **kwds):
     """
     Parse .yaml to dictionary
 
@@ -168,7 +195,8 @@ def parse_yaml(confpath, section="parameters", **kwds):
     confpath : str
         Path to config file.
     section : str
-        Specify section (key) name in configure file.
+        Specify section (key) name in configure file. If not specified, use
+        root.
 
     Returns
     -------
@@ -180,12 +208,10 @@ def parse_yaml(confpath, section="parameters", **kwds):
             d = yaml.load(f)
         except yaml.YAMLError:
             raise dpError("Fail to parse YAML file : " + confpath)
-    if section not in d:
-        raise dpError("No such section '{}' in {}".format(section, confpath))
-    return d[section]
+    return _key_or_root(d, section, confpath)
 
 
-def parse_json(confpath, section="parameters", **kwds):
+def parse_json(confpath, section=None, **kwds):
     """
     Parse .json to dictionary
 
@@ -194,7 +220,8 @@ def parse_json(confpath, section="parameters", **kwds):
     confpath : str
         Path to config file.
     section : str
-        Specify section (key) name in configure file.
+        Specify section (key) name in configure file. If not specified, use
+        root.
 
     Returns
     -------
@@ -206,9 +233,7 @@ def parse_json(confpath, section="parameters", **kwds):
             d = json.load(f)
         except:
             raise dpError("Fail to parse Json file : " + confpath)
-    if section not in d:
-        raise dpError("No such section '{}' in {}".format(section, confpath))
-    return d[section]
+    return _key_or_root(d, section, confpath)
 
 
 def parse(filetype, path, **kwds):
