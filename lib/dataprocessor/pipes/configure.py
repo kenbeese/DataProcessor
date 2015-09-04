@@ -47,7 +47,7 @@ def register(pipes_dics):
         "func": load,
         "args": ["filename"],
         "kwds": [("section", {"help": "section parameters are written"}),
-                 ("filetype", {"help": "filetype [ini, yaml]. If not given, "
+                 ("filetype", {"help": "filetype [ini, yaml, json]. If not given, "
                                        "determined automatically by the "
                                        "filename extension."})],
         "desc": "Read parameter file (use ConfigParser)",

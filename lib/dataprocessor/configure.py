@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import enum
+import json
 import os
 import yaml
 import ConfigParser as cp
@@ -11,7 +12,7 @@ logger = getLogger(__name__)
 logger.addHandler(NullHandler())
 
 
-_filetype_list = ["ini", "yaml", "nosection"]
+_filetype_list = ["ini", "yaml", "nosection", "json"]
 FileType = enum.Enum("FileType", "NONE " + " ".join(_filetype_list))
 node_key = "configure"
 
@@ -38,9 +39,37 @@ def guess_filetype_from_path(path):
         return FileType.ini
     elif ext in (".yml", ".yaml"):
         return FileType.yaml
+    elif ext in (".json"):
+        return FileType.json
     else:
         logger.warning("Unknown extension '{}'".format(ext))
         return FileType.NONE
+
+
+def get_parser(filetype):
+    """
+    Get parser corresponding to the filetype
+
+    Parameters
+    ----------
+    filetype : FileType
+        see enum filetype.FileType
+
+    Returns
+    -------
+    function that takes 2 args, confpath and section.
+
+    """
+    # check extension in case insensitive way
+    try:
+        return {
+            FileType.ini: parse_ini,
+            FileType.yaml: parse_yaml,
+            FileType.nosection: parse_nosection,
+            FileType.json: parse_json,
+        }[filetype]
+    except KeyError:
+        raise dpError("Unsupported filetype: {}".format(filetype))
 
 
 def string_to_filetype(filetype_str):
@@ -139,7 +168,7 @@ def parse_yaml(confpath, section="parameters", **kwds):
     confpath : str
         Path to config file.
     section : str
-        Specify section name in configure file.
+        Specify section (key) name in configure file.
 
     Returns
     -------
@@ -156,29 +185,30 @@ def parse_yaml(confpath, section="parameters", **kwds):
     return d[section]
 
 
-def get_parser(filetype):
+def parse_json(confpath, section="parameters", **kwds):
     """
-    Get parser corresponding to the filetype
+    Parse .json to dictionary
 
     Parameters
     ----------
-    filetype : FileType
-        see enum filetype.FileType
+    confpath : str
+        Path to config file.
+    section : str
+        Specify section (key) name in configure file.
 
     Returns
     -------
-    function that takes 2 args, confpath and section.
+    Specified section as a dictionary.
 
     """
-    # check extension in case insensitive way
-    try:
-        return {
-            FileType.ini: parse_ini,
-            FileType.yaml: parse_yaml,
-            FileType.nosection: parse_nosection,
-        }[filetype]
-    except KeyError:
-        raise dpError("Unsupported filetype: {}".format(filetype))
+    with open(confpath, "r") as f:
+        try:
+            d = json.load(f)
+        except:
+            raise dpError("Fail to parse Json file : " + confpath)
+    if section not in d:
+        raise dpError("No such section '{}' in {}".format(section, confpath))
+    return d[section]
 
 
 def parse(filetype, path, **kwds):
