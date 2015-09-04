@@ -159,7 +159,7 @@ def parse_nosection(confpath, split_char="=", comment_char=["#"], **kwds):
     return config
 
 
-def _key_or_root(d, key, confpath):
+def key_or_root(d, key, confpath):
     """
     Returns value of d[key]. If key is None, returns the dictionary as it is.
     TODO key as list
@@ -208,7 +208,7 @@ def parse_yaml(confpath, section=None, **kwds):
             d = yaml.load(f)
         except yaml.YAMLError:
             raise dpError("Fail to parse YAML file : " + confpath)
-    return _key_or_root(d, section, confpath)
+    return key_or_root(d, section, confpath)
 
 
 def parse_json(confpath, section=None, **kwds):
@@ -233,7 +233,7 @@ def parse_json(confpath, section=None, **kwds):
             d = json.load(f)
         except:
             raise dpError("Fail to parse Json file : " + confpath)
-    return _key_or_root(d, section, confpath)
+    return key_or_root(d, section, confpath)
 
 
 def parse(filetype, path, **kwds):

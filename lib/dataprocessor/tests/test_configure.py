@@ -6,7 +6,7 @@ from .helper import TestEnvironment
 from ..utility import abspath
 from ..pipes.configure import load
 from .. import configure
-from ..configure import FileType, guess_filetype_from_path
+from ..configure import FileType, guess_filetype_from_path, key_or_root
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
 
@@ -126,3 +126,18 @@ class TestConfigure_NoSection(TestEnvironment):
     def create_file(self, path, contents):
         with open(path, "w") as f:
             f.write(contents)
+
+
+class TestKeyOrRoot(TestEnvironment):
+
+    def setUp(self):
+        self.data = {"a": 1, "b": 2}
+
+    def test_key(self):
+        self.assertEqual(key_or_root(self.data, "a", ""), 1)
+
+    def test_root(self):
+        self.assertEqual(key_or_root(self.data, None, ""), self.data.copy())
+
+    def test_error(self):
+        self.assertRaises(dpError, key_or_root(self.data, "c", ""))
