@@ -75,6 +75,27 @@ class TestConfigure_YAML(unittest.TestCase):
         self.assertEqual(nl[0]["configure"], {"ny": 23})
 
 
+class TestConfigure_JSON(unittest.TestCase):
+
+    def setUp(self):
+        self.node_list = [{
+            "path": abspath(op.join(ROOT, "project5/run01")),
+            "type": "run",
+        }]
+
+    def test_load(self):
+        nl = load(self.node_list, "parameters.json")
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
+        nl = load(nl, "parameters.json")
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
+
+    def test_load_filetype_yaml(self):
+        nl = load(self.node_list, "parameters.json", filetype="INI")
+        self.assertNotIn("configure", nl[0])  # fail to parse YAML
+        nl = load(self.node_list, "parameters.json", filetype="YAML")
+        self.assertEqual(nl[0]["configure"], {"ny": 23})
+
+
 class TestConfigure_CONF(unittest.TestCase):
 
     def setUp(self):
