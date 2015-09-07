@@ -106,18 +106,6 @@ function _dpmanip-foreach_project (){
 }
 
 
-function _dpmanip-configure_no_section (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--split_char)--split_char[separetor of parameters]: :_files' \
-        '(--comment_char)--comment_char[charactors defines comment line]: :_files' \
-        '*::arguments:_files'
-}
-
-
 function _dpmanip-load_json (){
     typeset -A opt_args
     local context state line
@@ -128,16 +116,12 @@ function _dpmanip-load_json (){
 }
 
 
-function _dpmanip-starter (){
+function _dpmanip-foreach (){
     typeset -A opt_args
     local context state line
 
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '(--requirements)--requirements[section parameters are written]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
-        '(--name)--name[name of new run]: :_files' \
-        '(--projects)--projects[projects of new run]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
-        '(--runner)--runner[runner]': :(atnow sync)' \' \
         '*::arguments:_files'
 }
 
@@ -199,7 +183,17 @@ function _dpmanip-configure (){
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '(--section)--section[section parameters are written]: :_files' \
-        '(--filetype)--filetype[filetype \[ini, yaml\]. If not given, determined automatically by the filename extension.]: :_files' \
+        '(--filetype)--filetype[filetype \[ini, yaml, json\]. If not given, determined automatically by the filename extension.]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-remove_dead (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '*::arguments:_files'
 }
 
@@ -224,6 +218,20 @@ function _dpmanip-foreach_run (){
     _arguments -w -s -S \
         '(-h --help)'{-h,--help}'[show this help message and exit]' \
         '(--project)--project[project name or path]: :_files' \
+        '*::arguments:_files'
+}
+
+
+function _dpmanip-starter (){
+    typeset -A opt_args
+    local context state line
+
+    _arguments -w -s -S \
+        '(-h --help)'{-h,--help}'[show this help message and exit]' \
+        '(--requirements)--requirements[section parameters are written]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '(--name)--name[name of new run]: :_files' \
+        '(--projects)--projects[projects of new run]: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files:: :_files' \
+        '(--runner)--runner[runner]': :(atnow sync)' \' \
         '*::arguments:_files'
 }
 
@@ -262,16 +270,6 @@ function _dpmanip-add_ipynb (){
 }
 
 
-function _dpmanip-foreach (){
-    typeset -A opt_args
-    local context state line
-
-    _arguments -w -s -S \
-        '(-h --help)'{-h,--help}'[show this help message and exit]' \
-        '*::arguments:_files'
-}
-
-
 function _dpmanip-add_conf (){
     typeset -A opt_args
     local context state line
@@ -295,6 +293,7 @@ function _dpmanip-scan_directory (){
 function _dpmanip_subcmd_list() {
     local -a subcmd_list
     subcmd_list=(
+        untag:'remove a tag from specified path'
         foreach_project:'Execute a command in project directories'
         add_node:'Add node to node_list.'
         change_path:'change path of node'
@@ -304,24 +303,23 @@ function _dpmanip_subcmd_list() {
         show_projects:'output project name'
         add_comment:'add comment to node with path'
         gather_ipynb:'gather ipynb files'
-        configure_no_section:'Read parameter file (without section)'
         load_json:'load node_list from a JSON file'
-        untag:'remove a tag from specified path'
+        foreach:'Execute a command in all managed directories'
         start_ipynb:'start .ipynb in standing notebook'
-        show_runs:'output runs path'
+        filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
         move_node:'move node whose directory is also moved like as UNIX mv'
         filter_node_type:'filter by node type. This pipe filters out nodes which has different type attribute, and should be used with '\''-o'\'' option in dpmanip.'
         merge_nodelist:'Merge another node_list'
         configure:'Read parameter file (use ConfigParser)'
+        remove_dead:'Remove nodes that no longer exist.'
         add_run:'Add run.'
         foreach_run:'Execute a command in run directories'
+        show_runs:'output runs path'
         starter:'Start new run'
         add_ipynb:'register .ipynb file'
-        foreach:'Execute a command in all managed directories'
         add_conf:'Add a new configure to the path.'
         add_tag:'Add a tag into the node'
         scan_directory:'Scan nodes from all directories under the directory '\''root'\''.'
-        filter_prefix:'filter by prefix_path. This pipe filters out runs, projects and figures whose path does not start with the prefix, and should be used with '\''-o'\'' option in dpmanip.'
     )
     _describe -t subcmd 'subcommand list' subcmd_list && return
 }
