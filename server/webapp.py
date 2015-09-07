@@ -96,6 +96,11 @@ def show_run(node, node_list):
         n["name"] = dp.ipynb.resolve_name(p)
         ipynb_nodes.append(n)
 
+    # for test. remove this later!
+    node["video"] = {
+        "path": node["path"] + "/result.gif",
+        "link": "images/links/result.gif"
+    }
     return render_template("run.html", node=node, ipynb=ipynb_nodes,
                            parents=parent_nodes, project_ids=project_ids)
 
