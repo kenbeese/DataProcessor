@@ -27,12 +27,18 @@ def scan(node, filename):
     if not op.exists(videopath):
         return node
 
-    # Map path to filename
+    # Map path to a single string not containing '/'
     linkname = videopath.replace("/", "%")
-    node["video"] = {
+
+    if "video" not in node or not isinstance(node["video"], list):
+        node["video"] = list()
+    video = {
         "path": videopath,
         "link": linkname
     }
+    # Avoid duplicated element
+    if video not in node["video"]:
+        node["video"].append(video)
 
     if not op.exists(STATIC_DIR):
         os.makedirs(STATIC_DIR)
