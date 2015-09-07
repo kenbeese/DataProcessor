@@ -162,11 +162,10 @@ def parse_nosection(confpath, split_char="=", comment_char=["#"], **kwds):
 def key_or_root(d, key, confpath):
     """
     Returns value of d[key]. If key is None, returns the dictionary as it is.
-    TODO key as list
 
     Parameters
     ----------
-    d : dictionary
+    d : dict
         Dictionary
     key: str
         Key.
@@ -176,6 +175,11 @@ def key_or_root(d, key, confpath):
     Returns
     -------
     Value of dict.
+
+    TODO
+    ----
+     - accept list for "key" argument
+
     """
     if not key:
         return d
@@ -183,7 +187,6 @@ def key_or_root(d, key, confpath):
         return d[key]
     else:
         raise dpError("No such section '{}' in {}".format(key, confpath))
-
 
 
 def parse_yaml(confpath, section=None, **kwds):
