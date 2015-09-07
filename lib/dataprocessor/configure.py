@@ -96,7 +96,7 @@ def string_to_filetype(filetype_str):
         return FileType.NONE
 
 
-def parse_ini(confpath, section="defaults", **kwds):
+def parse_ini(confpath, section="parameters", **kwds):
     """
     Parse .ini and .conf to dictionary
 
@@ -159,7 +159,37 @@ def parse_nosection(confpath, split_char="=", comment_char=["#"], **kwds):
     return config
 
 
-def parse_yaml(confpath, section="parameters", **kwds):
+def key_or_root(d, key, confpath):
+    """
+    Returns value of d[key]. If key is None, returns the dictionary as it is.
+
+    Parameters
+    ----------
+    d : dict
+        Dictionary
+    key: str
+        Key.
+    confpath: str
+        for error message
+
+    Returns
+    -------
+    Value of dict.
+
+    TODO
+    ----
+     - accept list for "key" argument
+
+    """
+    if not key:
+        return d
+    if key in d:
+        return d[key]
+    else:
+        raise dpError("No such section '{}' in {}".format(key, confpath))
+
+
+def parse_yaml(confpath, section=None, **kwds):
     """
     Parse .yaml to dictionary
 
@@ -168,7 +198,8 @@ def parse_yaml(confpath, section="parameters", **kwds):
     confpath : str
         Path to config file.
     section : str
-        Specify section (key) name in configure file.
+        Specify section (key) name in configure file. If not specified, use
+        root.
 
     Returns
     -------
@@ -180,12 +211,10 @@ def parse_yaml(confpath, section="parameters", **kwds):
             d = yaml.load(f)
         except yaml.YAMLError:
             raise dpError("Fail to parse YAML file : " + confpath)
-    if section not in d:
-        raise dpError("No such section '{}' in {}".format(section, confpath))
-    return d[section]
+    return key_or_root(d, section, confpath)
 
 
-def parse_json(confpath, section="parameters", **kwds):
+def parse_json(confpath, section=None, **kwds):
     """
     Parse .json to dictionary
 
@@ -194,7 +223,8 @@ def parse_json(confpath, section="parameters", **kwds):
     confpath : str
         Path to config file.
     section : str
-        Specify section (key) name in configure file.
+        Specify section (key) name in configure file. If not specified, use
+        root.
 
     Returns
     -------
@@ -206,9 +236,7 @@ def parse_json(confpath, section="parameters", **kwds):
             d = json.load(f)
         except:
             raise dpError("Fail to parse Json file : " + confpath)
-    if section not in d:
-        raise dpError("No such section '{}' in {}".format(section, confpath))
-    return d[section]
+    return key_or_root(d, section, confpath)
 
 
 def parse(filetype, path, **kwds):
