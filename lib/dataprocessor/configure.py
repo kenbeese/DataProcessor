@@ -96,7 +96,7 @@ def string_to_filetype(filetype_str):
         return FileType.NONE
 
 
-def parse_ini(confpath, section="defaults", **kwds):
+def parse_ini(confpath, section="parameters", **kwds):
     """
     Parse .ini and .conf to dictionary
 

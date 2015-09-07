@@ -7,6 +7,7 @@ from ..utility import abspath
 from ..pipes.configure import load
 from .. import configure
 from ..configure import FileType, guess_filetype_from_path, key_or_root
+from ..exception import DataProcessorError
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
 
@@ -63,37 +64,54 @@ class TestConfigure_YAML(unittest.TestCase):
         }]
 
     def test_load(self):
-        nl = load(self.node_list, "parameters.yml")
+        nl = load(self.node_list, "parameters.yml", section="parameters")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
-        nl = load(nl, "parameters.yml")
+        nl = load(nl, "parameters.yml", section="parameters")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
 
     def test_load_filetype_yaml(self):
-        nl = load(self.node_list, "parameters.yml", filetype="INI")
+        nl = load(self.node_list, "parameters.yml", filetype="INI",
+                  section="parameters")
         self.assertNotIn("configure", nl[0])  # fail to parse YAML
-        nl = load(self.node_list, "parameters.yml", filetype="YAML")
+        nl = load(self.node_list, "parameters.yml", filetype="YAML",
+                  section="parameters")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
 
 
 class TestConfigure_JSON(unittest.TestCase):
 
     def setUp(self):
-        self.node_list = [{
-            "path": abspath(op.join(ROOT, "project5/run01")),
-            "type": "run",
-        }]
+        self.node_list = [
+            {
+                "path": abspath(op.join(ROOT, "project5/run01")),
+                "type": "run"
+            },
+            {
+                "path": abspath(op.join(ROOT, "project5/run02")),
+                "type": "run"
+            },
+        ]
 
     def test_load(self):
-        nl = load(self.node_list, "parameters.json")
+        nl = load(self.node_list, "parameters.json", section="parameters")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
-        nl = load(nl, "parameters.json")
+        nl = load(nl, "parameters.json", section="parameters")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
 
-    def test_load_filetype_yaml(self):
-        nl = load(self.node_list, "parameters.json", filetype="INI")
+    def test_load_filetype_json(self):
+        nl = load(self.node_list, "parameters.json", filetype="INI",
+                  section="parameters")
         self.assertNotIn("configure", nl[0])  # fail to parse YAML
-        nl = load(self.node_list, "parameters.json", filetype="YAML")
+        nl = load(self.node_list, "parameters.json", filetype="json",
+                  section="parameters")
         self.assertEqual(nl[0]["configure"], {"ny": 23})
+
+    def test_load_json_root(self):
+        nl = load(self.node_list, "parameters.json")
+        self.assertEqual(nl[1]["configure"], {"ny": 23})
+        nl = load(nl, "parameters.json")
+        self.assertEqual(nl[1]["configure"], {"ny": 23})
+
 
 
 class TestConfigure_CONF(unittest.TestCase):
@@ -149,7 +167,7 @@ class TestConfigure_NoSection(TestEnvironment):
             f.write(contents)
 
 
-class TestKeyOrRoot(TestEnvironment):
+class TestKeyOrRoot(unittest.TestCase):
 
     def setUp(self):
         self.data = {"a": 1, "b": 2}
@@ -161,4 +179,6 @@ class TestKeyOrRoot(TestEnvironment):
         self.assertEqual(key_or_root(self.data, None, ""), self.data.copy())
 
     def test_error(self):
-        self.assertRaises(dpError, key_or_root(self.data, "c", ""))
+        with self.assertRaises(DataProcessorError):
+            # no such key in the dictionaryor)
+            v = key_or_root(self.data, "c", "")

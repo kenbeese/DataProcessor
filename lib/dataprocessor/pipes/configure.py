@@ -34,7 +34,10 @@ def load(node, filename, filetype=None, section=None):
     if ft is configure.FileType.NONE:
         raise dpError("Cannot determine filetype of configure file.")
 
-    cfg = configure.parse(ft, confpath, section=section)
+    if section is None:
+        cfg = configure.parse(ft, confpath)
+    else:
+        cfg = configure.parse(ft, confpath, section=section)
 
     if configure.node_key not in node:
         node[configure.node_key] = {}
