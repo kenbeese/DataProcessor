@@ -7,6 +7,7 @@ from ..pipes.remove_dead import remove_dead
 
 ROOT = op.join(__file__, "../../../../sample/datadir")
 
+
 class TestRemoveDead(unittest.TestCase):
 
     def setUp(self):

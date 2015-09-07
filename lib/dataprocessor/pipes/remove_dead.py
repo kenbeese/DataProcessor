@@ -1,8 +1,7 @@
 # coding=utf-8
 
 import os.path as op
-from .. import pipe, nodes
-from ..exception import DataProcessorError as dpError
+from .. import nodes
 
 
 def remove_dead(nodelist):
