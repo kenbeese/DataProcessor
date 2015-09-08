@@ -5,6 +5,16 @@
 {% endblock %}
 
 {% block body %}
+{% if 'video' in node %}
+  {% for video in node['video'] %}
+    {% set video_src = url_for('static', filename="images/links/" + video['link']) %}
+    {% if video['path'].endswith('gif') %}
+    <img src="{{video_src}}"></img>
+    {% else %}
+    <video src="{{video_src}}"></video>
+    {% endif %}
+  {% endfor %}
+{% endif %}
 {% if ipynb %}
 <div class="panel panel-default">
   <div class="panel-heading">IPython Notebooks</div>
