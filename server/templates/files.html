@@ -11,11 +11,22 @@
 {% if files %}
 <div class="panel panel-default">
   <div class="panel-heading">Files</div>
-  <div class="row">
-    {% for fn in files %}
-    <div class="col-md-2">{{fn|e}}</div>
-    {% endfor %}
-  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>filename</th>
+        <th>type</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t, fn in files %}
+      <tr>
+        <td>{{fn|e}}</td>
+        <td>{{t|e}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endif %}
 {% if sequences %}

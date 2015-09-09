@@ -7,7 +7,6 @@ Some useful tools for dataprocessor are included.
 from .exception import DataProcessorError
 import re
 import os.path
-import collections
 import subprocess
 from contextlib import contextmanager
 from datetime import datetime
@@ -228,3 +227,28 @@ def detect_sequence(names):
             continue
         seq[pat] = ns
     return non_seq, seq
+
+
+def expect_filetype(name):
+    """
+    Expect filetype from extention
+
+    Example
+    -------
+    >>> expect_filetype("movie.avi")
+    'movie'
+    >>> expect_filetype("a.png")
+    'picture'
+
+    """
+    _, ext = os.path.splitext(name)
+    ext = ext[1:].lower()
+    extensions = {
+        "movie": ["avi", "mp4"],
+        "picture": ["png", "jpg", "jpeg", "gif"],
+        "ipynb": ["ipynb"],
+    }
+    for typename, exts in extensions.items():
+        if ext in exts:
+            return typename
+    return "Unknown"
