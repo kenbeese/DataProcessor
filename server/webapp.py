@@ -104,7 +104,7 @@ def show_run(node, node_list):
     non_seq, seq = dp.utility.detect_sequence(os.listdir(path))
     dirs = sorted([name for name in non_seq if os.path.isdir(os.path.join(path, name))])
     files = sorted([(dp.utility.expect_filetype(name), name)
-                    for name in non_seq if name not in dirs and name not in ipynb_names])
+                    for name in non_seq if name not in dirs and name not in ipynb_names], reverse=True)
     patterns = [(pat, len(seq[pat])) for pat in sorted(seq.keys())]
 
     return render_template("run.html", node=node, ipynb=ipynb_nodes, files=files, dirs=dirs,

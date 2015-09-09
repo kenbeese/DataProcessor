@@ -244,8 +244,8 @@ def expect_filetype(name):
     _, ext = os.path.splitext(name)
     ext = ext[1:].lower()
     extensions = {
-        "movie": ["avi", "mp4"],
-        "picture": ["png", "jpg", "jpeg", "gif"],
+        "video": ["avi", "mp4"],
+        "image": ["png", "jpg", "jpeg", "gif"],
         "ipynb": ["ipynb"],
     }
     for typename, exts in extensions.items():
