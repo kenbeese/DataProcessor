@@ -24,6 +24,8 @@ def safe_float(val):
         return float(val)
     except ValueError:
         return val
+    except TypeError:
+        return str(val)
 
 
 def get_project(node_list, project_path, properties=["comment"], index="path"):

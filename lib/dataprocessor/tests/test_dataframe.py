@@ -87,3 +87,20 @@ class TestIo(unittest.TestCase):
             dataframe.get_project(self.node_list, "/proj1", index=["pat", "name"])
         # not raise
         dataframe.get_project(self.node_list, "/proj1", index=[])
+
+
+class TestIo(unittest.TestCase):
+
+    def test_scalar(self):
+        self.assertEqual(dataframe.safe_float(1), 1.0)
+        self.assertEqual(dataframe.safe_float(1.0), 1.0)
+        self.assertEqual(dataframe.safe_float("1.0"), 1.0)
+        self.assertEqual(dataframe.safe_float("abc"), "abc")
+
+    def test_list(self):
+        l = [1, 2, 3]
+        self.assertEqual(dataframe.safe_float(l), str(l))
+
+    def test_dict(self):
+        d = {"a": 1}
+        self.assertEqual(dataframe.safe_float(d), str(d))
