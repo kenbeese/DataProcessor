@@ -32,8 +32,8 @@ def load(node, filename, filetype=None, section=None):
     confpath = abspath(op.join(node["path"], filename))
     try:
         check_file(confpath)
-    except:
-        logger.info("Configure file does not found: " + confpath)
+    except dpError as e:
+        logger.info(str(e))
         return node
 
     ft = configure.string_to_filetype(filetype)
