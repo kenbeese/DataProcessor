@@ -1,9 +1,13 @@
 # coding=utf-8
 
 import os.path as op
+from logging import getLogger, NullHandler
 from .. import pipe, configure
 from ..utility import abspath, check_file
 from ..exception import DataProcessorError as dpError
+
+logger = getLogger(__name__)
+logger.addHandler(NullHandler())
 
 
 @pipe.type("run")
@@ -26,7 +30,11 @@ def load(node, filename, filetype=None, section=None):
 
     """
     confpath = abspath(op.join(node["path"], filename))
-    check_file(confpath)
+    try:
+        check_file(confpath)
+    except dpError as e:
+        logger.info(str(e))
+        return node
 
     ft = configure.string_to_filetype(filetype)
     if ft is configure.FileType.NONE:
