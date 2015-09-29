@@ -18,6 +18,20 @@ function send_comment(comment, path){
     });
 }
 
+function dpcomment_keydown_handler(e) {
+  if (e.keyCode == 13) {  // Enter is pressed
+    if (e.shiftKey) {
+      // do nothing
+    } else if (e.ctrlKey) {
+      // do nothing
+    } else if (e.altKey) {
+      // do nothing
+    } else {  // Enter only
+      $(this).blur();
+    }
+  }
+}
+
 function enable_editable_comment() {
   f_click = function(){
     var comment = $(this).text();
@@ -26,6 +40,7 @@ function enable_editable_comment() {
     $("<textarea>")
       .val(comment)
       .attr("dp-path", path)
+      .keydown(dpcomment_keydown_handler)
       .addClass("form-control")
       .appendTo(this)
       .focus();
