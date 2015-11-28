@@ -29,6 +29,8 @@ def show_projectlist():
     with dp.io.SyncDataHandler(g.data_path) as dh:
         nl = dh.get()
     projects = dp.filter.node_type(nl, "project")
+    for p in projects:
+        p["num_children"] = len(p["children"])
     return render_template('projectlist.html', projects=projects)
 
 
@@ -95,15 +97,21 @@ def show_run(node, node_list):
             n["url"] = ""
         n["name"] = dp.ipynb.resolve_name(p)
         ipynb_nodes.append(n)
+    ipynb_names = [n["name"] for n in ipynb_nodes]
 
-    return render_template("run.html", node=node, ipynb=ipynb_nodes,
-                           parents=parent_nodes, project_ids=project_ids)
+    # files
+    path = node["path"]
+    non_seq, seq = dp.utility.detect_sequence(os.listdir(path))
+    dirs = sorted([name for name in non_seq if os.path.isdir(os.path.join(path, name))])
+    files = sorted([(dp.utility.expect_filetype(name), name)
+                    for name in non_seq if name not in dirs and name not in ipynb_names], reverse=True)
+    patterns = [(pat, len(seq[pat])) for pat in sorted(seq.keys())]
+
+    return render_template("run.html", node=node, ipynb=ipynb_nodes, files=files, dirs=dirs,
+                           sequences=patterns, parents=parent_nodes, project_ids=project_ids)
 
 
 def show_project(node, node_list):
-    df = dp.dataframe.get_project(node_list, node["path"],
-                                  properties=["comment"]).fillna("")
-
     # for tag
     parent_nodes = []
     for p in node["parents"]:
@@ -113,10 +121,12 @@ def show_project(node, node_list):
     project_id_nodes = dp.filter.prefix_path(node_list, dp.basket.get_project_basket())
     project_ids = [n["name"] for n in project_id_nodes]
 
-    def _count_uniq(col):
-        return len(set(df[col]))
-    index = sorted(df.columns, key=_count_uniq, reverse=True)
-    cfg = [c for c in index if c not in ["name", "comment"]]
+    df = dp.dataframe.get_project(node_list, node["path"], properties=["comment"])
+    if not df.empty:
+        index = sorted(df.columns, reverse=True, key=lambda col: len(set(df[col])))
+        cfg = [c for c in index if c not in ["name", "comment"]]
+    else:
+        cfg = None
     return render_template("project.html", df=df, cfg=cfg, node=node,
                            parents=parent_nodes, project_ids=project_ids)
 
@@ -170,3 +180,11 @@ def untag(path, project_path):
                   "untag", ["/" + path, "/" + project_path], {})
 
     return redirect(url_for('show_node', path=path))
+
+
+@app.route('/delete_project/<path:path>')
+def delete_project(path):
+    session['logged_in'] = True
+    flash("Delete project: '{}'".format("/" + path))
+    _execute_pipe(g.data_path, "remove_node", ["/" + path], {})
+    return redirect(url_for('show_projectlist'))

@@ -5,7 +5,9 @@
 <table class="dp-projectlist table table-striped">
   <thead>
     <tr>
+      <th></th>
       <th>Name</th>
+      <th>#Nodes</th>
       <th>Comment</th>
       <th>Path</th>
     </tr>
@@ -14,8 +16,21 @@
     {%- for p in projects %}
     <tr>
       <td>
+        <div class="dropdown">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="{{ url_for('delete_project', path=p.path[1:]) }}">Delete Project</a></li>
+          </ul>
+        </div>
+      </td>
+      <td>
         <a href="{{ url_for('show_node', path=p.path[1:]) }}">{{p.name|e}}</a>
       </td>
+      <td class="text-center">{{p.num_children|e}}</td>
       <td class="dp-comment" dp-path="{{p.path}}">{{p.comment|e}}</td>
       <td>{{p.path|e}}</td>
     </tr>

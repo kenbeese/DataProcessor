@@ -1,0 +1,52 @@
+{% if dirs %}
+<div class="panel panel-default">
+  <div class="panel-heading">Directories</div>
+  <ul class="list-group">
+    {% for d in dirs %}
+    <li class="list-group-item">{{d|e}}</td>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% if files %}
+<div class="panel panel-default">
+  <div class="panel-heading">Files</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>filename</th>
+        <th>type</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t, fn in files %}
+      <tr>
+        <td>{{fn|e}}</td>
+        <td>{{t|e}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% if sequences %}
+<div class="panel panel-default">
+  <div class="panel-heading">Sequences</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Pattern</th>
+        <th>#files</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for seq in sequences %}
+      <tr>
+        <td>{{seq[0]|e}}</td>
+        <td>{{seq[1]|e}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}

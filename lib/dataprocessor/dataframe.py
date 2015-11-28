@@ -78,7 +78,7 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
                 cfg[prop] = n[prop]
         run_nodes.append(cfg)
     df = DataFrame(run_nodes)
-    if not index:
+    if df.empty or not index:
         return df
     if isinstance(index, str):
         index = [index, ]
@@ -88,4 +88,4 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
         if idx not in df.columns:
             raise dpError("Invalid index: {}".format(idx))
     df = df.set_index(index)
-    return df
+    return df.fillna("")
