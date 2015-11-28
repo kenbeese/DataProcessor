@@ -55,3 +55,10 @@ def atnow(args, work_dir):
     tmp.write(atnow_template.format(path=work_dir, args=" ".join(args)))
     tmp.flush()
     utility.check_call(['at', 'now', '-f', tmp.name])
+
+
+@runner
+def systemd_user(args, work_dir):
+    """ execute command using systemd-run --user command """
+    utility.check_call(["systemd-run", "--user", "-p",
+                        "WorkingDirectory={}".format(work_dir)] + args)
