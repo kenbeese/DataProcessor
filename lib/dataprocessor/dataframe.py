@@ -19,13 +19,18 @@ def get_projects(node_list):
     return projects.dropna(how='all', axis=1)
 
 
-def safe_float(val):
-    try:
-        return float(val)
-    except ValueError:
+SCALAR_TYPE=set([bool, int, float, str])
+
+def value_sanitize(val):
+    if type(val) in (bool, int, float):
         return val
-    except TypeError:
-        return str(val)
+    else:
+        try:
+            return float(val)
+        except ValueError:
+            return val
+        except TypeError:
+            return str(val)
 
 
 def get_project(node_list, project_path, properties=["comment"], index="path"):
@@ -70,7 +75,7 @@ def get_project(node_list, project_path, properties=["comment"], index="path"):
         if n["type"] != "run":
             continue
         if "configure" in n and isinstance(n["configure"], dict):
-            cfg = {k: safe_float(v) for k, v in n["configure"].items()}
+            cfg = {k: value_sanitize(v) for k, v in n["configure"].items()}
         else:
             cfg = {}
         for prop in properties:
