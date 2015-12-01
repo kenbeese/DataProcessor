@@ -5,6 +5,7 @@ import os
 import os.path
 import time
 import copy
+import threading
 
 from flask import Flask, request, render_template, Response, abort, \
     redirect, url_for, g, flash, session
@@ -188,3 +189,14 @@ def delete_project(path):
     flash("Delete project: '{}'".format("/" + path))
     _execute_pipe(g.data_path, "remove_node", ["/" + path], {})
     return redirect(url_for('show_projectlist'))
+
+
+@app.route('/async_delete_project', methods=['POST'])
+def async_delete_project():
+    path=request.form['path']
+    session['logged_in'] = True
+    flash("Delete project: '{}'".format("/" + path))
+    thread = threading.Thread(target=_execute_pipe,
+                              args=(g.data_path, "remove_node", [path], {}))
+    thread.start()
+    return Response()
