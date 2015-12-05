@@ -31,7 +31,7 @@ $(function(){
     $("a.delete_project").click(function(){
       $(this).closest("tr").remove();
       $.ajax({
-        url: ASYNC_DELETE_PROJECT_URL,
+        url: DELETE_PROJECT_URL,
         type: "POST",
         data: {
           path: $(this).attr("dp-path"),
