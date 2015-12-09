@@ -23,7 +23,7 @@
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
-            <li><a href="{{ url_for('delete_project', path=p.path[1:]) }}">Delete Project</a></li>
+            <li><a href="javascript:void(0);" class="delete_project" dp-path="{{p.path}}">Delete Project</a></li>
           </ul>
         </div>
       </td>
