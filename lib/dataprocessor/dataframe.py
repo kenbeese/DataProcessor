@@ -19,8 +19,6 @@ def get_projects(node_list):
     return projects.dropna(how='all', axis=1)
 
 
-SCALAR_TYPE=set([bool, int, float, str])
-
 def value_sanitize(val):
     if type(val) in (bool, int, float):
         return val
