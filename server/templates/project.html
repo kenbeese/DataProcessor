@@ -6,6 +6,14 @@
 
 {% block body %}
 {% if not df.empty %}
+<div class="filters">
+  <div class="filter-container">
+    <input autocomplete="off" class="filter" name="Name" placeholder="Name" data-col="Name" />
+  </div>
+  {% for c in cfg %}
+  <input autocomplete="off" class="filter" name="{{c|e}}" placeholder="{{c|e}}" data-col="{{c|e}}" />
+  {% endfor %}
+</div>
 <table class="dp-project table table-condensed table-striped">
   <thead>
     <tr>
