@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block header %}
+{% include "node_page_header.html" %}
+{% endblock %}
+
+{% block body %}
+<a href="{{node['url']}}" target="_blank"><span class="glyphicon glyphicon-export"></span></a>
+<span> Open externally</span>
+{% endblock %}
