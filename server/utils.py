@@ -125,6 +125,7 @@ def install(args):
     _install_jquery_blockUI(jspath)
     _install_jquery_datatables(jspath, csspath, imagepath)
     _install_bootstrap(jspath, csspath, fontspath)
+    _install_multifilter(jspath)
 
 
 def show_progress(name):
@@ -216,6 +217,15 @@ def _install_bootstrap(jspath, csspath, fontspath):
         _copy_file(fontspath, zf, "dist/fonts/glyphicons-halflings-regular.svg")
         _copy_file(fontspath, zf, "dist/fonts/glyphicons-halflings-regular.ttf")
         _copy_file(fontspath, zf, "dist/fonts/glyphicons-halflings-regular.woff")
+
+
+@show_progress("multifilter")
+def _install_multifilter(jspath):
+    filename = "multifilter.min.js"
+    url = "https://raw.githubusercontent.com/tommyp/multifilter/master/" \
+        + filename
+    with open(op.join(jspath, filename), "w") as f:
+        f.write(urllib2.urlopen(url).read())
 
 
 def _copy_file(path, zf, fn):
