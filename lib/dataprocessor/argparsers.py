@@ -4,6 +4,8 @@ import sys
 
 from . import pipes
 from . import rc
+from .runner import runners
+from .utility import now_str
 
 
 def dpmanip():
@@ -28,6 +30,24 @@ def dpmanip():
             for kwd, attr in val["kwds"]:
                 pipe_psr.add_argument("--" + kwd, **attr)
         pipe_psr.set_defaults(val=val)
+    return parser
+
+
+def dpstart():
+    try:
+        parser = rc.ArgumentParser()
+    except rc.DataProcessorRcError:
+        print("Please create configure file by dpinit")
+        sys.exit(1)
+    parser.add_argument("args", nargs="+", help="command to be executed")
+    parser.add_argument("-n", "--name", nargs="+", default=now_str(),
+                        help="name")
+    parser.add_argument("-p", "--projects", nargs="+", default=[],
+                        help="Project or Tag")
+    parser.add_argument("-r", "--runner", choices=runners, default="sync",
+                        help="Runner")
+    parser.add_argument("--requirements", nargs="+", default=[],
+                        help="Additional requirements")
     return parser
 
 

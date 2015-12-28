@@ -7,22 +7,44 @@ import json
 import traceback
 import logging
 
+logger = logging.getLogger("dataprocessor")
+
 sys.path = ([sys.path[0]]
             + [os.path.join(os.path.dirname(__file__), "../lib")]
             + sys.path[1:])
 import dataprocessor as dp
 sys.path = [sys.path[0]] + sys.path[2:]
 
+def _add(l, name):
+    if name not in l:
+        l.append(name)
+
 
 def main(args):
-    pass
+    name = args.name or dp.utility.now_str()
+
+    ps = args.projects
+    _add(ps, os.path.basename(args.args[0]))
+
+    req = args.requirements
+    for a in args.args:
+        p = os.path.abspath(a)
+        if os.path.exists(p):
+            logger.info("Add requirements: " + p)
+            _add(req, p)
+
+    with dp.io.SyncDataHandler(args.json) as dh:
+        nl = dh.get()
+        node = dp.starter.start(nl, args.args, req, name=name, projects=ps, runner=args.runner)
+        dh.update(nl)
+
+    logger.info("Create new node: " + node["path"])
 
 
 if __name__ == '__main__':
     parser = dp.argparsers.dpstart()
     args = parser.parse_args()
 
-    logger = logging.getLogger("dataprocessor")
     logger.addHandler(logging.StreamHandler())
     if args.debug:
         logger.setLevel(logging.DEBUG)
