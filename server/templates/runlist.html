@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block header %}
+<h2>Run List</h2>
+{% endblock %}
+{% block body %}
+<table class="dp-projectlist table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Comment</th>
+      <th>Tags</th>
+      <th>Path</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%- for n in runs %}
+    <tr>
+      <td>
+        <a href="{{ url_for('show_node', path=n.path[1:]) }}">{{n.name|e}}</a>
+      </td>
+      <td class="dp-comment" dp-path="{{n.path}}">{{n.comment|e}}</td>
+      <td>
+        {% for t in n["tag-nodes"] %}
+        <span class="label label-default"><a href="{{ url_for('show_node', path=t['path'][1:])}}">{{t['name']|e}}</a></span>
+        {% endfor %}
+      </td>
+      <td>{{n.path|e}}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+{% endblock %}
