@@ -15,29 +15,19 @@ sys.path = ([sys.path[0]]
 import dataprocessor as dp
 sys.path = [sys.path[0]] + sys.path[2:]
 
-def _add(l, name):
-    if name not in l:
-        l.append(name)
+
+def uniq(l):
+    return list(set(l))
 
 
 def main(args):
     name = args.name or dp.utility.now_str()
-
-    ps = args.projects
-    _add(ps, os.path.basename(args.args[0]))
-
-    req = args.requirements
-    for a in args.args:
-        p = os.path.abspath(a)
-        if os.path.exists(p):
-            logger.info("Add requirements: " + p)
-            _add(req, p)
-
+    ps = uniq(args.projects + [os.path.basename(args.args[0])])
+    req = uniq(args.requirements + filter(os.path.exists, map(os.path.abspath, args.args)))
     with dp.io.SyncDataHandler(args.json) as dh:
         nl = dh.get()
         node = dp.starter.start(nl, args.args, req, name=name, projects=ps, runner=args.runner)
         dh.update(nl)
-
     logger.info("Create new node: " + node["path"])
 
 
