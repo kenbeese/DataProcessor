@@ -29,6 +29,7 @@
       {% endfor %}
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
+          <li><a class="dp-nav" href="{{ url_for('show_runlist') }}">Run List</a></li>
           <li><a class="dp-nav" href="{{ url_for('show_projectlist') }}">Project List</a></li>
           <li><a class="dp-nav" href="{{ url_for('show_ipynblist') }}">IPython Notebooks</a></li>
         </ul>

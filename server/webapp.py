@@ -34,6 +34,16 @@ def show_projectlist():
     return render_template('projectlist.html', projects=projects)
 
 
+@app.route('/runlist')
+def show_runlist():
+    with dp.io.SyncDataHandler(g.data_path) as dh:
+        nl = dh.get()
+    runs = dp.filter.node_type(nl, "run")
+    for n in runs:
+        n["tag-nodes"] = [dp.nodes.get(nl, p) for p in n["parents"]]
+    return render_template('runlist.html', runs=runs)
+
+
 @app.route('/ipynblist')
 def show_ipynblist():
     nl = dp.io.load([], g.data_path)
