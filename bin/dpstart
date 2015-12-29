@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os.path
+import sys
+import json
+import traceback
+import logging
+
+logger = logging.getLogger("dataprocessor")
+
+sys.path = ([sys.path[0]]
+            + [os.path.join(os.path.dirname(__file__), "../lib")]
+            + sys.path[1:])
+import dataprocessor as dp
+sys.path = [sys.path[0]] + sys.path[2:]
+
+
+def uniq(l):
+    return list(set(l))
+
+
+def main(args):
+    name = args.name or dp.utility.now_str()
+    ps = uniq(args.projects + [os.path.basename(args.args[0])])
+    req = uniq(args.requirements + filter(os.path.exists, map(os.path.abspath, args.args)))
+    with dp.io.SyncDataHandler(args.json) as dh:
+        nl = dh.get()
+        node = dp.starter.start(nl, args.args, req, name=name, projects=ps, runner=args.runner)
+        dh.update(nl)
+    logger.info("Create new node: " + node["path"])
+
+
+if __name__ == '__main__':
+    parser = dp.argparsers.dpstart()
+    args = parser.parse_args()
+
+    logger.addHandler(logging.StreamHandler())
+    if args.debug:
+        logger.setLevel(logging.DEBUG)
+    elif args.verbose:
+        logger.setLevel(logging.INFO)
+    else:
+        logger.setLevel(logging.WARNING)
+
+    try:
+        main(args)
+    except dp.exception.DataProcessorError as e:
+        if args.debug:
+            print(traceback.format_exc())
+        print("=*= ERROR =*=")
+        print("Message: %s" % e.msg)
+        sys.exit(1)
