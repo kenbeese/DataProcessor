@@ -17,7 +17,10 @@
     {% for n in ipynb %}
     <tr>
       {% if n["url"] %}
-      <td><a href="{{n['url']}}" target="_blank">{{n["name"]|e}}</a></td>
+      <td>
+        <a href="{{n['url']}}" target="_blank"><span class="glyphicon glyphicon-export"></span></a>
+        <a href="{{ url_for('show_node', path=n['path'][1:]) }}">{{n["name"]|e}}</a>
+      </td>
       {% else %}
       <td>{{n["name"]|e}}</td>
       {% endif %}

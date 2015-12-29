@@ -70,7 +70,11 @@ def show_node(path):
 
     node = dp.nodes.get(nl, path)
 
-    show_function = {"run": show_run, "project": show_project}
+    show_function = {
+        "run": show_run,
+        "project": show_project,
+        "ipynb": show_ipynb,
+    }
     return show_function[node["type"]](node, nl)
 
 
@@ -129,6 +133,20 @@ def show_project(node, node_list):
         cfg = None
     return render_template("project.html", df=df, cfg=cfg, node=node,
                            parents=parent_nodes, project_ids=project_ids)
+
+
+def show_ipynb(node, node_list):
+    parent_nodes = []
+    for p in node["parents"]:
+        parent_nodes.append(dp.nodes.get(node_list, p))
+    project_id_nodes = dp.filter.prefix_path(node_list, dp.basket.get_project_basket())
+    project_ids = [n["name"] for n in project_id_nodes]
+    nb = dp.ipynb.gather_notebooks()
+    try:
+        node["url"] = dp.ipynb.resolve_url(node["path"], nb)
+    except dp.exception.DataProcessorError:
+        node["url"] = ""
+    return render_template("ipynb.html", node=node, parents=parent_nodes, project_ids=project_ids)
 
 
 @app.route('/api/pipe', methods=['POST'])
